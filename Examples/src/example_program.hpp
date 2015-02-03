@@ -1,4 +1,6 @@
 /**
+ * A set of simple functions to show how to use gtest
+ *
  * @file example_program.hpp
  * @author Ryan Kerr
  * @date 02/02/2015

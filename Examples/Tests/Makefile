@@ -6,7 +6,7 @@ CUSTOM_CXXFLAGS= -Wall -Wextra
 CXX=g++
 
 # The list of all tests that exist
-TESTS=example_unittest
+TESTS=example_unittest example_unittest_fixture
 
 # Relative path to the gtest root directory
 GTEST_ROOT = ../../libs/gtest-1.7.0
@@ -57,12 +57,22 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 
 # ADD CUSTOM TESTS BELOW HERE AND ADD TO THE TESTS LIST AT THE TOP
-example_program.o : $(SRC_DIR)/example_program.cpp $(HEADER_DIR)/example_program.hpp $(GTEST_HEADERS)
+example_program.o : $(SRC_DIR)/example_program.cpp $(HEADER_DIR)/example_program.hpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/example_program.cpp
+
+example_class.o : $(SRC_DIR)/example_class.cpp $(HEADER_DIR)/example_class.hpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/example_class.cpp
 
 example_unittest.o : $(TESTS_DIR)/example_unittest.cpp \
 					 $(HEADER_DIR)/example_program.hpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/example_unittest.cpp
 
+example_unittest_fixture.o : $(TESTS_DIR)/example_unittest_fixture.cpp \
+							 $(HEADER_DIR)/example_class.hpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/example_unittest_fixture.cpp
+
 example_unittest : example_program.o example_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+example_unittest_fixture : example_class.o example_unittest_fixture.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@

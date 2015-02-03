@@ -1,4 +1,4 @@
-/**
+/*
  * @file example_program.cpp
  * @author Ryan Kerr
  * @date 02/02/2015

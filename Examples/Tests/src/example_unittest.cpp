@@ -48,10 +48,10 @@ TEST( ExampleTestSuite, LogicalTests )
 // NOTE all string tests expect a C string
 TEST( ExampleTestSuite, StringTests )
 {
-    // Case insensitive
+    // Case sensitive
     EXPECT_STREQ( "Hello", returnHello().c_str() );
     EXPECT_STRNE( "hello", returnHello().c_str() );
-    // Case sensitive
+    // Case insensitive
     EXPECT_STRCASEEQ( "Hello", returnHello().c_str() );
     EXPECT_STRCASENE( "world", returnHello().c_str() );
 }
