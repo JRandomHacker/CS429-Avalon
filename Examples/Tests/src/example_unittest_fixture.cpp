@@ -6,34 +6,34 @@
 #include "gtest/gtest.h"
 
 // Your fixture name will be the name of the test suite, must extend ::testing:Test
-class ExampleTestFixture: public ::testing::Test
-{
+class ExampleTestFixture: public ::testing::Test {
+
     public:
         // Variables you want your tests to access must be public
         ExampleClass* myClass;
 
         // Run before every test
-        void SetUp( void )
-        {
+        void SetUp( void ) {
+
             myClass = new ExampleClass( exampleValue );
         }
 
         // Run after every test
-        void TearDown( void )
-        {
+        void TearDown( void ) {
+
             delete myClass;
             myClass = NULL;
         }
 
         // Run only during setup (before any test)
-        ExampleTestFixture( void )
-        {
+        ExampleTestFixture( void ) {
+
             exampleValue = 5;
         }
 
         // Run during teardown (after every test)
-        ~ExampleTestFixture( void )
-        {
+        ~ExampleTestFixture( void ) {
+
             exampleValue = 10;
         }
 
@@ -43,7 +43,7 @@ class ExampleTestFixture: public ::testing::Test
 };
 
 // Test_F is to use a fixture, the test suite name must be the same as the fixture class
-TEST_F( ExampleTestFixture, EqualityTest )
-{
+TEST_F( ExampleTestFixture, EqualityTest ) {
+
     ASSERT_EQ( 5, myClass->getInput() );
 }

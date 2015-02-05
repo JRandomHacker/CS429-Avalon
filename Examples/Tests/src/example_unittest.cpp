@@ -25,20 +25,20 @@
  * Additionally, you can add a custom failure message as follows:
  * EXPECT_TRUE( false ) << "This is my custom error message";
  */
-TEST( ExampleTestSuite, BooleanTests )
-{
+TEST( ExampleTestSuite, BooleanTests ) {
+
     EXPECT_TRUE( returnOne() );
     EXPECT_FALSE( !returnOne() );
 }
 
-TEST( ExampleTestSuite, EqualityTests )
-{
+TEST( ExampleTestSuite, EqualityTests ) {
+
     EXPECT_EQ( 1, returnOne() );
     EXPECT_NE( 0, returnOne() );
 }
 
-TEST( ExampleTestSuite, LogicalTests )
-{
+TEST( ExampleTestSuite, LogicalTests ) {
+
     EXPECT_LT( 0, returnOne() ); // Less than
     EXPECT_LE( 1, returnOne() ); // Less than or equal
     EXPECT_GT( 2, returnOne() ); // Greater than
@@ -46,8 +46,8 @@ TEST( ExampleTestSuite, LogicalTests )
 }
 
 // NOTE all string tests expect a C string
-TEST( ExampleTestSuite, StringTests )
-{
+TEST( ExampleTestSuite, StringTests ) {
+
     // Case sensitive
     EXPECT_STREQ( "Hello", returnHello().c_str() );
     EXPECT_STRNE( "hello", returnHello().c_str() );
@@ -57,8 +57,8 @@ TEST( ExampleTestSuite, StringTests )
 }
 
 // Test to see if a peice of code throws an exception
-TEST( ExampleTestSuite, ThrowsTests )
-{
+TEST( ExampleTestSuite, ThrowsTests ) {
+
     EXPECT_THROW( throwError(), std::overflow_error );
     EXPECT_ANY_THROW( throwError() );
     EXPECT_NO_THROW( returnOne() );

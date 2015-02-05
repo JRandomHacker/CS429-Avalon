@@ -5,6 +5,11 @@ CUSTOM_CPPFLAGS= -isystem $(HEADER_DIR)
 CUSTOM_CXXFLAGS= -Wall -Wextra
 CXX=g++
 
+# If we're on Windows, add these flags for static linking, so the executables are portable
+ifeq ($(OS), Windows_NT)
+    CUSTOM_CXXFLAGS += -static-libgcc -static-libstdc++
+endif
+
 # The list of all tests that exist
 TESTS=example_unittest example_unittest_fixture
 
@@ -19,7 +24,10 @@ GTEST_ROOT = ../../libs/gtest-1.7.0
 # Required settings for gtest to work, none of this should need to be modified
 GTEST_CPPFLAGS = -isystem $(GTEST_ROOT)/include
 
-GTEST_CXXFLAGS = -pthread
+# If we're not on Windows, we need pthreads.  Otherwise it will just use Windows native threading
+ifneq ($(OS), Windows_NT)
+    GTEST_CXXFLAGS = -lpthread
+endif
 
 GTEST_HEADERS = $(GTEST_ROOT)/include/gtest/*.h \
 				$(GTEST_ROOT)/include/gtest/internal/*.h
@@ -72,7 +80,7 @@ example_unittest_fixture.o : $(TESTS_DIR)/example_unittest_fixture.cpp \
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/example_unittest_fixture.cpp
 
 example_unittest : example_program.o example_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
 
 example_unittest_fixture : example_class.o example_unittest_fixture.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@

@@ -9,13 +9,13 @@
 #include "example_class.hpp"
 
 // Constructor
-ExampleClass::ExampleClass( int input )
-{
+ExampleClass::ExampleClass( int input ) {
+
 	this->input = input;
 }
 
 // Returns the value that was passed in during instantiation
-int ExampleClass::getInput( void )
-{
+int ExampleClass::getInput( void ) {
+
 	return this->input;
 }

@@ -9,8 +9,8 @@
 #ifndef EXAMPLE_CLASS_HPP
 #define EXAMPLE_CLASS_HPP
 
-class ExampleClass
-{
+class ExampleClass {
+
     private:
         int input;
 

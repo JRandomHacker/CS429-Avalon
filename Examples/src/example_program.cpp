@@ -9,17 +9,17 @@
 
 #include "example_program.hpp"
 
-int returnOne( void )
-{
+int returnOne( void ) {
+
     return 1;
 }
 
-std::string returnHello( void )
-{
+std::string returnHello( void ) {
+
     return std::string( "Hello" );
 }
 
-void throwError( void )
-{
+void throwError( void ) {
+
     throw std::overflow_error("Test error");
 }
