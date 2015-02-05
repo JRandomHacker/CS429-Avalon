@@ -23,7 +23,11 @@ std::pair<int, std::list<Action>::iterator> ActionHandler::FreezeFrontActions() 
 	number_frozen_actions = action_queue.size();
 	queue_append_control.unlock();
 
-	return std::make_pair(number_existing_actions, action_queue.begin());
+	if (number_frozen_actions == 0) {
+		queue_read_control.unlock();
+	}
+
+	return std::make_pair(number_frozen_actions, action_queue.begin());
 }
 
 // Deletes the currently safe to read actions and releases read access

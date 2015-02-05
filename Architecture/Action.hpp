@@ -13,6 +13,8 @@ public:
 	 */
 	 Action(std::string mess_text);
 
+	 std::string GetMessage();
+
 private:
 	std::string message_text;
 };

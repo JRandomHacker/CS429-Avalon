@@ -6,7 +6,7 @@
 #include <mutex>
 #include <atomic>
 #include <utility>
-#include "Action.h"
+#include "Action.hpp"
 
 class ActionHandler {
 public:
@@ -36,7 +36,7 @@ public:
 	/**
 	 * Releases read access gotten elsewhere.
 	 */
-	void UnfrezeFrontActions( void );
+	void UnfreezeFrontActions( void );
 
 	/**
 	 * Removes all actions that are currently safe for reading and then
