@@ -7,3 +7,4 @@ Group Members:
 - Ryan Kerr
 - Daniel Simpson
 - Matthew Hoffman
+- Jaime P Roque
