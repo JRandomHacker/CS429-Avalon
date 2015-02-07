@@ -14,7 +14,7 @@ endif
 TESTS=example_unittest example_unittest_fixture
 
 # Relative path to the gtest root directory
-GTEST_ROOT = ../../libs/gtest-1.7.0
+GTEST_ROOT = ../../../libs/gtest-1.7.0
 
 # IT IS UNLIKELY ANYTHING WILL NEED TO BE MODIFIED BETWEEN HERE AND LINE 59
 
