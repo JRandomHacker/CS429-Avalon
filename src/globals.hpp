@@ -14,7 +14,7 @@
 
 namespace avalon {
 
-    static const int NUM_SPECIALS = 5;
+    static const int NUM_SPECIALS = 6;
 
     /*! An enumerator for the possible special roles */
     enum special_roles_t {
@@ -39,7 +39,16 @@ namespace avalon {
      * @param avalon::special_roles_t the special role to examine - Passing in the special role NONE is undefined
      * @return avalon::alignment_t The alignment of the role
      */
-    alignment_t roleAlignment( special_roles_t role );
+    alignment_t getRoleAlignment( special_roles_t role );
+
+    /**
+     * A function to get the number of evil characters based on the number of players
+     *
+     * @param num_players The number of players in the game
+     * @return int The number of players who should be evil
+     */
+    int getEvilCount( int num_players );
+
 }
 
 #endif // _GLOBALS_HPP

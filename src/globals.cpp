@@ -11,7 +11,7 @@
 #include "globals.hpp"
 
 // Switches a role to an alignment
-avalon::alignment_t avalon::roleAlignment( avalon::special_roles_t role ) {
+avalon::alignment_t avalon::getRoleAlignment( avalon::special_roles_t role ) {
 
     avalon::alignment_t align;
     switch( role ) {
@@ -35,3 +35,11 @@ avalon::alignment_t avalon::roleAlignment( avalon::special_roles_t role ) {
     return align;
 }
 
+// Figures out the proper number of evil players
+int avalon::getEvilCount( int num_players ) {
+
+    if( num_players ) {
+        return 1;
+    }
+    return 0;
+}
