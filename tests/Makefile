@@ -68,7 +68,7 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 # ADD CUSTOM TESTS BELOW HERE AND ADD TO THE TESTS LIST AT THE TOP
 
-player.o : $(SRC_DIR)/player.cpp $(HEADER_DIR)/player.hpp
+player.o : $(SRC_DIR)/player.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
 player_unittest.o : $(TESTS_DIR)/player_unittest.cpp \
