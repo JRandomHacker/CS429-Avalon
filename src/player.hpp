@@ -15,8 +15,8 @@ class Player {
 
     private:
         std::string name;
-        special_roles_t role;
-        alignment_t alignment;
+        avalon::special_roles_t role;
+        avalon::alignment_t alignment;
         // VOTE HISTORY
 
     public:
@@ -28,14 +28,14 @@ class Player {
          * @role The special role assigned to the player, or NONE if they are not special
          * @alignment Whether the player is on the side of good, or evil
          */
-        Player( std::string name, special_roles_t role, alignment_t alignment );
+        Player( std::string name, avalon::special_roles_t role, avalon::alignment_t alignment );
 
         /**
          * Getter for the players alignment
          *
-         * @return The alignment of the player (good or evil)
+         * @return avalon::alignment_t The alignment of the player (good or evil)
          */
-        alignment_t getAlignment();
+        avalon::alignment_t getAlignment();
 
         /**
          * Getter for the players name
@@ -49,7 +49,7 @@ class Player {
          *
          * @return The special role of the player
          */
-        special_roles_t getRole();
+        avalon::special_roles_t getRole();
 
         /**
          * Setter for the players name

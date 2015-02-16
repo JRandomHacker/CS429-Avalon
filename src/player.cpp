@@ -11,7 +11,7 @@
 #include "globals.hpp"
 
 // Constructor
-Player::Player( std::string name, special_roles_t role, alignment_t alignment ) {
+Player::Player( std::string name, avalon::special_roles_t role, avalon::alignment_t alignment ) {
 
     this->name = name;
     this->role = role;
@@ -19,7 +19,7 @@ Player::Player( std::string name, special_roles_t role, alignment_t alignment ) 
 }
 
 // Getter for alignment
-alignment_t Player::getAlignment( ) {
+avalon::alignment_t Player::getAlignment( ) {
     return alignment;
 }
 
@@ -29,7 +29,7 @@ std::string Player::getName( ) {
 }
 
 // Getter for role
-special_roles_t Player::getRole( ) {
+avalon::special_roles_t Player::getRole( ) {
     return role;
 }
 

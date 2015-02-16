@@ -9,5 +9,8 @@ all : $(PROGS)
 clean : 
 	rm -f $(PROGS) *.o 
 
+globals.o : globals.cpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $^
+
 player.o : player.cpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $^
