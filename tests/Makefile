@@ -1,4 +1,4 @@
-TESTS_DIR=./src
+TESTS_DIR=.
 SRC_DIR=../src
 HEADER_DIR=$(SRC_DIR)
 CUSTOM_CPPFLAGS= -isystem $(HEADER_DIR)
@@ -11,10 +11,10 @@ ifeq ($(OS), Windows_NT)
 endif
 
 # The list of all tests that exist
-TESTS=example_unittest example_unittest_fixture
+TESTS=player_unittest
 
 # Relative path to the gtest root directory
-GTEST_ROOT = ../../../libs/gtest-1.7.0
+GTEST_ROOT = ../libs/gtest-1.7.0
 
 # IT IS UNLIKELY ANYTHING WILL NEED TO BE MODIFIED BETWEEN HERE AND LINE 59
 
@@ -33,6 +33,8 @@ GTEST_HEADERS = $(GTEST_ROOT)/include/gtest/*.h \
 				$(GTEST_ROOT)/include/gtest/internal/*.h
 
 GTEST_SRCS = $(GTEST_ROOT)/src/*.cc $(GTEST_ROOT)/src/*.h $(GTEST_HEADERS)
+
+GTEST_H = $(GTEST_ROOT)/include/gtest/gtest.h
 
 
 
@@ -65,22 +67,13 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 
 # ADD CUSTOM TESTS BELOW HERE AND ADD TO THE TESTS LIST AT THE TOP
-example_program.o : $(SRC_DIR)/example_program.cpp $(HEADER_DIR)/example_program.hpp
+
+player.o : $(SRC_DIR)/player.cpp $(HEADER_DIR)/player.hpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
-example_class.o : $(SRC_DIR)/example_class.cpp $(HEADER_DIR)/example_class.hpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/example_class.cpp
+player_unittest.o : $(TESTS_DIR)/player_unittest.cpp \
+							 $(HEADER_DIR)/player.hpp  $(GTEST_H)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
-example_unittest.o : $(TESTS_DIR)/example_unittest.cpp \
-					 $(HEADER_DIR)/example_program.hpp $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/example_unittest.cpp
-
-example_unittest_fixture.o : $(TESTS_DIR)/example_unittest_fixture.cpp \
-							 $(HEADER_DIR)/example_class.hpp $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/example_unittest_fixture.cpp
-
-example_unittest : example_program.o example_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
-
-example_unittest_fixture : example_class.o example_unittest_fixture.o gtest_main.a
+player_unittest : player.o player_unittest.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
