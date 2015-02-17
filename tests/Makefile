@@ -11,7 +11,7 @@ ifeq ($(OS), Windows_NT)
 endif
 
 # The list of all tests that exist
-TESTS=player_unittest.exe
+TESTS=player_unittest.exe globals_unittest.exe
 
 # Relative path to the gtest root directory
 GTEST_ROOT = ../libs/gtest-1.7.0
@@ -76,4 +76,14 @@ player_unittest.o : $(TESTS_DIR)/player_unittest.cpp \
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
 player_unittest.exe : player.o player_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
+	
+globals.o : $(SRC_DIR)/globals.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
+	
+globals_unittest.o : $(TESTS_DIR)/globals_unittest.cpp \
+							 $(HEADER_DIR)/globals.hpp $(GTEST_H)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
+	
+globals_unittest.exe : globals.o globals_unittest.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
