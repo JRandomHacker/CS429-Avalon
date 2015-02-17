@@ -36,7 +36,7 @@ std::vector< avalon::special_roles_t > parse_options( int argc, char** argv );
 void* network_thread_func( void* targs );
 
 int main( int argc, char** argv ) {
-    
+
     std::vector< avalon::special_roles_t > selected_roles = parse_options( argc, argv );
 
     // Make sure we weren't given a super silly number for players
@@ -97,7 +97,7 @@ std::vector< avalon::special_roles_t > parse_options( int argc, char** argv ) {
         { "mordred",  no_argument,       NULL, 'r' },
         { "morgana",  no_argument,       NULL, 'g' },
         { "assassin", no_argument,       NULL, 'a' },
-        { "oberon",   no_argument,       NULL, 'b' } 
+        { "oberon",   no_argument,       NULL, 'b' }
     };
 
     char opt;
