@@ -7,7 +7,10 @@ public:
 	ModelData();
 	~ModelData();
 
+	// Interface functions
 	int getPayload();
+
+	// Model functions
 	void setPayload(int new_payload);
 
 private:

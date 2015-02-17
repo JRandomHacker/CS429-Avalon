@@ -133,3 +133,27 @@ TEST_F( ModelTests, testModelDestructed) {
     ASSERT_EQ((ModelData*)NULL, sub1.getModelData());
     ASSERT_TRUE(sub1.wasDestroyed);
 }
+
+TEST_F( ModelTests, testClosureSubscriber) {
+    int subscriber_num_updates = 0;
+    int subscriber_latest_value = 0;
+    bool subscriber_destroyed = 0;
+    ClosureSubscriber sub(
+        [&](Subscriber* s){
+            subscriber_num_updates++;
+            subscriber_latest_value = s->getModelData()->getPayload();
+        },
+        [&](Subscriber* s){ subscriber_destroyed = true; });
+
+    model.addData("data_name", 0);
+    model.subscribe("data_name", &sub);
+
+    model.updateData("data_name", 5);
+
+    ASSERT_EQ(1, subscriber_num_updates);
+    ASSERT_EQ(5, subscriber_latest_value);
+
+    model.removeData("data_name");
+
+    ASSERT_TRUE(subscriber_destroyed);
+}
