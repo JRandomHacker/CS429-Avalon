@@ -10,6 +10,8 @@
 #include "player.hpp"
 #include "globals.hpp"
 
+#include "player.pb.h"
+
 #include <algorithm>
 #include <random>
 #include <string>
@@ -123,9 +125,18 @@ Server::~Server( ) {
 bool Server::waitForClients( ) {
     
     for( int i = 0; i < num_clients; i++ ) {
-        int a = 42;
+		avalon::network::Player currPlayer;
+
+		currPlayer.set_role( players[ i ]->getRole( ) );
+		currPlayer.set_alignment( players[ i ]->getAlignment( ) );
+		currPlayer.set_name( players[ i ]->getName( ) );
+
+		std::string message = currPlayer.SerializeAsString( );
+		int messageSize = message.length( );
+
         sockets[ i ] = accept( servsock, NULL, NULL );
-        send( sockets[ i ], &a, sizeof( int ), 0 );
+        send( sockets[ i ], &messageSize, sizeof( int ), 0 );
+        send( sockets[ i ], message.c_str( ), messageSize * sizeof( char ), 0 );
     }
 
     return true;

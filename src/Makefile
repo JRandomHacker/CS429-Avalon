@@ -1,7 +1,9 @@
 PROGS=server.exe
-SERVER_OBJS=server.o player.o globals.o
+SERVER_OBJS=server.o player.o globals.o player.pb.o
 
-LIBS=-pthread
+PROTOS_DIR=../protos
+PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
+LIBS=-pthread -I$(PROTOS_DIR)
 CXXOPTS=-Wall -Wextra -std=c++11
 CXX=g++
 #CXX=x86_64-w64-mingw32-g++
@@ -10,7 +12,10 @@ CXX=g++
 all : $(PROGS)
 
 clean : 
-	rm -f $(PROGS) *.o 
+	rm -f $(PROGS) *.o  $(PROTOS_DIR)/*.h $(PROTOS_DIR)/*.cc
+
+protofiles :
+	protoc -I=$(PROTOS_DIR) --cpp_out=$(PROTOS_DIR) $(PROTOS_DIR)/*.proto
 
 globals.o : globals.cpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
@@ -18,8 +23,12 @@ globals.o : globals.cpp
 player.o : player.cpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
-server.o : server.cpp
+server.o : server.cpp  protofiles
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
+player.pb.o : $(PROTOS_DIR)/player.pb.cc
+	 pkg-config --cflags protobuf
+	 $(CXX) $(CXXOPTS) $(LIBS) -c $<
+
 server.exe : server_main.cpp $(SERVER_OBJS)
-	$(CXX) $(CXXOPTS) $(LIBS) $^ -o $@
+	$(CXX) $(CXXOPTS) $(LIBS) $^ -o $@ $(PROTOS_LIB)

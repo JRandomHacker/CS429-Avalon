@@ -1,6 +1,8 @@
 *.o
 *.a
 *.gch
+*.pb.cc
+*.pb.h
 
 *.exe
 
