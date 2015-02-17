@@ -9,7 +9,7 @@
 #ifndef _SERVER_HPP
 #define _SERVER_HPP
 
-#include <sys/socket.h>
+#include <netdb.h>
 #include <vector>
 #include "player.hpp"
 #include "globals.hpp"
@@ -21,6 +21,9 @@ class Server {
         int port;
         int* sockets;
         Player** players;
+
+        int servsock;
+        struct sockaddr_in servparm;
 
         /*
          * Helper function for the constructor to actually initialize data

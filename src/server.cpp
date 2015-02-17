@@ -10,14 +10,29 @@
 #include "player.hpp"
 #include "globals.hpp"
 
-#include <sys/socket.h>
 #include <algorithm>
 #include <random>
 #include <string>
+#include <iostream>
+
+#include <netdb.h>
 
 // Private functions
 void Server::initServer( ) {
-    // Add in logic to start listening on a port here
+
+    servsock = socket( AF_INET, SOCK_STREAM, 0 );
+
+    servparm.sin_family = AF_INET;
+    servparm.sin_port = htons( port );
+    servparm.sin_addr.s_addr = htonl( INADDR_ANY );
+
+    if( bind( servsock, (struct sockaddr*)(&servparm), sizeof(struct sockaddr_in) ) < 0 ) {
+        std::cerr << "Unable to bind network socket\n";
+    }
+
+    if( listen( servsock, SOMAXCONN ) < 0 ) {
+        std::cerr << "Unable to listen on specified port\n";
+    }
 }
 
 void Server::initPlayers( std::vector< avalon::special_roles_t > special_roles ) {
@@ -108,7 +123,9 @@ Server::~Server( ) {
 bool Server::waitForClients( ) {
     
     for( int i = 0; i < num_clients; i++ ) {
-        // recv, set up sockets[ i ] and send players[ i ]
+        int a = 42;
+        sockets[ i ] = accept( servsock, NULL, NULL );
+        send( sockets[ i ], &a, sizeof( int ), 0 );
     }
 
     return true;
