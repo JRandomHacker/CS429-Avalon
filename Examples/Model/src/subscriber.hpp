@@ -7,21 +7,24 @@
 #include <iostream>
 #include <functional>
 
+class DataBlock;
+
 class Subscriber {
 public:
 	Subscriber();
-	~Subscriber();
+	virtual ~Subscriber();
 
 	// Interface functions
 	ModelData* getModelData();
-	void setModelData(ModelData* new_model_data);
 
 	// Model access functions
+	void setDataBlock(DataBlock* new_data_block);
+
 	virtual void dataUpdated() = 0;
 	virtual void dataDestroyed() = 0;
 
 private:
-	ModelData* model_data = NULL;
+	DataBlock* data_block = NULL;
 
 	Subscriber(const Subscriber& that);
 };
@@ -30,9 +33,9 @@ class ClosureSubscriber : public Subscriber {
 public:
 	ClosureSubscriber(std::function<void ((Subscriber*))> duc,
 		std::function<void ((Subscriber*))> ddc);
-	
-	void dataUpdated();
-	void dataDestroyed();
+
+	virtual void dataUpdated();
+	virtual void dataDestroyed();
 
 private:
 	std::function<void ((Subscriber*))> dataUpdatedClosure;
@@ -41,8 +44,8 @@ private:
 
 class MockSubscriber : public Subscriber {
 public:
-	void dataUpdated();
-	void dataDestroyed();
+	virtual void dataUpdated();
+	virtual void dataDestroyed();
 
 	int updatedCount = 0;
 	bool wasDestroyed = false;

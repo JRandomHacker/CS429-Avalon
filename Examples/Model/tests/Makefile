@@ -72,6 +72,7 @@ model_unittest.o : $(TESTS_DIR)/model_unittest.cpp $(GTEST_H)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
 model_unittest.exe : $(SRC_DIR)/model.o $(SRC_DIR)/subscriber.o \
-                  $(SRC_DIR)/model_data.o model_unittest.o gtest_main.a
+                  $(SRC_DIR)/model_data.o $(SRC_DIR)/data_block.o \
+                  model_unittest.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
 	

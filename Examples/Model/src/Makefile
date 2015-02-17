@@ -1,5 +1,5 @@
 PROGS=model_demo.exe
-MODEL_OBJS=model.o subscriber.o model_data.o
+MODEL_OBJS=model.o subscriber.o model_data.o data_block.o
 
 LIBS=
 CXXOPTS=-Wall -Wextra -std=c++11
@@ -19,6 +19,9 @@ subscriber.o : subscriber.cpp subscriber.hpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
 model_data.o : model_data.cpp model_data.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+data_block.o : data_block.cpp data_block.hpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
 model_demo.exe : model_demo.cpp $(MODEL_OBJS)

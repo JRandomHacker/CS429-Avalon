@@ -4,29 +4,10 @@
 
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 #include "model_data.hpp"
+#include "data_block.hpp"
 #include "subscriber.hpp"
-
-class DataBlock{
-public:
-	DataBlock();
-	~DataBlock();
-	DataBlock(const DataBlock& that);
-
-	void addSubscriber(Subscriber* new_subscriber);
-	void detachSubscriber(Subscriber* old_subscriber);
-	void detachAllSubscribers();
-
-	void updateData(int new_data);
-
-private:
-	ModelData data_payload;
-	std::vector<Subscriber*> subscribers;
-	
-	void releaseSubscriber(Subscriber* old_subscriber);
-};
 
 class Model {
 public:

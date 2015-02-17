@@ -134,6 +134,22 @@ TEST_F( ModelTests, testModelDestructed) {
     ASSERT_TRUE(sub1.wasDestroyed);
 }
 
+TEST_F( ModelTests, testSubscribersUnsubscribeOnDeconstruction ) {
+    // Create a model and subscriber and pair the two
+    MockSubscriber* sub = new MockSubscriber();
+    Model* mod = new Model();
+    mod->addData("data_name", 0);
+    mod->subscribe("data_name", (Subscriber*)sub);
+
+    // Delete the subscriber, which should unsubscribe it
+    delete sub;
+
+    // Assert that the unsubscription fails as subscriber should be unpaired
+    ASSERT_FALSE(mod->unsubscribe("data_name", (Subscriber*)sub));
+
+    delete mod;
+}
+
 TEST_F( ModelTests, testClosureSubscriber) {
     int subscriber_num_updates = 0;
     int subscriber_latest_value = 0;
