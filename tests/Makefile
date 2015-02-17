@@ -11,7 +11,7 @@ ifeq ($(OS), Windows_NT)
 endif
 
 # The list of all tests that exist
-TESTS=player_unittest
+TESTS=player_unittest.exe
 
 # Relative path to the gtest root directory
 GTEST_ROOT = ../libs/gtest-1.7.0
@@ -75,5 +75,5 @@ player_unittest.o : $(TESTS_DIR)/player_unittest.cpp \
 							 $(HEADER_DIR)/player.hpp  $(GTEST_H)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
-player_unittest : player.o player_unittest.o gtest_main.a
+player_unittest.exe : player.o player_unittest.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
