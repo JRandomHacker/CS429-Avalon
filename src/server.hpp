@@ -9,20 +9,32 @@
 #ifndef _SERVER_HPP
 #define _SERVER_HPP
 
-#include <netdb.h>
 #include <vector>
 #include "player.hpp"
 #include "globals.hpp"
+
+#ifdef _WIN32
+    #include <winsock2.h>
+#else
+    #include <netdb.h>
+#endif
 
 class Server {
 
     private:
         int num_clients;
         int port;
-        int* sockets;
         Player** players;
 
-        int servsock;
+        // Windows requires the SOCKET type for sockets instead of int
+        #ifdef _WIN32
+            SOCKET* sockets;
+            SOCKET servsock;
+        #else
+            int* sockets;
+            int servsock;
+        #endif
+
         struct sockaddr_in servparm;
 
         /*

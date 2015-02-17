@@ -77,6 +77,8 @@ void* network_thread_func( void* targs ) {
     server->waitForClients( );
 
     pthread_exit( NULL );
+
+    return NULL;
 }
 
 /*
