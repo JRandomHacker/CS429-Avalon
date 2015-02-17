@@ -17,7 +17,11 @@
 #include <string>
 #include <iostream>
 
-#include <netdb.h>
+#ifdef _WIN32
+    #include <winsock.h>
+#else
+    #include <netdb.h>
+#endif
 
 // Private functions
 void Server::initServer( ) {
@@ -106,7 +110,11 @@ Server::Server( int num_clients, std::vector< avalon::special_roles_t > special_
     this->num_clients = num_clients;
     this->port = port;
 
-    sockets = new int[ num_clients ];
+    #ifdef _WIN32
+        sockets = new SOCKET[ num_clients ];
+    #else
+        sockets = new int[ num_clients ];
+    #endif
     players = new Player*[ num_clients ];
 
     initPlayers( special_roles );

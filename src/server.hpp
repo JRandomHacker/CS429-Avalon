@@ -9,18 +9,28 @@
 #ifndef _SERVER_HPP
 #define _SERVER_HPP
 
-#include <netdb.h>
 #include <vector>
 #include "player.hpp"
 #include "globals.hpp"
+
+#ifdef _WIN32
+    #include <winsock.h>
+#else
+    #include <netdb.h>
+#endif
 
 class Server {
 
     private:
         int num_clients;
         int port;
-        int* sockets;
         Player** players;
+
+        #ifdef _WIN32
+            SOCKET* sockets;
+        #else
+            int* sockets;
+        #endif
 
         int servsock;
         struct sockaddr_in servparm;
