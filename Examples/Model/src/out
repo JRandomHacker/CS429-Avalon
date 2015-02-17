@@ -1,0 +1,6 @@
+model.o:model.cpp:(.text+0x368): undefined reference to `Subscriber::setModelData(ModelData*)'
+model.o:model.cpp:(.text+0x38a): undefined reference to `Subscriber::setModelData(ModelData*)'
+model.o:model.cpp:(.text+0x515): undefined reference to `ModelData::setPayload(int)'
+c:/mingw/bin/../lib/gcc/mingw32/4.8.1/../../../../mingw32/bin/ld.exe: model.o: bad reloc address 0x1b in section `.text$_ZNSt11char_traitsIcE7compareEPKcS2_j[__ZNSt11char_traitsIcE7compareEPKcS2_j]'
+collect2.exe: error: ld returned 1 exit status
+make: *** [model_demo.exe] Error 1
