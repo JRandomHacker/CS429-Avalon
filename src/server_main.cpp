@@ -54,7 +54,7 @@ int main( int argc, char** argv ) {
 
     // Spawn the network listener thread
     pthread_t networkThread;
-    if( pthread_create( &networkThread, NULL, &network_thread_func, &serv ) != 0 )
+    if( pthread_create( &networkThread, NULL, &network_thread_func, serv ) != 0 )
     {
         std::cerr << "Unable to start network thread" << std::endl;
         exit( EXIT_THREAD_ERROR );
