@@ -18,13 +18,22 @@
 #include <iostream>
 
 #ifdef _WIN32
-    #include <winsock.h>
+    #include <winsock2.h>
+    #define WINSOCK_MAGIC 0x202
 #else
     #include <netdb.h>
 #endif
 
 // Private functions
 void Server::initServer( ) {
+
+    // Windows requires some initial socket setup
+    #ifdef _WIN32
+        WSADATA wsaData;
+        if( WSAStartup( WINSOCK_MAGIC, &wsaData ) != 0 ) {
+            std::cerr << "Unable to magic windows" << std::endl;
+        }
+    #endif
 
     servsock = socket( AF_INET, SOCK_STREAM, 0 );
 
@@ -33,11 +42,11 @@ void Server::initServer( ) {
     servparm.sin_addr.s_addr = htonl( INADDR_ANY );
 
     if( bind( servsock, (struct sockaddr*)(&servparm), sizeof(struct sockaddr_in) ) < 0 ) {
-        std::cerr << "Unable to bind network socket\n";
+        std::cerr << "Unable to bind network socket" << std::endl;
     }
 
     if( listen( servsock, SOMAXCONN ) < 0 ) {
-        std::cerr << "Unable to listen on specified port\n";
+        std::cerr << "Unable to listen on specified port" << std::endl;
     }
 }
 
@@ -110,6 +119,7 @@ Server::Server( int num_clients, std::vector< avalon::special_roles_t > special_
     this->num_clients = num_clients;
     this->port = port;
 
+    // Windows uses the SOCKET type instead of ints
     #ifdef _WIN32
         sockets = new SOCKET[ num_clients ];
     #else
@@ -122,6 +132,11 @@ Server::Server( int num_clients, std::vector< avalon::special_roles_t > special_
 }
 
 Server::~Server( ) {
+
+    // Windows requires additional socket teardown
+    #ifdef _WIN32
+        WSACleanup( );
+    #endif
 
     for( int i = 0; i < num_clients; i++ ) {
         delete players[ i ];
@@ -143,7 +158,9 @@ bool Server::waitForClients( ) {
 		int messageSize = message.length( );
 
         sockets[ i ] = accept( servsock, NULL, NULL );
-        send( sockets[ i ], &messageSize, sizeof( int ), 0 );
+
+        // Windows REQUIRES that sockets send char* rather than void*... so we have to do some bullshit to trick it
+        send( sockets[ i ], (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
         send( sockets[ i ], message.c_str( ), messageSize * sizeof( char ), 0 );
     }
 

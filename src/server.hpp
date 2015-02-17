@@ -14,7 +14,7 @@
 #include "globals.hpp"
 
 #ifdef _WIN32
-    #include <winsock.h>
+    #include <winsock2.h>
 #else
     #include <netdb.h>
 #endif
@@ -26,13 +26,15 @@ class Server {
         int port;
         Player** players;
 
+        // Windows requires the SOCKET type for sockets instead of int
         #ifdef _WIN32
             SOCKET* sockets;
+            SOCKET servsock;
         #else
             int* sockets;
+            int servsock;
         #endif
 
-        int servsock;
         struct sockaddr_in servparm;
 
         /*

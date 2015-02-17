@@ -8,7 +8,7 @@ INCLUDES=-I$(PROTOS_DIR)
 
 LIBS=-pthread $(PROTOS_LIB)
 ifeq ($(OS),Windows_NT)
-	LIBS+=-lwsock32
+	LIBS+=-lws2_32
 endif
 
 CXXOPTS=-Wall -Wextra -std=c++11
