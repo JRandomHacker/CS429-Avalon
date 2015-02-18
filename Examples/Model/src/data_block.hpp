@@ -6,7 +6,8 @@
 #include <vector>
 
 #include "model_data.hpp"
-#include "subscriber.hpp"
+
+class Subscriber;
 
 class DataBlock{
 public:
@@ -19,15 +20,38 @@ public:
 	bool detachSubscriberQuietly(Subscriber* old_subscriber);
 	void detachAllSubscribers();
 
-	void updateData(int new_data);
+	template <typename T>
+	void updateData(T new_data);
 
-	ModelData* getData();
+	template <typename T>
+	T* getData();
 
 private:
-	ModelData data_payload;
+	ModelData* data_payload = NULL;
 	std::vector<Subscriber*> subscribers;
 	
+	void releaseData();
 	void releaseSubscriber(Subscriber* old_subscriber);
+
+	void alertAllSubscribersToUpdate();
 };
+
+template <typename T>
+void DataBlock::updateData(T new_data) {
+	releaseData();
+	data_payload = new TypedModelData<T>(new_data);
+	alertAllSubscribersToUpdate();
+}
+
+template <typename T>
+T* DataBlock::getData() {
+	if (data_payload != NULL) {
+		TypedModelData<T>* data_payload_typed = dynamic_cast<TypedModelData<T>*>(data_payload);
+		if (data_payload_typed != NULL) {
+			return data_payload_typed->getPayloadReference();
+		}
+	}
+	return NULL;
+}
 
 #endif // DATA_BLOCK_HPP

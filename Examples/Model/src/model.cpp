@@ -29,7 +29,7 @@ bool Model::updateData(std::string data_id, int new_data) {
 	if (data_iter == flat_data.end()) {
 		return false;
 	}
-	data_iter->second.updateData(new_data);
+	data_iter->second.updateData<int>(new_data);
 	return true;
 }
 

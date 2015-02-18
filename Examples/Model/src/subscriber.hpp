@@ -3,11 +3,10 @@
 #define SUBSCRIBER_HPP
 
 #include "model_data.hpp"
+#include "data_block.hpp"
 
 #include <iostream>
 #include <functional>
-
-class DataBlock;
 
 class Subscriber {
 public:
@@ -15,7 +14,8 @@ public:
 	virtual ~Subscriber();
 
 	// Interface functions
-	ModelData* getModelData();
+	template <typename T>
+	T* getData();
 
 	// Model access functions
 	void setDataBlock(DataBlock* new_data_block);
@@ -28,6 +28,15 @@ private:
 
 	Subscriber(const Subscriber& that);
 };
+
+template <typename T>
+T* Subscriber::getData() {
+	if (data_block == NULL) {
+		return NULL;
+	}
+	return data_block->getData<T>();
+}
+
 
 class ClosureSubscriber : public Subscriber {
 public:

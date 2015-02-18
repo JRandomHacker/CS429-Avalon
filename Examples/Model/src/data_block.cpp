@@ -1,11 +1,14 @@
 #include "data_block.hpp"
 
+#include "subscriber.hpp"
+
 DataBlock::DataBlock() {
 
 }
 
 DataBlock::~DataBlock() {
 	detachAllSubscribers();
+	releaseData();
 }
 
 DataBlock::DataBlock(const DataBlock& that) {
@@ -52,13 +55,14 @@ void DataBlock::detachAllSubscribers() {
 	subscribers.erase(subscribers.begin(), subscribers.end());
 }
 
-void DataBlock::updateData(int new_data) {
-	data_payload.setPayload(new_data);
-	for (auto subscriber_iter = subscribers.begin(); subscriber_iter != subscribers.end(); subscriber_iter++) {
-		(*subscriber_iter)->dataUpdated();
+void DataBlock::releaseData() {
+	if (data_payload != NULL) {
+		delete data_payload;
 	}
 }
 
-ModelData* DataBlock::getData() {
-	return &data_payload;
+void DataBlock::alertAllSubscribersToUpdate() {
+	for (auto subscriber_iter = subscribers.begin(); subscriber_iter != subscribers.end(); subscriber_iter++) {
+		(*subscriber_iter)->dataUpdated();
+	}
 }

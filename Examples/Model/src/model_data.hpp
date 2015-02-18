@@ -6,24 +6,27 @@
 
 class ModelData {
 public:
-	ModelData();
-	~ModelData();
-
-	// Interface functions
-	int* getPayload();
-
-	// Model functions
-	void setPayload(int new_payload);
-	void dumpPayload();
+	ModelData() = default;
+	virtual ~ModelData() = default;
 
 private:
-	void allocatePayload(size_t new_payload_size);
-	void deallocatePayload();
-
-	size_t payload_size = 0;
-	void* payload = NULL;
-
 	ModelData(const ModelData& that);
+};
+
+template <typename T>
+class TypedModelData : public ModelData {
+public:
+	TypedModelData() = delete;
+	explicit TypedModelData(T payload_in) : payload(payload_in) {}
+	virtual ~TypedModelData() = default;
+
+	T getPayload() { return payload; };
+	T* getPayloadReference() { return &payload; };
+
+private:
+	T payload;
+
+	TypedModelData(const TypedModelData& that);
 };
 
 #endif // MODEL_DATA_HPP

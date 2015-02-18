@@ -2,25 +2,42 @@
 
 #include <iostream>
 
-#define VOTING_STATE 0
+class A {
+public:
+	virtual ~A() {
+		std::cout << "A's DESTRUCTOR IS CALLED" << std::endl;
+	}
 
-void enterVotingState(Model& model) {
-	model.updateData("state", VOTING_STATE);
-	model.addData("voting_state|hasplayervoted", 0);
-	model.addData("voting_state|playersonquest", 0);
-	model.addData("voting_state|votenum", 1);
-	model.addData("voting_state|questnum", 1);
-	model.addData("voting_state|player0|hasvoted", 0);
-}
+	virtual void bah() {
+		std::cout << "A" << std::endl;
+	}
+};
 
-void exitVotingState(Model& model) {
-	model.removeData("voting_state|hasplayervoted");
-	model.removeData("voting_state|playersonquest");
-	model.removeData("voting_state|votenum");
-	model.removeData("voting_state|questnum");
-	model.removeData("voting_state|player0|hasvoted");
-}
+class B : public A {
+public:
+	virtual void bah() {
+		std::cout << "B" << std::endl;
+	}
+};
+
+class C : public A {
+public:
+	virtual void bah() {
+		std::cout << "C" << std::endl;
+	}
+};
 
 int main() {
 	std::cout << "HI!" << std::endl;
+	A* a = new B();
+
+	B* b = dynamic_cast<B*>(a);
+	C* c = dynamic_cast<C*>(a);
+
+	std::cout << "B: " << b << std::endl;
+	b->bah();
+
+	std::cout << "C: " << c << std::endl;
+
+	delete a;
 }

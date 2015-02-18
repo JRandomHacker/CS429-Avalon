@@ -1,7 +1,5 @@
 #include "subscriber.hpp"
 
-#include "data_block.hpp"
-
 Subscriber::Subscriber() {
 
 }
@@ -10,13 +8,6 @@ Subscriber::~Subscriber() {
 	if (data_block != NULL) {
 		data_block->detachSubscriberQuietly(this);
 	}
-}
-
-ModelData* Subscriber::getModelData() {
-	if (data_block == NULL) {
-		return NULL;
-	}
-	return data_block->getData();
 }
 
 void Subscriber::setDataBlock(DataBlock* new_data_block) {
