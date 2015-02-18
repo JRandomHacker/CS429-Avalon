@@ -24,23 +24,14 @@ bool Model::unsubscribe(std::string data_id, Subscriber* old_subscriber) {
 	return data_iter->second.detachSubscriber(old_subscriber);
 }
 
-bool Model::updateData(std::string data_id, int new_data) {
-	auto data_iter = flat_data.find(data_id);
-	if (data_iter == flat_data.end()) {
-		return false;
-	}
-	data_iter->second.updateData<int>(new_data);
-	return true;
-}
-
-bool Model::addData(std::string data_id, int initial_value) {
+bool Model::addData(std::string data_id) {
 	auto data_iter = flat_data.find(data_id);
 	if (data_iter != flat_data.end()) {
 		return false;
 	}
 	DataBlock new_block;
 	flat_data.insert({data_id, new_block});
-	return updateData(data_id, initial_value);
+	return true;
 }
 
 bool Model::removeData(std::string data_id) {

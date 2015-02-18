@@ -25,9 +25,9 @@ void ModelTests::enterVotingState() {
 TEST_F( ModelTests, testAddingData) {
     // Adds data successfully twice, but then fails by trying to duplicate a
     // data name.
-    ASSERT_TRUE(model.addData("data_name", 0));
-    ASSERT_TRUE(model.addData("second_data_name", 0));
-    ASSERT_FALSE(model.addData("data_name", 0));
+    ASSERT_TRUE(model.addData<int>("data_name", 0));
+    ASSERT_TRUE(model.addData<int>("second_data_name", 0));
+    ASSERT_FALSE(model.addData<int>("data_name", 0));
 }
 
 TEST_F( ModelTests, testAbleToSubscribeWithData) {
@@ -37,7 +37,7 @@ TEST_F( ModelTests, testAbleToSubscribeWithData) {
     // Fails to subscribe as there is no data named garbage to subscribe to
     ASSERT_FALSE(model.subscribe("garbage", &sub1));
 
-    model.addData("data_name", 0);
+    model.addData<int>("data_name", 0);
 
     // Successfully subscribe to the new data
     ASSERT_TRUE(model.subscribe("data_name", &sub1));
@@ -65,7 +65,7 @@ TEST_F( ModelTests, testAbleToUpdateAndRetrieveData) {
     MockSubscriber sub2;
 
     // Adds data to subscribe to
-    model.addData("data_name", 0);
+    model.addData<int>("data_name", 0);
 
     // Successfully subscribe to the new data
     ASSERT_TRUE(model.subscribe("data_name", &sub1));
@@ -75,7 +75,7 @@ TEST_F( ModelTests, testAbleToUpdateAndRetrieveData) {
 
     // Updates the data and ensures that the subscriber is still accurate and
     // that its update method was called
-    model.updateData("data_name", 1);
+    model.updateData<int>("data_name", 1);
     ASSERT_EQ(1, *sub1.getData<int>());
     ASSERT_EQ(1, sub1.updatedCount);
 
@@ -84,7 +84,7 @@ TEST_F( ModelTests, testAbleToUpdateAndRetrieveData) {
     ASSERT_EQ(1, *sub2.getData<int>());
 
     // Updates the data and ensures that both subscribers were updated
-    model.updateData("data_name", 2);
+    model.updateData<int>("data_name", 2);
     ASSERT_EQ(2, *sub1.getData<int>());
     ASSERT_EQ(2, sub1.updatedCount);
     ASSERT_EQ(2, *sub2.getData<int>());
@@ -99,7 +99,7 @@ TEST_F( ModelTests, testDeletingDataRemovesSubscribers) {
     MockSubscriber sub1;
     
     // Adds data to subscribe to
-    model.addData("data_name", 0);
+    model.addData<int>("data_name", 0);
 
     // Successfully subscribe to the new data
     ASSERT_TRUE(model.subscribe("data_name", &sub1));
@@ -120,7 +120,7 @@ TEST_F( ModelTests, testModelDestructed) {
     Model* destroyable_model = new Model();
 
     // Adds data to subscribe to
-    destroyable_model->addData("data_name", 0);
+    destroyable_model->addData<int>("data_name", 0);
 
     // Successfully subscribe to the new data
     ASSERT_TRUE(destroyable_model->subscribe("data_name", &sub1));
@@ -138,7 +138,7 @@ TEST_F( ModelTests, testSubscribersUnsubscribeOnDeconstruction ) {
     // Create a model and subscriber and pair the two
     MockSubscriber* sub = new MockSubscriber();
     Model* mod = new Model();
-    mod->addData("data_name", 0);
+    mod->addData<int>("data_name", 0);
     mod->subscribe("data_name", (Subscriber*)sub);
 
     // Delete the subscriber, which should unsubscribe it
@@ -161,10 +161,10 @@ TEST_F( ModelTests, testClosureSubscriber) {
         },
         [&](Subscriber* s){ subscriber_destroyed = true; });
 
-    model.addData("data_name", 0);
+    model.addData<int>("data_name", 0);
     model.subscribe("data_name", &sub);
 
-    model.updateData("data_name", 5);
+    model.updateData<int>("data_name", 5);
 
     ASSERT_EQ(1, subscriber_num_updates);
     ASSERT_EQ(5, subscriber_latest_value);

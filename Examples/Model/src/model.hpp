@@ -16,9 +16,12 @@ public:
 
 	bool subscribe(std::string data_id, Subscriber* new_subscriber);
 	bool unsubscribe(std::string data_id, Subscriber* old_subscriber);
-	
-	bool updateData(std::string data_id, int new_data);
-	bool addData(std::string data_id, int inital_value);
+
+	template <typename T>
+	bool updateData(std::string data_id, T new_data);
+	template <typename T>
+	bool addData(std::string data_id, T initial_data);
+	bool addData(std::string data_id);
 	bool removeData(std::string data_id);
 
 private:
@@ -28,5 +31,24 @@ private:
 
 	Model(const Model& that);
 };
+
+template <typename T>
+bool Model::updateData(std::string data_id, T new_data) {
+	auto data_iter = flat_data.find(data_id);
+	if (data_iter == flat_data.end()) {
+		return false;
+	}
+	data_iter->second.updateData<T>(new_data);
+	return true;
+}
+
+template <typename T>
+bool Model::addData(std::string data_id, T initial_value) {
+	bool data_created = addData(data_id);
+	if (!data_created) {
+		return false;
+	}
+	return updateData<T>(data_id, initial_value);
+}
 
 #endif // MODEL_HPP
