@@ -18,9 +18,9 @@ public:
 	bool unsubscribe(std::string data_id, Subscriber* old_subscriber);
 
 	template <typename T>
-	bool updateData(std::string data_id, T new_data);
+	bool updateData(std::string data_id, const T& new_data);
 	template <typename T>
-	bool addData(std::string data_id, T initial_data);
+	bool addData(std::string data_id, const T& initial_data);
 	bool addData(std::string data_id);
 	bool removeData(std::string data_id);
 
@@ -33,7 +33,7 @@ private:
 };
 
 template <typename T>
-bool Model::updateData(std::string data_id, T new_data) {
+bool Model::updateData(std::string data_id, const T& new_data) {
 	auto data_iter = flat_data.find(data_id);
 	if (data_iter == flat_data.end()) {
 		return false;
@@ -43,7 +43,7 @@ bool Model::updateData(std::string data_id, T new_data) {
 }
 
 template <typename T>
-bool Model::addData(std::string data_id, T initial_value) {
+bool Model::addData(std::string data_id, const T& initial_value) {
 	bool data_created = addData(data_id);
 	if (!data_created) {
 		return false;

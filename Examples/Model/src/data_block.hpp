@@ -21,7 +21,7 @@ public:
 	void detachAllSubscribers();
 
 	template <typename T>
-	void updateData(T new_data);
+	void updateData(const T& new_data);
 
 	template <typename T>
 	T* getData();
@@ -37,7 +37,7 @@ private:
 };
 
 template <typename T>
-void DataBlock::updateData(T new_data) {
+void DataBlock::updateData(const T& new_data) {
 	releaseData();
 	data_payload = new TypedModelData<T>(new_data);
 	alertAllSubscribersToUpdate();

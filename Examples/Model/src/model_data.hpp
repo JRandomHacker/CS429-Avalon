@@ -17,10 +17,10 @@ template <typename T>
 class TypedModelData : public ModelData {
 public:
 	TypedModelData() = delete;
-	explicit TypedModelData(T payload_in) : payload(payload_in) {}
+	explicit TypedModelData(const T& payload_in) : payload(payload_in) {}
 	virtual ~TypedModelData() = default;
 
-	T getPayload() { return payload; };
+	T& getPayload() { return payload; };
 	T* getPayloadReference() { return &payload; };
 
 private:

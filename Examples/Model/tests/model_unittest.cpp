@@ -18,16 +18,69 @@ public:
     Model model;
 };
 
-void ModelTests::enterVotingState() {
+class ConDestructTester {
+public:
+    static int constcount, destcount, copycount;
 
-}
+    ConDestructTester() { constcount++; }
+    ~ConDestructTester() {
+        destcount++;
+    }
+    ConDestructTester(const ConDestructTester& that) { copycount++; }
+};
+int ConDestructTester::constcount = 0;
+int ConDestructTester::destcount = 0;
+int ConDestructTester::copycount = 0;
 
 TEST_F( ModelTests, testAddingData) {
     // Adds data successfully twice, but then fails by trying to duplicate a
     // data name.
     ASSERT_TRUE(model.addData<int>("data_name", 0));
-    ASSERT_TRUE(model.addData<int>("second_data_name", 0));
+    ASSERT_TRUE(model.addData<bool>("second_data_name", false));
     ASSERT_FALSE(model.addData<int>("data_name", 0));
+}
+
+TEST_F( ModelTests, testAddingConstructedData ) {
+    ConDestructTester::constcount = 0;
+    ConDestructTester::destcount = 0;
+    ConDestructTester::copycount = 0;
+
+    Model* mod = new Model();
+
+    // Adds data that has a constructor and a destructor
+    ConDestructTester cdt;
+    EXPECT_EQ(1, ConDestructTester::constcount);
+    EXPECT_EQ(0, ConDestructTester::destcount);
+    EXPECT_EQ(0, ConDestructTester::copycount);
+    
+    ASSERT_TRUE(mod->addData<ConDestructTester>("constructed_data", cdt));
+    EXPECT_EQ(1, ConDestructTester::constcount);
+    EXPECT_EQ(0, ConDestructTester::destcount);
+    EXPECT_EQ(1, ConDestructTester::copycount);
+
+    ASSERT_TRUE(mod->removeData("constructed_data"));
+    EXPECT_EQ(1, ConDestructTester::constcount);
+    EXPECT_EQ(1, ConDestructTester::destcount);
+    EXPECT_EQ(1, ConDestructTester::copycount);
+    
+    ConDestructTester::constcount = 0;
+    ConDestructTester::destcount = 0;
+    ConDestructTester::copycount = 0;
+
+    ConDestructTester* cdt2 = new ConDestructTester();
+    EXPECT_EQ(1, ConDestructTester::constcount);
+    EXPECT_EQ(0, ConDestructTester::destcount);
+    EXPECT_EQ(0, ConDestructTester::copycount);
+    
+    ASSERT_TRUE(mod->addData<ConDestructTester>("constructed_data", *cdt2));
+    EXPECT_EQ(1, ConDestructTester::constcount);
+    EXPECT_EQ(0, ConDestructTester::destcount);
+    EXPECT_EQ(1, ConDestructTester::copycount);
+
+    delete mod;
+    EXPECT_EQ(1, ConDestructTester::constcount);
+    EXPECT_EQ(1, ConDestructTester::destcount);
+    EXPECT_EQ(1, ConDestructTester::copycount);
 }
 
 TEST_F( ModelTests, testAbleToSubscribeWithData) {
