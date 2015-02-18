@@ -16,6 +16,7 @@ public:
 
 	bool subscribe(std::string data_id, Subscriber* new_subscriber);
 	bool unsubscribe(std::string data_id, Subscriber* old_subscriber);
+	
 	bool updateData(std::string data_id, int new_data);
 	bool addData(std::string data_id, int inital_value);
 	bool removeData(std::string data_id);

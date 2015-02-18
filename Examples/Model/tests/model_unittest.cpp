@@ -71,23 +71,23 @@ TEST_F( ModelTests, testAbleToUpdateAndRetrieveData) {
     ASSERT_TRUE(model.subscribe("data_name", &sub1));
 
     // Ensure that the subscriber can access the data
-    ASSERT_EQ(0, sub1.getModelData()->getPayload());
+    ASSERT_EQ(0, *sub1.getModelData()->getPayload());
 
     // Updates the data and ensures that the subscriber is still accurate and
     // that its update method was called
     model.updateData("data_name", 1);
-    ASSERT_EQ(1, sub1.getModelData()->getPayload());
+    ASSERT_EQ(1, *sub1.getModelData()->getPayload());
     ASSERT_EQ(1, sub1.updatedCount);
 
     // Adds a second subscriber
     ASSERT_TRUE(model.subscribe("data_name", &sub2));
-    ASSERT_EQ(1, sub2.getModelData()->getPayload());
+    ASSERT_EQ(1, *sub2.getModelData()->getPayload());
 
     // Updates the data and ensures that both subscribers were updated
     model.updateData("data_name", 2);
-    ASSERT_EQ(2, sub1.getModelData()->getPayload());
+    ASSERT_EQ(2, *sub1.getModelData()->getPayload());
     ASSERT_EQ(2, sub1.updatedCount);
-    ASSERT_EQ(2, sub2.getModelData()->getPayload());
+    ASSERT_EQ(2, *sub2.getModelData()->getPayload());
     ASSERT_EQ(1, sub2.updatedCount);
 
     // Since the subscribers are being destroyed they need to be freed
@@ -157,7 +157,7 @@ TEST_F( ModelTests, testClosureSubscriber) {
     ClosureSubscriber sub(
         [&](Subscriber* s){
             subscriber_num_updates++;
-            subscriber_latest_value = s->getModelData()->getPayload();
+            subscriber_latest_value = *s->getModelData()->getPayload();
         },
         [&](Subscriber* s){ subscriber_destroyed = true; });
 

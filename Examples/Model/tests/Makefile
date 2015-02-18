@@ -2,7 +2,7 @@ TESTS_DIR=.
 SRC_DIR=../src
 HEADER_DIR=$(SRC_DIR)
 CUSTOM_CPPFLAGS= -isystem $(HEADER_DIR)
-CUSTOM_CXXFLAGS= -Wall -Wextra
+CUSTOM_CXXFLAGS= -Wall -Wextra -g
 CXX=g++
 
 # If we're on Windows, add these flags for static linking, so the executables are portable
