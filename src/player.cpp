@@ -18,6 +18,12 @@ Player::Player( std::string name, avalon::special_roles_t role, avalon::alignmen
     this->alignment = alignment;
 }
 
+Player::Player( const avalon::network::Player& p ) {
+	this->name = p.name( );
+	this->role = static_cast< avalon::special_roles_t >( p.role( ) );
+	this->alignment = static_cast< avalon::alignment_t >( p.alignment( ) );
+}
+
 // Getter for alignment
 avalon::alignment_t Player::getAlignment( ) {
     return alignment;

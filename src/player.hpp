@@ -11,6 +11,8 @@
 #include <string>
 #include "globals.hpp"
 
+#include "../protos/player.pb.h"
+
 class Player {
 
     private:
@@ -25,10 +27,17 @@ class Player {
          * Constructor for a new player
          *
          * @param name The name assigned to the player
-         * @role The special role assigned to the player, or NONE if they are not special
-         * @alignment Whether the player is on the side of good, or evil
+         * @param role The special role assigned to the player, or NONE if they are not special
+         * @param alignment Whether the player is on the side of good, or evil
          */
         Player( std::string name, avalon::special_roles_t role, avalon::alignment_t alignment );
+        
+        /**
+         * Constructor for a new player from a network player
+         * 
+         * @param p The protobuf player from the network
+         */
+        Player( const avalon::network::Player& p );
 
         /**
          * Getter for the players alignment

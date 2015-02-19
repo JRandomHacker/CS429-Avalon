@@ -1,5 +1,6 @@
-PROGS=server.exe
+PROGS=server.exe client.exe
 SERVER_OBJS=server.o player.o globals.o player.pb.o
+CLIENT_OBJS=model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o
 
 PROTOS_DIR=../protos
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
@@ -32,10 +33,25 @@ player.o : player.cpp
 
 server.o : server.cpp  protofiles
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
+	
+model.o : model.cpp model.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+subscriber.o : subscriber.cpp subscriber.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+model_data.o : model_data.cpp model_data.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+data_block.o : data_block.cpp data_block.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
 player.pb.o : $(PROTOS_DIR)/player.pb.cc
 	 pkg-config --cflags protobuf
 	 $(CXX) $(CXXOPTS) -c $<
 
 server.exe : server_main.cpp $(SERVER_OBJS)
+	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)
+	
+client.exe : mock_client.cpp $(CLIENT_OBJS)
 	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)
