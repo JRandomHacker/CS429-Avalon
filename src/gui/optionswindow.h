@@ -15,10 +15,12 @@ public:
     explicit OptionsWindow(QWidget *parent = 0);
     ~OptionsWindow();
 
+public slots:
+    void createServer();
+
 private:
     Ui::OptionsWindow *ui;
     
-    createServer();
 };
 
 #endif // OPTIONSWINDOW_H
