@@ -17,6 +17,8 @@ public:
 
 private:
     Ui::OptionsWindow *ui;
+    
+    createServer();
 };
 
 #endif // OPTIONSWINDOW_H

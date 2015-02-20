@@ -79,7 +79,7 @@ int main( int argc, char** argv ) {
     int playerBufSize;
     avalon::network::Player currNetPlayer;
     
-    recv( sock, &playerBufSize, sizeof( int ), 0 );
+    recv( sock, (char*) &playerBufSize, sizeof( int ), 0 );
 
     std::cout << "Receiving: " << playerBufSize << std::endl;
     
