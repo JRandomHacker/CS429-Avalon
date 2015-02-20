@@ -18,7 +18,7 @@ public:
 	/**
 	 * Adds a subscriber so that they can be notified of any changes.
 	 * @param new_subscriber Pointer to the Subscriber object for our new subscriber.
-	 * @return true on success
+	 * @return true on success.
 	**/
 	bool addSubscriber(Subscriber* new_subscriber);
 	/**
