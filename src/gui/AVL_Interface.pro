@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = AVL_Interface
 TEMPLATE = app
 
+CONFIG += c++11
 
 SOURCES += main.cpp\
         optionswindow.cpp

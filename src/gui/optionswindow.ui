@@ -206,15 +206,48 @@
      <string>Available Characters</string>
     </property>
    </widget>
-   <widget class="QColumnView" name="columnView">
+   <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
-      <x>225</x>
-      <y>60</y>
+      <x>230</x>
+      <y>70</y>
       <width>201</width>
       <height>192</height>
      </rect>
     </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::MultiSelection</enum>
+    </property>
+    <item>
+     <property name="text">
+      <string>merlin</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>percival</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>mordred</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>morgana</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>assassin</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>oberon</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -223,7 +256,7 @@
      <x>0</x>
      <y>0</y>
      <width>673</width>
-     <height>26</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAvalon_Oline">

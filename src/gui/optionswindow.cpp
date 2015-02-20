@@ -31,7 +31,6 @@ OptionsWindow::~OptionsWindow( ) {
 }
 
 void OptionsWindow::createServer() {
-    //fprintf(stdout, "Fork!  If I could figure out how...");
     if( fork( ) == 0 ) {
         int i = 0;
         char* args[ MAX_ARGS + 1 ]; // +1 for the NULL pointer at the end of the array
@@ -41,9 +40,19 @@ void OptionsWindow::createServer() {
         playerStr += std::to_string( ui->serverSectionPlayerAmount->value( ) );
         std::cout << playerStr << std::endl;
 
+        QList<QListWidgetItem* > roles = ui->listWidget->selectedItems();
+
         // First argument must be the executable
         args[ i++ ] = (char*)"../server.exe";
         args[ i++ ] = (char*)playerStr.c_str();
+
+        for ( int j = 0; j < roles.length(); j++ ) {
+            std::string dashDash = "--";
+            dashDash += roles[j]->text().toStdString();
+            std::cout << dashDash << std::endl;
+            args[ i++ ] = (char*)dashDash.c_str();
+        }
+
         args[ i ] = NULL; // Must be null terminated
         
         // execv takes an array for the arguments
