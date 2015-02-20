@@ -17,7 +17,7 @@ public:
 	/**
 	 * If the given data_id is found, adds new subscriber.
 	 * @param data_id id to search for
-	 * @param new_subscriber Pointer to Subscriber object to add to subscribers
+	 * @param new_subscriber Pointer to Subscriber object to add to subscribers.
 	 * @return true if successfully added, false if data_id not found
 	**/
 	bool subscribe(std::string data_id, Subscriber* new_subscriber);
