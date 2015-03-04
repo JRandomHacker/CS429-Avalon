@@ -14,13 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         optionswindow.cpp \
-    testdialog.cpp \
     connectwindow.cpp \
     gamewindow.cpp \
     createserverwindow.cpp
 
 HEADERS  += optionswindow.h \
-    testdialog.h \
     connectwindow.h \
     gamewindow.h \
     createserverwindow.h
