@@ -30,13 +30,13 @@ void CreateServerWindow::createServer() {
         execStr += " --players=";
         execStr += std::to_string( ui->sbNumPlayers->value( ) );
 
-        /*QList<QListWidgetItem* > roles = ui->listView->selectedItems();
+        QList<QListWidgetItem* > roles = ui->listWidget->selectedItems();
 
         for ( int j = 0; j < roles.length(); j++ ) {
             std::string flagStr = " --";
             flagStr += roles[j]->text().toStdString();
             execStr += flagStr;
-        }*/
+        }
 
 		// Setup required structs for windows process
 		STARTUPINFOA StartupInfo;
@@ -69,19 +69,19 @@ void CreateServerWindow::createServer() {
 	        std::string playerStr = "--players=";
 	        playerStr += std::to_string( ui->sbNumPlayers->value( ) );
 
-	        /*QList<QListWidgetItem* > roles = ui->listWidget->selectedItems();*/
+	        QList<QListWidgetItem* > roles = ui->listWidget->selectedItems();
 	
 	        // First argument must be the executable
 	        args[ i++ ] = (char*)"./server.exe";
 	        args[ i++ ] = (char*)playerStr.c_str();
-            /*
+          
 	        for ( int j = 0; j < roles.length(); j++ ) {
                 std::string flagStr = "--";
                 flagStr += roles[j]->text().toStdString();
                 char* tempFlagStr = new char[ flagStr.size( ) ];
                 strcpy( tempFlagStr, flagStr.c_str() );
                 args[ i++ ] = tempFlagStr;
-	        }*/
+	        }
 	
 	        args[ i ] = NULL; // Must be null terminated
 	        // execv takes an array for the arguments
@@ -94,25 +94,15 @@ void CreateServerWindow::createServer() {
 	    }
     #endif
     sleep(1);
-    //joinServer( "localhost", DEFAULT_PORT );
 }
-/*
-void OptionsWindow::joinServerSlot( ) {
-    joinServer( ui->clientSectionServerAddressField->text().toStdString(), DEFAULT_PORT );
-}
-*/
+
 void CreateServerWindow::on_buttonCreateServer_clicked()
 {
     createServer();
 
-    ConnectWindow w;
+    ConnectWindow w(this, "localhost", DEFAULT_PORT);
     w.setModal(true);
     w.exec();
 }
 
-/*
-void OptionsWindow::joinServer( std::string host, int port ) {
-    ClientController controller( NULL, host, port );
-    controller.processActions( );
-}
-*/
+

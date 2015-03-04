@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QListView" name="listView">
+  <widget class="QListWidget" name="listWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -22,6 +22,39 @@
      <height>241</height>
     </rect>
    </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::MultiSelection</enum>
+   </property>
+    <item>
+     <property name="text">
+      <string>merlin</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>percival</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>mordred</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>morgana</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>assassin</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>oberon</string>
+     </property>
+    </item>
   </widget>
   <widget class="QSpinBox" name="sbNumPlayers">
    <property name="geometry">
