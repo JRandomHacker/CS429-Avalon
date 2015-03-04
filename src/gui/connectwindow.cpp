@@ -2,6 +2,7 @@
 #include "gamewindow.h"
 #include "ui_connectwindow.h"
 #include "clientController.hpp"
+#include "model.hpp"
 
 ConnectWindow::ConnectWindow(QWidget *parent, std::string ip, int port) :
     QDialog(parent),
@@ -9,7 +10,13 @@ ConnectWindow::ConnectWindow(QWidget *parent, std::string ip, int port) :
 {
     ui->setupUi(this);
     
-    joinServer(ip, port);
+    Model m;
+    ClientController controller( &m, ip, port );
+    //controller.processActions( );
+    
+    GameWindow g(this, &controller, &m);
+    g.setModal(true);
+    g.exec();
 }
 
 ConnectWindow::~ConnectWindow()
@@ -23,9 +30,3 @@ void ConnectWindow::on_dummyConnect_clicked()
     g.setModal(true);
     g.exec();
 }
-
-void ConnectWindow::joinServer( std::string host, int port ) {
-    ClientController controller( NULL, host, port );
-    controller.processActions( );
-}
-

@@ -19,7 +19,6 @@ public:
 
 private slots:
     void on_dummyConnect_clicked();
-    void joinServer(std::string ip, int port);
     
 private:
     Ui::ConnectWindow *ui;
