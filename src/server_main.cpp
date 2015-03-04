@@ -39,7 +39,7 @@ int main( int argc, char** argv ) {
     // Make sure we weren't given a super silly number for players
     if( num_players <= 0 ) {
         std::cerr << "--players is required, and must have a positive integer" << std::endl;
-        exit( EXIT_INVALID_PLAYERS );
+        exit( EXIT_INVALID_PLAYERS_ERROR );
     }
 
     // Set the default port if we weren't provided one

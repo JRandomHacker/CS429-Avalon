@@ -36,7 +36,7 @@ avalon::alignment_t avalon::getRoleAlignment( avalon::special_roles_t role ) {
 }
 
 // Figures out the proper number of evil players
-int avalon::getEvilCount( int num_players ) {
+unsigned int avalon::getEvilCount( int num_players ) {
 
     if( num_players ) {
         return 1;

@@ -29,17 +29,17 @@ Client::Client( std::string host, int port ) {
     hints.ai_flags = 0;
     if( getaddrinfo( "localhost", std::to_string( DEFAULT_PORT ).c_str(), &hints, &servinfo ) != 0 ) {
         std::cerr << "Unable to get address info" << std::endl;
-        exit( EXIT_FAILURE );
+        exit( EXIT_SOCKET_ERROR );
     }
 
     if( ( sock = socket( AF_INET, SOCK_STREAM, 0 ) ) == INVALID_SOCKET ) {
         std::cerr << "Socket bind failure" << std::endl;
-        exit( EXIT_FAILURE );
+        exit( EXIT_SOCKET_ERROR );
     }
 
     if( connect( sock, servinfo->ai_addr, servinfo->ai_addrlen ) != 0 ) {
         std::cerr << "Unable to connect to server" << std::endl;
-        exit( EXIT_FAILURE );
+        exit( EXIT_SOCKET_ERROR );
     }
 }
 

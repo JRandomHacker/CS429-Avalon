@@ -83,8 +83,7 @@ void OptionsWindow::createServer() {
 	        // Get the number of players
 	        std::string playerStr = "--players=";
 	        playerStr += std::to_string( ui->serverSectionPlayerAmount->value( ) );
-	        std::cout << playerStr << std::endl;
-	
+
 	        QList<QListWidgetItem* > roles = ui->listWidget->selectedItems();
 	
 	        // First argument must be the executable
@@ -92,10 +91,11 @@ void OptionsWindow::createServer() {
 	        args[ i++ ] = (char*)playerStr.c_str();
 	
 	        for ( int j = 0; j < roles.length(); j++ ) {
-	            std::string dashDash = "--";
-	            dashDash += roles[j]->text().toStdString();
-	            std::cout << dashDash << std::endl;
-	            args[ i++ ] = (char*)dashDash.c_str();
+                std::string flagStr = "--";
+                flagStr += roles[j]->text().toStdString();
+                char* tempFlagStr = new char[ flagStr.size( ) ];
+                strcpy( tempFlagStr, flagStr.c_str() );
+                args[ i++ ] = tempFlagStr;
 	        }
 	
 	        args[ i ] = NULL; // Must be null terminated
@@ -106,9 +106,6 @@ void OptionsWindow::createServer() {
 	        // If the server exits on its own, we won't get here
 	        std::cerr << "Unable to find server executable, or something terrible happened!" << std::endl;
 	        exit( 1 );
-	    }
-	    else {
-	        std::cout << "Server Created." << std::endl;
 	    }
     #endif
     sleep(1);

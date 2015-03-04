@@ -12,8 +12,10 @@
 
 #define DEFAULT_PORT 42917
 
-#define EXIT_INVALID_PLAYERS 1
-#define EXIT_THREAD_ERROR 2
+#define EXIT_INVALID_PLAYERS_ERROR -1
+#define EXIT_THREAD_ERROR -2
+#define EXIT_EVIL_ERROR -3 // Too many evil roles compared to evil player count
+#define EXIT_SOCKET_ERROR -4
 
 namespace avalon {
 
@@ -50,7 +52,7 @@ namespace avalon {
      * @param num_players The number of players in the game
      * @return int The number of players who should be evil
      */
-    int getEvilCount( int num_players );
+    unsigned int getEvilCount( int num_players );
 
 	namespace network {
 		/*! An enumerator for different protobuf types */

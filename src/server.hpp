@@ -22,7 +22,7 @@
 class Server {
 
     private:
-        int num_clients;
+        unsigned int num_clients;
         int port;
         Player** players;
 

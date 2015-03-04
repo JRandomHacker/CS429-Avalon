@@ -67,10 +67,15 @@ void Server::initPlayers( std::vector< avalon::special_roles_t > special_roles )
     }
 
     // Add the possible characters to the vectors
-    int numEvil = avalon::getEvilCount( num_clients );
+    unsigned int numEvil = avalon::getEvilCount( num_clients );
+
+	if ( evilChars.size( ) > numEvil ) {
+		std::cerr << "More evil roles than evil players. Exiting." << std::endl;
+		exit( EXIT_EVIL_ERROR );
+	}
 
     // possibleChars vector
-    for( int i = 0; i < num_clients; i++ ) {
+    for( unsigned int i = 0; i < num_clients; i++ ) {
         if( i < numEvil ) {
             possibleChars.push_back( avalon::EVIL );
         } else {
@@ -138,7 +143,7 @@ Server::~Server( ) {
         WSACleanup( );
     #endif
 
-    for( int i = 0; i < num_clients; i++ ) {
+    for( unsigned int i = 0; i < num_clients; i++ ) {
         delete players[ i ];
     }
     delete[] players;
@@ -147,7 +152,7 @@ Server::~Server( ) {
 
 bool Server::waitForClients( ) {
     
-    for( int i = 0; i < num_clients; i++ ) {
+    for( unsigned int i = 0; i < num_clients; i++ ) {
 		avalon::network::Player currPlayer;
 
 		currPlayer.set_role( players[ i ]->getRole( ) );
