@@ -1,6 +1,8 @@
 #include "optionswindow.h"
+#include "connectwindow.h"
+#include "gamewindow.h"
 #include "ui_optionswindow.h"
-#include <unistd.h>
+//#include <unistd.h>
 #include <stdio.h>
 
 OptionsWindow::OptionsWindow(QWidget *parent) :
@@ -18,7 +20,7 @@ OptionsWindow::~OptionsWindow()
 }
 
 
-OptionsWindow::createServer()
+void OptionsWindow::createServer()
 {
     fprintf(stdout, "Fork!  If I could figure out how...");
     /*int child = fork();
@@ -31,4 +33,11 @@ OptionsWindow::createServer()
     {
         cout << "Server Created.";
     }*/
-  }
+}
+
+void OptionsWindow::on_serverSectionCreateButton_clicked()
+{
+    ConnectWindow test;
+    test.setModal(true);
+    test.exec();
+}
