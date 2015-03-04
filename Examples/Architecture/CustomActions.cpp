@@ -1,35 +1,43 @@
 #include "CustomActions.hpp"
 
 //Public constructors
-CreateGameAction::CreateGameAction(std::string mess_text, std::string comm_args) : Action(std::string mess_text) {
+CreateGameAction::CreateGameAction(std::string comm_args) : Action("CreateGame") {
     command_args = comm_args;
 }
 
-JoinGameAction::JoinGameAction(std::string mess_text, std::string serv_info) : Action(std::string mess_text) {
+CreateGameAction::~CreateGameAction() {}
+
+JoinGameAction::JoinGameAction(std::string serv_info) : Action("JoinGame") {
     server_info = serv_info;
 }
 
-EnterLobbyAction::EnterLobbyAction(std::string mess_text, std::string settings) : Action(std::string mess_text) {
+JoinGameAction::~JoinGameAction() {}
+
+EnterLobbyAction::EnterLobbyAction(std::string settings) : Action("EnterLobby") {
     game_settings = settings;
 }
 
-AddPlayerAction::AddPlayerAction(std::string mess_text, std::string player) : Action(std::string mess_text) {
+EnterLobbyAction::~EnterLobbyAction() {}
+
+AddPlayerAction::AddPlayerAction(std::string player) : Action("AddPlayer") {
     player_info = player;
 }
 
+AddPlayerAction::~AddPlayerAction() {}
+
 //Getters
-std::string CreateGameAction::GetArgs() {
+std::string CreateGameAction::getArgs() {
     return command_args;
 }
 
-std::string JoinGameAction::GetServerInfo() {
+std::string JoinGameAction::getServerInfo() {
     return server_info;
 }
 
-std::string EnterLobbyAction::GetSettings() {
+std::string EnterLobbyAction::getSettings() {
     return game_settings;
 }
 
-std::string AddPlayerAction::GetPlayerInfo() {
+std::string AddPlayerAction::getPlayerInfo() {
     return player_info;
 }

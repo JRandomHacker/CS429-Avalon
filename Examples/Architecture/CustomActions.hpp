@@ -1,6 +1,8 @@
 #ifndef CUSTOMACTIONS_HPP
 #define CUSTOMACTIONS_HPP
 
+#include <string>
+
 #include "Action.hpp"
 
 class CreateGameAction : public Action {
@@ -12,9 +14,10 @@ public:
 	 *     of the action
 	 * @param comm_args The string of command args to give to the server
 	 */
-	 CreateGameAction(std::string mess_text, std::string comm_args);
+	CreateGameAction(std::string comm_args);
+	virtual ~CreateGameAction();
 	 
-	 std::string GetArgs();
+	std::string getArgs();
 
 private:
 	std::string command_args;
@@ -30,9 +33,10 @@ public:
 	 * @param serv_info The string representing the IP and port of the server
 	 *     to attempt to connect to
 	 */
-	 JoinGameAction(std::string mess_text, std::string serv_info);
+	JoinGameAction(std::string serv_info);
+	virtual ~JoinGameAction();
 	 
-	 std::string GetServerInfo();
+	std::string getServerInfo();
 
 private:
 	std::string server_info;
@@ -48,9 +52,10 @@ public:
 	 * @param settings The string representing the game settings for the
 	 *     GUI to display
 	 */
-	 EnterLobbyAction(std::string mess_text, std::string settings);
+	EnterLobbyAction(std::string settings);
+	virtual ~EnterLobbyAction();
 	 
-	 std::string GetSettings();
+	std::string getSettings();
 
 private:
 	std::string game_settings;
@@ -66,9 +71,10 @@ public:
 	 * @param player The string representing the player info for the GUI
 	 *     to display
 	 */
-	 JoinGameAction(std::string mess_text, std::string player);
+	AddPlayerAction(std::string player);
+	virtual ~AddPlayerAction();
 	 
-	 std::string GetPlayerInfo();
+	std::string getPlayerInfo();
 
 private:
 	std::string player_info;
