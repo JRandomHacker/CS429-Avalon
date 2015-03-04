@@ -52,8 +52,10 @@ model_data.o : model_data.cpp model_data.hpp
 data_block.o : data_block.cpp data_block.hpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
+settings.pb.o : $(PROTOS_DIR)/settings.pb.cc
+	 $(CXX) $(CXXOPTS) -c $<
+
 player.pb.o : $(PROTOS_DIR)/player.pb.cc
-	 pkg-config --cflags protobuf
 	 $(CXX) $(CXXOPTS) -c $<
 
 server.exe : server_main.cpp $(SERVER_OBJS)
