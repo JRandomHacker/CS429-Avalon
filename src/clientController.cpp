@@ -13,7 +13,7 @@ ClientController::ClientController( Model* model, std::string host, int port ) {
 	this->qSem = new sem_t;
 	this->qMutex = new pthread_mutex_t;
 	
-	sem_init( qSem, 0, -1 ); // Initialize semaphore at -1 so wait immediately blocks
+	sem_init( qSem, 0, 0 ); // Initialize semaphore at -1 so wait immediately blocks
 	pthread_mutex_init( qMutex, NULL );
 	
 	client->initQueue( q, qSem, qMutex );
