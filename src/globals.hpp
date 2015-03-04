@@ -57,10 +57,18 @@ namespace avalon {
 	namespace network {
 		/*! An enumerator for different protobuf types */
 		enum buffers_t {
-			PLAYER_BUF /*! An avalon::network::Player protobuf */
+			PLAYER_BUF, /*! An avalon::network::Player protobuf */
+			SETTINGS_BUF /*! An avalon::network::GameSettings protobuf */
 		};
 	}
 }
+
+typedef struct _tempAction {
+			void* data;
+			int flag;
+			unsigned int playerID;
+		} tempAction;
+	
 
 
 #endif // _GLOBALS_HPP

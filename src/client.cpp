@@ -8,6 +8,7 @@
 #include <queue>
 
 #include "player.pb.h"
+#include "settings.pb.h"
 
 #ifdef _WIN32
 	#include <ws2tcpip.h>
@@ -27,7 +28,7 @@ Client::Client( std::string host, int port ) {
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = 0;
-    if( getaddrinfo( "localhost", std::to_string( DEFAULT_PORT ).c_str(), &hints, &servinfo ) != 0 ) {
+    if( getaddrinfo( host.c_str( ), std::to_string( port ).c_str(), &hints, &servinfo ) != 0 ) {
         std::cerr << "Unable to get address info" << std::endl;
         exit( EXIT_SOCKET_ERROR );
     }
@@ -49,7 +50,7 @@ Client::~Client( ) {
     #endif	
 }
 
-void Client::initQueue( std::queue< Player* >* q, sem_t* qSem, pthread_mutex_t* qMutex ) {
+void Client::initQueue( std::queue< tempAction >* q, sem_t* qSem, pthread_mutex_t* qMutex ) {
 	this->q = q;
 	this->qSem = qSem;
 	this->qMutex = qMutex;
@@ -66,6 +67,9 @@ void Client::waitForData( ) {
 		case avalon::network::PLAYER_BUF:
 			recvPlayer( bufLength );
 			break;
+		case avalon::network::SETTINGS_BUF:
+			recvSettings( bufLength );
+			break;
 		default:
 			break;
 	}
@@ -79,10 +83,34 @@ void Client::recvPlayer( int bufLength ) {
 	pBuf.ParseFromArray( playerBuf, bufLength );
 	Player* p = new Player( pBuf );
 	
+	tempAction t;
+	t.data = p;
+	t.flag = 1; // Player* is 1
+	t.playerID = pBuf.id( );
+	
 	pthread_mutex_lock( qMutex );
-	q->push( p );
+	q->push( t );
 	pthread_mutex_unlock( qMutex );
 	sem_post( qSem );
 	
 	delete playerBuf;
+}
+
+void Client::recvSettings( int bufLength ) {
+	char* settingsBuf = new char[ bufLength ];
+	recv( sock, settingsBuf, bufLength * sizeof( char ), 0);
+	
+	avalon::network::GameSettings* sBuf = new avalon::network::GameSettings( );
+	sBuf->ParseFromArray( settingsBuf, bufLength );
+	
+	tempAction t;
+	t.data = sBuf;
+	t.flag = 2; // GameSettings* is 2
+	
+	pthread_mutex_lock( qMutex );
+	q->push( t );
+	pthread_mutex_unlock( qMutex );
+	sem_post( qSem );
+	
+	delete settingsBuf;
 }

@@ -1,6 +1,6 @@
-PROGS=server.exe client.exe
-SERVER_OBJS=server.o player.o globals.o player.pb.o
-CLIENT_OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o
+PROGS=server.exe
+SERVER_OBJS=server.o player.o globals.o player.pb.o settings.pb.o
+OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o settings.pb.o
 
 PROTOS_DIR=../protos
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
@@ -17,7 +17,7 @@ CXX=g++
 #CXX=x86_64-w64-mingw32-g++
 #CXX=i686-w64-mingw32-g++
 
-all : $(PROGS)
+all : $(PROGS) $(OBJS)
 
 clean : 
 	rm -f $(PROGS) *.o  $(PROTOS_DIR)/*.h $(PROTOS_DIR)/*.cc
@@ -61,5 +61,5 @@ player.pb.o : $(PROTOS_DIR)/player.pb.cc
 server.exe : server_main.cpp $(SERVER_OBJS)
 	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)
 	
-client.exe : mock_client.cpp $(CLIENT_OBJS)
-	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)
+#client.exe : mock_client.cpp $(CLIENT_OBJS)
+#	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)

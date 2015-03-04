@@ -14,6 +14,7 @@
 #include <semaphore.h>
 #include <pthread.h>
 #include "player.hpp"
+#include "globals.hpp"
 
 #ifdef _WIN32
     #include <winsock2.h>
@@ -32,7 +33,7 @@ class Client {
 			int sock;
 		#endif
 		
-		std::queue< Player* >* q;
+		std::queue< tempAction >* q;
 		sem_t* qSem;
 		pthread_mutex_t* qMutex;
 		
@@ -42,6 +43,10 @@ class Client {
 		 * Recv's an avalon::network::Player protobuf and does something with it
 		 */
 		void recvPlayer( int bufLength );
+		
+		void recvSettings( int bufLength );
+		
+	
 	
 	public:
 		/**
@@ -59,7 +64,7 @@ class Client {
 		 */
 		~Client( );
 		
-		void initQueue( std::queue< Player* >* q, sem_t* qSem, pthread_mutex_t* qMutex );
+		void initQueue( std::queue< tempAction >* q, sem_t* qSem, pthread_mutex_t* qMutex );
 		
 		/**
 		 * Data processing function
