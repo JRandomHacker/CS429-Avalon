@@ -21,10 +21,13 @@ private slots:
     void on_buttonQuit_clicked();
 
     void on_buttonCreateMenu_clicked();
+/*
+    void createServer();
+    void joinServerSlot();*/
 
 private:
     Ui::OptionsWindow *ui;
-    void createServer();
+   // void joinServer( std::string host, int port );
 };
 
 #endif // OPTIONSWINDOW_H
