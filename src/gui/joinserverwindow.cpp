@@ -1,4 +1,5 @@
 #include "joinserverwindow.h"
+#include "connectwindow.h"
 #include "ui_joinserverwindow.h"
 
 JoinServerWindow::JoinServerWindow(QWidget *parent) :
@@ -11,4 +12,11 @@ JoinServerWindow::JoinServerWindow(QWidget *parent) :
 JoinServerWindow::~JoinServerWindow()
 {
     delete ui;
+}
+
+void JoinServerWindow::on_buttonJoinServer_clicked()
+{
+    ConnectWindow w;
+    w.setModal(true);
+    w.exec();
 }

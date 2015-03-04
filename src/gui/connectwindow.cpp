@@ -14,7 +14,7 @@ ConnectWindow::~ConnectWindow()
     delete ui;
 }
 
-void ConnectWindow::on_pushButton_clicked()
+void ConnectWindow::on_dummyConnect_clicked()
 {
     GameWindow g;
     g.setModal(true);

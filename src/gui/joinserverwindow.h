@@ -15,6 +15,9 @@ public:
     explicit JoinServerWindow(QWidget *parent = 0);
     ~JoinServerWindow();
 
+private slots:
+    void on_buttonJoinServer_clicked();
+
 private:
     Ui::JoinServerWindow *ui;
 };

@@ -1,4 +1,5 @@
 #include "createserverwindow.h"
+#include "connectwindow.h"
 #include "ui_createserverwindow.h"
 
 CreateServerWindow::CreateServerWindow(QWidget *parent) :
@@ -11,4 +12,11 @@ CreateServerWindow::CreateServerWindow(QWidget *parent) :
 CreateServerWindow::~CreateServerWindow()
 {
     delete ui;
+}
+
+void CreateServerWindow::on_buttonCreateServer_clicked()
+{
+    ConnectWindow w;
+    w.setModal(true);
+    w.exec();
 }

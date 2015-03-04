@@ -15,6 +15,9 @@ public:
     explicit CreateServerWindow(QWidget *parent = 0);
     ~CreateServerWindow();
 
+private slots:
+    void on_buttonCreateServer_clicked();
+
 private:
     Ui::CreateServerWindow *ui;
 };

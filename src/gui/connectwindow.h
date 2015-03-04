@@ -16,7 +16,7 @@ public:
     ~ConnectWindow();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_dummyConnect_clicked();
 
 private:
     Ui::ConnectWindow *ui;
