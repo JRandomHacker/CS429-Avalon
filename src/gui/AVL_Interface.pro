@@ -16,14 +16,17 @@ SOURCES += main.cpp\
         optionswindow.cpp \
     connectwindow.cpp \
     gamewindow.cpp \
-    createserverwindow.cpp
+    createserverwindow.cpp \
+    joinserverwindow.cpp
 
 HEADERS  += optionswindow.h \
     connectwindow.h \
     gamewindow.h \
-    createserverwindow.h
+    createserverwindow.h \
+    joinserverwindow.h
 
 FORMS    += optionswindow.ui \
     connectwindow.ui \
     gamewindow.ui \
-    createserverwindow.ui
+    createserverwindow.ui \
+    joinserverwindow.ui
