@@ -12,6 +12,7 @@ public:
 	 *     of the action
 	 */
 	 Action(std::string mess_text);
+	 virtual ~Action();
 
 	 std::string GetMessage();
 

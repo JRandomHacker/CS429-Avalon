@@ -6,7 +6,7 @@ ActionHandler::ActionHandler() {
 }
 
 // Adds an action to the queue
-void ActionHandler::AddAction(Action new_action) {
+void ActionHandler::AddAction(Action* new_action) {
 	queue_append_control.lock();
 
 	action_queue.push_back(new_action);
@@ -16,7 +16,7 @@ void ActionHandler::AddAction(Action new_action) {
 
 // Gets access to the front of the queue for reading with a number of safe
 // elements
-std::pair<int, std::list<Action>::iterator> ActionHandler::FreezeFrontActions() {
+std::pair<int, std::list<Action*>::iterator> ActionHandler::FreezeFrontActions() {
 	queue_read_control.lock();
 
 	queue_append_control.lock();
