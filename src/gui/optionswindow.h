@@ -17,10 +17,11 @@ public:
 
 public slots:
     void createServer();
+    void joinServerSlot();
 
 private:
     Ui::OptionsWindow *ui;
-    
+    void joinServer( std::string host, int port );
 };
 
 #endif // OPTIONSWINDOW_H

@@ -18,4 +18,16 @@ SOURCES += main.cpp\
 
 HEADERS  += optionswindow.h
 
+INCLUDEPATH  += ../
+INCLUDEPATH  += ../../protos/
+
 FORMS    += optionswindow.ui
+
+OBJECTS  += ../*.o
+
+QMAKE_LFLAGS += -pthread
+win32:QMAKE_LFLAGS += -lws2_32
+
+CONFIG += link_pkgconfig
+PKGCONFIG += protobuf
+QT_CONFIG -= no-pkg-config

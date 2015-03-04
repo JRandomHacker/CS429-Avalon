@@ -12,6 +12,9 @@
 
 #define DEFAULT_PORT 42917
 
+#define EXIT_INVALID_PLAYERS 1
+#define EXIT_THREAD_ERROR 2
+
 namespace avalon {
 
     static const int NUM_SPECIALS = 6;
@@ -49,6 +52,13 @@ namespace avalon {
      */
     int getEvilCount( int num_players );
 
+	namespace network {
+		/*! An enumerator for different protobuf types */
+		enum buffers_t {
+			PLAYER_BUF /*! An avalon::network::Player protobuf */
+		};
+	}
 }
+
 
 #endif // _GLOBALS_HPP

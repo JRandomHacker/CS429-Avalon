@@ -15,9 +15,6 @@
 #include "server.hpp"
 #include "globals.hpp"
 
-// Error codes
-#define EXIT_INVALID_PLAYERS 1
-#define EXIT_THREAD_ERROR 2
 
 // Globals with the options
 /*

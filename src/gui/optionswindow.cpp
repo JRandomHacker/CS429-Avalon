@@ -1,3 +1,5 @@
+#include "globals.hpp"
+#include "clientController.hpp"
 #include "optionswindow.h"
 #include "ui_optionswindow.h"
 #include <unistd.h>
@@ -28,6 +30,7 @@ OptionsWindow::OptionsWindow( QWidget *parent ) :
     ui->setupUi(this);
     
     connect( ui->serverSectionCreateButton, SIGNAL( released( ) ), this, SLOT( createServer( ) ) );
+    connect( ui->clientSectionJoinButton, SIGNAL( released( ) ), this, SLOT( joinServerSlot( ) ) );
 }
 
 OptionsWindow::~OptionsWindow( ) {
@@ -108,4 +111,16 @@ void OptionsWindow::createServer() {
 	        std::cout << "Server Created." << std::endl;
 	    }
     #endif
+    sleep(1);
+    joinServer( "localhost", DEFAULT_PORT );
+}
+
+void OptionsWindow::joinServerSlot( ) {
+    joinServer( ui->clientSectionServerAddressField->text().toStdString(), DEFAULT_PORT );
+
+}
+
+void OptionsWindow::joinServer( std::string host, int port ) {
+    ClientController controller( NULL, host, port );
+    controller.processActions( );
 }

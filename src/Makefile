@@ -1,6 +1,6 @@
 PROGS=server.exe client.exe
 SERVER_OBJS=server.o player.o globals.o player.pb.o
-CLIENT_OBJS=model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o
+CLIENT_OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o
 
 PROTOS_DIR=../protos
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
@@ -12,7 +12,7 @@ ifeq ($(OS),Windows_NT)
 	LIBS+=-lws2_32
 endif
 
-CXXOPTS=-Wall -Wextra -std=c++11
+CXXOPTS=-Wall -Wextra -std=c++11 -ggdb
 CXX=g++
 #CXX=x86_64-w64-mingw32-g++
 #CXX=i686-w64-mingw32-g++
@@ -34,6 +34,12 @@ player.o : player.cpp
 server.o : server.cpp  protofiles
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
 	
+client.o : client.cpp  protofiles
+	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
+
+clientController.o : clientController.cpp
+	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
+
 model.o : model.cpp model.hpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 

@@ -160,6 +160,8 @@ bool Server::waitForClients( ) {
         sockets[ i ] = accept( servsock, NULL, NULL );
 
         // Windows REQUIRES that sockets send char* rather than void*... so we have to do some bullshit to trick it
+        avalon::network::buffers_t type = avalon::network::PLAYER_BUF;
+        send( sockets[ i ], (char*)(&type), sizeof( avalon::network::PLAYER_BUF ) / sizeof( char ), 0 );
         send( sockets[ i ], (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
         send( sockets[ i ], message.c_str( ), messageSize * sizeof( char ), 0 );
     }
