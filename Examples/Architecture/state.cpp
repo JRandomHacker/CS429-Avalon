@@ -16,14 +16,14 @@ State::~State() {
 }
 
 void State::actionHandle(Action* newAct) {
-    std::string actionData = newAct->actionString;
-    if (strcmp(actionData, "CreateGame") == 0)
+    std::string actionType = newAct->GetMessage();
+    if (strcmp(actionType, "CreateGame") == 0)
       //send string of command args from Action obj to Server from GUI
-    else if (strcmp(actionData, "JoinGame") == 0)
+    else if (strcmp(actionType, "JoinGame") == 0)
       //send string representing IP and port of server and player information from GUI
-    else if (strcmp(actionData, "EnterLobby") == 0)
+    else if (strcmp(actionType, "EnterLobby") == 0)
       //send game settings info for lobby from Network
-    else if (strcmp(actionData, "AddPlayer") == 0)
+    else if (strcmp(actionType, "AddPlayer") == 0)
       //send info about new player in game from Network
     else
       //invalid action
