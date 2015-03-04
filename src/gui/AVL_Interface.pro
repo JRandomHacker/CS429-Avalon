@@ -26,8 +26,10 @@ FORMS    += optionswindow.ui
 OBJECTS  += ../*.o
 
 QMAKE_LFLAGS += -pthread
-win32:QMAKE_LFLAGS += -lws2_32
+win32:LIBS += -L/mingw64/lib -lprotobuf -lz -lws2_32
 
-CONFIG += link_pkgconfig
-PKGCONFIG += protobuf
-QT_CONFIG -= no-pkg-config
+unix {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += protobuf
+    QT_CONFIG -= no-pkg-config
+}

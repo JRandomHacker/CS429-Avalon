@@ -17,6 +17,7 @@
 
 #ifdef _WIN32
     #include <winsock2.h>
+    #define WINSOCK_MAGIC 0x202
 #else
     #include <netdb.h>
     #define INVALID_SOCKET -1

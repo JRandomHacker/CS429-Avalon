@@ -9,6 +9,10 @@
 
 #include "player.pb.h"
 
+#ifdef _WIN32
+	#include <ws2tcpip.h>
+#endif
+
 Client::Client( std::string host, int port ) {
 	// Network initialization
     struct addrinfo hints, *servinfo;
