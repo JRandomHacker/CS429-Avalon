@@ -1,6 +1,8 @@
 #include "optionswindow.h"
 #include "connectwindow.h"
 #include "gamewindow.h"
+#include "joinserverwindow.h"
+#include "createserverwindow.h"
 #include "ui_optionswindow.h"
 //#include <unistd.h>
 #include <stdio.h>
@@ -11,7 +13,8 @@ OptionsWindow::OptionsWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     
-    connect(ui->serverSectionCreateButton, SIGNAL(released()), this, SLOT(createServer()));
+    //Saving code, might need later
+    //connect(ui->serverSectionCreateButton, SIGNAL(released()), this, SLOT(createServer()));
 }
 
 OptionsWindow::~OptionsWindow()
@@ -35,9 +38,21 @@ void OptionsWindow::createServer()
     }*/
 }
 
-void OptionsWindow::on_serverSectionCreateButton_clicked()
+void OptionsWindow::on_buttonJoinMenu_clicked()
 {
-    ConnectWindow test;
-    test.setModal(true);
-    test.exec();
+    JoinServerWindow w;
+    w.setModal(true);
+    w.exec();
+}
+
+void OptionsWindow::on_buttonQuit_clicked()
+{
+    this->close();
+}
+
+void OptionsWindow::on_buttonCreateMenu_clicked()
+{
+    CreateServerWindow w;
+    w.setModal(true);
+    w.exec();
 }

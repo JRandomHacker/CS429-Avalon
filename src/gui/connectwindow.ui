@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QProgressBar" name="progressBar">
+  <widget class="QProgressBar" name="pbLoadProgr">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -26,7 +26,7 @@
     <number>24</number>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="labelConnectMsg">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -39,7 +39,7 @@
     <string>Connecting to your game...</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="dummyConnect">
    <property name="geometry">
     <rect>
      <x>150</x>

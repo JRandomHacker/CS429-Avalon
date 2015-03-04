@@ -6,185 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>673</width>
-    <height>393</height>
+    <width>153</width>
+    <height>226</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>OptionsWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QSpinBox" name="serverSectionPlayerAmount">
+   <widget class="QPushButton" name="buttonJoinMenu">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>50</y>
-      <width>42</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="serverSectionPlayersLabel">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>50</y>
-      <width>55</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Players</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="serverSectionCreateButton">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>290</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Create Game</string>
-    </property>
-   </widget>
-   <widget class="Line" name="line">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>10</y>
-      <width>20</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="clientSectionTitle">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>10</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Client Options</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="serverSectionTitle">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>10</y>
-      <width>91</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Server Options</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="serverSectionVoting">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>170</y>
-      <width>101</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Open Voting</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_2">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>120</y>
-      <width>121</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Lady of the Lake</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="clientSectionPlayerNameLabel">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>50</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Player Name</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="serverSectionRandomizeCharsButton">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>290</y>
-      <width>131</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Randomize Selection</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="clientSectionPlayerNameField">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>50</y>
-      <width>113</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Peasant</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="clientSectionServerAddress">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>80</y>
-      <width>71</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>IP Address</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="clientSectionServerAddressField">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>80</y>
-      <width>113</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>dummy</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="clientSectionJoinButton">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>290</y>
+      <x>30</x>
+      <y>30</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -193,27 +27,30 @@
      <string>Join Game</string>
     </property>
    </widget>
-   <widget class="QLabel" name="serverSectionCharactersLabel">
+   <widget class="QPushButton" name="buttonCreateMenu">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>30</y>
-      <width>121</width>
-      <height>16</height>
+      <x>30</x>
+      <y>70</y>
+      <width>93</width>
+      <height>28</height>
      </rect>
     </property>
     <property name="text">
-     <string>Available Characters</string>
+     <string>Create Game</string>
     </property>
    </widget>
-   <widget class="QColumnView" name="columnView">
+   <widget class="QPushButton" name="buttonQuit">
     <property name="geometry">
      <rect>
-      <x>225</x>
-      <y>60</y>
-      <width>201</width>
-      <height>192</height>
+      <x>30</x>
+      <y>110</y>
+      <width>93</width>
+      <height>28</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>Quit</string>
     </property>
    </widget>
   </widget>
@@ -231,7 +68,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>673</width>
+     <width>153</width>
      <height>26</height>
     </rect>
    </property>

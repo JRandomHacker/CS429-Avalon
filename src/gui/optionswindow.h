@@ -16,7 +16,11 @@ public:
     ~OptionsWindow();
 
 private slots:
-    void on_serverSectionCreateButton_clicked();
+    void on_buttonJoinMenu_clicked();
+
+    void on_buttonQuit_clicked();
+
+    void on_buttonCreateMenu_clicked();
 
 private:
     Ui::OptionsWindow *ui;
