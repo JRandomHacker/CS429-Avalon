@@ -36,7 +36,7 @@ OptionsWindow::~OptionsWindow( ) {
 
 void OptionsWindow::createServer() {
 	#ifdef _WIN32
-		std::string execStr = "./server.exe"; 
+		std::string execStr = "server.exe"; 
 
         // Get the number of players
         execStr += " --players=";
@@ -51,7 +51,7 @@ void OptionsWindow::createServer() {
         }
 
 		// Setup required structs for windows process
-		STARTUPINFO StartupInfo;
+		STARTUPINFOA StartupInfo;
 		PROCESS_INFORMATION ProcessInfo;
 		
 		// Don't show the console in the new process
@@ -63,7 +63,7 @@ void OptionsWindow::createServer() {
 		char* execChar = new char[ execStr.size( ) ];
 		strcpy( execChar, execStr.c_str( ) );
 
-		if (!CreateProcess( NULL, execChar, NULL, NULL, FALSE,
+		if (!CreateProcessA( NULL, execChar, NULL, NULL, FALSE,
 			DETACHED_PROCESS, 
 			NULL, 
 			NULL,
@@ -85,7 +85,7 @@ void OptionsWindow::createServer() {
 	        QList<QListWidgetItem* > roles = ui->listWidget->selectedItems();
 	
 	        // First argument must be the executable
-	        args[ i++ ] = (char*)"../server.exe";
+	        args[ i++ ] = (char*)"./server.exe";
 	        args[ i++ ] = (char*)playerStr.c_str();
 	
 	        for ( int j = 0; j < roles.length(); j++ ) {
