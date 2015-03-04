@@ -13,6 +13,8 @@
 #include "player.hpp"
 #include "globals.hpp"
 
+#include "../protos/settings.pb.h"
+
 #ifdef _WIN32
     #include <winsock2.h>
 #else
@@ -22,9 +24,11 @@
 class Server {
 
     private:
-        int num_clients;
+        unsigned int num_clients;
         int port;
         Player** players;
+        
+        avalon::network::GameSettings settingsBuf;
 
         // Windows requires the SOCKET type for sockets instead of int
         #ifdef _WIN32
@@ -48,6 +52,14 @@ class Server {
          * @param A vector of the special characters we want to use
          */
         void initPlayers( std::vector< avalon::special_roles_t > special_roles );
+        
+        //~ void sendBuffer( avalon::network::buffers_t bufType, int bufSize, )
+        
+        void sendPlayer( int playerID, int destinationID );
+        
+        void sendStartingInfo( int playerID );
+        
+        void sendProtobuf( avalon::network::buffers_t bufType, int destinationID, std::string message );
 
     public:
         /**

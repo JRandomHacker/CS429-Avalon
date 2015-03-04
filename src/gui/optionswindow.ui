@@ -52,6 +52,39 @@
     <property name="text">
      <string>Quit</string>
     </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::MultiSelection</enum>
+    </property>
+    <item>
+     <property name="text">
+      <string>merlin</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>percival</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>mordred</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>morgana</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>assassin</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>oberon</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QToolBar" name="mainToolBar">

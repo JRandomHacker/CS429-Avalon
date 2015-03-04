@@ -1,6 +1,6 @@
-PROGS=server.exe client.exe
-SERVER_OBJS=server.o player.o globals.o player.pb.o
-CLIENT_OBJS=model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o
+PROGS=server.exe
+SERVER_OBJS=server.o player.o globals.o player.pb.o settings.pb.o
+OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o settings.pb.o
 
 PROTOS_DIR=../protos
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
@@ -12,12 +12,12 @@ ifeq ($(OS),Windows_NT)
 	LIBS+=-lws2_32
 endif
 
-CXXOPTS=-Wall -Wextra -std=c++11
+CXXOPTS=-Wall -Wextra -std=c++11 -ggdb
 CXX=g++
 #CXX=x86_64-w64-mingw32-g++
 #CXX=i686-w64-mingw32-g++
 
-all : $(PROGS)
+all : $(PROGS) $(OBJS)
 
 clean : 
 	rm -f $(PROGS) *.o  $(PROTOS_DIR)/*.h $(PROTOS_DIR)/*.cc
@@ -34,6 +34,12 @@ player.o : player.cpp
 server.o : server.cpp  protofiles
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
 	
+client.o : client.cpp  protofiles
+	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
+
+clientController.o : clientController.cpp
+	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
+
 model.o : model.cpp model.hpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
@@ -46,12 +52,14 @@ model_data.o : model_data.cpp model_data.hpp
 data_block.o : data_block.cpp data_block.hpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
+settings.pb.o : $(PROTOS_DIR)/settings.pb.cc
+	 $(CXX) $(CXXOPTS) -c $<
+
 player.pb.o : $(PROTOS_DIR)/player.pb.cc
-	 pkg-config --cflags protobuf
 	 $(CXX) $(CXXOPTS) -c $<
 
 server.exe : server_main.cpp $(SERVER_OBJS)
 	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)
 	
-client.exe : mock_client.cpp $(CLIENT_OBJS)
-	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)
+#client.exe : mock_client.cpp $(CLIENT_OBJS)
+#	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)

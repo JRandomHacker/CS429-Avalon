@@ -12,6 +12,11 @@
 
 #define DEFAULT_PORT 42917
 
+#define EXIT_INVALID_PLAYERS_ERROR -1
+#define EXIT_THREAD_ERROR -2
+#define EXIT_EVIL_ERROR -3 // Too many evil roles compared to evil player count
+#define EXIT_SOCKET_ERROR -4
+
 namespace avalon {
 
     static const int NUM_SPECIALS = 6;
@@ -47,8 +52,23 @@ namespace avalon {
      * @param num_players The number of players in the game
      * @return int The number of players who should be evil
      */
-    int getEvilCount( int num_players );
+    unsigned int getEvilCount( int num_players );
 
+	namespace network {
+		/*! An enumerator for different protobuf types */
+		enum buffers_t {
+			PLAYER_BUF, /*! An avalon::network::Player protobuf */
+			SETTINGS_BUF /*! An avalon::network::GameSettings protobuf */
+		};
+	}
 }
+
+typedef struct _tempAction {
+			void* data;
+			int flag;
+			unsigned int playerID;
+		} tempAction;
+	
+
 
 #endif // _GLOBALS_HPP

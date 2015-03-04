@@ -11,6 +11,7 @@
 #include "globals.hpp"
 
 #include "player.pb.h"
+#include "settings.pb.h"
 
 #include <algorithm>
 #include <random>
@@ -67,10 +68,15 @@ void Server::initPlayers( std::vector< avalon::special_roles_t > special_roles )
     }
 
     // Add the possible characters to the vectors
-    int numEvil = avalon::getEvilCount( num_clients );
+    unsigned int numEvil = avalon::getEvilCount( num_clients );
+
+	if ( evilChars.size( ) > numEvil ) {
+		std::cerr << "More evil roles than evil players. Exiting." << std::endl;
+		exit( EXIT_EVIL_ERROR );
+	}
 
     // possibleChars vector
-    for( int i = 0; i < num_clients; i++ ) {
+    for( unsigned int i = 0; i < num_clients; i++ ) {
         if( i < numEvil ) {
             possibleChars.push_back( avalon::EVIL );
         } else {
@@ -129,6 +135,40 @@ Server::Server( int num_clients, std::vector< avalon::special_roles_t > special_
 
     initPlayers( special_roles );
     initServer( );
+    
+    settingsBuf.set_players( num_clients );
+    settingsBuf.set_merlin( false );
+	settingsBuf.set_percival( false );
+	settingsBuf.set_mordred( false );
+	settingsBuf.set_morgana( false );
+	settingsBuf.set_assassin( false );
+	settingsBuf.set_oberon( false );
+    for( std::vector< avalon::special_roles_t >::iterator it = special_roles.begin(); it != special_roles.end(); it++ ) {
+		switch( *it ) {
+			case avalon::MERLIN:
+				settingsBuf.set_merlin( true );
+				break;
+			case avalon::PERCIVAL:
+				settingsBuf.set_percival( true );
+				break;
+			case avalon::MORDRED:  
+				settingsBuf.set_mordred( true );
+				break;
+			case avalon::MORGANA:
+				settingsBuf.set_morgana( true );
+				break;
+			case avalon::ASSASSIN:
+				settingsBuf.set_assassin( true );
+				break;
+			case avalon::OBERON:
+				settingsBuf.set_oberon( true );
+				break;
+			case avalon::NONE:
+			default:
+				break;
+		}
+	}
+    
 }
 
 Server::~Server( ) {
@@ -138,7 +178,7 @@ Server::~Server( ) {
         WSACleanup( );
     #endif
 
-    for( int i = 0; i < num_clients; i++ ) {
+    for( unsigned int i = 0; i < num_clients; i++ ) {
         delete players[ i ];
     }
     delete[] players;
@@ -147,22 +187,42 @@ Server::~Server( ) {
 
 bool Server::waitForClients( ) {
     
-    for( int i = 0; i < num_clients; i++ ) {
-		avalon::network::Player currPlayer;
-
-		currPlayer.set_role( players[ i ]->getRole( ) );
-		currPlayer.set_alignment( players[ i ]->getAlignment( ) );
-		currPlayer.set_name( players[ i ]->getName( ) );
-
-		std::string message = currPlayer.SerializeAsString( );
-		int messageSize = message.length( );
-
+    for( unsigned int i = 0; i < num_clients; i++ ) {
+		
         sockets[ i ] = accept( servsock, NULL, NULL );
-
-        // Windows REQUIRES that sockets send char* rather than void*... so we have to do some bullshit to trick it
-        send( sockets[ i ], (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
-        send( sockets[ i ], message.c_str( ), messageSize * sizeof( char ), 0 );
+		sendStartingInfo( i );
     }
 
     return true;
+}
+
+void Server::sendPlayer( int playerID, int destinationID ) {
+	avalon::network::Player playerBuf;
+
+	playerBuf.set_role( players[ playerID ]->getRole( ) );
+	playerBuf.set_alignment( players[ playerID ]->getAlignment( ) );
+	playerBuf.set_name( players[ playerID ]->getName( ) );
+	playerBuf.set_id( playerID );
+
+	sendProtobuf( avalon::network::PLAYER_BUF, destinationID, playerBuf.SerializeAsString( ) );
+}
+
+void Server::sendStartingInfo( int playerID ) {
+	settingsBuf.set_client( playerID );
+	sendProtobuf( avalon::network::SETTINGS_BUF, playerID, settingsBuf.SerializeAsString( ) );
+	
+	for( int i = 0; i < playerID; i++ ) {
+		sendPlayer( i, playerID ); // Send each currently connected player to the new player
+		sendPlayer( playerID, i ); // Send the new player to each player already connected
+	}
+	sendPlayer( playerID, playerID ); // Send the new player their own info
+}
+
+void Server::sendProtobuf( avalon::network::buffers_t bufType, int destinationID, std::string message ) {
+	int messageSize = message.length( );
+
+	// Windows REQUIRES that sockets send char* rather than void*... so we have to do some bullshit to trick it
+	send( sockets[ destinationID ], (char*)(&bufType), sizeof( avalon::network::buffers_t ) / sizeof( char ), 0 );
+	send( sockets[ destinationID ], (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
+	send( sockets[ destinationID ], message.c_str( ), messageSize * sizeof( char ), 0 );
 }
