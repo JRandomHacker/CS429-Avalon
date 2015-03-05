@@ -1,4 +1,4 @@
 Makefile*
 moc_*
 ui_*
-*.user
+*.user*
