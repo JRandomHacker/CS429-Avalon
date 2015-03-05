@@ -32,9 +32,10 @@ LobbyState::LobbyState( Model* mod ) : ControllerState( "Lobby", mod ) {
 }
 
 ControllerState* LobbyState::handleAction(Action* action_to_be_handled) {
-	std::cout << "Action being handled by lobby state" << std::endl;
+	std::cerr << "Action being handled by lobby state" << std::endl;
 	std::string action_type = action_to_be_handled->GetMessage();
 	if (action_type == "GameSettings") {
+		std::cerr << "GameSettings action handled by lobby state" << std::endl;
 		auto action = dynamic_cast<GameSettingsAction*>(action_to_be_handled);
 		avalon::network::GameSettings* sBuf = action->getSettings();
 		unsigned int num_clients = sBuf->players();
@@ -45,6 +46,7 @@ ControllerState* LobbyState::handleAction(Action* action_to_be_handled) {
 		}
 		model->updateData("hasGameSettings", true);
 	} else if (action_type == "AddPlayer") {
+		std::cerr << "AddPlayer action handled by lobby state" << std::endl;
 		auto action = dynamic_cast<AddPlayerAction*>(action_to_be_handled);
 		unsigned int player_number = action->getPlayerNumber();
 		Player* p = action->getPlayerInfo();
