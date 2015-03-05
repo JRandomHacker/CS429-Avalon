@@ -205,6 +205,7 @@ void Server::sendPlayer( int playerID, int destinationID, bool allInfo ) {
 		playerBuf = players[ playerID ]->getHiddenBuf( );
 	}
 
+	playerBuf.set_id( playerID );
 	sendProtobuf( avalon::network::PLAYER_BUF, destinationID, playerBuf.SerializeAsString( ) );
 }
 

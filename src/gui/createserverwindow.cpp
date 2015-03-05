@@ -63,6 +63,7 @@ void CreateServerWindow::createServer() {
 		{
 			std::cerr << "Unable to find server executable, or something terrible happened!" << std::endl;	
 		}
+		Sleep(1500);
 	#else 
 		if( fork( ) == 0 ) {
 	        int i = 0;
@@ -95,8 +96,11 @@ void CreateServerWindow::createServer() {
 	        std::cerr << "Unable to find server executable, or something terrible happened!" << std::endl;
 	        exit( 1 );
 	    }
+	sleep(1);
     #endif
-    sleep(1);
+    
+    
+    
 }
 
 void CreateServerWindow::on_buttonCreateServer_clicked()
