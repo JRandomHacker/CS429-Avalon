@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>263</width>
-    <height>150</height>
+    <height>189</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,7 +37,7 @@
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>110</y>
+     <y>150</y>
      <width>93</width>
      <height>28</height>
     </rect>
@@ -70,6 +70,29 @@
    </property>
    <property name="text">
     <string>Server Address</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="fieldPortNum">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>110</y>
+     <width>121</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelPortNum">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>110</y>
+     <width>41</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Port #</string>
    </property>
   </widget>
  </widget>
