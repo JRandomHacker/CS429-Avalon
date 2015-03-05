@@ -8,6 +8,8 @@ JoinServerWindow::JoinServerWindow(QWidget *parent) :
     ui(new Ui::JoinServerWindow)
 {
     ui->setupUi(this);
+    
+    ui->fieldPortNum->insert(QString(std::to_string(DEFAULT_PORT).c_str()));
 }
 
 JoinServerWindow::~JoinServerWindow()
@@ -18,7 +20,8 @@ JoinServerWindow::~JoinServerWindow()
 void JoinServerWindow::on_buttonJoinServer_clicked()
 {
     std::string addr = ui->fieldServerAddr->text().toStdString();
-    ConnectWindow w(this, addr, DEFAULT_PORT);
+    int port = ui->fieldPortNum->text().toInt();
+    ConnectWindow w(this, addr, port);
     w.setModal(true);
     w.exec();
 }

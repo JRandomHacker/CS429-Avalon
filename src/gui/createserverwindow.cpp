@@ -13,6 +13,9 @@ CreateServerWindow::CreateServerWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     
+    
+    ui->editPortNum->insert(QString(std::to_string(DEFAULT_PORT).c_str()));
+    
     //connect( ui->serverSectionCreateButton, SIGNAL( released( ) ), this, SLOT( createServer( ) ) );
     //connect( ui->clientSectionJoinButton, SIGNAL( released( ) ), this, SLOT( joinServerSlot( ) ) );
 }
@@ -100,7 +103,8 @@ void CreateServerWindow::on_buttonCreateServer_clicked()
 {
     createServer();
 
-    ConnectWindow w(this, "localhost", DEFAULT_PORT);
+    int port = ui->editPortNum->text().toInt();
+    ConnectWindow w(this, "localhost", port);
     w.setModal(true);
     w.exec();
 }
