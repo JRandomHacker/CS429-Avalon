@@ -25,42 +25,42 @@
    <property name="selectionMode">
     <enum>QAbstractItemView::MultiSelection</enum>
    </property>
-    <item>
-     <property name="text">
-      <string>merlin</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>percival</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>mordred</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>morgana</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>assassin</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>oberon</string>
-     </property>
-    </item>
+   <item>
+    <property name="text">
+     <string>merlin</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>percival</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>mordred</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>morgana</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>assassin</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>oberon</string>
+    </property>
+   </item>
   </widget>
   <widget class="QSpinBox" name="sbNumPlayers">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>40</y>
+     <x>100</x>
+     <y>30</y>
      <width>42</width>
      <height>22</height>
     </rect>
@@ -95,14 +95,14 @@
   <widget class="QLabel" name="labelPlayers">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>40</y>
-     <width>51</width>
+     <x>20</x>
+     <y>30</y>
+     <width>71</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>Players</string>
+    <string># of Players</string>
    </property>
   </widget>
   <widget class="QLabel" name="labelAvailChars">
@@ -129,6 +129,29 @@
    </property>
    <property name="text">
     <string>Create Server</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelPortNum">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>55</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Port #</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="editPortNum">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>60</y>
+     <width>81</width>
+     <height>22</height>
+    </rect>
    </property>
   </widget>
  </widget>
