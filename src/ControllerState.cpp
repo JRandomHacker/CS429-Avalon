@@ -13,7 +13,7 @@ void ControllerState::reportUnhandledAction(std::string action_type) {
 
 }
 
-VotingState::VotingState() : ControllerState("Voting") {
+VotingState::VotingState( Model* mod ) : ControllerState( "Voting", mod ) {
 	
 }
 
@@ -27,7 +27,7 @@ ControllerState* VotingState::handleAction(Action* action_to_be_handled) {
 	return NULL;
 }
 
-LobbyState::LobbyState() : ControllerState("Lobby") {
+LobbyState::LobbyState( Model* mod ) : ControllerState( "Lobby", mod ) {
 	
 }
 
@@ -40,15 +40,15 @@ ControllerState* LobbyState::handleAction(Action* action_to_be_handled) {
 		unsigned int num_clients = sBuf->players();
 		model->addData("numberOfPlayers", num_clients);
 		model->addData("myID", sBuf->client());
-		for (int i = 0; i < num_clients; i++) {
-			model->addData(std::string("player")+i, NULL);
+		for ( unsigned int i = 0; i < num_clients; i++ ) {
+			model->addData( std::string( "player" ) + std::to_string( i ), NULL );
 		}
 		model->updateData("hasGameSettings", true);
 	} else if (action_type == "AddPlayer") {
 		auto action = dynamic_cast<AddPlayerAction*>(action_to_be_handled);
 		unsigned int player_number = action->getPlayerNumber();
 		Player* p = action->getPlayerInfo();
-		model->updateData(std::string("player")+player_number, p);
+		model->updateData( std::string( "player" ) + std::to_string( player_number ), p );
 	} else {
 		reportUnhandledAction(action_type);
 	}

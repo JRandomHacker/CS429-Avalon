@@ -45,7 +45,3 @@ void ActionHandler::UnfreezeFrontActions() {
 	number_frozen_actions = 0;
 	queue_read_control.unlock();
 }
-
-void ActionHandler::action_add_semaphore( sem_t* new_sem ) {
-	action_add_semaphore = new_sem;
-}

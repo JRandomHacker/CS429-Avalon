@@ -20,19 +20,19 @@ public:
 
 	std::string state_type;
 
-private:
+protected:
 	Model* model;
 };
 
 class LobbyState : public ControllerState {
 public:
-	LobbyState( );
+	LobbyState( Model* mod );
 
 	ControllerState* handleAction( Action* action_to_be_handled );
 };
 
 class VotingState : public ControllerState {
-	VotingState( );
+	VotingState( Model* mod );
 
 	ControllerState* handleAction( Action* action_to_be_handled );
 };

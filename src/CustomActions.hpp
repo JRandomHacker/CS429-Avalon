@@ -4,7 +4,8 @@
 #include <string>
 
 #include "Action.hpp"
-#include "settings.pb.h"
+#include "player.hpp"
+#include "../protos/settings.pb.h"
 
 class GameSettingsAction : public Action {
 public:

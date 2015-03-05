@@ -1,6 +1,6 @@
 PROGS=server.exe client.exe
 SERVER_OBJS=server.o player.o globals.o player.pb.o settings.pb.o
-OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o settings.pb.o
+OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o settings.pb.o customActions.o action.o actionHandler.o controllerState.o
 
 PROTOS_DIR=../protos
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
