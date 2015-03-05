@@ -32,6 +32,7 @@ void CreateServerWindow::createServer() {
         // Get the number of players
         execStr += " --players=";
         execStr += std::to_string( ui->sbNumPlayers->value( ) );
+        execStr += " --port=" + ui->editPortNum->text().toStdString();
 
         QList<QListWidgetItem* > roles = ui->listWidget->selectedItems();
 
@@ -78,6 +79,7 @@ void CreateServerWindow::createServer() {
 	        // First argument must be the executable
 	        args[ i++ ] = (char*)"./server.exe";
 	        args[ i++ ] = (char*)playerStr.c_str();
+            args[ i++ ] = (char*)ui->editPortNum->text().toStdString();
           
 	        for ( int j = 0; j < roles.length(); j++ ) {
                 std::string flagStr = "--";
