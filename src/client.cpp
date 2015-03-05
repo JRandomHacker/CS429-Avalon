@@ -50,10 +50,8 @@ Client::~Client( ) {
     #endif	
 }
 
-void Client::initQueue( std::queue< tempAction >* q, sem_t* qSem, pthread_mutex_t* qMutex ) {
-	this->q = q;
-	this->qSem = qSem;
-	this->qMutex = qMutex;
+void Client::initQueue( ActionHandler* new_queue ) {
+	queue = new_queue;
 }
 
 void Client::waitForData( ) {
@@ -87,16 +85,9 @@ void Client::recvPlayer( int bufLength ) {
 	pBuf.ParseFromArray( playerBuf, bufLength );
 	Player* p = new Player( pBuf );
 	
-	tempAction t;
-	t.data = p;
-	t.flag = 1; // Player* is 1
-	t.playerID = pBuf.id( );
-	
-	pthread_mutex_lock( qMutex );
-	q->push( t );
-	pthread_mutex_unlock( qMutex );
-	sem_post( qSem );
-	
+	AddPlayerAction* action = new AddPlayerAction(pBuf.id(), p);
+	queue->AddAction((Action*)action);
+
 	delete playerBuf;
 }
 
@@ -107,14 +98,8 @@ void Client::recvSettings( int bufLength ) {
 	avalon::network::GameSettings* sBuf = new avalon::network::GameSettings( );
 	sBuf->ParseFromArray( settingsBuf, bufLength );
 	
-	tempAction t;
-	t.data = sBuf;
-	t.flag = 2; // GameSettings* is 2
-	
-	pthread_mutex_lock( qMutex );
-	q->push( t );
-	pthread_mutex_unlock( qMutex );
-	sem_post( qSem );
+	GameSettingsAction* action = new GameSettingsAction(sBuf);
+	queue->AddAction((Action*)action);
 	
 	delete settingsBuf;
 }

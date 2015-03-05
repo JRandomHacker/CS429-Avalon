@@ -10,11 +10,12 @@
 #define _CLIENT_HPP
 
 #include <string>
-#include <queue>
-#include <semaphore.h>
 #include <pthread.h>
 #include "player.hpp"
 #include "globals.hpp"
+#include "ActionHandler.hpp"
+#include "Action.hpp"
+#include "CustomActions.hpp"
 
 #ifdef _WIN32
     #include <winsock2.h>
@@ -33,9 +34,7 @@ class Client {
 			int sock;
 		#endif
 		
-		std::queue< tempAction >* q;
-		sem_t* qSem;
-		pthread_mutex_t* qMutex;
+		ActionHandler* queue;
 		
 		// Some sort of reference to the action queue
 		
@@ -64,7 +63,7 @@ class Client {
 		 */
 		~Client( );
 		
-		void initQueue( std::queue< tempAction >* q, sem_t* qSem, pthread_mutex_t* qMutex );
+		void initQueue( ActionHandler* new_queue );
 		
 		/**
 		 * Data processing function

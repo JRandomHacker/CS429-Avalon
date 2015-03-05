@@ -6,6 +6,7 @@
 #include <mutex>
 #include <atomic>
 #include <utility>
+#include <semaphore.h>
 #include "Action.hpp"
 
 class ActionHandler {
@@ -13,7 +14,7 @@ public:
 	/**
 	 * Public constructor
 	 */
-	ActionHandler();
+	ActionHandler( sem_t* sem );
 
 	/**
 	 * Adds a new action to the queue. Is thread safe, and can be interwoven
@@ -48,6 +49,8 @@ private:
 	std::list<Action*> action_queue;
 	std::mutex queue_append_control;
 	std::mutex queue_read_control;
+
+	sem_t* action_add_semaphore;
 
 	int number_frozen_actions;
 };

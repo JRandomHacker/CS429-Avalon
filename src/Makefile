@@ -1,6 +1,6 @@
 PROGS=server.exe client.exe
 SERVER_OBJS=server.o player.o globals.o player.pb.o settings.pb.o
-OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o settings.pb.o
+OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o settings.pb.o customActions.o action.o actionHandler.o controllerState.o
 
 PROTOS_DIR=../protos
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
@@ -50,6 +50,18 @@ model_data.o : model_data.cpp model_data.hpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
 data_block.o : data_block.cpp data_block.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+controllerState.o : ControllerState.cpp ControllerState.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+customActions.o : CustomActions.cpp CustomActions.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+action.o : Action.cpp Action.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+actionHandler.o : ActionHandler.cpp ActionHandler.hpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
 settings.pb.o : $(PROTOS_DIR)/settings.pb.cc
