@@ -58,8 +58,12 @@ void Client::initQueue( std::queue< tempAction >* q, sem_t* qSem, pthread_mutex_
 
 void Client::waitForData( ) {
 	int bufType;
-	recv( sock, (char*) &bufType, sizeof( int ), 0 );
-	
+	int size = recv( sock, (char*) &bufType, sizeof( int ), 0 );
+	if(size < 0) {
+        std::cerr<< "Client network error: " <<size <<std::endl;
+        exit(-1);
+    }
+    
 	int bufLength;
 	recv( sock, (char*) &bufLength, sizeof( int ), 0 );
 	

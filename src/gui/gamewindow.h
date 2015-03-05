@@ -21,6 +21,8 @@ private:
     Ui::GameWindow *ui;
     ClientController * control;
     Model * model;
+    
+    static void* controlThreadFn(void* data);
 };
 
 #endif // GAMEWINDOW_H

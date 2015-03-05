@@ -9,10 +9,21 @@ GameWindow::GameWindow(QWidget *parent, ClientController* controller, Model * mo
     this->model = model;
     ui->setupUi(this);
     
-    control->processActions();
+	pthread_t controlThread;    
+    if( pthread_create( &controlThread, NULL, &controlThreadFn, this->control ) != 0 )
+    {
+        std::cerr << "Unable to start controller thread" << std::endl;
+        exit( EXIT_THREAD_ERROR );
+    }	
 }
 
 GameWindow::~GameWindow()
 {
     delete ui;
+}
+
+void* GameWindow::controlThreadFn(void* data)
+{   
+    ((ClientController*) data)->processActions();
+    return NULL;
 }
