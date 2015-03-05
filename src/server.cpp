@@ -196,13 +196,14 @@ bool Server::waitForClients( ) {
     return true;
 }
 
-void Server::sendPlayer( int playerID, int destinationID ) {
+void Server::sendPlayer( int playerID, int destinationID, bool allInfo ) {
 	avalon::network::Player playerBuf;
-
-	playerBuf.set_role( players[ playerID ]->getRole( ) );
-	playerBuf.set_alignment( players[ playerID ]->getAlignment( ) );
-	playerBuf.set_name( players[ playerID ]->getName( ) );
-	playerBuf.set_id( playerID );
+	
+	if ( allInfo ) {
+		playerBuf = players[ playerID ]->getBuf( );
+	} else {
+		playerBuf = players[ playerID ]->getHiddenBuf( );
+	}
 
 	sendProtobuf( avalon::network::PLAYER_BUF, destinationID, playerBuf.SerializeAsString( ) );
 }
@@ -212,10 +213,10 @@ void Server::sendStartingInfo( int playerID ) {
 	sendProtobuf( avalon::network::SETTINGS_BUF, playerID, settingsBuf.SerializeAsString( ) );
 	
 	for( int i = 0; i < playerID; i++ ) {
-		sendPlayer( i, playerID ); // Send each currently connected player to the new player
-		sendPlayer( playerID, i ); // Send the new player to each player already connected
+		sendPlayer( i, playerID, false ); // Send each currently connected player to the new player
+		sendPlayer( playerID, i, false ); // Send the new player to each player already connected
 	}
-	sendPlayer( playerID, playerID ); // Send the new player their own info
+	sendPlayer( playerID, playerID, true ); // Send the new player their own info
 }
 
 void Server::sendProtobuf( avalon::network::buffers_t bufType, int destinationID, std::string message ) {

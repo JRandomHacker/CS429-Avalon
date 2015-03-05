@@ -29,13 +29,15 @@ namespace avalon {
         MORGANA,  /*! Morgana (Evil) Known to Percival (Disguises Merlin) */
         ASSASSIN, /*! Assassin (Evil) Gets a last ditch chance to kill Merlin, making Evil win */
         OBERON,   /*! Oberon (Evil) Unknown to other Evil players */
-        NONE      /*! None Corresponds to being a generic good/evil person */
+        NONE,     /*! None Corresponds to being a generic good/evil person */
+        UNKNOWN_ROLE	  /*! Unknown Corresponds to another player in the game whose alignment should not be known*/
     };
 
     /*! An enumerator of the possible alignments */
     enum alignment_t {
         GOOD, /*! Good (Wants missions to pass) */
-        EVIL /*! Evil (Wants missions to fail) */
+        EVIL, /*! Evil (Wants missions to fail) */
+        UNKNOWN_ALIGN	  /*! Unknown Corresponds to another player in the game whose alignment should not be known */
     };
 
     /**

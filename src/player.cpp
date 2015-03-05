@@ -46,3 +46,21 @@ void Player::setName( std::string name ) {
         this->name = name;
     }
 }
+
+avalon::network::Player Player::getBuf( ) {
+	avalon::network::Player playerBuf;
+
+	playerBuf.set_role( role );
+	playerBuf.set_alignment( alignment );
+	playerBuf.set_name( name );
+	return playerBuf;
+}
+
+avalon::network::Player Player::getHiddenBuf( ) {
+	avalon::network::Player playerBuf;
+
+	playerBuf.set_role( avalon::UNKNOWN_ROLE );
+	playerBuf.set_alignment( avalon::UNKNOWN_ALIGN );
+	playerBuf.set_name( name );
+	return playerBuf;
+}
