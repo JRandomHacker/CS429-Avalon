@@ -53,9 +53,7 @@ class Server {
          */
         void initPlayers( std::vector< avalon::special_roles_t > special_roles );
         
-        //~ void sendBuffer( avalon::network::buffers_t bufType, int bufSize, )
-        
-        void sendPlayer( int playerID, int destinationID );
+        void sendPlayer( int playerID, int destinationID, bool allInfo );
         
         void sendStartingInfo( int playerID );
         

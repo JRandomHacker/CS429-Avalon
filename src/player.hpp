@@ -67,5 +67,8 @@ class Player {
          * @return None
          */
         void setName( std::string name );
+        
+        avalon::network::Player getBuf( );
+        avalon::network::Player getHiddenBuf( );
 };
 #endif // _PLAYER_HPP
