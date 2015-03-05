@@ -50,6 +50,7 @@ ControllerState* LobbyState::handleAction(Action* action_to_be_handled) {
 		auto action = dynamic_cast<AddPlayerAction*>(action_to_be_handled);
 		unsigned int player_number = action->getPlayerNumber();
 		Player* p = action->getPlayerInfo();
+		std::cerr << "AddPlayer player number: " << player_number << std::endl;
 		model->updateData( std::string( "player" ) + std::to_string( player_number ), p );
 	} else {
 		reportUnhandledAction(action_type);
