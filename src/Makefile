@@ -20,7 +20,10 @@ CXX=g++
 all : $(PROGS) $(OBJS)
 
 clean : 
-	rm -f $(PROGS) *.o  $(PROTOS_DIR)/*.h $(PROTOS_DIR)/*.cc
+	rm -f *.exe *.o *.gch
+	rm -f gui/*.o gui/moc_* gui/ui_* gui/Makefile*
+	rm -f $(PROTOS_DIR)/*.h $(PROTOS_DIR)/*.cc
+	rm -rf gui/debug gui/release
 
 protofiles :
 	protoc -I=$(PROTOS_DIR) --cpp_out=$(PROTOS_DIR) $(PROTOS_DIR)/*.proto
@@ -75,3 +78,4 @@ server.exe : server_main.cpp $(SERVER_OBJS)
 	
 client.exe : $(OBJS)
 	cd gui/ && qmake && make
+	mv `find gui/ -regextype posix-egrep -regex ".*/AVL_Interface(|.exe)$$"` ./AVL_Interface.exe
