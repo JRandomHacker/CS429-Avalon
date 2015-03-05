@@ -52,6 +52,18 @@ model_data.o : model_data.cpp model_data.hpp
 data_block.o : data_block.cpp data_block.hpp
 	$(CXX) $(CXXOPTS) $(LIBS) -c $<
 
+controllerState.o : ControllerState.cpp ControllerState.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+customActions.o : CustomActions.cpp CustomActions.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+action.o : Action.cpp Action.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
+actionHandler.o : ActionHandler.cpp ActionHandler.hpp
+	$(CXX) $(CXXOPTS) $(LIBS) -c $<
+
 settings.pb.o : $(PROTOS_DIR)/settings.pb.cc
 	 $(CXX) $(CXXOPTS) -c $<
 

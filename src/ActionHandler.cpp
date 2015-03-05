@@ -1,7 +1,7 @@
 #include "ActionHandler.hpp"
 
 // Public constructor
-ActionHandler::ActionHandler() {
+ActionHandler::ActionHandler(sem_t* sem) : action_add_semaphore(sem) {
 
 }
 
@@ -12,6 +12,8 @@ void ActionHandler::AddAction(Action* new_action) {
 	action_queue.push_back(new_action);
 
 	queue_append_control.unlock();
+
+	sem_post(action_add_semaphore);
 }
 
 // Gets access to the front of the queue for reading with a number of safe
@@ -42,4 +44,8 @@ void ActionHandler::ReleaseFrozenActions() {
 void ActionHandler::UnfreezeFrontActions() {
 	number_frozen_actions = 0;
 	queue_read_control.unlock();
+}
+
+void ActionHandler::action_add_semaphore( sem_t* new_sem ) {
+	action_add_semaphore = new_sem;
 }

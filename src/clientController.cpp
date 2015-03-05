@@ -10,17 +10,15 @@ ClientController::ClientController( Model* model, std::string host, int port ) {
 	
 	this->client = new Client( host, port );
 	
-	this->q = new std::queue< tempAction >( );
 	this->qSem = new sem_t;
-	this->qMutex = new pthread_mutex_t;
 	
 	this->num_clients = 0;
 	this->players = NULL;
 	
 	sem_init( qSem, 0, 0 ); // Initialize semaphore at -1 so wait immediately blocks
-	pthread_mutex_init( qMutex, NULL );
-	
-	client->initQueue( q, qSem, qMutex );
+	action_queue = new ActionHandler(qSem);
+
+	client->initQueue( action_queue );
 	
 	pthread_t networkThread;
     if( pthread_create( &networkThread, NULL, &networkThreadHelper, this ) != 0 )
@@ -32,9 +30,9 @@ ClientController::ClientController( Model* model, std::string host, int port ) {
 
 ClientController::~ClientController( ) {
 	delete client;
-	delete q;
 	delete qSem;
-	delete qMutex;
+	delete action_queue;
+	releaseControllerState();
 }
 
 void* ClientController::networkThreadHelper( void* obj ) {
@@ -48,14 +46,44 @@ void ClientController::networkThreadFunc( ) {
 	}
 }
 
+void ClientController::setControllerState( ControllerState* new_state ) {
+	releaseControllerState();
+	handling_state = new_state;
+}
+
+void ClientController::releaseControllerState( ) {
+	if (handling_state != NULL) {
+		delete handling_state;
+		handling_state = NULL;
+	}
+}
+
+void ClientController::processAction( Action* action ) {
+	ControllerState* new_state = handling_state->handleAction(action);
+	if (new_state != NULL) {
+		setControllerState(new_state);
+	}
+}
+
+void ClientController::addActionToQueue( Action* new_action ) {
+	action_queue->AddAction(new_action);
+}
+
 void ClientController::processActions( ) {
 	while( true ) { 
 		sem_wait( qSem );
-		pthread_mutex_lock( qMutex );
-		tempAction t = q->front( );
-		q->pop( );
-		pthread_mutex_unlock( qMutex );
 		
+		std::pair<int, std::list<Action*>::iterator> available_actions = action_queue->FreezeFrontActions();
+		for (int i = 0; i < available_actions.first; i++) {
+			processAction(*available_actions.second);
+			available_actions.second++;
+		}
+		for (int i = 1; i < available_actions.first; i++) {
+			sem_wait( qSem );
+		}
+		action_queue->ReleaseFrozenActions();
+		
+		/*
 		switch( t.flag ) {
 			case 1:
 				// Do player stuff
@@ -83,6 +111,6 @@ void ClientController::processActions( ) {
 			}
 			default:
 				break;
-		}
+		}*/
 	}
 }

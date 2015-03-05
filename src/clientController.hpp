@@ -5,6 +5,9 @@
 #include "model.hpp"
 #include "client.hpp"
 #include "globals.hpp"
+#include "ControllerState.hpp"
+#include "ActionHandler.hpp"
+#include "Action.hpp"
 #include <queue>
 #include <semaphore.h>
 #include <pthread.h>
@@ -13,9 +16,11 @@ class ClientController {
 	private:
 		Model* model;
 		Client* client;
-		std::queue< tempAction >* q; // Replace with action queue stuff
+
+		ActionHandler* action_queue;
+		ControllerState* handling_state;
+
 		sem_t* qSem;
-		pthread_mutex_t* qMutex;
 		
 		unsigned int num_clients;
 		unsigned int myID;
@@ -24,12 +29,20 @@ class ClientController {
 		void networkThreadFunc( );
 		
 		static void* networkThreadHelper( void* obj );
+
+		void processAction( Action* action );
+
+		void setControllerState( ControllerState* new_state );
+		void releaseControllerState( );
 		
 	public:
 		ClientController( Model* model, std::string host, int port );
 		~ClientController( );
 		
+		// Begins an infinite loop that keeps processing actions as long as
+		// they exist
 		void processActions( );
+		void addActionToQueue( Action* new_action );
 };
 
 
