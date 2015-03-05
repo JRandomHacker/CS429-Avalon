@@ -18,7 +18,7 @@ class ClientController {
 		Client* client;
 
 		ActionHandler* action_queue;
-		ControllerState* handling_state;
+		ControllerState* handling_state = NULL;
 
 		sem_t* qSem;
 		

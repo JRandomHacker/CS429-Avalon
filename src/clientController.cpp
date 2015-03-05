@@ -19,6 +19,9 @@ ClientController::ClientController( Model* model, std::string host, int port ) {
 	action_queue = new ActionHandler(qSem);
 
 	client->initQueue( action_queue );
+
+	handling_state = NULL;
+	setControllerState(new LobbyState(model));
 	
 	pthread_t networkThread;
     if( pthread_create( &networkThread, NULL, &networkThreadHelper, this ) != 0 )
