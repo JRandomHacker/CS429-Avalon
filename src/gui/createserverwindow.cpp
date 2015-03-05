@@ -79,7 +79,7 @@ void CreateServerWindow::createServer() {
 	        // First argument must be the executable
 	        args[ i++ ] = (char*)"./server.exe";
 	        args[ i++ ] = (char*)playerStr.c_str();
-            args[ i++ ] = (char*)ui->editPortNum->text().toStdString();
+            args[ i++ ] = (char*)ui->editPortNum->text().toStdString().c_str( );
           
 	        for ( int j = 0; j < roles.length(); j++ ) {
                 std::string flagStr = "--";
