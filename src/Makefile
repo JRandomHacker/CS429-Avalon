@@ -1,4 +1,4 @@
-PROGS=server.exe
+PROGS=server.exe client.exe
 SERVER_OBJS=server.o player.o globals.o player.pb.o settings.pb.o
 OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o settings.pb.o
 
@@ -61,5 +61,5 @@ player.pb.o : $(PROTOS_DIR)/player.pb.cc
 server.exe : server_main.cpp $(SERVER_OBJS)
 	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)
 	
-#client.exe : mock_client.cpp $(CLIENT_OBJS)
-#	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)
+client.exe : $(OBJS)
+	cd gui/ && qmake && make

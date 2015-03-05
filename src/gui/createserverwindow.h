@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#define MAX_ARGS 8
+
 namespace Ui {
 class CreateServerWindow;
 }
