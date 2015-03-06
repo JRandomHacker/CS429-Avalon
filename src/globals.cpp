@@ -50,7 +50,7 @@ unsigned int avalon::getEvilCount( int num_players ) {
 
 void avalon::sleep( int seconds ) {
     #ifdef _WIN32
-        Sleep( seconds * 1000 );
+        sleep( seconds * 1000 );
     #else
         sleep( seconds );
     #endif
