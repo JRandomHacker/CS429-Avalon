@@ -21,6 +21,12 @@ private:
     Ui::GameWindow *ui;
     ClientController * control;
     Model * model;
+
+    Subscriber* num_players_subscriber;
+    std::vector<Subscriber*> player_subscribers;
+
+    void startWatchOnHasGameSettings();
+    void createPlayerSubscribers();
     
     static void* controlThreadFn(void* data);
 };

@@ -2,7 +2,7 @@
 
 ControllerState::ControllerState(std::string state_type_desc, Model* mod) :
 	state_type(state_type_desc), model(mod) {
-
+	model->addData("hasGameSettings", false);
 }
 
 ControllerState::~ControllerState() {
