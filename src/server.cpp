@@ -33,6 +33,7 @@ void Server::initServer( ) {
         WSADATA wsaData;
         if( WSAStartup( WINSOCK_MAGIC, &wsaData ) != 0 ) {
             std::cerr << "Unable to magic windows" << std::endl;
+            exit( EXIT_SOCKET_ERROR );
         }
     #endif
 
@@ -44,10 +45,12 @@ void Server::initServer( ) {
 
     if( bind( servsock, (struct sockaddr*)(&servparm), sizeof(struct sockaddr_in) ) < 0 ) {
         std::cerr << "Unable to bind network socket" << std::endl;
+        exit( EXIT_SOCKET_ERROR );
     }
 
     if( listen( servsock, SOMAXCONN ) < 0 ) {
         std::cerr << "Unable to listen on specified port" << std::endl;
+        exit( EXIT_SOCKET_ERROR );
     }
 }
 

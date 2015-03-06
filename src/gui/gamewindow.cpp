@@ -43,15 +43,18 @@ void* GameWindow::waitForPlayers(void* data)
     GameWindow* gw = (GameWindow*) data;
 
     // Wait for game data to arrive
-    ClosureSubscriber nPlayersSub( NULL, NULL);
-    while(!gw->model->subscribe("numberOfPlayers", &nPlayersSub))
-        Sleep(10);
+    ClosureSubscriber nPlayersSub( NULL, NULL );
+    while( !gw->model->subscribe( "numberOfPlayers", &nPlayersSub ) ) {
+        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+    }
     
     unsigned int nPlayers = *(nPlayersSub.getData<unsigned int>());
     
     ClosureSubscriber myIDSub( NULL, NULL );
-    while(!gw->model->subscribe("myID", &myIDSub))
+    while(!gw->model->subscribe("myID", &myIDSub)) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+
     int myID = *(myIDSub.getData<int>());
     
     // Add the appropriate number of players to the player list
