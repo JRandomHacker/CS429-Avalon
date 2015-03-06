@@ -2,11 +2,9 @@
 #include "ui_gamewindow.h"
 #include "subscriber.hpp"
 #include "player.hpp"
-#include "globals.hpp"
 #include <QStandardItem>
 #include <thread>
 #include <chrono>
-#include <unistd.h>
 
 GameWindow::GameWindow(QWidget *parent, ClientController* controller, Model * model) :
     QDialog(parent),
@@ -47,7 +45,7 @@ void* GameWindow::waitForPlayers(void* data)
     // Wait for game data to arrive
     ClosureSubscriber nPlayersSub( NULL, NULL);
     while(!gw->model->subscribe("numberOfPlayers", &nPlayersSub))
-        avalon::sleep( 1 );
+        Sleep(10);
     
     unsigned int nPlayers = *(nPlayersSub.getData<unsigned int>());
     
