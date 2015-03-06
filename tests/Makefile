@@ -2,8 +2,13 @@ TESTS_DIR=.
 SRC_DIR=../src
 HEADER_DIR=$(SRC_DIR)
 CUSTOM_CPPFLAGS= -isystem $(HEADER_DIR)
-CUSTOM_CXXFLAGS= -Wall -Wextra
+CUSTOM_CXXFLAGS= -Wall -Wextra -std=c++11 -ggdb
 CXX=g++
+
+PROTOS_DIR=../protos
+PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
+
+LIBS=-pthread $(PROTOS_LIB)
 
 # If we're on Windows, add these flags for static linking, so the executables are portable
 ifeq ($(OS), Windows_NT)
@@ -11,7 +16,7 @@ ifeq ($(OS), Windows_NT)
 endif
 
 # The list of all tests that exist
-TESTS=player_unittest.exe globals_unittest.exe
+TESTS=player_unittest.exe globals_unittest.exe model_unittest.exe action_unittest.exe
 
 # Relative path to the gtest root directory
 GTEST_ROOT = ../libs/gtest-1.7.0
@@ -67,23 +72,28 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 
 # ADD CUSTOM TESTS BELOW HERE AND ADD TO THE TESTS LIST AT THE TOP
-
-player.o : $(SRC_DIR)/player.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
-
 player_unittest.o : $(TESTS_DIR)/player_unittest.cpp \
 							 $(HEADER_DIR)/player.hpp  $(GTEST_H)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
-player_unittest.exe : player.o player_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
-	
-globals.o : $(SRC_DIR)/globals.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
+player_unittest.exe : $(SRC_DIR)/player.o $(SRC_DIR)/player.pb.o player_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
 	
 globals_unittest.o : $(TESTS_DIR)/globals_unittest.cpp \
 							 $(HEADER_DIR)/globals.hpp $(GTEST_H)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 	
-globals_unittest.exe : globals.o globals_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
+globals_unittest.exe : $(SRC_DIR)/globals.o globals_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
+	
+model_unittest.o : $(TESTS_DIR)/model_unittest.cpp $(GTEST_H)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
+	
+model_unittest.exe : $(SRC_DIR)/model.o $(SRC_DIR)/subscriber.o $(SRC_DIR)/model_data.o $(SRC_DIR)/data_block.o model_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
+
+action_unittest.o : $(TESTS_DIR)/action_unittest.cpp $(GTEST_H)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
+	
+action_unittest.exe : $(SRC_DIR)/Action.o $(SRC_DIR)/ActionHandler.o action_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
