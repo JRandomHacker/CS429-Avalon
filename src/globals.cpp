@@ -10,6 +10,10 @@
 #include <iostream>
 #include "globals.hpp"
 
+#ifndef _WIN32
+    #include <unistd.h>
+#endif
+
 // Switches a role to an alignment
 avalon::alignment_t avalon::getRoleAlignment( avalon::special_roles_t role ) {
 
@@ -42,4 +46,12 @@ unsigned int avalon::getEvilCount( int num_players ) {
         return 1;
     }
     return 0;
+}
+
+void avalon::sleep( int seconds ) {
+    #ifdef _WIN32
+        Sleep( seconds * 1000 );
+    #else
+        sleep( seconds );
+    #endif
 }

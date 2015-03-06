@@ -56,6 +56,14 @@ namespace avalon {
      */
     unsigned int getEvilCount( int num_players );
 
+    /**
+     * A helper function to allow sleeping in both Linux and Windows
+     *
+     * @param seconds The number of seconds to sleep
+     * @return None
+     */
+    void sleep( int seconds );
+
 	namespace network {
 		/*! An enumerator for different protobuf types */
 		enum buffers_t {
@@ -64,13 +72,5 @@ namespace avalon {
 		};
 	}
 }
-
-typedef struct _tempAction {
-			void* data;
-			int flag;
-			unsigned int playerID;
-		} tempAction;
-	
-
 
 #endif // _GLOBALS_HPP
