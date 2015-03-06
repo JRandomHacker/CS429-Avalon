@@ -15,8 +15,9 @@ ConnectWindow::ConnectWindow(QWidget *parent, std::string ip, int port) :
     ClientController controller( &m, ip, port );
     
     GameWindow g(this, &controller, &m);
-    g.setModal(true);
     g.exec();
+    
+    close();
 }
 
 ConnectWindow::~ConnectWindow()

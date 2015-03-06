@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "clientController.hpp"
 #include "model.hpp"
+#include "subscriber.hpp"
 
 namespace Ui {
 class GameWindow;
@@ -21,6 +22,8 @@ private:
     Ui::GameWindow *ui;
     ClientController * control;
     Model * model;
+    
+    static void* waitForPlayers(void* data);
     
     static void* controlThreadFn(void* data);
 };
