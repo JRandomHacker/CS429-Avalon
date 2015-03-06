@@ -15,19 +15,16 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
         optionswindow.cpp \
-    connectwindow.cpp \
     gamewindow.cpp \
     createserverwindow.cpp \
     joinserverwindow.cpp
 
 HEADERS  += optionswindow.h \
-    connectwindow.h \
     gamewindow.h \
     createserverwindow.h \
     joinserverwindow.h
 
 FORMS    += optionswindow.ui \
-    connectwindow.ui \
     gamewindow.ui \
     createserverwindow.ui \
     joinserverwindow.ui

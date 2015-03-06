@@ -1,8 +1,6 @@
 #include "globals.hpp"
 #include "clientController.hpp"
 #include "optionswindow.h"
-#include "connectwindow.h"
-#include "gamewindow.h"
 #include "joinserverwindow.h"
 #include "createserverwindow.h"
 #include "ui_optionswindow.h"

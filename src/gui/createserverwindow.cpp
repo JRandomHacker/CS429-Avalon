@@ -1,5 +1,5 @@
 #include "createserverwindow.h"
-#include "connectwindow.h"
+#include "gamewindow.h"
 #include "ui_createserverwindow.h"
 #include "globals.hpp"
 #include "clientController.hpp"
@@ -107,8 +107,12 @@ void CreateServerWindow::on_buttonCreateServer_clicked()
     createServer();
 
     int port = ui->editPortNum->text().toInt();
-    ConnectWindow w(this, "localhost", port);
-    w.exec();
+    
+    Model m;
+    ClientController controller( &m, "localhost", port );
+    
+    GameWindow g(this, &controller, &m);
+    g.exec();
     
     close();
 }

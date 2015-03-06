@@ -1,5 +1,5 @@
 #include "joinserverwindow.h"
-#include "connectwindow.h"
+#include "gamewindow.h"
 #include "ui_joinserverwindow.h"
 #include "globals.hpp"
 
@@ -22,8 +22,12 @@ void JoinServerWindow::on_buttonJoinServer_clicked()
 {
     std::string addr = ui->fieldServerAddr->text().toStdString();
     int port = ui->fieldPortNum->text().toInt();
-    ConnectWindow w(this, addr, port);
-    w.exec();
+    
+    Model m;
+    ClientController controller( &m, addr, port );
+    
+    GameWindow g(this, &controller, &m);
+    g.exec();
     
     close();
 }

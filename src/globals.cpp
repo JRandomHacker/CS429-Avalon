@@ -12,6 +12,8 @@
 
 #ifndef _WIN32
     #include <unistd.h>
+#else
+    #include <windows.h>
 #endif
 
 // Switches a role to an alignment
