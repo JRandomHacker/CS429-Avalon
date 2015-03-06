@@ -9,6 +9,7 @@ ConnectWindow::ConnectWindow(QWidget *parent, std::string ip, int port) :
     ui(new Ui::ConnectWindow)
 {
     ui->setupUi(this);
+    this->setFixedSize(frameSize());
     
     Model m;
     ClientController controller( &m, ip, port );

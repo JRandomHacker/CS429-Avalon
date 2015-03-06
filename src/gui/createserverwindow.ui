@@ -7,153 +7,125 @@
     <x>0</x>
     <y>0</y>
     <width>308</width>
-    <height>422</height>
+    <height>373</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Avalon Online - Create Server</string>
   </property>
-  <widget class="QListWidget" name="listWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>130</y>
-     <width>261</width>
-     <height>241</height>
-    </rect>
-   </property>
-   <property name="selectionMode">
-    <enum>QAbstractItemView::MultiSelection</enum>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <property name="text">
-     <string>merlin</string>
-    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="spacing">
+      <number>20</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="labelPlayers">
+           <property name="text">
+            <string># of Players</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="sbNumPlayers"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="labelPortNum">
+           <property name="text">
+            <string>Port #</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="editPortNum"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="cbOpenVoting">
+         <property name="text">
+          <string>Open Voting</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cbLady">
+         <property name="text">
+          <string>Lady of the Lake</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
    <item>
-    <property name="text">
-     <string>percival</string>
-    </property>
+    <widget class="QLabel" name="labelAvailChars">
+     <property name="text">
+      <string>Available Characters</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </item>
    <item>
-    <property name="text">
-     <string>mordred</string>
-    </property>
+    <widget class="QListWidget" name="listWidget">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::MultiSelection</enum>
+     </property>
+     <item>
+      <property name="text">
+       <string>merlin</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>percival</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>mordred</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>morgana</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>assassin</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>oberon</string>
+      </property>
+     </item>
+    </widget>
    </item>
    <item>
-    <property name="text">
-     <string>morgana</string>
-    </property>
+    <widget class="QPushButton" name="buttonCreateServer">
+     <property name="text">
+      <string>Create Server</string>
+     </property>
+    </widget>
    </item>
-   <item>
-    <property name="text">
-     <string>assassin</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>oberon</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QSpinBox" name="sbNumPlayers">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>30</y>
-     <width>42</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="cbOpenVoting">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>30</y>
-     <width>101</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Open Voting</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="cbLady">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>60</y>
-     <width>121</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Lady of the Lake</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelPlayers">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>30</y>
-     <width>71</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string># of Players</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelAvailChars">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>100</y>
-     <width>121</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Available Characters</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="buttonCreateServer">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>380</y>
-     <width>93</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Create Server</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelPortNum">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>60</y>
-     <width>55</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Port #</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="editPortNum">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>60</y>
-     <width>81</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
+  </layout>
  </widget>
  <resources/>
  <connections/>

@@ -13,7 +13,6 @@ CreateServerWindow::CreateServerWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     
-    
     ui->editPortNum->insert(QString(std::to_string(DEFAULT_PORT).c_str()));
     
     //connect( ui->serverSectionCreateButton, SIGNAL( released( ) ), this, SLOT( createServer( ) ) );
