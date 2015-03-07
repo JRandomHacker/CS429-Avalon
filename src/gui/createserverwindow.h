@@ -16,13 +16,14 @@ class CreateServerWindow : public QDialog
 public:
     explicit CreateServerWindow(QWidget *parent = 0);
     ~CreateServerWindow();
-    void createServer();
 
 private slots:
     void on_buttonCreateServer_clicked();
 
 private:
     Ui::CreateServerWindow *ui;
+    int createServer();
+    void connectToServer();
 };
 
 #endif // CREATESERVERWINDOW_H
