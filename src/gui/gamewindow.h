@@ -24,6 +24,7 @@ private:
     Model * model;
 
     Subscriber* num_players_subscriber;
+    Subscriber* myID_subscriber;
     std::vector<Subscriber*> player_subscribers;
 
     void startWatchOnHasGameSettings();

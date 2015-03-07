@@ -171,6 +171,7 @@ void CreateServerWindow::connectToServer( )
     ClientController controller( &m, "localhost", port );
     
     GameWindow g(this, &controller, &m);
+    g.setModal(true);
     g.exec();
     
     close();
