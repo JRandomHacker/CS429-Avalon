@@ -10,7 +10,6 @@
 #define _CLIENT_HPP
 
 #include <string>
-#include <pthread.h>
 #include "player.hpp"
 #include "globals.hpp"
 #include "ActionHandler.hpp"
@@ -36,13 +35,20 @@ class Client {
 		
 		ActionHandler* queue;
 		
-		// Some sort of reference to the action queue
-		
 		/*
-		 * Recv's an avalon::network::Player protobuf and does something with it
+		 * Recv's an avalon::network::Player protobuf, creates an Action, and adds it to the queue
+         *
+         * @param bufLength The size of the protobuf that needs to be received
+         * @return None
 		 */
 		void recvPlayer( int bufLength );
 		
+		/*
+		 * Recv's an avalon::network::GameSettings protobuf, creates an Action, and adds it to the queue
+         *
+         * @param bufLength The size of the protobuf that needs to be received
+         * @return None
+		 */
 		void recvSettings( int bufLength );
 		
 	

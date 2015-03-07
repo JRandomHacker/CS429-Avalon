@@ -35,7 +35,7 @@ avalon::alignment_t avalon::getRoleAlignment( avalon::special_roles_t role ) {
             break;
 
         default:
-            std::cerr << "[ globals ] Invalid alignment passed into roleAlignment\n";
+            std::cerr << "[ globals ] Invalid alignment passed into getRoleAlignment" << std::endl;
     }
 
     return align;

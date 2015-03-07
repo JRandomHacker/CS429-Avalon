@@ -68,7 +68,21 @@ class Player {
          */
         void setName( std::string name );
         
+        /**
+         * Gets a protobuf representation of the Player object
+         *
+         * @param None
+         * @return An avalon::network::Player protobuf corresponding to this player
+         */
         avalon::network::Player getBuf( );
+
+        /**
+         * Gets a protobuf representation of the Player object
+         * Does not reveal the player's role or alignment
+         *
+         * @param None
+         * @return An avalon::network::Player protobuf corresponding to this player with a hidden role/alignment
+         */
         avalon::network::Player getHiddenBuf( );
 };
 #endif // _PLAYER_HPP
