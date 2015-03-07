@@ -12,13 +12,28 @@ class JoinServerWindow : public QDialog
     Q_OBJECT
 
 public:
+	/**
+     *  Creates a join server window.
+     */
     explicit JoinServerWindow(QWidget *parent = 0);
+
+    /**
+     *  Destroys the join server window.
+     */
     ~JoinServerWindow();
 
 private slots:
+
+	/**
+	 *	Creates a client model and controller.
+     *  Joins a game server on click. 
+     */
     void on_buttonJoinServer_clicked();
 
 private:
+	/**
+     *  Join server ui field.
+     */
     Ui::JoinServerWindow *ui;
 };
 
