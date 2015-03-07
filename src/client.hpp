@@ -51,8 +51,6 @@ class Client {
 		 */
 		void recvSettings( int bufLength );
 		
-	
-	
 	public:
 		/**
 		 * Constructor for a Client

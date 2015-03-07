@@ -28,7 +28,7 @@ Client::Client( std::string host, int port ) {
         WSADATA wsaData;
         if( WSAStartup( WINSOCK_MAGIC, &wsaData ) != 0 ) {
             std::cerr << "Unable to magic windows" << std::endl;
-            exit( EXIT_SOCKET_ERROR );
+            exit( EXIT_NETWORK_ERROR );
         }
     #endif
 
@@ -83,7 +83,7 @@ void Client::waitForData( ) {
     // Less than equal, since on Linux an error will return 0, and on Windows an error will return -1
 	if(size <= 0) {
         std::cerr << "Client network error: " << size << std::endl;
-        exit( -1 );
+        exit( EXIT_NETWORK_ERROR );
     }
 
     // Receive the length of the protobuf we're looking for

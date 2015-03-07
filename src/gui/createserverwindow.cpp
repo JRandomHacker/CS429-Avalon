@@ -155,6 +155,10 @@ void CreateServerWindow::on_buttonCreateServer_clicked( )
             std::cout << "server not found" << std::endl;
             // Unable to find server executable
             break;
+        case EXIT_NETWORK_ERROR:
+            std::cout << "Windows magic broke" << std::endl;
+            // Windows magic broke
+            break;
     }
 }
 

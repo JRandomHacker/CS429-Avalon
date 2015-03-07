@@ -25,7 +25,7 @@
     #include <netdb.h>
 #endif
 
-// Private functions
+// Initializes the server to start listening for connections
 void Server::initServer( ) {
 
     // Windows requires some initial socket setup
@@ -33,27 +33,31 @@ void Server::initServer( ) {
         WSADATA wsaData;
         if( WSAStartup( WINSOCK_MAGIC, &wsaData ) != 0 ) {
             std::cerr << "Unable to magic windows" << std::endl;
-            exit( EXIT_SOCKET_ERROR );
+            exit( EXIT_NETWORK_ERROR );
         }
     #endif
 
+    // Create a system socket
     servsock = socket( AF_INET, SOCK_STREAM, 0 );
 
     servparm.sin_family = AF_INET;
-    servparm.sin_port = htons( port );
-    servparm.sin_addr.s_addr = htonl( INADDR_ANY );
+    servparm.sin_port = htons( port ); // Port to listen on
+    servparm.sin_addr.s_addr = htonl( INADDR_ANY ); // INET addresses to listen to
 
-    if( bind( servsock, (struct sockaddr*)(&servparm), sizeof(struct sockaddr_in) ) < 0 ) {
+    // Bind the socket with our servparm settings
+    if( bind( servsock, ( struct sockaddr* )( &servparm ), sizeof( struct sockaddr_in ) ) < 0 ) {
         std::cerr << "Unable to bind network socket" << std::endl;
         exit( EXIT_SOCKET_ERROR );
     }
 
+    // Start listening for connections
     if( listen( servsock, SOMAXCONN ) < 0 ) {
         std::cerr << "Unable to listen on specified port" << std::endl;
         exit( EXIT_SOCKET_ERROR );
     }
 }
 
+// Creates Players, and randomizes them around the Players array
 void Server::initPlayers( std::vector< avalon::special_roles_t > special_roles ) {
 
     std::vector< avalon::special_roles_t > evilChars;
@@ -123,6 +127,7 @@ void Server::initPlayers( std::vector< avalon::special_roles_t > special_roles )
     }
 }
 
+// Constructor
 Server::Server( int num_clients, std::vector< avalon::special_roles_t > special_roles, int port ) {
 
     this->num_clients = num_clients;
@@ -139,6 +144,8 @@ Server::Server( int num_clients, std::vector< avalon::special_roles_t > special_
     initPlayers( special_roles );
     initServer( );
     
+    // For some reason, the default of false in the protobuf file isn't working
+    // So set them all to false ourselves
     settingsBuf.set_players( num_clients );
     settingsBuf.set_merlin( false );
 	settingsBuf.set_percival( false );
@@ -146,6 +153,8 @@ Server::Server( int num_clients, std::vector< avalon::special_roles_t > special_
 	settingsBuf.set_morgana( false );
 	settingsBuf.set_assassin( false );
 	settingsBuf.set_oberon( false );
+
+    // Figure out which roles we have in the game
     for( std::vector< avalon::special_roles_t >::iterator it = special_roles.begin(); it != special_roles.end(); it++ ) {
 		switch( *it ) {
 			case avalon::MERLIN:
@@ -174,6 +183,7 @@ Server::Server( int num_clients, std::vector< avalon::special_roles_t > special_
     
 }
 
+// Destructor
 Server::~Server( ) {
 
     // Windows requires additional socket teardown
@@ -188,6 +198,8 @@ Server::~Server( ) {
     delete sockets;
 }
 
+// Wait for all the players to connect
+// and send them their information as they do
 bool Server::waitForClients( ) {
     
     for( unsigned int i = 0; i < num_clients; i++ ) {
@@ -199,7 +211,9 @@ bool Server::waitForClients( ) {
     return true;
 }
 
+// Sends one player another player's information
 void Server::sendPlayer( int playerID, int destinationID, bool allInfo ) {
+
 	avalon::network::Player playerBuf;
 	
 	if ( allInfo ) {
@@ -212,7 +226,9 @@ void Server::sendPlayer( int playerID, int destinationID, bool allInfo ) {
 	sendProtobuf( avalon::network::PLAYER_BUF, destinationID, playerBuf.SerializeAsString( ) );
 }
 
+// Sends the beginning information when a player connects
 void Server::sendStartingInfo( int playerID ) {
+
 	settingsBuf.set_client( playerID );
 	sendProtobuf( avalon::network::SETTINGS_BUF, playerID, settingsBuf.SerializeAsString( ) );
 	
@@ -220,10 +236,13 @@ void Server::sendStartingInfo( int playerID ) {
 		sendPlayer( i, playerID, false ); // Send each currently connected player to the new player
 		sendPlayer( playerID, i, false ); // Send the new player to each player already connected
 	}
+
 	sendPlayer( playerID, playerID, true ); // Send the new player their own info
 }
 
+// Sends a protobuf to a player
 void Server::sendProtobuf( avalon::network::buffers_t bufType, int destinationID, std::string message ) {
+
 	int messageSize = message.length( );
 
 	// Windows REQUIRES that sockets send char* rather than void*... so we have to do some bullshit to trick it
