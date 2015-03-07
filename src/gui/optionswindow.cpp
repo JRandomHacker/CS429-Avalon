@@ -39,9 +39,10 @@ OptionsWindow::~OptionsWindow( ) {
 
 void OptionsWindow::on_buttonJoinMenu_clicked()
 {
-    JoinServerWindow w;
-    w.setModal(true);
-    w.exec();
+    JoinServerWindow* w = new JoinServerWindow();
+    w->setModal(false);
+    w->show();
+    this->close();
 }
 
 void OptionsWindow::on_buttonQuit_clicked()
@@ -51,7 +52,8 @@ void OptionsWindow::on_buttonQuit_clicked()
 
 void OptionsWindow::on_buttonCreateMenu_clicked()
 {
-    CreateServerWindow w;
-    w.setModal(true);
-    w.exec();
+    CreateServerWindow* w = new CreateServerWindow();
+    w->setModal(false);
+    w->show();
+    this->close();
 }

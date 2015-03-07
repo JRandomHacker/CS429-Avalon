@@ -7,7 +7,7 @@
 #include <chrono>
 
 GameWindow::GameWindow(QWidget *parent, ClientController* controller, Model * model) :
-    QDialog(parent),
+    QDialog(NULL),
     ui(new Ui::GameWindow)
 {
     this->control = controller;

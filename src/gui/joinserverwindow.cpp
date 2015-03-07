@@ -23,11 +23,12 @@ void JoinServerWindow::on_buttonJoinServer_clicked()
     std::string addr = ui->fieldServerAddr->text().toStdString();
     int port = ui->fieldPortNum->text().toInt();
     
-    Model m;
-    ClientController controller( &m, addr, port );
+    Model* m = new Model();
+    ClientController* controller = new ClientController( m, addr, port );
     
-    GameWindow g(this, &controller, &m);
-    g.exec();
+    GameWindow* g = new GameWindow(NULL, controller, m);
+    g->setModal(false);
+    g->show();
     
     close();
 }
