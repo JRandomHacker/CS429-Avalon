@@ -28,6 +28,11 @@
 // Initializes the server to start listening for connections
 void Server::initServer( ) {
 
+    if( port > 65536 || port < 0 )
+    {
+        std::cerr << "Invalid port number" << std::endl;
+        exit( EXIT_NETWORK_ERROR );
+    }
     // Windows requires some initial socket setup
     #ifdef _WIN32
         WSADATA wsaData;

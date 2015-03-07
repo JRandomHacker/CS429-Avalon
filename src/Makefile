@@ -2,6 +2,7 @@ PROGS=server.exe client.exe
 SERVER_OBJS=server.o player.o globals.o player.pb.o settings.pb.o
 OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o settings.pb.o customActions.o action.o actionHandler.o controllerState.o
 
+BIN_DIR=.
 PROTOS_DIR=../protos
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
 
@@ -19,11 +20,18 @@ CXX=g++
 
 all : $(PROGS) $(OBJS)
 
+tests :
+	make $(OBJS) $(SERVER_OBJS)
+	cd ../tests && make
+	cp ../tests/*.exe $(BIN_DIR)
+
 clean : 
 	rm -f *.exe *.o *.gch
 	rm -f gui/*.o gui/moc_* gui/ui_* gui/Makefile*
 	rm -f $(PROTOS_DIR)/*.h $(PROTOS_DIR)/*.cc
 	rm -rf gui/debug gui/release
+	rm -f ../tests/*.exe ../tests/*.o ../tests/*.a
+	rm -f ../bin/*.exe
 
 protofiles :
 	protoc -I=$(PROTOS_DIR) --cpp_out=$(PROTOS_DIR) $(PROTOS_DIR)/*.proto
@@ -34,10 +42,10 @@ globals.o : globals.cpp
 player.o : player.cpp
 	$(CXX) $(CXXOPTS) -c $<
 
-server.o : server.cpp  protofiles
+server.o : server.cpp protofiles
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
 	
-client.o : client.cpp  protofiles
+client.o : client.cpp protofiles
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
 
 clientController.o : clientController.cpp
@@ -74,8 +82,8 @@ player.pb.o : $(PROTOS_DIR)/player.pb.cc
 	 $(CXX) $(CXXOPTS) -c $<
 
 server.exe : server_main.cpp $(SERVER_OBJS)
-	$(CXX) $(CXXOPTS) $^ -o $@ $(LIBS)
+	$(CXX) $(CXXOPTS) $^ -o $(BIN_DIR)/$@ $(LIBS)
 	
 client.exe : $(OBJS)
 	cd gui/ && qmake && make
-	mv `find gui/ -regextype posix-egrep -regex ".*/AVL_Interface(|.exe)$$"` ./AVL_Interface.exe
+	mv `find gui/ -regextype posix-egrep -regex ".*/AVL_Interface(|.exe)$$"` $(BIN_DIR)/AVL_Interface.exe
