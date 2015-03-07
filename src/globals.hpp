@@ -12,10 +12,12 @@
 
 #define DEFAULT_PORT 42917
 
-#define EXIT_INVALID_PLAYERS_ERROR -1
-#define EXIT_THREAD_ERROR -2
-#define EXIT_EVIL_ERROR -3 // Too many evil roles compared to evil player count
-#define EXIT_SOCKET_ERROR -4
+#define EXIT_INVALID_PLAYERS_ERROR 10
+#define EXIT_THREAD_ERROR 11
+#define EXIT_EVIL_ERROR 12 // Too many evil roles compared to evil player count
+#define EXIT_SOCKET_ERROR 13
+#define EXIT_SERVER_NOT_FOUND 14 // Unable to find the server executable
+#define UNKNOWN_ERROR 42
 
 namespace avalon {
 
