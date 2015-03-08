@@ -89,8 +89,8 @@ void GameWindow::createPlayerSubscribers( ) {
     }
 }
 
-void* GameWindow::controlThreadFn(void* data)
+void* GameWindow::controlThreadFn(void* clientController)
 {   
-    ((ClientController*) data)->processActions();
+    ((ClientController*) clientController)->processActions();
     return NULL;
 }

@@ -14,6 +14,7 @@ class JoinServerWindow : public QDialog
 public:
 	/**
      *  Creates a join server window.
+     *  @param   parent		Pointer to parent widget.
      */
     explicit JoinServerWindow(QWidget *parent = 0);
 

@@ -16,6 +16,7 @@ class OptionsWindow : public QMainWindow {
 public:
     /**
      *  Constructor that creates new options window.
+     *  @param   parent     Pointer to parent widget.
      */
     explicit OptionsWindow(QWidget *parent = 0);
 
