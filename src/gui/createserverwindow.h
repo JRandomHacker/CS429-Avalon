@@ -20,29 +20,29 @@ class CreateServerWindow : public QDialog
 
 public:
 	/**
- 	*  Creates a new server window.
- 	*	@param	parent	pointer to parent window
- 	*/
+ 	 *  Creates a new server window.
+ 	 *	@param	parent	pointer to parent window
+ 	 */
     explicit CreateServerWindow(QWidget *parent = 0);
 
     ~CreateServerWindow();
 
 private slots:
 	/**
-	 *  calles create server on click
+	 *  calls create server on click
 	 *	displays respective error message if create server fails.
 	 */
     void on_buttonCreateServer_clicked();
 
 private:
 	/**
- 	*  UI fiels for create server window
- 	*/
+ 	 *  UI field for create server window
+ 	 */
     Ui::CreateServerWindow *ui;
 
     /**
- 	*  Creates the server in a new process.
- 	*/
+ 	 *  Creates the server in a new process.
+ 	 */
     int createServer();
 
     /**

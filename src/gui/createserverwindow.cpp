@@ -14,18 +14,15 @@
     #include <sys/wait.h>
 #endif
 
-CreateServerWindow::CreateServerWindow(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::CreateServerWindow)
-{
-    ui->setupUi(this);
+CreateServerWindow::CreateServerWindow( QWidget *parent ) :
+    QDialog( parent ),
+    ui( new Ui::CreateServerWindow ) {
+    ui->setupUi( this );
 
-    ui->editPortNum->insert(QString(std::to_string(DEFAULT_PORT).c_str()));
-
+    ui->editPortNum->insert( QString( std::to_string( DEFAULT_PORT ).c_str( ) ) );
 }
 
-CreateServerWindow::~CreateServerWindow()
-{
+CreateServerWindow::~CreateServerWindow() {
     delete ui;
 }
 
@@ -44,7 +41,7 @@ int CreateServerWindow::createServer() {
 
         for ( int j = 0; j < roles.length(); j++ ) {
             std::string flagStr = " --";
-            flagStr += roles[j]->text().toStdString();
+            flagStr += roles[j]->text( ).toStdString( );
             execStr += flagStr;
         }
 
@@ -53,21 +50,20 @@ int CreateServerWindow::createServer() {
         PROCESS_INFORMATION ProcessInfo;
 
         // Don't show the console in the new process
-        memset(&StartupInfo, 0, sizeof(StartupInfo));
-        StartupInfo.cb = sizeof(STARTUPINFO);
+        memset( &StartupInfo, 0, sizeof( StartupInfo ) );
+        StartupInfo.cb = sizeof( STARTUPINFO );
         StartupInfo.dwFlags = STARTF_USESHOWWINDOW;
         StartupInfo.wShowWindow = SW_HIDE;
 
         char* execChar = new char[ execStr.size( ) ];
         strcpy( execChar, execStr.c_str( ) );
 
-        if (!CreateProcessA( NULL, execChar, NULL, NULL, FALSE,
+        if ( !CreateProcessA( NULL, execChar, NULL, NULL, FALSE,
             DETACHED_PROCESS,
             NULL,
             NULL,
             &StartupInfo,
-            &ProcessInfo))
-        {
+            &ProcessInfo ) ) {
             std::cerr << "Unable to find server executable, or something terrible happened!" << std::endl;
             return EXIT_SERVER_NOT_FOUND;
         }
@@ -95,20 +91,20 @@ int CreateServerWindow::createServer() {
 
             // Get the port
             std::string portStr = "--port=";
-            portStr += ui->editPortNum->text().toStdString();
+            portStr += ui->editPortNum->text( ).toStdString( );
 
-            QList< QListWidgetItem* > roles = ui->listWidget->selectedItems();
+            QList< QListWidgetItem* > roles = ui->listWidget->selectedItems( );
 
             // First argument must be the executable
-            args[ i++ ] = (char*)"./server.exe";
-            args[ i++ ] = (char*)playerStr.c_str( );
-            args[ i++ ] = (char*)portStr.c_str( );
+            args[ i++ ] = ( char* )"./server.exe";
+            args[ i++ ] = ( char* )playerStr.c_str( );
+            args[ i++ ] = ( char* )portStr.c_str( );
 
             for ( int j = 0; j < roles.length(); j++ ) {
                 std::string flagStr = "--";
-                flagStr += roles[j]->text().toStdString();
+                flagStr += roles[j]->text( ).toStdString( );
                 char* tempFlagStr = new char[ flagStr.size( ) ];
-                strcpy( tempFlagStr, flagStr.c_str() );
+                strcpy( tempFlagStr, flagStr.c_str( ) );
                 args[ i++ ] = tempFlagStr;
             }
 
@@ -128,12 +124,10 @@ int CreateServerWindow::createServer() {
             }
         }
     #endif
-
     return 0;
 }
 
-void CreateServerWindow::on_buttonCreateServer_clicked( )
-{
+void CreateServerWindow::on_buttonCreateServer_clicked( ) {
     int serverCreation = createServer( );
     switch( serverCreation ) {
         case 0:
@@ -142,52 +136,50 @@ void CreateServerWindow::on_buttonCreateServer_clicked( )
             break;
         case EXIT_INVALID_PLAYERS_ERROR: {
             // Not enough players
-            QErrorMessage error(this);
+            QErrorMessage error( this );
             error.showMessage("Invalid players number");
             error.exec();
             break;
         }
         case EXIT_SOCKET_ERROR: {
             // Unable to bind port (probably... technically just a generic socketing error)
-            QErrorMessage error(this);
+            QErrorMessage error( this );
             error.showMessage("Socket already bound");
             error.exec();
             break;
         }
         case EXIT_EVIL_ERROR: {
             // More evil specials than evil players
-            QErrorMessage error(this);
+            QErrorMessage error( this );
             error.showMessage("More special evil than evil");
             error.exec();
             break;
         }
         case EXIT_SERVER_NOT_FOUND: {
             // Unable to find server executable
-            QErrorMessage error(this);
+            QErrorMessage error( this );
             error.showMessage("Server not found");
             error.exec();
             break;
         }
         case EXIT_NETWORK_ERROR:
             // Windows magic broke
-            QErrorMessage error(this);
-            error.showMessage("Windows magic broke");
-            error.exec();
+            QErrorMessage error( this );
+            error.showMessage( "Windows magic broke" );
+            error.exec( );
             break;
     }
 }
 
-
-void CreateServerWindow::connectToServer( )
-{
-    int port = ui->editPortNum->text().toInt();
+void CreateServerWindow::connectToServer( ) {
+    int port = ui->editPortNum->text( ).toInt( );
     
-    Model* m = new Model();
+    Model* m = new Model( );
     ClientController* controller = new ClientController( m, "localhost", port );
     
-    GameWindow* g = new GameWindow(NULL, controller, m);
-    g->setModal(false);
-    g->show();
+    GameWindow* g = new GameWindow( NULL, controller, m );
+    g->setModal( false );
+    g->show( );
     
-    close();
+    close( );
 }
