@@ -28,17 +28,17 @@ TEST_F( ActionTests, testAddingActions) {
     sem_init(&mut, 1, 1);
     ActionHandler ahandler(&mut);
     Action act("CreateGame");
-    ASSERT_TRUE(act.GetMessage() == "CreateGame");
+    ASSERT_TRUE(act.getMessage() == "CreateGame");
     Action act2("JoinGame");
-    ASSERT_TRUE(act2.GetMessage() == "JoinGame");
-    ahandler.AddAction(&act);
-    ahandler.AddAction(&act2);
+    ASSERT_TRUE(act2.getMessage() == "JoinGame");
+    ahandler.addAction(&act);
+    ahandler.addAction(&act2);
     ASSERT_EQ(2,2);
-    auto p = ahandler.FreezeFrontActions();
+    auto p = ahandler.freezeFrontActions();
     ASSERT_EQ(std::get<0>(p), 2);
-    ahandler.ReleaseFrozenActions();
+    ahandler.releaseFrozenActions();
     ASSERT_EQ(2,2);
-    p = ahandler.FreezeFrontActions();
+    p = ahandler.freezeFrontActions();
     ASSERT_EQ(std::get<0>(p), 0);
 }
 

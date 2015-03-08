@@ -22,7 +22,7 @@ public:
 	 *
 	 * @param new_action The new action being added to the queue.
 	 */
-	void AddAction( Action* new_action );
+	void addAction( Action* new_action );
 
 	/**
 	 * Grants exclusive access to the front of the queue for reading. Blocks
@@ -32,18 +32,18 @@ public:
 	 *     and an iterator to the first element to be read. Iterating past the
 	 *     last safe element is undefined.
 	 */
-	std::pair<int, std::list<Action*>::iterator> FreezeFrontActions( void );
+	std::pair<int, std::list<Action*>::iterator> freezeFrontActions( void );
 
 	/**
 	 * Releases read access gotten elsewhere.
 	 */
-	void UnfreezeFrontActions( void );
+	void unfreezeFrontActions( void );
 
 	/**
 	 * Removes all actions that are currently safe for reading and then
 	 * releases read access.
 	 */
-	void ReleaseFrozenActions( void );
+	void releaseFrozenActions( void );
 
 private:
 	std::list<Action*> action_queue;

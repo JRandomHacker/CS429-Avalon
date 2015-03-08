@@ -121,7 +121,7 @@ void Client::recvPlayer( int bufLength ) {
 
     // Add an action to the queue
 	AddPlayerAction* action = new AddPlayerAction( pBuf.id(), p );
-	queue->AddAction( ( Action* )action );
+	queue->addAction( ( Action* )action );
 
 	delete playerBuf;
 }
@@ -139,7 +139,7 @@ void Client::recvSettings( int bufLength ) {
 	
     // Add an action to the queue
 	GameSettingsAction* action = new GameSettingsAction( sBuf );
-	queue->AddAction( ( Action* )action );
+	queue->addAction( ( Action* )action );
 	
 	delete settingsBuf;
 }

@@ -19,7 +19,7 @@ VotingState::VotingState( Model* mod ) : ControllerState( "Voting", mod ) {
 
 ControllerState* VotingState::handleAction(Action* action_to_be_handled) {
 	std::cout << "Action being handled by main screen state" << std::endl;
-	std::string action_type = action_to_be_handled->GetMessage();
+	std::string action_type = action_to_be_handled->getMessage();
 	if (action_type == "EnterLobby") {
 	} else {
 		reportUnhandledAction(action_type);
@@ -33,7 +33,7 @@ LobbyState::LobbyState( Model* mod ) : ControllerState( "Lobby", mod ) {
 
 ControllerState* LobbyState::handleAction(Action* action_to_be_handled) {
 	std::cerr << "Action being handled by lobby state" << std::endl;
-	std::string action_type = action_to_be_handled->GetMessage();
+	std::string action_type = action_to_be_handled->getMessage();
 	if (action_type == "GameSettings") {
 		std::cerr << "GameSettings action handled by lobby state" << std::endl;
 		auto action = dynamic_cast<GameSettingsAction*>(action_to_be_handled);

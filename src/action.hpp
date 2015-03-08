@@ -14,7 +14,7 @@ public:
 	 Action(std::string mess_text);
 	 virtual ~Action();
 
-	 std::string GetMessage();
+	 std::string getMessage();
 
 private:
 	std::string message_text;

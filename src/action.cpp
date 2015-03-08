@@ -9,6 +9,6 @@ Action::~Action() {
 	
 }
 
-std::string Action::GetMessage() {
+std::string Action::getMessage() {
 	return message_text;
 }

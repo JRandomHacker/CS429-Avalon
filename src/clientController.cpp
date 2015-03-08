@@ -87,7 +87,7 @@ void ClientController::processAction( Action* action ) {
 }
 
 void ClientController::addActionToQueue( Action* new_action ) {
-	action_queue->AddAction(new_action);
+	action_queue->addAction(new_action);
 }
 
 // Infinite loop, waiting for actions from either the GUI or network
@@ -97,7 +97,7 @@ void ClientController::processActions( ) {
 		sem_wait( qSem ); // Wait until there is an action to process, so we don't spinlock
 		
         // Grab all the currently available actions
-		std::pair< int, std::list< Action* >::iterator > available_actions = action_queue->FreezeFrontActions( );
+		std::pair< int, std::list< Action* >::iterator > available_actions = action_queue->freezeFrontActions( );
 
         // Iterate through the available actions and process them
 		for( int i = 0; i < available_actions.first; i++ ) {
@@ -111,6 +111,6 @@ void ClientController::processActions( ) {
 			sem_wait( qSem );
 		}
 
-		action_queue->ReleaseFrozenActions( );
+		action_queue->releaseFrozenActions( );
 	}
 }
