@@ -29,7 +29,7 @@ OptionsWindow::OptionsWindow( QWidget *parent ) :
     QMainWindow( parent ),
     ui( new Ui::OptionsWindow ) {
 
-    ui->setupUi(this);
+    ui->setupUi( this );
 }
 
 OptionsWindow::~OptionsWindow( ) {
@@ -37,23 +37,20 @@ OptionsWindow::~OptionsWindow( ) {
 }
 
 
-void OptionsWindow::on_buttonJoinMenu_clicked()
-{
-    JoinServerWindow* w = new JoinServerWindow();
-    w->setModal(false);
-    w->show();
-    this->close();
+void OptionsWindow::on_buttonJoinMenu_clicked( ) {
+    JoinServerWindow* w = new JoinServerWindow( );
+    w->setModal( false );
+    w->show( );
+    this->close( );
 }
 
-void OptionsWindow::on_buttonQuit_clicked()
-{
-    this->close();
+void OptionsWindow::on_buttonQuit_clicked( ) {
+    this->close( );
 }
 
-void OptionsWindow::on_buttonCreateMenu_clicked()
-{
-    CreateServerWindow* w = new CreateServerWindow();
-    w->setModal(false);
-    w->show();
-    this->close();
+void OptionsWindow::on_buttonCreateMenu_clicked( ) {
+    CreateServerWindow* w = new CreateServerWindow( );
+    w->setModal( false );
+    w->show( );
+    this->close( );
 }

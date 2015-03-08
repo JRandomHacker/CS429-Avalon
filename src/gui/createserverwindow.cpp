@@ -22,11 +22,11 @@ CreateServerWindow::CreateServerWindow( QWidget *parent ) :
     ui->editPortNum->insert( QString( std::to_string( DEFAULT_PORT ).c_str( ) ) );
 }
 
-CreateServerWindow::~CreateServerWindow() {
+CreateServerWindow::~CreateServerWindow( ) {
     delete ui;
 }
 
-int CreateServerWindow::createServer() {
+int CreateServerWindow::createServer( ) {
     #ifdef _WIN32
         std::string execStr = "server.exe";
 
@@ -35,11 +35,11 @@ int CreateServerWindow::createServer() {
         execStr += std::to_string( ui->sbNumPlayers->value( ) );
         // Get the port number
         execStr += " --port=";
-        execStr += ui->editPortNum->text().toStdString();
+        execStr += ui->editPortNum->text().toStdString( );
 
-        QList<QListWidgetItem* > roles = ui->listWidget->selectedItems();
+        QList<QListWidgetItem* > roles = ui->listWidget->selectedItems( );
 
-        for ( int j = 0; j < roles.length(); j++ ) {
+        for ( int j = 0; j < roles.length( ); j++ ) {
             std::string flagStr = " --";
             flagStr += roles[j]->text( ).toStdString( );
             execStr += flagStr;
@@ -100,7 +100,7 @@ int CreateServerWindow::createServer() {
             args[ i++ ] = ( char* )playerStr.c_str( );
             args[ i++ ] = ( char* )portStr.c_str( );
 
-            for ( int j = 0; j < roles.length(); j++ ) {
+            for ( int j = 0; j < roles.length( ); j++ ) {
                 std::string flagStr = "--";
                 flagStr += roles[j]->text( ).toStdString( );
                 char* tempFlagStr = new char[ flagStr.size( ) ];
@@ -138,28 +138,28 @@ void CreateServerWindow::on_buttonCreateServer_clicked( ) {
             // Not enough players
             QErrorMessage error( this );
             error.showMessage("Invalid players number");
-            error.exec();
+            error.exec( );
             break;
         }
         case EXIT_SOCKET_ERROR: {
             // Unable to bind port (probably... technically just a generic socketing error)
             QErrorMessage error( this );
             error.showMessage("Socket already bound");
-            error.exec();
+            error.exec( );
             break;
         }
         case EXIT_EVIL_ERROR: {
             // More evil specials than evil players
             QErrorMessage error( this );
             error.showMessage("More special evil than evil");
-            error.exec();
+            error.exec( );
             break;
         }
         case EXIT_SERVER_NOT_FOUND: {
             // Unable to find server executable
             QErrorMessage error( this );
             error.showMessage("Server not found");
-            error.exec();
+            error.exec( );
             break;
         }
         case EXIT_NETWORK_ERROR:

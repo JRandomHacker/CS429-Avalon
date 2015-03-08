@@ -18,28 +18,28 @@ public:
      *  Constructor that creates new options window.
      *  @param   parent     Pointer to parent widget.
      */
-    explicit OptionsWindow(QWidget *parent = 0);
+    explicit OptionsWindow( QWidget *parent = 0 );
 
     /**
      *  Destroys the options window.
      */
-    ~OptionsWindow();
+    ~OptionsWindow( );
 
 private slots:
     /**
      *  Opens joins server window on click, closes the current window
      */
-    void on_buttonJoinMenu_clicked();
+    void on_buttonJoinMenu_clicked( );
 
     /**
      *  Closes the current window
      */
-    void on_buttonQuit_clicked();
+    void on_buttonQuit_clicked( );
 
     /**
      *  Opens create server window on click, closes the current window
      */
-    void on_buttonCreateMenu_clicked();
+    void on_buttonCreateMenu_clicked( );
 
 private:
     /**

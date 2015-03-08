@@ -14,8 +14,7 @@ class CreateServerWindow;
  *  Displays the options and settings to create a new game.
  *	Spawns listen server in a new process.
  */
-class CreateServerWindow : public QDialog
-{
+class CreateServerWindow : public QDialog {
     Q_OBJECT
 
 public:
@@ -25,14 +24,14 @@ public:
  	 */
     explicit CreateServerWindow(QWidget *parent = 0);
 
-    ~CreateServerWindow();
+    ~CreateServerWindow( );
 
 private slots:
 	/**
 	 *  calls create server on click
 	 *	displays respective error message if create server fails.
 	 */
-    void on_buttonCreateServer_clicked();
+    void on_buttonCreateServer_clicked( );
 
 private:
 	/**
@@ -43,13 +42,13 @@ private:
     /**
  	 *  Creates the server in a new process.
  	 */
-    int createServer();
+    int createServer( );
 
     /**
  	 *	Connects to an existing server
  	 *	creates a game window, closes the current window.
  	 */
-    void connectToServer();
+    void connectToServer( );
 };
 
 #endif // CREATESERVERWINDOW_H
