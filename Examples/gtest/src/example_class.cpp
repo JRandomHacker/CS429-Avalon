@@ -11,11 +11,11 @@
 // Constructor
 ExampleClass::ExampleClass( int input ) {
 
-	this->input = input;
+    this->input = input;
 }
 
 // Returns the value that was passed in during instantiation
 int ExampleClass::getInput( void ) {
 
-	return this->input;
+    return this->input;
 }

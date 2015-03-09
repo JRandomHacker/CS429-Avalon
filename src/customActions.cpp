@@ -1,4 +1,4 @@
-#include "CustomActions.hpp"
+#include "customActions.hpp"
 
 //Public constructors
 GameSettingsAction::GameSettingsAction(avalon::network::GameSettings* settings) : Action("GameSettings") {
@@ -20,7 +20,7 @@ avalon::network::GameSettings* GameSettingsAction::getSettings() {
 }
 
 unsigned int AddPlayerAction::getPlayerNumber() {
-	return player_number;
+    return player_number;
 }
 
 Player* AddPlayerAction::getPlayerInfo() {

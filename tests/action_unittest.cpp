@@ -6,9 +6,9 @@
  * @file action_unittest.cpp
  */
 
-#include "ActionHandler.hpp"
-#include "Action.hpp"
-#include "CustomActions.hpp"
+#include "actionHandler.hpp"
+#include "action.hpp"
+#include "customActions.hpp"
 #include "gtest/gtest.h"
 
 #include <string>

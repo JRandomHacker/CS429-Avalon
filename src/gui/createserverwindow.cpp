@@ -173,13 +173,13 @@ void CreateServerWindow::on_buttonCreateServer_clicked( ) {
 
 void CreateServerWindow::connectToServer( ) {
     int port = ui->editPortNum->text( ).toInt( );
-    
+
     Model* m = new Model( );
     ClientController* controller = new ClientController( m, "localhost", port );
-    
+
     GameWindow* g = new GameWindow( NULL, controller, m );
     g->setModal( false );
     g->show( );
-    
+
     close( );
 }

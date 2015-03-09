@@ -33,14 +33,14 @@ namespace avalon {
         ASSASSIN, /*! Assassin (Evil) Gets a last ditch chance to kill Merlin, making Evil win */
         OBERON,   /*! Oberon (Evil) Unknown to other Evil players */
         NONE,     /*! None Corresponds to being a generic good/evil person */
-        UNKNOWN_ROLE	  /*! Unknown Corresponds to another player in the game whose alignment should not be known*/
+        UNKNOWN_ROLE      /*! Unknown Corresponds to another player in the game whose alignment should not be known*/
     };
 
     /*! An enumerator of the possible alignments */
     enum alignment_t {
         GOOD, /*! Good (Wants missions to pass) */
         EVIL, /*! Evil (Wants missions to fail) */
-        UNKNOWN_ALIGN	  /*! Unknown Corresponds to another player in the game whose alignment should not be known */
+        UNKNOWN_ALIGN      /*! Unknown Corresponds to another player in the game whose alignment should not be known */
     };
 
     /**
@@ -67,13 +67,13 @@ namespace avalon {
      */
     void sleep( int seconds );
 
-	namespace network {
-		/*! An enumerator for different protobuf types */
-		enum buffers_t {
-			PLAYER_BUF, /*! An avalon::network::Player protobuf */
-			SETTINGS_BUF /*! An avalon::network::GameSettings protobuf */
-		};
-	}
+    namespace network {
+        /*! An enumerator for different protobuf types */
+        enum buffers_t {
+            PLAYER_BUF, /*! An avalon::network::Player protobuf */
+            SETTINGS_BUF /*! An avalon::network::GameSettings protobuf */
+        };
+    }
 }
 
 #endif // _GLOBALS_HPP

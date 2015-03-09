@@ -15,18 +15,18 @@ class ExampleClass {
         int input;
 
     public:
-		/**
-		 * Public constructor
-		 *
-		 * @param input The value to set input to
-		 */
+        /**
+         * Public constructor
+         *
+         * @param input The value to set input to
+         */
         ExampleClass( int input );
 
-		/**
-		 * Method to return the input given at class instantiation
-		 *
-		 * @return The integer you passed in earlier
-		 */
+        /**
+         * Method to return the input given at class instantiation
+         *
+         * @return The integer you passed in earlier
+         */
         int getInput( void );
 };
 

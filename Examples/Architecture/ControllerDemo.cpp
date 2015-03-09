@@ -11,20 +11,20 @@
 static Controller controller;
 
 void beginControllerProcessing() {
-	controller.beginProcessing();
+    controller.beginProcessing();
 }
 
 int main() {
-	std::thread controller_process_thread(&beginControllerProcessing);
+    std::thread controller_process_thread(&beginControllerProcessing);
 
-	std::cin.get();
-	controller.addActionToQueue(new JoinGameAction("jfeuisfes"));
-	std::cin.get();
-	controller.addActionToQueue(new EnterLobbyAction("FJIOES"));
-	while (true) {
-		std::cin.get();
-		controller.addActionToQueue(new AddPlayerAction("LJI"));
-	}
+    std::cin.get();
+    controller.addActionToQueue(new JoinGameAction("jfeuisfes"));
+    std::cin.get();
+    controller.addActionToQueue(new EnterLobbyAction("FJIOES"));
+    while (true) {
+        std::cin.get();
+        controller.addActionToQueue(new AddPlayerAction("LJI"));
+    }
 
-	return 0;
+    return 0;
 }

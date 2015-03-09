@@ -1,6 +1,6 @@
 /**
  * Tests for player.cpp
- * 
+ *
  * @author Justin Koehler && Ryan Kerr
  * @date 2015-02-16
  * @file player_unittest.cpp

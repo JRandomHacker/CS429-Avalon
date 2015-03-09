@@ -1,12 +1,12 @@
 package avalon.network;
 
 message GameSettings {
-	required int32 players = 1;
-	required bool merlin = 2 [ default = false ];
-	required bool percival = 3 [ default = false ];
-	required bool mordred = 4 [ default = false ];
-	required bool morgana = 5 [ default = false ];
-	required bool assassin = 6 [ default = false ];
-	required bool oberon = 7 [ default = false ];
-	required int32 client = 8;
+    required int32 players = 1;
+    required bool merlin = 2 [ default = false ];
+    required bool percival = 3 [ default = false ];
+    required bool mordred = 4 [ default = false ];
+    required bool morgana = 5 [ default = false ];
+    required bool assassin = 6 [ default = false ];
+    required bool oberon = 7 [ default = false ];
+    required int32 client = 8;
 }

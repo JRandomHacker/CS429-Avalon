@@ -95,7 +95,7 @@ model_unittest.exe : $(SRC_DIR)/model.o $(SRC_DIR)/subscriber.o $(SRC_DIR)/model
 action_unittest.o : $(TESTS_DIR)/action_unittest.cpp $(GTEST_H)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 	
-action_unittest.exe : $(SRC_DIR)/Action.o $(SRC_DIR)/ActionHandler.o action_unittest.o gtest_main.a
+action_unittest.exe : $(SRC_DIR)/action.o $(SRC_DIR)/actionHandler.o action_unittest.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
 
 client_server_unittest.o : $(TESTS_DIR)/client_server_unittest.cpp

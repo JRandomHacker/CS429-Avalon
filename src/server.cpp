@@ -82,10 +82,10 @@ void Server::initPlayers( std::vector< avalon::special_roles_t > special_roles )
     // Add the possible characters to the vectors
     unsigned int numEvil = avalon::getEvilCount( num_clients );
 
-	if ( evilChars.size( ) > numEvil ) {
-		std::cerr << "More evil roles than evil players. Exiting." << std::endl;
-		exit( EXIT_EVIL_ERROR );
-	}
+    if ( evilChars.size( ) > numEvil ) {
+        std::cerr << "More evil roles than evil players. Exiting." << std::endl;
+        exit( EXIT_EVIL_ERROR );
+    }
 
     // possibleChars vector
     for( unsigned int i = 0; i < num_clients; i++ ) {
@@ -100,7 +100,7 @@ void Server::initPlayers( std::vector< avalon::special_roles_t > special_roles )
     for( unsigned int i = 0; i < ( numEvil - evilChars.size() ); i++ ) {
         evilChars.push_back( avalon::NONE );
     }
-    
+
     // goodChars vector
     for( unsigned int i = 0; i < ( num_clients - numEvil - goodChars.size() ); i++ ) {
         goodChars.push_back( avalon::NONE );
@@ -148,44 +148,44 @@ Server::Server( int num_clients, std::vector< avalon::special_roles_t > special_
 
     initPlayers( special_roles );
     initServer( );
-    
+
     // For some reason, the default of false in the protobuf file isn't working
     // So set them all to false ourselves
     settingsBuf.set_players( num_clients );
     settingsBuf.set_merlin( false );
-	settingsBuf.set_percival( false );
-	settingsBuf.set_mordred( false );
-	settingsBuf.set_morgana( false );
-	settingsBuf.set_assassin( false );
-	settingsBuf.set_oberon( false );
+    settingsBuf.set_percival( false );
+    settingsBuf.set_mordred( false );
+    settingsBuf.set_morgana( false );
+    settingsBuf.set_assassin( false );
+    settingsBuf.set_oberon( false );
 
     // Figure out which roles we have in the game
     for( std::vector< avalon::special_roles_t >::iterator it = special_roles.begin(); it != special_roles.end(); it++ ) {
-		switch( *it ) {
-			case avalon::MERLIN:
-				settingsBuf.set_merlin( true );
-				break;
-			case avalon::PERCIVAL:
-				settingsBuf.set_percival( true );
-				break;
-			case avalon::MORDRED:  
-				settingsBuf.set_mordred( true );
-				break;
-			case avalon::MORGANA:
-				settingsBuf.set_morgana( true );
-				break;
-			case avalon::ASSASSIN:
-				settingsBuf.set_assassin( true );
-				break;
-			case avalon::OBERON:
-				settingsBuf.set_oberon( true );
-				break;
-			case avalon::NONE:
-			default:
-				break;
-		}
-	}
-    
+        switch( *it ) {
+            case avalon::MERLIN:
+                settingsBuf.set_merlin( true );
+                break;
+            case avalon::PERCIVAL:
+                settingsBuf.set_percival( true );
+                break;
+            case avalon::MORDRED:
+                settingsBuf.set_mordred( true );
+                break;
+            case avalon::MORGANA:
+                settingsBuf.set_morgana( true );
+                break;
+            case avalon::ASSASSIN:
+                settingsBuf.set_assassin( true );
+                break;
+            case avalon::OBERON:
+                settingsBuf.set_oberon( true );
+                break;
+            case avalon::NONE:
+            default:
+                break;
+        }
+    }
+
 }
 
 // Destructor
@@ -206,11 +206,11 @@ Server::~Server( ) {
 // Wait for all the players to connect
 // and send them their information as they do
 bool Server::waitForClients( ) {
-    
+
     for( unsigned int i = 0; i < num_clients; i++ ) {
-		
+
         sockets[ i ] = accept( servsock, NULL, NULL );
-		sendStartingInfo( i );
+        sendStartingInfo( i );
     }
 
     return true;
@@ -219,39 +219,39 @@ bool Server::waitForClients( ) {
 // Sends one player another player's information
 void Server::sendPlayer( int playerID, int destinationID, bool allInfo ) {
 
-	avalon::network::Player playerBuf;
-	
-	if ( allInfo ) {
-		playerBuf = players[ playerID ]->getBuf( );
-	} else {
-		playerBuf = players[ playerID ]->getHiddenBuf( );
-	}
+    avalon::network::Player playerBuf;
 
-	playerBuf.set_id( playerID );
-	sendProtobuf( avalon::network::PLAYER_BUF, destinationID, playerBuf.SerializeAsString( ) );
+    if ( allInfo ) {
+        playerBuf = players[ playerID ]->getBuf( );
+    } else {
+        playerBuf = players[ playerID ]->getHiddenBuf( );
+    }
+
+    playerBuf.set_id( playerID );
+    sendProtobuf( avalon::network::PLAYER_BUF, destinationID, playerBuf.SerializeAsString( ) );
 }
 
 // Sends the beginning information when a player connects
 void Server::sendStartingInfo( int playerID ) {
 
-	settingsBuf.set_client( playerID );
-	sendProtobuf( avalon::network::SETTINGS_BUF, playerID, settingsBuf.SerializeAsString( ) );
-	
-	for( int i = 0; i < playerID; i++ ) {
-		sendPlayer( i, playerID, false ); // Send each currently connected player to the new player
-		sendPlayer( playerID, i, false ); // Send the new player to each player already connected
-	}
+    settingsBuf.set_client( playerID );
+    sendProtobuf( avalon::network::SETTINGS_BUF, playerID, settingsBuf.SerializeAsString( ) );
 
-	sendPlayer( playerID, playerID, true ); // Send the new player their own info
+    for( int i = 0; i < playerID; i++ ) {
+        sendPlayer( i, playerID, false ); // Send each currently connected player to the new player
+        sendPlayer( playerID, i, false ); // Send the new player to each player already connected
+    }
+
+    sendPlayer( playerID, playerID, true ); // Send the new player their own info
 }
 
 // Sends a protobuf to a player
 void Server::sendProtobuf( avalon::network::buffers_t bufType, int destinationID, std::string message ) {
 
-	int messageSize = message.length( );
+    int messageSize = message.length( );
 
-	// Windows REQUIRES that sockets send char* rather than void*... so we have to do some bullshit to trick it
-	send( sockets[ destinationID ], (char*)(&bufType), sizeof( avalon::network::buffers_t ) / sizeof( char ), 0 );
-	send( sockets[ destinationID ], (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
-	send( sockets[ destinationID ], message.c_str( ), messageSize * sizeof( char ), 0 );
+    // Windows REQUIRES that sockets send char* rather than void*... so we have to do some bullshit to trick it
+    send( sockets[ destinationID ], (char*)(&bufType), sizeof( avalon::network::buffers_t ) / sizeof( char ), 0 );
+    send( sockets[ destinationID ], (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
+    send( sockets[ destinationID ], message.c_str( ), messageSize * sizeof( char ), 0 );
 }

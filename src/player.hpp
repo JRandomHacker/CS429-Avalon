@@ -31,10 +31,10 @@ class Player {
          * @param alignment Whether the player is on the side of good, or evil
          */
         Player( std::string name, avalon::special_roles_t role, avalon::alignment_t alignment );
-        
+
         /**
          * Constructor for a new player from a network player
-         * 
+         *
          * @param p The protobuf player from the network
          */
         Player( const avalon::network::Player& p );
@@ -67,7 +67,7 @@ class Player {
          * @return None
          */
         void setName( std::string name );
-        
+
         /**
          * Gets a protobuf representation of the Player object
          *

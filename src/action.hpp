@@ -5,19 +5,19 @@
 
 class Action {
 public:
-	/**
-	 * Public constructor
-	 * 
-	 * @param mess_text The human readable message explaining the contents
-	 *     of the action
-	 */
-	 Action(std::string mess_text);
-	 virtual ~Action();
+    /**
+     * Public constructor
+     *
+     * @param mess_text The human readable message explaining the contents
+     *     of the action
+     */
+     Action(std::string mess_text);
+     virtual ~Action();
 
-	 std::string getMessage();
+     std::string getMessage();
 
 private:
-	std::string message_text;
+    std::string message_text;
 };
 
 #endif // ACTION_HPP

@@ -27,7 +27,7 @@ class Server {
         unsigned int num_clients;
         int port;
         Player** players;
-        
+
         // A place to store the settings on creation to be able to send them to
         // players as they connect
         avalon::network::GameSettings settingsBuf;
@@ -54,7 +54,7 @@ class Server {
          * @param A vector of the special characters we want to use
          */
         void initPlayers( std::vector< avalon::special_roles_t > special_roles );
-        
+
         /*
          * Helper function to send a player to another player
          *
@@ -64,7 +64,7 @@ class Server {
          * @return None
          */
         void sendPlayer( int playerID, int destinationID, bool allInfo );
-        
+
         /*
          * Helper function to send everything a player needs upon connecting to the server
          * Sends settings, their player object, and all currently connected players
@@ -74,7 +74,7 @@ class Server {
          * @return None
          */
         void sendStartingInfo( int playerID );
-        
+
         /*
          * Helper function to send a protobuf
          *

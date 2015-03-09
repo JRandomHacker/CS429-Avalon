@@ -20,29 +20,29 @@
 
 int main( int argc, char** argv ) {
 
-	// Construct model and subscribe (as view) with a print method
-	Model* model = new Model( );
-	model->addData( "player1" );
-	
-	ClosureSubscriber* sub = new ClosureSubscriber(
-		[&]( Subscriber* s ){
-			Player* p = s->getData< Player >();
-			if ( p != NULL ) {
-				std::cout << "Player name: " << p->getName( ) << std::endl;
-				std::cout << "Role ID#: " << p->getRole( ) << std::endl;
-				std::cout << "You are ";
-				if ( p->getAlignment( ) == avalon::GOOD ) {
-					std::cout << "good." << std::endl;
-				} else {
-					std::cout << "evil." << std::endl;
-				}
+    // Construct model and subscribe (as view) with a print method
+    Model* model = new Model( );
+    model->addData( "player1" );
 
-			}
-		}, [&]( Subscriber* ) { }
-	);
-	model->subscribe("player1", sub);
+    ClosureSubscriber* sub = new ClosureSubscriber(
+        [&]( Subscriber* s ){
+            Player* p = s->getData< Player >();
+            if ( p != NULL ) {
+                std::cout << "Player name: " << p->getName( ) << std::endl;
+                std::cout << "Role ID#: " << p->getRole( ) << std::endl;
+                std::cout << "You are ";
+                if ( p->getAlignment( ) == avalon::GOOD ) {
+                    std::cout << "good." << std::endl;
+                } else {
+                    std::cout << "evil." << std::endl;
+                }
 
-	// Network initialization
+            }
+        }, [&]( Subscriber* ) { }
+    );
+    model->subscribe("player1", sub);
+
+    // Network initialization
     int rv;
     struct addrinfo hints, *servinfo;
     #ifdef _WIN32
@@ -75,20 +75,20 @@ int main( int argc, char** argv ) {
         exit( EXIT_FAILURE );
     }
 
-	// recv transmission size, followed by transmission
+    // recv transmission size, followed by transmission
     int playerBufSize;
     avalon::network::Player currNetPlayer;
-    
+
     recv( sock, (char*) &playerBufSize, sizeof( int ), 0 );
 
     std::cout << "Receiving: " << playerBufSize << std::endl;
-    
+
     char* playerBuf = new char[ playerBufSize ];
     recv( sock, playerBuf, playerBufSize * sizeof( char ), 0);
-    
+
     currNetPlayer.ParseFromArray( playerBuf, playerBufSize );
     Player currPlayer( currNetPlayer );
-    
+
     model->updateData< Player >( "player1", currPlayer );
 
     #ifdef _WIN32

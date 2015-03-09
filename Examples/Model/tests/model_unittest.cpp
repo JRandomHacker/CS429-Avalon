@@ -1,6 +1,6 @@
 /**
  * Tests for player.cpp
- * 
+ *
  * @author Justin Koehler && Ryan Kerr
  * @date 2015-02-16
  * @file player_unittest.cpp
@@ -52,7 +52,7 @@ TEST_F( ModelTests, testAddingConstructedData ) {
     EXPECT_EQ(1, ConDestructTester::constcount);
     EXPECT_EQ(0, ConDestructTester::destcount);
     EXPECT_EQ(0, ConDestructTester::copycount);
-    
+
     ASSERT_TRUE(mod->addData<ConDestructTester>("constructed_data", cdt));
     EXPECT_EQ(1, ConDestructTester::constcount);
     EXPECT_EQ(0, ConDestructTester::destcount);
@@ -62,7 +62,7 @@ TEST_F( ModelTests, testAddingConstructedData ) {
     EXPECT_EQ(1, ConDestructTester::constcount);
     EXPECT_EQ(1, ConDestructTester::destcount);
     EXPECT_EQ(1, ConDestructTester::copycount);
-    
+
     ConDestructTester::constcount = 0;
     ConDestructTester::destcount = 0;
     ConDestructTester::copycount = 0;
@@ -71,7 +71,7 @@ TEST_F( ModelTests, testAddingConstructedData ) {
     EXPECT_EQ(1, ConDestructTester::constcount);
     EXPECT_EQ(0, ConDestructTester::destcount);
     EXPECT_EQ(0, ConDestructTester::copycount);
-    
+
     ASSERT_TRUE(mod->addData<ConDestructTester>("constructed_data", *cdt2));
     EXPECT_EQ(1, ConDestructTester::constcount);
     EXPECT_EQ(0, ConDestructTester::destcount);
@@ -150,7 +150,7 @@ TEST_F( ModelTests, testAbleToUpdateAndRetrieveData) {
 
 TEST_F( ModelTests, testDeletingDataRemovesSubscribers) {
     MockSubscriber sub1;
-    
+
     // Adds data to subscribe to
     model.addData<int>("data_name", 0);
 

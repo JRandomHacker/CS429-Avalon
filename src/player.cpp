@@ -21,9 +21,9 @@ Player::Player( std::string name, avalon::special_roles_t role, avalon::alignmen
 // Copy constructor
 Player::Player( const avalon::network::Player& p ) {
 
-	this->name = p.name( );
-	this->role = static_cast< avalon::special_roles_t >( p.role( ) );
-	this->alignment = static_cast< avalon::alignment_t >( p.alignment( ) );
+    this->name = p.name( );
+    this->role = static_cast< avalon::special_roles_t >( p.role( ) );
+    this->alignment = static_cast< avalon::alignment_t >( p.alignment( ) );
 }
 
 // Getter for alignment
@@ -54,20 +54,20 @@ void Player::setName( std::string name ) {
 
 // Gets a protobuf from a player object
 avalon::network::Player Player::getBuf( ) {
-	avalon::network::Player playerBuf;
+    avalon::network::Player playerBuf;
 
-	playerBuf.set_role( role );
-	playerBuf.set_alignment( alignment );
-	playerBuf.set_name( name );
-	return playerBuf;
+    playerBuf.set_role( role );
+    playerBuf.set_alignment( alignment );
+    playerBuf.set_name( name );
+    return playerBuf;
 }
 
 // Gets a protobuf from a player object, without revealing the player's role or alignment
 avalon::network::Player Player::getHiddenBuf( ) {
-	avalon::network::Player playerBuf;
+    avalon::network::Player playerBuf;
 
-	playerBuf.set_role( avalon::UNKNOWN_ROLE );
-	playerBuf.set_alignment( avalon::UNKNOWN_ALIGN );
-	playerBuf.set_name( name );
-	return playerBuf;
+    playerBuf.set_role( avalon::UNKNOWN_ROLE );
+    playerBuf.set_alignment( avalon::UNKNOWN_ALIGN );
+    playerBuf.set_name( name );
+    return playerBuf;
 }

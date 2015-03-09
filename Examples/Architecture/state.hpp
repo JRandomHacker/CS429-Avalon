@@ -6,7 +6,7 @@
 class State {
 public:
     State();
-    
+
     void actionHandle(Action* newAct);
 };
 
