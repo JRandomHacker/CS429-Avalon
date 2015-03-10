@@ -1,5 +1,6 @@
 #include "createserverwindow.h"
 #include "gamewindow.h"
+#include "optionswindow.h"
 #include "ui_createserverwindow.h"
 #include "globals.hpp"
 #include "clientController.hpp"
@@ -170,6 +171,14 @@ void CreateServerWindow::on_buttonCreateServer_clicked( ) {
             break;
     }
 }
+
+void CreateServerWindow::on_buttonCancel_clicked( ) {
+    OptionsWindow* o = new OptionsWindow( );
+    o->show();
+    
+    close();
+}
+
 
 void CreateServerWindow::connectToServer( ) {
     int port = ui->editPortNum->text( ).toInt( );

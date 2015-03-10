@@ -1,4 +1,5 @@
 #include "joinserverwindow.h"
+#include "optionswindow.h"
 #include "gamewindow.h"
 #include "ui_joinserverwindow.h"
 #include "globals.hpp"
@@ -14,6 +15,13 @@ JoinServerWindow::JoinServerWindow( QWidget *parent ) :
 
 JoinServerWindow::~JoinServerWindow( ) {
     delete ui;
+}
+
+void JoinServerWindow::on_buttonCancel_clicked( ) {
+    OptionsWindow* o = new OptionsWindow();
+    o->show();
+    
+    close();
 }
 
 void JoinServerWindow::on_buttonJoinServer_clicked( ) {

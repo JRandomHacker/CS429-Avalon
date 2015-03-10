@@ -119,11 +119,22 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="buttonCreateServer">
-     <property name="text">
-      <string>Create Server</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="buttonCancel">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonCreateServer">
+       <property name="text">
+        <string>Create Server</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

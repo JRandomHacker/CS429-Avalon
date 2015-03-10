@@ -32,6 +32,11 @@ private slots:
 	 *	displays respective error message if create server fails.
 	 */
     void on_buttonCreateServer_clicked( );
+    
+    /**
+     *  Closes this window and opens the main menu
+     */
+    void on_buttonCancel_clicked( );
 
 private:
 	/**

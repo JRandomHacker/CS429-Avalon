@@ -29,6 +29,11 @@ private slots:
      *  Joins a game server on click. 
      */
     void on_buttonJoinServer_clicked( );
+    
+    /**
+     *  Closes this window and opens the main menu
+     */
+    void on_buttonCancel_clicked();
 
 private:
 	/**
