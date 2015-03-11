@@ -19,10 +19,10 @@ SOURCES += main.cpp\
     createserverwindow.cpp \
     joinserverwindow.cpp
 
-HEADERS  += optionswindow.h \
-    gamewindow.h \
-    createserverwindow.h \
-    joinserverwindow.h
+HEADERS  += optionswindow.hpp \
+    gamewindow.hpp \
+    createserverwindow.hpp \
+    joinserverwindow.hpp
 
 FORMS    += optionswindow.ui \
     gamewindow.ui \

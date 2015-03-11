@@ -1,8 +1,8 @@
 #include "globals.hpp"
 #include "clientController.hpp"
-#include "optionswindow.h"
-#include "joinserverwindow.h"
-#include "createserverwindow.h"
+#include "optionswindow.hpp"
+#include "joinserverwindow.hpp"
+#include "createserverwindow.hpp"
 #include "ui_optionswindow.h"
 #include <unistd.h>
 #include <iostream>

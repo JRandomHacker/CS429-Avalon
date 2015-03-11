@@ -1,4 +1,4 @@
-#include "optionswindow.h"
+#include "optionswindow.hpp"
 #include <QApplication>
 
 int main( int argc, char *argv[] )

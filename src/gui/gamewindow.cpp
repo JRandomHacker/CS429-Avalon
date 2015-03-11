@@ -1,4 +1,4 @@
-#include "gamewindow.h"
+#include "gamewindow.hpp"
 #include "ui_gamewindow.h"
 #include "subscriber.hpp"
 #include "player.hpp"

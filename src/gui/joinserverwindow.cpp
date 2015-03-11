@@ -1,6 +1,6 @@
-#include "joinserverwindow.h"
-#include "optionswindow.h"
-#include "gamewindow.h"
+#include "joinserverwindow.hpp"
+#include "optionswindow.hpp"
+#include "gamewindow.hpp"
 #include "ui_joinserverwindow.h"
 #include "globals.hpp"
 
