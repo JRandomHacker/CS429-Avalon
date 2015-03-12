@@ -28,6 +28,25 @@ public:
      */
     ~GameWindow( );
 
+signals:
+    void gameSettingsReceived( );
+    void playerInfoUpdated( int playerNum );
+
+private slots:
+    /**
+     *  Makes subscriber to get num of players.
+     *  Makes subscribers to current player ID.
+     *  Creates and displays the list of players.
+     *  Makes a subscriber list and registers them for each of the players.
+     */
+    void createPlayerSubscribers( );
+
+    /**
+     * Updates a player's entry in the player list
+     * @param id The playerNum of the updated player
+     */
+    void updatePlayer( int id );
+
 private:
     /**
      *  UI field for gamewindow
@@ -65,14 +84,6 @@ private:
      */
     void startWatchOnHasGameSettings( );
 
-    /**
-     *  Makes subscriber to get num of players.
-     *  Makes subscribers to current player ID.
-     *  Creates and displays the list of players.
-     *  Makes a subscriber list and registers them for each of the players.
-     */
-    void createPlayerSubscribers( );
-    
     /**
      *  Process the action queue for given client controller. 
      * 
