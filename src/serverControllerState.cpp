@@ -15,7 +15,6 @@ ServerControllerState* WaitingForClientsState::handleAction( Action* action_to_b
 
     ServerStateHelper helper( model );
 
-    std::cout << "Action being handled by main screen state" << std::endl;
     std::string action_type = action_to_be_handled->getMessage();
 
     if( action_type == "NewPlayer" ) {

@@ -66,7 +66,7 @@ int Server::initServer( ) {
 }
 
 void Server::initQueue( ActionHandler* queue ) {
-    if( this->queue != NULL ) {
+    if( !(this->queue) ) {
         this->queue = queue;
     } else {
         std::cerr << "[ SERVER ] Attempted to add a second ActionHandler" << std::endl;
