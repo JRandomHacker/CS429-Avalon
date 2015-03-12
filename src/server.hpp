@@ -24,6 +24,7 @@ class Server {
         ServInfo* model;
         ActionHandler* queue;
         int port;
+        bool clients_connected;
 
         struct sockaddr_in servparm;
 

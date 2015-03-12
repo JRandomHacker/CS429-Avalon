@@ -109,7 +109,7 @@ void Client::waitForData( ) {
 
     // Less than equal, since on Linux an error will return 0, and on Windows an error will return -1
     if(size <= 0) {
-        std::cerr << "[ CLIENT ] Network recv error";
+        std::cerr << "[ CLIENT ] Network recv error" << std::endl;
         exit( EXIT_NETWORK_ERROR );
     }
 

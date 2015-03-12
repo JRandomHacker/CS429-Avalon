@@ -23,6 +23,8 @@
     #define WINSOCK_MAGIC 0x202
 #else
     #include <netdb.h>
+    #include <sys/select.h>
+    #define SOCKET int
 #endif
 
 // Initializes the server to start listening for connections
@@ -79,6 +81,7 @@ Server::Server( ServInfo* model, int port ) {
     this->model = model;
     this->port = port;
     this->queue = NULL;
+    this->clients_connected = false;
 
 }
 
@@ -95,12 +98,54 @@ Server::~Server( ) {
 // Selects across the sockets to find one ready to read
 // Should then add an action to the Queue
 void Server::waitForData( ) {
+    if( !clients_connected ) {
+        std::cerr << "[ SERVER ] Waiting for data before connecting to clients" << std::endl;
+        return;
+    }
 
+    // Set up the fd_set to select across
+    fd_set clients;
+    FD_ZERO( &clients );
+    for( std::vector< SOCKET >::iterator it = model->sockets.begin(); it != model->sockets.end(); it++ ) {
+        FD_SET( *it, &clients );
+    }
+
+    select( model->num_clients, &clients, NULL, NULL, NULL );
+
+    // Find the sockets that had data
+    for( std::vector< SOCKET >::iterator it = model->sockets.begin(); it != model->sockets.end(); it++ ) {
+        if( FD_ISSET( *it, &clients ) ) {
+            SOCKET sock = *it;
+
+            // Receive the type of protobuf we're waiting for
+            int bufType;
+            int size = recv( sock, (char*) &bufType, sizeof( int ), 0 );
+
+            // Make sure there wasn't a receive error
+            if( size <= 0 ) {
+                std::cerr << "[ SERVER ] Network recv error" << std::endl;
+                exit( EXIT_NETWORK_ERROR );
+            }
+
+            // Receive the length of the protobuf we're waiting for
+            int bufLength;
+            recv( sock, (char*) &bufType, sizeof( int ), 0 );
+
+            switch( bufType ) {
+
+                case avalon::network::PLAYER_BUF:
+                    std::cout << "[ SERVER ] Received a player protobuf" << std::endl;
+        //            recvPlayer( bufLength );
+                default:
+                    std::cerr << "[ SERVER ] Received an unknown type of protobuf" << std::endl;
+                    break;
+            }
+        }
+    }
 }
 
 // Wait for all the players to connect
-// and send them their information as they do
-// TODO: THIS METHOD SHOULD SWITCH TO SENDING AN ACTION TO THE CONTROLLER
+// Adds an action to the queue for the Controller when they do
 bool Server::waitForClients( ) {
 
     for( unsigned int i = 0; i < model->num_clients; i++ ) {
@@ -109,8 +154,8 @@ bool Server::waitForClients( ) {
         model->sockets.push_back( accept( model->servsock, NULL, NULL ) );
         NewPlayerAction* action = new NewPlayerAction( i );
         queue->addAction( ( Action* )action );
-//        sendStartingInfo( i );
     }
 
+    clients_connected = true;
     return true;
 }
