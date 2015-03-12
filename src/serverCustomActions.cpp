@@ -1,13 +1,13 @@
 #include "serverCustomActions.hpp"
 
 //Public constructors
-AddClientAction::AddClientAction(client_info_temp* new_client_info) : Action("AddClient") {
-    client_info = new_client_info;
+NewPlayerAction::NewPlayerAction( unsigned int player_id ) : Action( "NewPlayer" ) {
+    this->player_id = player_id;
 }
 
-AddClientAction::~AddClientAction() {}
+NewPlayerAction::~NewPlayerAction( ) { }
 
 //Getters
-client_info_temp* AddClientAction::getClientInfo() {
-	return client_info;
+unsigned int NewPlayerAction::getPlayerID( ) {
+        return player_id;
 }

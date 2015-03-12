@@ -7,24 +7,25 @@
 #include "player.hpp"
 #include "../protos/settings.pb.h"
 
-class client_info_temp {};
-
-class AddClientAction : public Action {
+class NewPlayerAction : public Action {
 public:
     /**
      * Public constructor
      *
-     * @param mess_text The human readable message explaining the contents
-     *     of the action
-     * @param new_client_info The struct detailing the new client to be added
+     * @param client_id The id of the client that just connected
      */
-    AddClientAction(client_info_temp* new_client_info);
-    virtual ~AddClientAction();
+    NewPlayerAction( unsigned int player_id );
+    virtual ~NewPlayerAction( );
 
-    client_info_temp* getClientInfo();
+    /**
+     * Getter
+     *
+     * @return The ID of the player that just joined
+     */
+    unsigned int getPlayerID( );
 
 private:
-    client_info_temp* client_info;
+    unsigned int player_id;
 };
 
 #endif // SERVERCUSTOMACTIONS_HPP

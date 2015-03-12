@@ -8,6 +8,7 @@
 #include "serverController.hpp"
 #include "serverControllerState.hpp"
 #include "settings.pb.h"
+#include "player.pb.h"
 #include "serverInfo.hpp"
 
 #include <semaphore.h>
@@ -31,7 +32,7 @@ ServerController::ServerController( ServInfo* model, int port ) {
     server->initQueue( action_queue );
 
     handling_state = NULL;
-    //setServerState( new WaitForClients( model ) );
+    setServerState( new WaitingForClientsState( model ) );
 }
 
 // Destructor

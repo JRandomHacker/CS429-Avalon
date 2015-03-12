@@ -42,7 +42,7 @@ void Client::initQueue( ActionHandler* new_queue ) {
         queue = new_queue;
     }
     else {
-        std::cerr << "Attempted to add a second ActionHandler to Client." << std::endl;
+        std::cerr << "[ CLIENT ] Attempted to add a second ActionHandler" << std::endl;
     }
 }
 
@@ -50,7 +50,7 @@ void Client::initQueue( ActionHandler* new_queue ) {
 int Client::initClient( std::string host, int port ) {
 
     if( network_initialized ) {
-        std::cerr << "Attempting to connect client to a second server." << std::endl;
+        std::cerr << "[ CLIENT ] Attempting to connect to a second server" << std::endl;
         return EXIT_NETWORK_ERROR;
     }
 
@@ -59,7 +59,7 @@ int Client::initClient( std::string host, int port ) {
     #ifdef _WIN32
         WSADATA wsaData;
         if( WSAStartup( WINSOCK_MAGIC, &wsaData ) != 0 ) {
-            std::cerr << "Unable to magic windows" << std::endl;
+            std::cerr << "[ CLIENT ] Unable to magic windows" << std::endl;
             return EXIT_NETWORK_ERROR;
         }
     #endif
@@ -72,19 +72,19 @@ int Client::initClient( std::string host, int port ) {
 
     // Populate servinfo with the proper addrinfo->ai_addr to be able to connect later
     if( getaddrinfo( host.c_str( ), std::to_string( port ).c_str(), &hints, &servinfo ) != 0 ) {
-        std::cerr << "Unable to get address info" << std::endl;
+        std::cerr << "[ CLIENT ] Unable to get address info" << std::endl;
         return EXIT_SOCKET_ERROR;
     }
 
     // Open a new socket on the system
     if( ( sock = socket( AF_INET, SOCK_STREAM, 0 ) ) == INVALID_SOCKET ) {
-        std::cerr << "Socket bind failure" << std::endl;
+        std::cerr << "[ CLIENT ] Socket bind failure" << std::endl;
         return EXIT_SOCKET_ERROR;
     }
 
     // Connect the socket to the server
     if( connect( sock, servinfo->ai_addr, servinfo->ai_addrlen ) != 0 ) {
-        std::cerr << "Unable to connect to server" << std::endl;
+        std::cerr << "[ CLIENT ] Unable to connect to server" << std::endl;
         return EXIT_SOCKET_ERROR;
     }
 
@@ -99,7 +99,7 @@ int Client::initClient( std::string host, int port ) {
 void Client::waitForData( ) {
 
     if( !network_initialized ) {
-        std::cerr << "Attempting to wait for data in Client without connecting to a server" << std::endl;
+        std::cerr << "[ CLIENT ] Attempting to wait for data without connecting to a server" << std::endl;
         return;
     }
 
@@ -109,7 +109,7 @@ void Client::waitForData( ) {
 
     // Less than equal, since on Linux an error will return 0, and on Windows an error will return -1
     if(size <= 0) {
-        std::cerr << "Client network error: " << size << std::endl;
+        std::cerr << "[ CLIENT ] Network recv error";
         exit( EXIT_NETWORK_ERROR );
     }
 
@@ -129,7 +129,7 @@ void Client::waitForData( ) {
             break;
 
         default:
-            std::cerr << "Received an unknown type of protobuf" << std::endl;
+            std::cerr << "[ CLIENT ] Received an unknown type of protobuf" << std::endl;
             break;
     }
 }

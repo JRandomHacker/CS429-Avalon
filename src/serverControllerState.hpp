@@ -1,6 +1,5 @@
-
-#ifndef CLIENT_CONTROLLER_STATE_HPP
-#define CLIENT_CONTROLLER_STATE_HPP
+#ifndef SERVER_CONTROLLER_STATE_HPP
+#define SERVER_CONTROLLER_STATE_HPP
 
 #include <string>
 #include <iostream>
@@ -21,8 +20,9 @@ protected:
 class WaitingForClientsState : public ServerControllerState {
 public:
     WaitingForClientsState( ServInfo* mod );
+    ~WaitingForClientsState( );
 
     ServerControllerState* handleAction( Action* action_to_be_handled );
 };
 
-#endif // CLIENT_CONTROLLER_STATE_HPP
+#endif // SERVER_CONTROLLER_STATE_HPP
