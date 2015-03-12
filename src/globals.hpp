@@ -59,14 +59,6 @@ namespace avalon {
      */
     unsigned int getEvilCount( int num_players );
 
-    /**
-     * A helper function to allow sleeping in both Linux and Windows
-     *
-     * @param seconds The number of seconds to sleep
-     * @return None
-     */
-    void sleep( int seconds );
-
     namespace network {
         /*! An enumerator for different protobuf types */
         enum buffers_t {
