@@ -14,6 +14,7 @@
 ClientController::ClientController( Model* model, std::string host, int port ) {
 
     this->model = model;
+    model->addData("hasGameSettings", false);
     this->client = new Client( host, port );
 
     this->qSem = new sem_t;

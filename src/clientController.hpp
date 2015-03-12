@@ -13,7 +13,7 @@
 #include "model.hpp"
 #include "client.hpp"
 #include "globals.hpp"
-#include "controllerState.hpp"
+#include "clientControllerState.hpp"
 #include "actionHandler.hpp"
 #include "action.hpp"
 #include <semaphore.h>

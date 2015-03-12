@@ -11,7 +11,7 @@
 
 class ControllerState {
 public:
-    ControllerState(std::string state_type_desc, Model* mod);
+    ControllerState(std::string state_type_desc);
     virtual ~ControllerState();
 
     virtual ControllerState* handleAction(Action* action_to_be_handled) = 0;
@@ -19,22 +19,6 @@ public:
     void reportUnhandledAction(std::string action_type);
 
     std::string state_type;
-
-protected:
-    Model* model;
-};
-
-class LobbyState : public ControllerState {
-public:
-    LobbyState( Model* mod );
-
-    ControllerState* handleAction( Action* action_to_be_handled );
-};
-
-class VotingState : public ControllerState {
-    VotingState( Model* mod );
-
-    ControllerState* handleAction( Action* action_to_be_handled );
 };
 
 #endif // CONTROLLER_STATE_HPP
