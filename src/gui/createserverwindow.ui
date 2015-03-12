@@ -31,7 +31,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbNumPlayers"/>
+          <widget class="QSpinBox" name="sbNumPlayers">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
