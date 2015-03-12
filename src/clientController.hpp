@@ -17,6 +17,7 @@
 #include "actionHandler.hpp"
 #include "action.hpp"
 #include <semaphore.h>
+#include <string>
 
 class ClientController {
     private:
@@ -81,18 +82,23 @@ class ClientController {
          * Contructor
          *
          * @param model A pointer to the model that the GUI is watching
-         * @param host The hostname or ip address of the server to connect to
-         * @param port The port number of the server to connect to
-         *
          */
-        ClientController( Model* model, std::string host, int port );
+        ClientController( Model* model );
 
         /**
          * Destructor
          * Will not deallocate model, that is the GUI's job
-         *
          */
         ~ClientController( );
+
+        /**
+         * Initializes the network connection and thread
+         *
+         * @param host The hostname or ip address of the server to connect to
+         * @param port The port number of the server to connect to
+         * @return EXIT_SUCCESS on success, an error code otherwise
+         */
+        int spawnNetwork( std::string host, int port );
 
         /**
          * This method should be called on its own thread, once the controller has been set up.

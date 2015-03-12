@@ -12,6 +12,8 @@
 #include <vector>
 #include "player.hpp"
 #include "globals.hpp"
+#include "serverInfo.hpp"
+#include "actionHandler.hpp"
 
 #include "../protos/settings.pb.h"
 
@@ -24,36 +26,12 @@
 class Server {
 
     private:
-        unsigned int num_clients;
+        ServInfo* model;
+        ActionHandler* action_queue;
         int port;
-        Player** players;
-
-        // A place to store the settings on creation to be able to send them to
-        // players as they connect
-        avalon::network::GameSettings settingsBuf;
-
-        // Windows requires the SOCKET type for sockets instead of int
-        #ifdef _WIN32
-            SOCKET* sockets;
-            SOCKET servsock;
-        #else
-            int* sockets;
-            int servsock;
-        #endif
 
         struct sockaddr_in servparm;
 
-        /*
-         * Helper function for the constructor to actually initialize data
-         */
-        void initServer( );
-
-        /*
-         * Helper function for initServer to actually initialize the players array
-         *
-         * @param A vector of the special characters we want to use
-         */
-        void initPlayers( std::vector< avalon::special_roles_t > special_roles );
 
         /*
          * Helper function to send a player to another player
@@ -93,13 +71,27 @@ class Server {
          * @param special_characters A list of the special characters we should include
          * @param port The port to connect to for sending/receiving data
          */
-        Server( int num_clients, std::vector< avalon::special_roles_t > special_roles, int port );
+        Server( ServInfo* model, int port );
 
         /**
          * Deconstructor for a server
          *
          */
         ~Server( );
+
+        /*
+         * Actually initializes the servers action queue 
+         *
+         * @return None
+         */
+        void initQueue( ActionHandler* action_queue );
+
+        /**
+         * Actually initializes the servers connection
+         *
+         * @return EXIT_SUCCESS if the server successfully connected. An error code otherwise
+         */
+        int initServer( );
 
         /**
          * A function to simply wait for initial connections
@@ -109,5 +101,12 @@ class Server {
          * @return True if there are now num_clients connected, False if any errors occured
          */
         bool waitForClients( );
+
+        /**
+         * A function to select across the sockets looking for a players message
+         *
+         * @return True if there are now num_clients connected, False if any errors occured
+         */
+        void waitForData( );
 };
 #endif // _SERVER_HPP

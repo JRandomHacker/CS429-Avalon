@@ -17,12 +17,14 @@ SOURCES += main.cpp\
         optionswindow.cpp \
     gamewindow.cpp \
     createserverwindow.cpp \
-    joinserverwindow.cpp
+    joinserverwindow.cpp \
+    displayerrors.cpp
 
 HEADERS  += optionswindow.hpp \
     gamewindow.hpp \
     createserverwindow.hpp \
-    joinserverwindow.hpp
+    joinserverwindow.hpp \
+    displayerrors.hpp
 
 FORMS    += optionswindow.ui \
     gamewindow.ui \

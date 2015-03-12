@@ -12,28 +12,20 @@
 #include <vector>
 #include <pthread.h>
 
-#include "server.hpp"
+#include "serverController.hpp"
 #include "globals.hpp"
 
 
 // Globals with the options
-/*
-int merlin = 0;
-int percival = 0;
-int mordred = 0;
-int morgana = 0;
-int assassin = 0;
-int oberon = 0;
-*/
 int port = 0;
 int num_players = 0;
 
 // Helper functions
 std::vector< avalon::special_roles_t > parse_options( int argc, char** argv );
-void* network_thread_func( void* targs );
 
 int main( int argc, char** argv ) {
 
+    int retval;
     std::vector< avalon::special_roles_t > selected_roles = parse_options( argc, argv );
 
     // Make sure we weren't given a super silly number for players
@@ -46,36 +38,19 @@ int main( int argc, char** argv ) {
     if( port == 0 ) {
         port = DEFAULT_PORT;
     }
-    Server* serv = new Server( num_players, selected_roles, port );
 
-
-    // Spawn the network listener thread
-    pthread_t networkThread;
-    if( pthread_create( &networkThread, NULL, &network_thread_func, serv ) != 0 )
-    {
-        std::cerr << "Unable to start network thread" << std::endl;
-        exit( EXIT_THREAD_ERROR );
+    ServInfo* model = new ServInfo;
+    ServerController* controller = new ServerController( model, port );
+    if( ( retval = controller->initModel( num_players, selected_roles ) ) != EXIT_SUCCESS ) {
+        exit( retval );
+    }
+    if( ( retval = controller->spawnNetwork( ) ) != EXIT_SUCCESS ) {
+        exit( retval );
     }
 
-    // Just make this thread wait for now.  Later we will probably do game logic
-    pthread_join( networkThread, NULL );
+    controller->processActions( );
 
     exit( EXIT_SUCCESS );
-}
-
-/*
- * Function that the thread which takes care of network chatter will run
- *
- */
-void* network_thread_func( void* targs ) {
-
-    Server* server = (Server*)targs;
-
-    server->waitForClients( );
-
-    pthread_exit( NULL );
-
-    return NULL;
 }
 
 /*

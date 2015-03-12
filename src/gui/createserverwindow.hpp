@@ -27,13 +27,13 @@ public:
     ~CreateServerWindow( );
 
 private slots:
-	/**
+	/*
 	 *  calls create server on click
 	 *	displays respective error message if create server fails.
 	 */
     void on_buttonCreateServer_clicked( );
     
-    /**
+    /*
      *  Closes this window and opens the main menu
      */
     void on_buttonCancel_clicked( );
@@ -44,16 +44,17 @@ private:
  	 */
     Ui::CreateServerWindow *ui;
 
-    /**
+    /*
  	 *  Creates the server in a new process.
  	 */
     int createServer( );
 
-    /**
+    /*
  	 *	Connects to an existing server
  	 *	creates a game window, closes the current window.
  	 */
     void connectToServer( );
+
 };
 
 #endif // CREATESERVERWINDOW_H

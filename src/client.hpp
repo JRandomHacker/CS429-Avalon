@@ -22,18 +22,17 @@
 #else
     #include <netdb.h>
     #define INVALID_SOCKET -1
+    // Linux SOCKETS are just ints
+    #define SOCKET int
 #endif
 
 class Client {
     private:
-        // Windows requires the SOCKET type for sockets instead of int
-        #ifdef _WIN32
-            SOCKET sock;
-        #else
-            int sock;
-        #endif
+        SOCKET sock;
 
         ActionHandler* queue;
+
+        bool network_initialized;
 
         /*
          * Recv's an avalon::network::Player protobuf, creates an Action, and adds it to the queue
@@ -52,14 +51,12 @@ class Client {
         void recvSettings( int bufLength );
 
     public:
+
         /**
-         * Constructor for a Client
-         * Connects socket to the server with given host and port
-         *
-         * @param host the hostname or IP dotted quad to connect to
-         * @param port the port to connect on
+         * Default contructor
+         * Simply nulls out private variables
          */
-        Client( std::string host, int port );
+        Client( );
 
         /**
          * Destructor for a Client
@@ -67,6 +64,23 @@ class Client {
          */
         ~Client( );
 
+        /**
+         * Connects the client to the server with given host and port
+         *
+         * @param host the hostname or IP dotted quad to connect to
+         * @param port the port to connect on
+         * @return EXIT_SUCCESS if successful, an error code otherwise
+         */
+        int initClient( std::string host, int port );
+
+        /**
+         * Sets up the Clients action queue
+         * If there is already an ActionHandler attached to this client,
+         * prints an error and does nothing
+         *
+         * @param new_queue The queue to attach to the client
+         * @return None
+         */
         void initQueue( ActionHandler* new_queue );
 
         /**

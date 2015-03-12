@@ -2,6 +2,7 @@
 #include "optionswindow.hpp"
 #include "gamewindow.hpp"
 #include "ui_joinserverwindow.h"
+#include "displayerrors.hpp"
 #include "globals.hpp"
 
 JoinServerWindow::JoinServerWindow( QWidget *parent ) :
@@ -29,11 +30,17 @@ void JoinServerWindow::on_buttonJoinServer_clicked( ) {
     int port = ui->fieldPortNum->text().toInt( );
 
     Model* m = new Model( );
-    ClientController* controller = new ClientController( m, addr, port );
+    ClientController* controller = new ClientController( m );
+    int status = controller->spawnNetwork( addr, port );
+    if( status != EXIT_SUCCESS ) {
+        displayError( status, this );
+    } else {
 
-    GameWindow* g = new GameWindow( NULL, controller, m );
-    g->setModal( false );
-    g->show( );
+        GameWindow* g = new GameWindow( NULL, controller, m );
+        g->setModal( false );
+        g->show( );
 
-    close( );
+        close( );
+    }
 }
+

@@ -1,6 +1,6 @@
 PROGS=server.exe client.exe
-SERVER_OBJS=server.o player.o globals.o player.pb.o settings.pb.o
-OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o settings.pb.o action.o customActions.o serverCustomActions.o actionHandler.o controllerState.o clientControllerState.o serverControllerState.o
+SERVER_OBJS=server.o player.o globals.o player.pb.o settings.pb.o serverController.o serverControllerState.o action.o actionHandler.o controllerState.o
+OBJS=client.o clientController.o model.o subscriber.o model_data.o data_block.o player.o globals.o player.pb.o settings.pb.o action.o customActions.o serverCustomActions.o actionHandler.o controllerState.o clientControllerState.o
 
 BIN_DIR=.
 PROTOS_DIR=../protos
@@ -45,6 +45,9 @@ player.o : player.cpp
 server.o : server.cpp protofiles
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
 	
+serverController.o : serverController.cpp protofiles
+	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
+
 client.o : client.cpp protofiles
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
 

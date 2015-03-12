@@ -11,11 +11,11 @@
 #include <pthread.h>
 
 // Constructor
-ClientController::ClientController( Model* model, std::string host, int port ) {
+ClientController::ClientController( Model* model ) {
 
     this->model = model;
     model->addData("hasGameSettings", false);
-    this->client = new Client( host, port );
+    this->client = new Client( );
 
     this->qSem = new sem_t;
 
@@ -28,13 +28,6 @@ ClientController::ClientController( Model* model, std::string host, int port ) {
     handling_state = NULL;
     setControllerState( new LobbyState( model ) ); // When the controller first starts, we're in the lobby waiting for players
 
-    // Start the Client listening for server data
-    pthread_t networkThread;
-    if( pthread_create( &networkThread, NULL, &networkThreadHelper, this ) != 0 )
-    {
-        std::cerr << "Unable to start network thread" << std::endl;
-        exit( EXIT_THREAD_ERROR );
-    }
 }
 
 // Destructor
@@ -46,6 +39,25 @@ ClientController::~ClientController( ) {
     delete action_queue;
     releaseControllerState( );
 }
+
+int ClientController::spawnNetwork( std::string host, int port ) {
+
+    int retval = client->initClient( host, port );
+    if( retval != EXIT_SUCCESS ) {
+        return retval;
+    }
+
+    // Start the Client listening for server data
+    pthread_t networkThread;
+    if( pthread_create( &networkThread, NULL, &networkThreadHelper, this ) != 0 )
+    {
+        std::cerr << "Unable to start network thread" << std::endl;
+        return EXIT_THREAD_ERROR;
+    }
+
+    return EXIT_SUCCESS;
+}
+
 
 // Helper to spawn the client networking
 void* ClientController::networkThreadHelper( void* obj ) {

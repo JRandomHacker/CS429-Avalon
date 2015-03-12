@@ -20,7 +20,39 @@
 #endif
 
 // Constructor
-Client::Client( std::string host, int port ) {
+Client::Client( ) {
+    queue = NULL;
+    network_initialized = false;
+}
+
+// Destructor
+Client::~Client( ) {
+    // Required socket cleanup in Windows
+    #ifdef _WIN32
+        if( network_initialized ) {
+            WSACleanup( );
+        }
+    #endif
+}
+
+// Allows the initialization of a queue after the client has successfully connected to the server
+void Client::initQueue( ActionHandler* new_queue ) {
+
+    if( !queue ) {
+        queue = new_queue;
+    }
+    else {
+        std::cerr << "Attempted to add a second ActionHandler to Client." << std::endl;
+    }
+}
+
+// Sets up the clients network connection
+int Client::initClient( std::string host, int port ) {
+
+    if( network_initialized ) {
+        std::cerr << "Attempting to connect client to a second server." << std::endl;
+        return EXIT_NETWORK_ERROR;
+    }
 
     // Network initialization
     struct addrinfo hints, *servinfo;
@@ -28,7 +60,7 @@ Client::Client( std::string host, int port ) {
         WSADATA wsaData;
         if( WSAStartup( WINSOCK_MAGIC, &wsaData ) != 0 ) {
             std::cerr << "Unable to magic windows" << std::endl;
-            exit( EXIT_NETWORK_ERROR );
+            return EXIT_NETWORK_ERROR;
         }
     #endif
 
@@ -41,40 +73,35 @@ Client::Client( std::string host, int port ) {
     // Populate servinfo with the proper addrinfo->ai_addr to be able to connect later
     if( getaddrinfo( host.c_str( ), std::to_string( port ).c_str(), &hints, &servinfo ) != 0 ) {
         std::cerr << "Unable to get address info" << std::endl;
-        exit( EXIT_SOCKET_ERROR );
+        return EXIT_SOCKET_ERROR;
     }
 
     // Open a new socket on the system
     if( ( sock = socket( AF_INET, SOCK_STREAM, 0 ) ) == INVALID_SOCKET ) {
         std::cerr << "Socket bind failure" << std::endl;
-        exit( EXIT_SOCKET_ERROR );
+        return EXIT_SOCKET_ERROR;
     }
 
     // Connect the socket to the server
     if( connect( sock, servinfo->ai_addr, servinfo->ai_addrlen ) != 0 ) {
         std::cerr << "Unable to connect to server" << std::endl;
-        exit( EXIT_SOCKET_ERROR );
+        return EXIT_SOCKET_ERROR;
     }
-}
 
-// Destructor
-Client::~Client( ) {
-    // Required socket cleanup in Windows
-    #ifdef _WIN32
-        WSACleanup( );
-    #endif
-}
+    network_initialized = true;
 
-// Allows the initialization of a queue after the client has successfully connected to the server
-void Client::initQueue( ActionHandler* new_queue ) {
-
-    queue = new_queue;
+    return EXIT_SUCCESS;
 }
 
 // Function to wait for another packet from the server
 // Receives the information about the next message,
 // then delegates to helper functions
 void Client::waitForData( ) {
+
+    if( !network_initialized ) {
+        std::cerr << "Attempting to wait for data in Client without connecting to a server" << std::endl;
+        return;
+    }
 
     // Receive the type of protobuf we're going to be working with
     int bufType;

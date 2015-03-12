@@ -14,10 +14,12 @@
 
 #define EXIT_INVALID_PLAYERS_ERROR 10
 #define EXIT_THREAD_ERROR 11
-#define EXIT_EVIL_ERROR 12 // Too many evil roles compared to evil player count
-#define EXIT_SOCKET_ERROR 13
-#define EXIT_SERVER_NOT_FOUND 14 // Unable to find the server executable
-#define EXIT_NETWORK_ERROR 15
+#define EXIT_SPECIAL_ERROR 12
+#define EXIT_EVIL_ERROR 13 // Too many evil roles compared to evil player count
+#define EXIT_GOOD_ERROR 14
+#define EXIT_SOCKET_ERROR 15
+#define EXIT_SERVER_NOT_FOUND 16 // Unable to find the server executable
+#define EXIT_NETWORK_ERROR 17
 #define UNKNOWN_ERROR 42
 
 namespace avalon {

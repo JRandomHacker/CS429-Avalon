@@ -3,8 +3,8 @@
 #include "optionswindow.hpp"
 #include "ui_createserverwindow.h"
 #include "globals.hpp"
+#include "displayerrors.hpp"
 #include "clientController.hpp"
-#include <QErrorMessage>
 #include <unistd.h>
 #include <iostream>
 #include <string>
@@ -130,45 +130,11 @@ int CreateServerWindow::createServer( ) {
 
 void CreateServerWindow::on_buttonCreateServer_clicked( ) {
     int serverCreation = createServer( );
-    switch( serverCreation ) {
-        case 0:
-            std::cout << "Connecting to server" << std::endl;
-            connectToServer( );
-            break;
-        case EXIT_INVALID_PLAYERS_ERROR: {
-            // Not enough players
-            QErrorMessage error( this );
-            error.showMessage("Invalid players number");
-            error.exec( );
-            break;
-        }
-        case EXIT_SOCKET_ERROR: {
-            // Unable to bind port (probably... technically just a generic socketing error)
-            QErrorMessage error( this );
-            error.showMessage("Socket already bound");
-            error.exec( );
-            break;
-        }
-        case EXIT_EVIL_ERROR: {
-            // More evil specials than evil players
-            QErrorMessage error( this );
-            error.showMessage("More special evil than evil");
-            error.exec( );
-            break;
-        }
-        case EXIT_SERVER_NOT_FOUND: {
-            // Unable to find server executable
-            QErrorMessage error( this );
-            error.showMessage("Server not found");
-            error.exec( );
-            break;
-        }
-        case EXIT_NETWORK_ERROR:
-            // Windows magic broke
-            QErrorMessage error( this );
-            error.showMessage( "Windows magic broke" );
-            error.exec( );
-            break;
+    if( serverCreation != EXIT_SUCCESS ) {
+        displayError( serverCreation, this );
+    } else {
+        std::cout << "Connecting to server" << std::endl;
+        connectToServer( );
     }
 }
 
@@ -184,7 +150,11 @@ void CreateServerWindow::connectToServer( ) {
     int port = ui->editPortNum->text( ).toInt( );
 
     Model* m = new Model( );
-    ClientController* controller = new ClientController( m, "localhost", port );
+    ClientController* controller = new ClientController( m );
+    int status = controller->spawnNetwork( "localhost", port );
+    if( status != EXIT_SUCCESS ) {
+        displayError( status, this );
+    }
 
     GameWindow* g = new GameWindow( NULL, controller, m );
     g->setModal( false );
