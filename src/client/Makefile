@@ -1,4 +1,4 @@
-OBJS=client.o clientController.o clientControllerState.o clientCustomActions.o
+OBJS=client.o clientController.o clientControllerState.o clientCustomActionsFromNet.o clientCustomActionsFromGUI.o
 
 COMMON_DIR=../common
 PROTOS_DIR=../protos
@@ -25,5 +25,8 @@ clientController.o : clientController.cpp clientController.hpp
 clientControllerState.o : clientControllerState.cpp clientControllerState.hpp
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
 
-clientCustomActions.o : clientCustomActions.cpp clientCustomActions.hpp
+clientCustomActionsFromNet.o : clientCustomActionsFromNet.cpp clientCustomActionsFromNet.hpp
+	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
+
+clientCustomActionsFromGUI.o : clientCustomActionsFromGUI.cpp clientCustomActionsFromGUI.hpp
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<

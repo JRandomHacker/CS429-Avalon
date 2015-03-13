@@ -6,7 +6,7 @@
 #include <iostream>
 
 #include "action.hpp"
-#include "clientCustomActions.hpp"
+#include "clientCustomActionsFromNet.hpp"
 #include "model.hpp"
 #include "controllerState.hpp"
 

@@ -14,7 +14,7 @@
 #include "globals.hpp"
 #include "actionHandler.hpp"
 #include "action.hpp"
-#include "clientCustomActions.hpp"
+#include "clientCustomActionsFromNet.hpp"
 
 #ifdef _WIN32
     #include <winsock2.h>

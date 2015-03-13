@@ -61,6 +61,15 @@ namespace avalon {
      */
     unsigned int getEvilCount( int num_players );
 
+    /*! An enumerator of all possible voting states */
+    enum player_vote_t {
+        YES, /* A vote for the current team */
+        NO, /* A vote against the current team */
+        HIDDEN, /*! This represents a player who has voted but you don't know what they voted. */
+        NO_VOTE,  /* This represents a player who has not voted */
+        UNKNOWN_VOTE  /* This represents knowing nothing about whether a player has voted */
+    };
+
     namespace network {
         /*! An enumerator for different protobuf types */
         enum buffers_t {
