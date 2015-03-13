@@ -11,7 +11,7 @@
 #include <string>
 #include "globals.hpp"
 
-#include "../protos/player.pb.h"
+#include "player.pb.h"
 
 class Player {
 

@@ -5,7 +5,7 @@
 
 #include "action.hpp"
 #include "player.hpp"
-#include "../protos/settings.pb.h"
+#include "settings.pb.h"
 
 class NewPlayerAction : public Action {
 public:

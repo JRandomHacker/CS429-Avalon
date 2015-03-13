@@ -9,7 +9,7 @@
 #ifndef _SERVERSTATEHELPER_HPP
 #define _SERVERSTATEHELPER_HPP
 
-#include "../protos/settings.pb.h"
+#include "settings.pb.h"
 #include "serverInfo.hpp"
 
 class ServerStateHelper {

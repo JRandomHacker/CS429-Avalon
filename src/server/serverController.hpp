@@ -10,7 +10,6 @@
 #define _SERVERCONTROLLER_HPP
 
 #include "player.hpp"
-#include "client.hpp"
 #include "globals.hpp"
 #include "server.hpp"
 #include "serverControllerState.hpp"

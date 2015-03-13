@@ -1,7 +1,7 @@
 #ifndef SERVERINFO_HPP
 #define SERVERINFO_HPP
 
-#include "../protos/settings.pb.h"
+#include "settings.pb.h"
 #include "player.hpp"
 #include <vector>
 #ifdef _WIN32

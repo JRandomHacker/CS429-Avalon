@@ -6,8 +6,6 @@
 #include <iostream>
 
 #include "action.hpp"
-#include "customActions.hpp"
-#include "model.hpp"
 
 class ControllerState {
 public:

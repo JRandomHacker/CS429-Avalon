@@ -13,8 +13,8 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-SOURCES += main.cpp\
-        optionswindow.cpp \
+SOURCES  += main.cpp\
+    optionswindow.cpp \
     gamewindow.cpp \
     createserverwindow.cpp \
     joinserverwindow.cpp \
@@ -31,10 +31,13 @@ FORMS    += optionswindow.ui \
     createserverwindow.ui \
     joinserverwindow.ui
 
-INCLUDEPATH  += ../
-INCLUDEPATH  += ../../protos/
+INCLUDEPATH  += ../protos/
+INCLUDEPATH  += ../common/
+INCLUDEPATH  += ../client/
 
-OBJECTS  += ../*.o
+OBJECTS  += ../protos/*.o
+OBJECTS  += ../common/*.o
+OBJECTS  += ../client/*.o
 
 QMAKE_LFLAGS += -pthread
 win32:LIBS += -L/mingw64/lib -lprotobuf -lz -lws2_32
