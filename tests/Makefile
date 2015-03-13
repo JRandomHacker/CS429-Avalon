@@ -1,28 +1,36 @@
+# The list of all tests that exist
+TESTS=player_unittest.exe \
+	  globals_unittest.exe \
+	  model_unittest.exe \
+	  action_unittest.exe \
+	  client_server_unittest.exe
+
 TESTS_DIR=.
 SRC_DIR=../src
-HEADER_DIR=$(SRC_DIR)
-CUSTOM_CPPFLAGS= -isystem $(HEADER_DIR)
-CUSTOM_CXXFLAGS= -Wall -Wextra -std=c++11 -ggdb
-CXX=g++
+COMMON_DIR=$(SRC_DIR)/common
+CLIENT_DIR=$(SRC_DIR)/client
+SERVER_DIR=$(SRC_DIR)/server
+PROTOS_DIR=$(SRC_DIR)/protos
 
-PROTOS_DIR=../protos
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
 
 LIBS=-pthread $(PROTOS_LIB)
+OBJS=$(COMMON_DIR)/*.o $(CLIENT_DIR)/*.o $(SERVER_DIR)/*.o $(PROTOS_DIR)/*.o
+CUSTOM_CPPFLAGS= -I$(COMMON_DIR) -I$(CLIENT_DIR) -I$(SERVER_DIR) -I$(PROTOS_DIR)
+CUSTOM_CXXFLAGS= -Wall -Wextra -std=c++11 -ggdb
+CXX=g++
 
 # If we're on Windows, add these flags for static linking, so the executables are portable
 ifeq ($(OS), Windows_NT)
+	LIBS += lws_32
     CUSTOM_CXXFLAGS += -static-libgcc -static-libstdc++
 endif
-
-# The list of all tests that exist
-TESTS=player_unittest.exe globals_unittest.exe model_unittest.exe action_unittest.exe client_server_unittest.exe
 
 # Relative path to the gtest root directory
 GTEST_ROOT = ../libs/gtest-1.7.0
 
-# IT IS UNLIKELY ANYTHING WILL NEED TO BE MODIFIED BETWEEN HERE AND LINE 59
-
+# IT IS UNLIKELY ANYTHING WILL NEED TO BE MODIFIED BETWEEN HERE AND
+# THE COMMENT '# END GTEST BUILD'
 
 
 
@@ -40,8 +48,6 @@ GTEST_HEADERS = $(GTEST_ROOT)/include/gtest/*.h \
 GTEST_SRCS = $(GTEST_ROOT)/src/*.cc $(GTEST_ROOT)/src/*.h $(GTEST_HEADERS)
 
 GTEST_H = $(GTEST_ROOT)/include/gtest/gtest.h
-
-
 
 # Set our CPP and CXX flags
 CPPFLAGS+=$(GTEST_CPPFLAGS) $(CUSTOM_CPPFLAGS)
@@ -70,36 +76,35 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 
 
+# END GTEST BUILD
 
 # ADD CUSTOM TESTS BELOW HERE AND ADD TO THE TESTS LIST AT THE TOP
-player_unittest.o : $(TESTS_DIR)/player_unittest.cpp \
-							 $(HEADER_DIR)/player.hpp  $(GTEST_H)
+player_unittest.o : $(TESTS_DIR)/player_unittest.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
-player_unittest.exe : $(SRC_DIR)/player.o $(SRC_DIR)/player.pb.o player_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
+player_unittest.exe : player_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
 	
-globals_unittest.o : $(TESTS_DIR)/globals_unittest.cpp \
-							 $(HEADER_DIR)/globals.hpp $(GTEST_H)
+globals_unittest.o : $(TESTS_DIR)/globals_unittest.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 	
-globals_unittest.exe : $(SRC_DIR)/globals.o globals_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
+globals_unittest.exe : globals_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
 	
-model_unittest.o : $(TESTS_DIR)/model_unittest.cpp $(GTEST_H)
+model_unittest.o : $(TESTS_DIR)/model_unittest.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 	
-model_unittest.exe : $(SRC_DIR)/model.o $(SRC_DIR)/subscriber.o $(SRC_DIR)/model_data.o $(SRC_DIR)/data_block.o model_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
+model_unittest.exe : model_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
 
-action_unittest.o : $(TESTS_DIR)/action_unittest.cpp $(GTEST_H)
+action_unittest.o : $(TESTS_DIR)/action_unittest.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 	
-action_unittest.exe : $(SRC_DIR)/action.o $(SRC_DIR)/actionHandler.o action_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
+action_unittest.exe : action_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
 
 client_server_unittest.o : $(TESTS_DIR)/client_server_unittest.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
-client_server_unittest.exe : $(SRC_DIR)/*.o client_server_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
+client_server_unittest.exe : client_server_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
