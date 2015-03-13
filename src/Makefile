@@ -6,6 +6,7 @@ CLIENT_DIR=./client
 SERVER_DIR=./server
 PROTOS_DIR=./protos
 GUI_DIR=./gui
+TESTS_DIR=../tests
 
 SERVER_OBJS=$(COMMON_DIR)/*.o $(SERVER_DIR)/*.o $(PROTOS_DIR)/*.o
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
@@ -26,8 +27,8 @@ all : $(PROGS)
 
 tests :
 	$(MAKE)
-	$(MAKE) -C ../tests
-	cp ../tests/*.exe $(BIN_DIR)
+	$(MAKE) -C $(TESTS_DIR)
+	cp $(TESTS_DIR)/*.exe $(BIN_DIR)
 
 clean : 
 	cd $(PROTOS_DIR) && $(MAKE) clean
@@ -35,9 +36,10 @@ clean :
 	cd $(SERVER_DIR) && $(MAKE) clean
 	cd $(COMMON_DIR) && $(MAKE) clean
 	rm -f *.exe
-	rm -f gui/*.o gui/moc_* gui/ui_* gui/Makefile*
-	rm -rf gui/debug gui/release
-	rm -f ../tests/*.exe ../tests/*.o ../tests/*.a
+	rm -f $(GUI_DIR)/moc_* $(GUI_DIR)/ui_* $(GUI_DIR)/object_*
+	rm -f $(GUI_DIR)/Makefile* $(GUI_DIR)/*.o
+	rm -rf $(GUI_DIR)/debug $(GUI_DIR)/release
+	rm -f $(TESTS_DIR)/*.exe $(TESTS_DIR)/*.o $(TESTS_DIR)/*.a
 
 protos :
 	$(MAKE) -C $(PROTOS_DIR)
