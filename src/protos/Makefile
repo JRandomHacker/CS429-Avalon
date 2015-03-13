@@ -18,10 +18,10 @@ protos :
 	protoc -I=$(PROTOS_DIR) --cpp_out=$(PROTOS_DIR) $(PROTOS_DIR)/*.proto
 
 settings.pb.cc :
-	make protos
+	$(MAKE) protos
 
 player.pb.cc :
-	make protos
+	$(MAKE) protos
 
 settings.pb.o : settings.pb.cc
 	$(CXX) $(CXXOPTS) -c $<

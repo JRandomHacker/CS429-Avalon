@@ -25,31 +25,31 @@ endif
 all : $(PROGS)
 
 tests :
-	make
-	cd ../tests && make
+	$(MAKE)
+	$(MAKE) -C ../tests
 	cp ../tests/*.exe $(BIN_DIR)
 
 clean : 
-	cd $(PROTOS_DIR) && make clean
-	cd $(CLIENT_DIR) && make clean
-	cd $(SERVER_DIR) && make clean
-	cd $(COMMON_DIR) && make clean
+	cd $(PROTOS_DIR) && $(MAKE) clean
+	cd $(CLIENT_DIR) && $(MAKE) clean
+	cd $(SERVER_DIR) && $(MAKE) clean
+	cd $(COMMON_DIR) && $(MAKE) clean
 	rm -f *.exe
 	rm -f gui/*.o gui/moc_* gui/ui_* gui/Makefile*
 	rm -rf gui/debug gui/release
 	rm -f ../tests/*.exe ../tests/*.o ../tests/*.a
 
 protos :
-	cd $(PROTOS_DIR) && make
+	$(MAKE) -C $(PROTOS_DIR)
 
 client : common
-	cd $(CLIENT_DIR) && make
+	$(MAKE) -C $(CLIENT_DIR)
 
 server : common
-	cd $(SERVER_DIR) && make
+	$(MAKE) -C $(SERVER_DIR)
 
 common : protos
-	cd $(COMMON_DIR) && make
+	$(MAKE) -C $(COMMON_DIR)
 
 server.exe : $(SERVER_DIR)/server_main.cpp server
 	$(CXX) $(CXXOPTS) $(INCLUDES) $< $(SERVER_OBJS) -o $(BIN_DIR)/$@ $(LIBS)
@@ -58,5 +58,5 @@ $(GUI_DIR)/Makefile : $(GUI_DIR)/AVL_Interface.pro
 	cd $(GUI_DIR) && qmake
 
 AVL_Interface.exe : $(GUI_DIR)/Makefile client
-	cd gui/ && make
-	mv `find gui/ -regextype posix-egrep -regex ".*/AVL_Interface(|.exe)$$"` $(BIN_DIR)/AVL_Interface.exe
+	$(MAKE) -C $(GUI_DIR)
+	mv `find $(GUI_DIR) -regextype posix-egrep -regex ".*/AVL_Interface(|.exe)$$"` $(BIN_DIR)/AVL_Interface.exe
