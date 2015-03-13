@@ -54,7 +54,9 @@ common : protos
 server.exe : $(SERVER_DIR)/server_main.cpp server
 	$(CXX) $(CXXOPTS) $(INCLUDES) $< $(SERVER_OBJS) -o $(BIN_DIR)/$@ $(LIBS)
 	
-$(GUI_DIR)/Makefile : $(GUI_DIR)/AVL_Interface.pro
+# Depend on server, client and common, since apparently shell globbing
+# doesn't work properly in Windows qmake if the files don't exist yet
+$(GUI_DIR)/Makefile : $(GUI_DIR)/AVL_Interface.pro server client common
 	cd $(GUI_DIR) && qmake
 
 AVL_Interface.exe : $(GUI_DIR)/Makefile client

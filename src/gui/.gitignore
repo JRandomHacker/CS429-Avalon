@@ -2,3 +2,4 @@ Makefile*
 moc_*
 ui_*
 *.user*
+object_*
