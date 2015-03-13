@@ -1,4 +1,4 @@
-OBJS=server.o serverController.o serverControllerState.o serverStateHelpers.o serverCustomActions.o
+OBJS=server.o serverController.o serverControllerState.o serverCustomActions.o
 
 COMMON_DIR=../common
 PROTOS_DIR=../protos
@@ -23,9 +23,6 @@ serverController.o : serverController.cpp server.hpp
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
 
 serverControllerState.o : serverControllerState.cpp serverControllerState.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-serverStateHelpers.o : serverStateHelpers.cpp serverStateHelpers.hpp
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
 
 serverCustomActions.o : serverCustomActions.cpp serverCustomActions.hpp
