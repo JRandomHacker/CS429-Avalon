@@ -1,4 +1,4 @@
-#include "customActions.hpp"
+#include "clientCustomActions.hpp"
 
 //Public constructors
 GameSettingsAction::GameSettingsAction(avalon::network::GameSettings* settings) : Action("GameSettings") {
