@@ -14,41 +14,6 @@
    <string>Avalon Online</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="3">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="proposeTeamLabel">
-       <property name="text">
-        <string>Proposed Team</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="5" column="3" colspan="2">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>438</width>
-          <height>85</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTextEdit" name="textEdit"/>
-     </item>
-    </layout>
-   </item>
    <item row="3" column="3">
     <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
@@ -58,6 +23,24 @@
       <widget class="QPushButton" name="proposeTeamButton">
        <property name="text">
         <string>Propose Team</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="3" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="proposeTeamLabel">
+       <property name="text">
+        <string>Proposed Team</string>
+       </property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="votingLabel">
+       <property name="text">
+        <string>Voting</string>
        </property>
       </widget>
      </item>
@@ -81,12 +64,29 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="2" colspan="3">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
+   <item row="5" column="3" colspan="2">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>436</width>
+          <height>85</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTextEdit" name="textEdit"/>
+     </item>
+    </layout>
    </item>
    <item row="0" column="1" rowspan="6" colspan="2">
     <widget class="Line" name="line">
@@ -105,16 +105,12 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="4">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="votingLabel">
-       <property name="text">
-        <string>Voting</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="4" column="2" colspan="3">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
    <item row="1" column="3" colspan="2">
     <widget class="QListView" name="voteTrackList"/>
