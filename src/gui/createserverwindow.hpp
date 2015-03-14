@@ -3,6 +3,10 @@
 
 #include <QDialog>
 
+#ifdef _WIN32
+    #include <windows.h>
+#endif
+
 #define MAX_ARGS 8
 
 namespace Ui {
@@ -43,7 +47,19 @@ private:
  	 *  UI field for create server window
  	 */
     Ui::CreateServerWindow *ui;
-
+    
+    #ifdef _WIN32
+        /**
+         *  Server handle
+         */
+        HANDLE serverH;
+    #else
+        /**
+         *  Server pid
+         */
+        int serverH;
+    #endif
+    
     /*
  	 *  Creates the server in a new process.
  	 */
@@ -54,7 +70,7 @@ private:
  	 *	creates a game window, closes the current window.
  	 */
     void connectToServer( );
-
+    
 };
 
 #endif // CREATESERVERWINDOW_H

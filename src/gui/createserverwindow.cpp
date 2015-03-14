@@ -21,6 +21,8 @@ CreateServerWindow::CreateServerWindow( QWidget *parent ) :
     QDialog( parent ),
     ui( new Ui::CreateServerWindow ) {
     ui->setupUi( this );
+    
+    serverH = 0;
 
     ui->editPortNum->insert( QString( std::to_string( DEFAULT_PORT ).c_str( ) ) );
 }
@@ -71,6 +73,8 @@ int CreateServerWindow::createServer( ) {
             return EXIT_SERVER_NOT_FOUND;
         }
         Sleep( 2000 );
+        
+        serverH = ProcessInfo.hProcess;
 
         DWORD exitCode;
         GetExitCodeProcess( ProcessInfo.hProcess, &exitCode );
@@ -120,6 +124,7 @@ int CreateServerWindow::createServer( ) {
             std::cerr << "Unable to find server executable, or something terrible happened!" << std::endl;
             exit( EXIT_SERVER_NOT_FOUND );
         } else if( pid > 0 ) {
+            serverH = pid;
             sleep( 2 );
             int status;
             if( waitpid( pid, &status, WNOHANG ) == pid ) {
@@ -161,7 +166,7 @@ void CreateServerWindow::connectToServer( ) {
         // TODO: Replace the "" with an std::string from the UI when it's available
         SetNameAction* setName = new SetNameAction( "" );
         controller->addActionToQueue( ( Action* )setName );
-        GameWindow* g = new GameWindow( NULL, controller, m );
+        GameWindow* g = new GameWindow( NULL, controller, m, serverH );
         g->setModal( false );
         g->show( );
 

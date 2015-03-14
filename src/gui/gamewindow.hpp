@@ -5,6 +5,9 @@
 #include "clientController.hpp"
 #include "model.hpp"
 #include "subscriber.hpp"
+#ifdef _WIN32
+    #include <windows.h>
+#endif
 
 namespace Ui {
 class GameWindow;
@@ -18,15 +21,25 @@ class GameWindow : public QDialog {
     Q_OBJECT
 
 public:
+    #ifdef _WIN32
     /**
      *  Creates a game window, starts the controller thread.
      */
-    explicit GameWindow( QWidget *parent = 0, ClientController* controller = NULL, Model * model = NULL );
-
+    explicit GameWindow( QWidget *parent = 0, ClientController* controller = NULL, Model * model = NULL, HANDLE serverHandle = 0 );
+    #else
+    explicit GameWindow( QWidget *parent = 0, ClientController* controller = NULL, Model * model = NULL, int serverHandle = 0 );
+    #endif
+    
     /**
      *  Destroys the game window.
      */
     ~GameWindow( );
+    
+    /**
+     *  @Override
+     *  On close, kills the server if this client created the server
+     */
+    void closeEvent(QCloseEvent* event);
 
 signals:
     void gameSettingsReceived( );
@@ -77,6 +90,18 @@ private:
      *  Subscriber vector that watches player objects.
      */
     std::vector<Subscriber*> player_subscribers;
+    
+    #ifdef _WIN32
+        /**
+         *  Process handle of server
+         */
+        HANDLE serverH;
+    #else
+        /**
+         *  pid of the server
+         */
+        int serverH;
+    #endif
 
     /**
      *  Create a subscriber that checks if the model has game settings, 

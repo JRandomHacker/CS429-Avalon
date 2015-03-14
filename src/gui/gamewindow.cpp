@@ -6,12 +6,13 @@
 #include <thread>
 #include <chrono>
 
-GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model ) :
+GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model, HANDLE serverHandle ) :
     QDialog( parent ),
     ui( new Ui::GameWindow ) {
     this->control = controller;
     this->model = model;
     ui->setupUi( this );
+    serverH = serverHandle;
 
     startWatchOnHasGameSettings( );
 
@@ -109,4 +110,16 @@ void GameWindow::updatePlayer(int id)
 void* GameWindow::controlThreadFn( void* clientController ) {
     ( ( ClientController* ) clientController )->processActions( );
     return NULL;
+}
+
+void GameWindow::closeEvent(QCloseEvent* e) {
+    if(serverH != 0)
+    {
+        #ifdef _WIN32
+            TerminateProcess(serverH, 0);
+        #else
+            kill(serverH);
+        #endif
+    }
+    
 }
