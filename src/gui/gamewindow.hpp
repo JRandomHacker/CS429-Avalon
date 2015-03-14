@@ -85,6 +85,11 @@ private:
      *  Subscriber that gets current player ID from the model.
      */
     Subscriber* myID_subscriber;
+    
+    Subscriber* numEvil_subscriber;
+    
+    Subscriber* roleList_subscriber;
+    
 
     /**
      *  Subscriber vector that watches player objects.

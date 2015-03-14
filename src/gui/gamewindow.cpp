@@ -4,8 +4,12 @@
 #include "player.hpp"
 #include <signal.h>
 #include <QStandardItem>
+#include <QCloseEvent>
 #include <thread>
 #include <chrono>
+#include <vector>
+
+using namespace std;
 
 #ifdef _WIN32
 	GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model, HANDLE serverHandle ) :
@@ -27,7 +31,7 @@
     // Start up thread for controller
     pthread_t controlThread;
     if( pthread_create( &controlThread, NULL, &controlThreadFn, this->control ) != 0 ) {
-        std::cerr << "Unable to start controller thread" << std::endl;
+        cerr << "Unable to start controller thread" << endl;
         exit( EXIT_THREAD_ERROR );
     }
 }
@@ -55,6 +59,24 @@ void GameWindow::createPlayerSubscribers( ) {
     model->subscribe( "numberOfPlayers", num_players_subscriber );
     unsigned int num_players = *num_players_subscriber->getData<unsigned int>( );
 
+    // Get number of evil
+    numEvil_subscriber = new ClosureSubscriber(NULL, NULL);
+    model->subscribe( "numEvilChars", numEvil_subscriber );
+    unsigned int* num_evil = numEvil_subscriber->getData<unsigned int>();
+    string num_evil_string = "Evil Players: ";
+    if(num_evil != NULL)
+        num_evil_string += to_string(*num_evil);
+    else
+        num_evil_string += "unknown number";
+    ui->numOfEvilPlayers->setText(QString(num_evil_string.c_str()));
+    
+    // Get list of roles
+    roleList_subscriber = new ClosureSubscriber(NULL, NULL);
+    model->subscribe( "isRoleInGame", roleList_subscriber );
+    vector<bool>* roleList = roleList_subscriber->getData<vector<bool>>();
+    if(roleList != NULL) 
+    {/* TODO: Add roles to list */}
+    
     // Get my ID
     myID_subscriber = new ClosureSubscriber( NULL, NULL );
     model->subscribe( "myID", myID_subscriber );
@@ -67,25 +89,27 @@ void GameWindow::createPlayerSubscribers( ) {
     for ( unsigned int i = 0; i < num_players; i++ ) {
         // Add subscriber for this player
         player_subscribers.push_back( new ClosureSubscriber(
-            [&,i,listModel]( Subscriber* s ){
+            [&,i,listModel]( Subscriber* ){
                 emit playerInfoUpdated(i);
             },
             [&]( Subscriber* ){ } ) );
-        model->subscribe( std::string( "player" )+std::to_string( i ), player_subscribers[i] );
+        model->subscribe( string( "player" )+to_string( i ), player_subscribers[i] );
 
         // Check whether this player is already connected
         Player** p = player_subscribers[i]->getData<Player*>( );
 
-        std::string player_string = "";
+        string player_string = "";
         if( p != NULL )
             player_string += (*p)->getName( );
         else
-            player_string += "p" + std::to_string( i );
+            player_string += "p" + to_string( i );
 
         if( ( int ) i == myID )
             player_string += " (me)";
 
-        if(p == NULL)
+        if(i == 0)
+            player_string += " (host)";
+        else if(p == NULL)
             player_string += " (not connected)";
         else
             player_string += " (connected)";
@@ -103,11 +127,14 @@ void GameWindow::updatePlayer(int id)
     Player* p = *(player_subscribers[id]->getData<Player*>( ) );
 
     // Update the player's info in GUI
-    std::string newString = p->getName( );
+    string newString = p->getName( );
     if( ( int ) id == *myID_subscriber->getData<int>( ) ) {
         newString += " (me)";
     }
-    newString += " (connected)";
+    if(id == 0)
+        newString += " (host)";
+    else
+        newString += " (connected)";
     listModel->item( id )->setText( QString( newString.c_str( ) ) );
 
 }
@@ -127,4 +154,5 @@ void GameWindow::closeEvent(QCloseEvent* e) {
         #endif
     }
     
+    e->accept();
 }
