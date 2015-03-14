@@ -8,16 +8,17 @@
 #include "clientControllerState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
+#include "clientInfo.hpp"
 
 // Constructor for the parent class, ClientControllerState.
 // Sets the description and model internally to whatever it gets passed
-ClientControllerState::ClientControllerState( std::string state_type_desc, Model* mod )
-    : ControllerState(state_type_desc), model( mod ) {
+ClientControllerState::ClientControllerState( std::string state_type_desc, ClientInfo* dat )
+    : ControllerState(state_type_desc), data( dat ) {
 
 }
 
 // Constructor for the VotingState, simply sets the correct state name
-VotingState::VotingState( Model* mod ) : ClientControllerState( "Voting", mod ) {
+VotingState::VotingState( ClientInfo* dat ) : ClientControllerState( "Voting", dat ) {
 
 }
 
@@ -39,7 +40,7 @@ ControllerState* VotingState::handleAction( Action* action_to_be_handled ) {
 }
 
 // Constructor for the LobbyState, simply sets the correct state name
-LobbyState::LobbyState( Model* mod ) : ClientControllerState( "Lobby", mod ) {
+LobbyState::LobbyState( ClientInfo* dat ) : ClientControllerState( "Lobby", dat ) {
 
 }
 
@@ -56,16 +57,17 @@ ControllerState* LobbyState::handleAction( Action* action_to_be_handled ) {
 
         auto action = dynamic_cast< GameSettingsAction* >( action_to_be_handled );
         avalon::network::GameSettings* sBuf = action->getSettings( );
-        unsigned int num_clients = sBuf->players( );
+        data->num_players = sBuf->players( );
+        data->my_id = sBuf->client( );
 
-        model->addData( "numberOfPlayers", num_clients );
-        model->addData( "myID", sBuf->client( ) );
+        data->model->addData( "numberOfPlayers", data->num_players );
+        data->model->addData( "myID", sBuf->client( ) );
 
-        for ( unsigned int i = 0; i < num_clients; i++ ) {
-            model->addData( std::string( "player" ) + std::to_string( i ), NULL );
+        for ( unsigned int i = 0; i < data->num_players; i++ ) {
+            data->model->addData( std::string( "player" ) + std::to_string( i ), NULL );
         }
 
-        model->updateData("hasGameSettings", true);
+        data->model->updateData("hasGameSettings", true);
 
     // We need to update one of the players in the model with the real player
     } else if( action_type == "AddPlayer" ) {
@@ -77,7 +79,7 @@ ControllerState* LobbyState::handleAction( Action* action_to_be_handled ) {
         Player* p = action->getPlayerInfo( );
         std::cerr << "AddPlayer player number: " << player_number << std::endl;
 
-        model->updateData( std::string( "player" ) + std::to_string( player_number ), p );
+        data->model->updateData( std::string( "player" ) + std::to_string( player_number ), p );
 
     // We need to send the Server our preferred name
     } else if ( action_type == "SetName" ) {
@@ -85,9 +87,10 @@ ControllerState* LobbyState::handleAction( Action* action_to_be_handled ) {
         std::cerr << "SetName action handled by lobby state" << std::endl;
 
         auto action = dynamic_cast< SetNameAction* >( action_to_be_handled );
-        std::string new_name = action->getName( );
-
-        // Send the server our new name
+        Player p( action->getName( ), avalon::UNKNOWN_ROLE, avalon::UNKNOWN_ALIGN );
+        avalon::network::Player buf = p.getBuf( );
+        buf.set_id( data->my_id );
+        data->client->sendProtobuf( avalon::network::PLAYER_BUF, buf.SerializeAsString( ) );
 
     // We don't care about the action we received, since it isn't valid in this state
     } else {

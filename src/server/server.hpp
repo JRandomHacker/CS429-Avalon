@@ -15,6 +15,7 @@
 #ifdef _WIN32
     #include <winsock2.h>
 #else
+    #define SOCKET int
     #include <netdb.h>
 #endif
 
@@ -27,6 +28,22 @@ class Server {
         bool clients_connected;
 
         struct sockaddr_in servparm;
+
+        /*
+         * Helper function to receive data and create an action
+         *
+         * @param recvSock The socket to recv from
+         * @return None
+         */
+        void recvData( SOCKET recvSock );
+
+        /*
+         * Helper function to receive a custom name from the player during setup
+         *
+         * @param recvSock The socket to recv from
+         * @return The player's requested name
+         */
+        std::string recvCustomName( SOCKET recvSock );
 
     public:
         /**

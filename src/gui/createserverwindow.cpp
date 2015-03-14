@@ -5,6 +5,8 @@
 #include "globals.hpp"
 #include "displayerrors.hpp"
 #include "clientController.hpp"
+#include "clientCustomActionsFromGUI.hpp"
+
 #include <unistd.h>
 #include <iostream>
 #include <string>
@@ -156,6 +158,9 @@ void CreateServerWindow::connectToServer( ) {
         displayError( status, this );
     } else {
 
+        // TODO: Replace the "" with an std::string from the UI when it's available
+        SetNameAction* setName = new SetNameAction( "" );
+        controller->addActionToQueue( ( Action* )setName );
         GameWindow* g = new GameWindow( NULL, controller, m );
         g->setModal( false );
         g->show( );

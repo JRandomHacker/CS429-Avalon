@@ -10,7 +10,7 @@
 #include <iostream>
 
 #include "action.hpp"
-#include "model.hpp"
+#include "clientInfo.hpp"
 #include "controllerState.hpp"
 #include "globals.hpp"
 
@@ -29,21 +29,12 @@ class ClientControllerState : public ControllerState {
          * Constructor
          *
          * @param state_type_desc A string representation of the state we're in
-         * @param mod A pointer to the model, to be used to update the GUI
+         * @param dat A pointer to a ClientInfo struct with the clients data
          */
-        ClientControllerState( std::string state_type_desc, Model* mod );
-
-        /**
-         * Helper function to send a protobuf to the server
-         *
-         * @param bufType The type of buffer that is being sent
-         * @param message The protobuf to be sent, already serialized as a string (Using the protobuf method)
-         * @return None
-         */
-        void sendProtobuf( avalon::network::buffers_t bufType, std::string message );
+        ClientControllerState( std::string state_type_desc, ClientInfo* dat );
 
     protected:
-        Model* model;
+        ClientInfo* data;
 };
 
 /**
@@ -59,9 +50,9 @@ class LobbyState : public ClientControllerState {
         /**
          * Constructor
          *
-         * @param mod A pointer to the model, to be used to update the GUI
+         * @param dat A pointer to a ClientInfo struct with the clients data
          */
-        LobbyState( Model* mod );
+        LobbyState( ClientInfo* dat );
 
         /**
          * Method to actually deal with the action we've received
@@ -84,9 +75,9 @@ class VotingState : public ClientControllerState {
         /**
          * Constructor
          *
-         * @param mod A pointer to the model, to be used to update the GUI
+         * @param dat A pointer to a ClientInfo struct with the clients data
          */
-        VotingState( Model* mod );
+        VotingState( ClientInfo* mod );
 
         /**
          * Method to actually deal with the action we've received

@@ -4,7 +4,6 @@
 #include "ui_joinserverwindow.h"
 #include "displayerrors.hpp"
 #include "globals.hpp"
-#include "action.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 
 JoinServerWindow::JoinServerWindow( QWidget *parent ) :

@@ -7,6 +7,7 @@
  */
 #include "clientController.hpp"
 #include "model.hpp"
+#include "clientInfo.hpp"
 #include <semaphore.h>
 #include <pthread.h>
 
@@ -25,8 +26,13 @@ ClientController::ClientController( Model* model ) {
     action_queue = new ActionHandler( qSem );
     client->initQueue( action_queue );
 
+    // Add the known data to a ClientInfo struct
+    ClientInfo* data = new ClientInfo;
+    data->model = model;
+    data->client = client;
+
     handling_state = NULL;
-    setControllerState( new LobbyState( model ) ); // When the controller first starts, we're in the lobby waiting for players
+    setControllerState( new LobbyState( data ) ); // When the controller first starts, we're in the lobby waiting for players
 
 }
 

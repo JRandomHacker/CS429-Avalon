@@ -115,33 +115,74 @@ void Server::waitForData( ) {
     // Find the sockets that had data
     for( std::vector< SOCKET >::iterator it = model->sockets.begin(); it != model->sockets.end(); it++ ) {
         if( FD_ISSET( *it, &clients ) ) {
-            SOCKET sock = *it;
 
-            // Receive the type of protobuf we're waiting for
-            int bufType;
-            int size = recv( sock, (char*) &bufType, sizeof( int ), 0 );
-
-            // Make sure there wasn't a receive error
-            if( size <= 0 ) {
-                std::cerr << "[ SERVER ] Network recv error" << std::endl;
-                exit( EXIT_NETWORK_ERROR );
-            }
-
-            // Receive the length of the protobuf we're waiting for
-            int bufLength;
-            recv( sock, (char*) &bufType, sizeof( int ), 0 );
-
-            switch( bufType ) {
-
-                case avalon::network::PLAYER_BUF:
-                    std::cout << "[ SERVER ] Received a player protobuf" << std::endl;
-        //            recvPlayer( bufLength );
-                default:
-                    std::cerr << "[ SERVER ] Received an unknown type of protobuf" << std::endl;
-                    break;
-            }
+            recvData( *it );
         }
+
     }
+}
+
+void Server::recvData( SOCKET recvSock ) {
+
+    // Receive the type of protobuf we're waiting for
+    int bufType;
+    int size = recv( recvSock, ( char* )&bufType, sizeof( int ), 0 );
+
+    // Make sure there wasn't a receive error
+    if( size <= 0 ) {
+        std::cerr << "[ SERVER ] Network recv error" << std::endl;
+        exit( EXIT_NETWORK_ERROR );
+    }
+
+    // Receive the length of the protobuf we're waiting for
+    int bufLength;
+    recv( recvSock, ( char* )&bufLength, sizeof( int ), 0 );
+
+    switch( bufType ) {
+
+        case avalon::network::PLAYER_BUF:
+            std::cout << "[ SERVER ] Received a player protobuf" << std::endl;
+//            recvPlayer( bufLength );
+        default:
+            std::cerr << "[ SERVER ] Received an unknown type of protobuf" << std::endl;
+            break;
+    }
+}
+
+std::string Server::recvCustomName( SOCKET recvSock ) {
+
+    // Receive the type of protobuf we're waiting for
+    int bufType;
+    int size = recv( recvSock, ( char* )&bufType, sizeof( int ), 0 );
+
+    // Make sure there wasn't a receive error
+    if( size <= 0 ) {
+        std::cerr << "[ SERVER ] Network recv error" << std::endl;
+        exit( EXIT_NETWORK_ERROR );
+    }
+
+    // Receive the length of the protobuf we're waiting for
+    int bufLength;
+    recv( recvSock, ( char* )&bufLength, sizeof( int ), 0 );
+
+    // Receive the buffer
+    char* buffer = new char[ bufLength ];
+    recv( recvSock, ( char* )buffer, bufLength * sizeof( char ), 0 );
+
+    // If it was the wrong type, print an error, free the buffer and return an empty string
+    if( avalon::network::PLAYER_BUF != bufType ) {
+        std::cerr << "[ SERVER ] Attempted to receive a custom player name, but got bufType " << bufType << std::endl;
+        delete buffer;
+        return "";
+    }
+
+    // Parse the player
+    avalon::network::Player pbuf;
+    pbuf.ParseFromArray( buffer, bufLength );
+    Player p( pbuf );
+
+    // Return the name
+    return p.getName( );
 }
 
 // Wait for all the players to connect
@@ -149,9 +190,14 @@ void Server::waitForData( ) {
 bool Server::waitForClients( ) {
 
     for( unsigned int i = 0; i < model->num_clients; i++ ) {
-    std::cout << i << "/" << model->num_clients << std::endl;
 
-        model->sockets.push_back( accept( model->servsock, NULL, NULL ) );
+        SOCKET new_sock = accept( model->servsock, NULL, NULL );
+        model->sockets.push_back( new_sock );
+        std::string playerName = recvCustomName( new_sock );
+        if( !playerName.empty( ) ) {
+            model->players[ i ]->setName( playerName );
+        }
+
         NewPlayerAction* action = new NewPlayerAction( i );
         queue->addAction( ( Action* )action );
     }

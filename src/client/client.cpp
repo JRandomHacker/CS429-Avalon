@@ -170,3 +170,13 @@ void Client::recvSettings( int bufLength ) {
 
     delete settingsBuf;
 }
+
+void Client::sendProtobuf( avalon::network::buffers_t bufType, std::string message ) {
+
+    int messageSize = message.length( );
+
+    // Windows REQUIRES that sockets send char* rather than void*... so trick it
+    send( sock, (char*)(&bufType), sizeof( avalon::network::buffers_t ) / sizeof( char ), 0 );
+    send( sock, (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
+    send( sock, message.c_str( ), messageSize * sizeof( char ), 0 );
+}

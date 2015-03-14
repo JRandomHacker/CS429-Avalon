@@ -91,5 +91,15 @@ class Client {
          */
         void waitForData( );
 
+        /**
+         * Function to send a protobuf to the server the client is connected to
+         *
+         * @param bufType The type of buffer that is being sent
+         * @param message The protobuf to be sent, already serialized as a string (Using protobuf method)
+         *
+         * @return None
+         */
+        void sendProtobuf( avalon::network::buffers_t bufType, std::string message );
+
 };
 #endif
