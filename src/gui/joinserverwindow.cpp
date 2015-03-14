@@ -4,6 +4,8 @@
 #include "ui_joinserverwindow.h"
 #include "displayerrors.hpp"
 #include "globals.hpp"
+#include "action.hpp"
+#include "clientCustomActionsFromGUI.hpp"
 
 JoinServerWindow::JoinServerWindow( QWidget *parent ) :
     QDialog( parent ),
@@ -36,6 +38,8 @@ void JoinServerWindow::on_buttonJoinServer_clicked( ) {
         displayError( status, this );
     } else {
 
+        SetNameAction* setName = new SetNameAction( ui->fieldPlayerName->text( ).toStdString( ) );
+        controller->addActionToQueue( ( Action* )setName );
         GameWindow* g = new GameWindow( NULL, controller, m );
         g->setModal( false );
         g->show( );

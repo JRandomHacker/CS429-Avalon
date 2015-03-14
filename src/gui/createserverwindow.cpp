@@ -154,11 +154,12 @@ void CreateServerWindow::connectToServer( ) {
     int status = controller->spawnNetwork( "localhost", port );
     if( status != EXIT_SUCCESS ) {
         displayError( status, this );
+    } else {
+
+        GameWindow* g = new GameWindow( NULL, controller, m );
+        g->setModal( false );
+        g->show( );
+
+        close( );
     }
-
-    GameWindow* g = new GameWindow( NULL, controller, m );
-    g->setModal( false );
-    g->show( );
-
-    close( );
 }

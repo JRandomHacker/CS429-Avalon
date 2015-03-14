@@ -14,7 +14,7 @@
 ClientController::ClientController( Model* model ) {
 
     this->model = model;
-    model->addData("hasGameSettings", false);
+    model->addData( "hasGameSettings", false );
     this->client = new Client( );
 
     this->qSem = new sem_t;
@@ -51,7 +51,7 @@ int ClientController::spawnNetwork( std::string host, int port ) {
     pthread_t networkThread;
     if( pthread_create( &networkThread, NULL, &networkThreadHelper, this ) != 0 )
     {
-        std::cerr << "Unable to start network thread" << std::endl;
+        std::cerr << "[ ClientController ] Unable to start network thread" << std::endl;
         return EXIT_THREAD_ERROR;
     }
 
@@ -76,6 +76,7 @@ void ClientController::networkThreadFunc( ) {
 
 // Helper function to change the controller's state
 void ClientController::setControllerState( ControllerState* new_state ) {
+
     releaseControllerState( ); // Clean up the old ControllerState before changing
     handling_state = new_state;
 }
@@ -93,6 +94,7 @@ void ClientController::releaseControllerState( ) {
 // Helper function to process an action
 // Calls the ActionHandler to do the work and changes our state accordingly
 void ClientController::processAction( Action* action ) {
+
     ControllerState* new_state = handling_state->handleAction( action );
     if( new_state != NULL ) {
         setControllerState( new_state );
@@ -100,12 +102,14 @@ void ClientController::processAction( Action* action ) {
 }
 
 void ClientController::addActionToQueue( Action* new_action ) {
+
     action_queue->addAction(new_action);
 }
 
 // Infinite loop, waiting for actions from either the GUI or network
 // and processing them as they come in
 void ClientController::processActions( ) {
+
     while( true ) {
         sem_wait( qSem ); // Wait until there is an action to process, so we don't spinlock
 

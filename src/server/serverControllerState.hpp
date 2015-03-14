@@ -26,22 +26,22 @@ class ServerControllerState : public ControllerState {
         ServInfo* model;
 
         /**
-          * Helper function to send a player to another player
-          *
-          * @param playerID The ID of the player to be sent
-          * @param destintationID The ID of the player to send the player to
-          * @param allInfo Whether the player should know the role and alignment of the sent player
-          * @return None
-          */
+         * Helper function to send a player to another player
+         *
+         * @param playerID The ID of the player to be sent
+         * @param destintationID The ID of the player to send the player to
+         * @param allInfo Whether the player should know the role and alignment of the sent player
+         * @return None
+         */
         void sendPlayer( int playerID, int destinationID, bool allInfo );
 
         /**
-          * Helper function to send a protobuf
-          *
-          * @param bufType The type of the buffer that is being sent
-          * @param destinationID The ID of the player that the buffer should be sent to
-          * @param message The protobuf to be sent, already serialized as a string (Using protobuf's method)
-           * @return None
+         * Helper function to send a protobuf
+         *
+         * @param bufType The type of the buffer that is being sent
+         * @param destinationID The ID of the player that the buffer should be sent to
+         * @param message The protobuf to be sent, already serialized as a string (Using protobuf's method)
+         * @return None
          */
         void sendProtobuf( avalon::network::buffers_t bufType, int destinationID, std::string message );
 };
