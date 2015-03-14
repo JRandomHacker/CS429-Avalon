@@ -2,11 +2,16 @@
 #include "ui_gamewindow.h"
 #include "subscriber.hpp"
 #include "player.hpp"
+#include <signal.h>
 #include <QStandardItem>
 #include <thread>
 #include <chrono>
 
-GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model, HANDLE serverHandle ) :
+#ifdef _WIN32
+	GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model, HANDLE serverHandle ) :
+#else     
+	GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model, int serverHandle ) :
+#endif
     QDialog( parent ),
     ui( new Ui::GameWindow ) {
     this->control = controller;
@@ -118,7 +123,7 @@ void GameWindow::closeEvent(QCloseEvent* e) {
         #ifdef _WIN32
             TerminateProcess(serverH, 0);
         #else
-            kill(serverH);
+            kill(serverH, SIGKILL);
         #endif
     }
     
