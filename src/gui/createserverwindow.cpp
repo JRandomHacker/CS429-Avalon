@@ -164,7 +164,8 @@ void CreateServerWindow::connectToServer( ) {
     } else {
 
         // TODO: Replace the "" with an std::string from the UI when it's available
-        SetNameAction* setName = new SetNameAction( "" );
+        std::string name = ui->editPlayerName->text( ).toStdString( );
+        SetNameAction* setName = new SetNameAction( name );
         controller->addActionToQueue( ( Action* )setName );
         GameWindow* g = new GameWindow( NULL, controller, m, serverH );
         g->setModal( false );
