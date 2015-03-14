@@ -14,6 +14,26 @@
    <string>Avalon Online</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" rowspan="4">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QGraphicsView" name="playerAvatar"/>
+     </item>
+     <item>
+      <widget class="QListView" name="playerList"/>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1" rowspan="6" colspan="3">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3" colspan="2">
+    <widget class="QListView" name="voteTrackList"/>
+   </item>
    <item row="2" column="3">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item alignment="Qt::AlignHCenter">
@@ -25,27 +45,14 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="3" colspan="2">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="widgetResizable">
-        <bool>true</bool>
+   <item row="2" column="4">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="votingLabel">
+       <property name="text">
+        <string>Voting</string>
        </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>438</width>
-          <height>85</height>
-         </rect>
-        </property>
-       </widget>
       </widget>
-     </item>
-     <item>
-      <widget class="QTextEdit" name="textEdit"/>
      </item>
     </layout>
    </item>
@@ -81,43 +88,57 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="2" colspan="3">
+   <item row="4" column="2" rowspan="2" colspan="3">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" rowspan="6" colspan="2">
-    <widget class="Line" name="line">
+   <item row="5" column="3" rowspan="3" colspan="2">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>436</width>
+          <height>85</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTextEdit" name="textEdit"/>
+     </item>
+    </layout>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="Line" name="line_3">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="0" column="0" rowspan="6">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item row="7" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
-      <widget class="QGraphicsView" name="playerAvatar"/>
-     </item>
-     <item>
-      <widget class="QListView" name="playerList"/>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="4">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="votingLabel">
+      <widget class="QLabel" name="numOfEvilPlayers">
        <property name="text">
-        <string>Voting</string>
+        <string>Evil Players:</string>
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QListView" name="currRolesList"/>
+     </item>
     </layout>
-   </item>
-   <item row="1" column="3" colspan="2">
-    <widget class="QListView" name="voteTrackList"/>
    </item>
   </layout>
  </widget>
