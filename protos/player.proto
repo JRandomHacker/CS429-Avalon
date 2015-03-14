@@ -1,8 +1,0 @@
-package avalon.network;
-
-message Player {
-  required int32 role = 1;
-  required int32 alignment = 2;
-  required string name = 3;
-  required int32 id = 4;
-}
