@@ -1,4 +1,3 @@
-
 #ifndef CONTROLLER_STATE_HPP
 #define CONTROLLER_STATE_HPP
 
@@ -7,16 +6,49 @@
 
 #include "action.hpp"
 
+/**
+ * The parent class of both Server and Client controller states
+ *
+ * @class ControllerState
+ * @author Matt Hoffman && Ryan Kerr
+ * @date 2015-02-10
+ */
 class ControllerState {
-public:
-    ControllerState(std::string state_type_desc);
-    virtual ~ControllerState();
+    public:
 
-    virtual ControllerState* handleAction(Action* action_to_be_handled) = 0;
+        /**
+         * Public constructor
+         *
+         * @param state_type_desc A string representing the state we're in
+         */
+        ControllerState(std::string state_type_desc);
 
-    void reportUnhandledAction(std::string action_type);
+        /**
+         * Destructor
+         */
+        virtual ~ControllerState();
 
-    std::string state_type;
+        /**
+         * Virtual method for handling an action
+         * All ControllerStates must be able to handle an action
+         *
+         * @param action_to_be_handled The action that needs to be handled in the current state
+         * @return A different ControllerState if the action causes a state switch. NULL otherwise
+         */
+        virtual ControllerState* handleAction(Action* action_to_be_handled) = 0;
+
+        /**
+         * A method that can be called whenever you get an unwanted action in handleAction
+         * Prints a message to standard error
+         *
+         * @param action_type A string representing the action you weren't expecting
+         * @return None
+         */
+        void reportUnhandledAction(std::string action_type);
+
+    private:
+        //! A string containing the type of state this is
+        std::string state_type;
 };
 
 #endif // CONTROLLER_STATE_HPP

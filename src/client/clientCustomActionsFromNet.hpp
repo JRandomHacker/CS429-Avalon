@@ -23,10 +23,7 @@ class GameSettingsAction : public Action {
         /**
          * Public constructor
          *
-         * @param mess_text The human readable message explaining the contents
-         *     of the action
-         * @param settings The string representing the game settings for the
-         *     GUI to display
+         * @param settings A GameSettings protobuf containing the game's settings
          */
         GameSettingsAction( avalon::network::GameSettings* settings );
         virtual ~GameSettingsAction( );
@@ -55,10 +52,8 @@ class AddPlayerAction : public Action {
         /**
          * Public constructor
          *
-         * @param mess_text The human readable message explaining the contents
-         *     of the action
-         * @param player The string representing the player info for the GUI
-         *     to display
+         * @param player_number The ID of the player to add
+         * @param player The player object that is being added
          */
         AddPlayerAction( unsigned int player_number, Player* player );
         virtual ~AddPlayerAction( );

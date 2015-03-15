@@ -54,8 +54,6 @@ class Server {
         /**
          * Constructor for a Server
          *
-         * @param num_clients The number of clients that will connect
-         * @param special_characters A list of the special characters we should include
          * @param port The port to connect to for sending/receiving data
          */
         Server( int port );
@@ -66,9 +64,10 @@ class Server {
          */
         ~Server( );
 
-        /*
+        /**
          * Actually initializes the servers action queue 
          *
+         * @param action_queue The action queue we should put actions into
          * @return None
          */
         void initQueue( ActionHandler* action_queue );

@@ -10,16 +10,25 @@
 #ifndef _GLOBALS_HPP
 #define _GLOBALS_HPP
 
-#define DEFAULT_PORT 42917
-
+//! The default port for the server to listen on and the client to connect to
+#define DEFAULT_PORT 42917 
+//! Exit status if there are too many, or too few, players
 #define EXIT_INVALID_PLAYERS_ERROR 10
+//! Exit status if we're unable to spawn a thread
 #define EXIT_THREAD_ERROR 11
+//! Exit status if there are more special players than players
 #define EXIT_SPECIAL_ERROR 12
-#define EXIT_EVIL_ERROR 13 // Too many evil roles compared to evil player count
+//! Exit status if there are more evil special players than evil players
+#define EXIT_EVIL_ERROR 13
+//! Exit status if there are more good special players than good players
 #define EXIT_GOOD_ERROR 14
+//! Exit status if a socket cannot be bound or connected to
 #define EXIT_SOCKET_ERROR 15
-#define EXIT_SERVER_NOT_FOUND 16 // Unable to find the server executable
+//! Exit status if the server executable cannot be found
+#define EXIT_SERVER_NOT_FOUND 16
+//! Exit status if we lose a connection
 #define EXIT_NETWORK_ERROR 17
+//! Exit status in Windows if the exit code of the server is larger than an integer
 #define UNKNOWN_ERROR 42
 
 namespace avalon {

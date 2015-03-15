@@ -22,11 +22,13 @@ class SetNameAction : public Action {
         /**
          * Public constructor
          *
-         * @param mess_text The human readable message explaining the contents
-         *     of the action
-         * @param new_name This player's new name
+         * @param new_name This new name I want
          */
         SetNameAction( std::string new_name );
+
+        /**
+         * Destructor
+         */
         virtual ~SetNameAction( );
 
         /**
@@ -37,6 +39,7 @@ class SetNameAction : public Action {
         std::string getName( );
 
     private:
+        //! The name I want
         std::string name;
 };
 
@@ -53,12 +56,13 @@ class TeamVoteAction : public Action {
         /**
          * Public constructor
          *
-         * @param mess_text The human readable message explaining the contents
-         *     of the action
-         * @param player The string representing the player info for the GUI
-         *     to display
+         * @param new_vote The vote I wish to cast
          */
         TeamVoteAction( avalon::player_vote_t new_vote );
+
+        /**
+         * Destructor
+         */
         virtual ~TeamVoteAction( );
 
         /**
@@ -69,6 +73,7 @@ class TeamVoteAction : public Action {
         avalon::player_vote_t getPlayerVote( );
 
     private:
+        //! My vote
         avalon::player_vote_t vote;
 };
 
@@ -85,12 +90,14 @@ class SelectQuestGoerAction : public Action {
         /**
          * Public constructor
          *
-         * @param mess_text The human readable message explaining the contents
-         *     of the action
          * @param is_selected If this player is being selected or deselected
          * @param selected_player_id Which player is being selected to be on or off the team
          */
         SelectQuestGoerAction( bool is_selected, unsigned int selected_player_id );
+
+        /**
+         * Destructor
+         */
         virtual ~SelectQuestGoerAction( );
 
         /**
@@ -108,8 +115,9 @@ class SelectQuestGoerAction : public Action {
         unsigned int getSelectedPlayer( );
 
     private:
-
+        //! Whether to select or deselect the player 
         bool selected;
+        //! The id of the selected player
         unsigned int selected_player;
 };
 
@@ -125,11 +133,12 @@ class FinalizeTeamAction : public Action {
 
         /**
          * Public constructor
-         *
-         * @param mess_text The human readable message explaining the contents
-         *     of the action
          */
         FinalizeTeamAction( );
+
+        /**
+         * Destructor
+         */
         virtual ~FinalizeTeamAction( );
 };
 

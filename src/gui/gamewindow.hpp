@@ -40,14 +40,14 @@ public:
     ~GameWindow( );
     
     /**
-     *  @Override
      *  On close, kills the server if this client is the host
+     *
+     *  @param event The CloseEvent that happened, causing this function to be called
+     *  @return None
      */
     void closeEvent(QCloseEvent* event);
 
     /**
-     * @Override
-     *
      * Overrides the escape key to clean up the server if on host
      *
      * @param event Information about the key that was pressed
@@ -56,8 +56,26 @@ public:
     void keyPressEvent( QKeyEvent* event );
 
 signals:
+    /**
+     * A function that is called whenever the GameSettings protobuf is received
+     *
+     * @return None
+     */
     void gameSettingsReceived( );
+
+    /**
+     * A function that is called whenever a player gets updated information
+     *
+     * @param playerNum The ID of the player that is being updated
+     * @return None
+     */
     void playerInfoUpdated( unsigned int playerNum );
+
+    /**
+     * A function that is called when the GameSettings have finished setting things up
+     *
+     * @return None
+     */
     void gameInfoUpdated( );
 
 private slots:

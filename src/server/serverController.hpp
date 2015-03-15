@@ -96,9 +96,8 @@ class ServerController {
         /**
          * Contructor
          *
-         * @param model A pointer to the model that the GUI is watching
-         * @param host The hostname or ip address of the server to connect to
-         * @param port The port number of the server to connect to
+         * @param model A pointer to the model of the server's state
+         * @param port The port number to listen on
          *
          */
         ServerController( ServInfo* model, int port );

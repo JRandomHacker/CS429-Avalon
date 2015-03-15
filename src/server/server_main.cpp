@@ -16,13 +16,28 @@
 #include "globals.hpp"
 
 
-// Globals with the options
+//! The port number we're listening on
 int port = 0;
+//! The number of players this game will support
 int num_players = 0;
 
-// Helper functions
+
+/**
+ * Helper function to parse the options passed into the program
+ *
+ * @param argc The number of arguments passed in
+ * @param argv An array of the arguments passed in
+ * @return A vector containing all the chosen special roles
+ */
 std::vector< avalon::special_roles_t > parse_options( int argc, char** argv );
 
+/**
+ * Main function for the server executable
+ *
+ * @param argc The number of arguments passed in
+ * @param argv An array of the arguments passed in
+ * @return EXIT_SUCCESS on a normal exit, an error otherwise
+ */
 int main( int argc, char** argv ) {
 
     int retval;

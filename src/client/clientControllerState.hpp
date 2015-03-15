@@ -34,6 +34,7 @@ class ClientControllerState : public ControllerState {
         ClientControllerState( std::string state_type_desc, ClientInfo* dat );
 
     protected:
+        //! The data that is being passed between the controller states
         ClientInfo* data;
 };
 
@@ -75,7 +76,7 @@ class VotingState : public ClientControllerState {
         /**
          * Constructor
          *
-         * @param dat A pointer to a ClientInfo struct with the clients data
+         * @param mod A pointer to a ClientInfo struct with the clients data
          */
         VotingState( ClientInfo* mod );
 

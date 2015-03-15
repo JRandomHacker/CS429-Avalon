@@ -32,13 +32,14 @@ class ServerControllerState : public ControllerState {
         ServerControllerState( std::string state_type_desc, ServInfo* mod );
 
     protected:
+        //! A pointer to the model containing the game state
         ServInfo* model;
 
         /**
          * Helper function to send a player to another player
          *
          * @param playerID The ID of the player to be sent
-         * @param destintationID The ID of the player to send the player to
+         * @param destinationID The ID of the player to send the player to
          * @param allInfo Whether the player should know the role and alignment of the sent player
          * @return None
          */
