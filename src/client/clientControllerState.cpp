@@ -59,16 +59,17 @@ ControllerState* LobbyState::handleAction( Action* action_to_be_handled ) {
         avalon::network::GameSettings* sBuf = action->getSettings( );
         data->num_players = sBuf->players( );
         data->my_id = sBuf->client( );
-        unsigned int num_evil = sBuf->evil_count( );
+        data->num_evil = sBuf->evil_count( );
 
         data->model->addData( "numberOfPlayers", data->num_players );
-        data->model->addData( "myID", sBuf->client( ) );
-        data->model->addData( "numEvilChars", num_evil );
+        data->model->addData( "myID", data->my_id );
+        data->model->addData( "numEvilChars", data->num_evil );
 
         for ( unsigned int i = 0; i < data->num_players; i++ ) {
             data->model->addData( std::string( "player" ) + std::to_string( i ), NULL );
         }
 
+        delete sBuf;
         data->model->updateData("hasGameSettings", true);
 
     // We need to update one of the players in the model with the real player
@@ -79,6 +80,7 @@ ControllerState* LobbyState::handleAction( Action* action_to_be_handled ) {
         auto action = dynamic_cast< AddPlayerAction* >( action_to_be_handled );
         unsigned int player_number = action->getPlayerNumber( );
         Player* p = action->getPlayerInfo( );
+        data->players.push_back( p );
         std::cerr << "AddPlayer player number: " << player_number << std::endl;
 
         data->model->updateData( std::string( "player" ) + std::to_string( player_number ), p );

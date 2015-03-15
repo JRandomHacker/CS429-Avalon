@@ -113,7 +113,7 @@ void GameWindow::updatePlayer(unsigned int id) {
     if(p != NULL)
     {
         newString = (*p)->getName( );
-        if( (int) id == *myID_subscriber->getData<int>( ) )
+        if( id == *myID_subscriber->getData<unsigned int>( ) )
             newString += " (me)";
 
         if(id == 0)

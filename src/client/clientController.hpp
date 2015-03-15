@@ -27,6 +27,7 @@ class ClientController {
 
         // A client for networking to the server
         Client* client;
+        ClientInfo* data;
 
         // The queue to put actions into so that the separate thread can process them later
         // (And associated helpers)
