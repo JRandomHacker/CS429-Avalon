@@ -2,6 +2,8 @@
 #include "ui_gamewindow.h"
 #include "subscriber.hpp"
 #include "player.hpp"
+#include "globals.hpp"
+#include "clientCustomActionsFromGUI.hpp"
 #include <signal.h>
 #include <QStandardItem>
 #include <QCloseEvent>
@@ -135,6 +137,16 @@ void GameWindow::updateGameInfo() {
     std::vector<bool>* roleList = roleList_subscriber->getData<std::vector<bool>>();
     if(roleList != NULL)
     { /* TODO: translate list of bool to list of roles in game */ }
+}
+
+void GameWindow::on_buttonVotePass_clicked() {
+    TeamVoteAction* vote = new TeamVoteAction(avalon::YES);
+    control->addActionToQueue(vote);
+}
+
+void GameWindow::on_buttonVoteFail_clicked() {
+    TeamVoteAction* vote = new TeamVoteAction(avalon::NO);
+    control->addActionToQueue(vote);
 }
 
 void GameWindow::closeEvent(QCloseEvent* e) {

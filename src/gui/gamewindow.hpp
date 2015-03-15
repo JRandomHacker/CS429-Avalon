@@ -68,6 +68,16 @@ private slots:
      *  Updates the numEvil and roleList UI elements
      */
     void updateGameInfo();
+    
+    /**
+     *  Callback for positive vote button
+     */
+    void on_buttonVotePass_clicked();
+    
+    /**
+     *  Callback for negative vote button
+     */
+    void on_buttonVoteFail_clicked();
 
 private:
     /**
