@@ -1,6 +1,8 @@
 #ifndef OPTIONSWINDOW_H
 #define OPTIONSWINDOW_H
 
+#include "joinserverwindow.hpp"
+#include "createserverwindow.hpp"
 #include <QMainWindow>
 
 namespace Ui {
@@ -46,6 +48,10 @@ private:
      *  Options window field.
      */
     Ui::OptionsWindow *ui;
+    
+    JoinServerWindow* joinWindow;
+    
+    CreateServerWindow* createWindow;
 };
 
 #endif // OPTIONSWINDOW_H

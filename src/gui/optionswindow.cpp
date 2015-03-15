@@ -30,18 +30,25 @@ OptionsWindow::OptionsWindow( QWidget *parent ) :
     ui( new Ui::OptionsWindow ) {
 
     ui->setupUi( this );
+    
+    joinWindow = NULL;
+    createWindow = NULL;
 }
 
 OptionsWindow::~OptionsWindow( ) {
     delete ui;
+    delete joinWindow;
+    delete createWindow;
 }
 
 
 void OptionsWindow::on_buttonJoinMenu_clicked( ) {
-    JoinServerWindow* w = new JoinServerWindow( );
-    w->setModal( false );
-    w->show( );
-    this->close( );
+    if(joinWindow == NULL) {
+        joinWindow = new JoinServerWindow( this );
+        joinWindow->setModal( false );
+    }
+    joinWindow->show( );
+    this->hide( );
 }
 
 void OptionsWindow::on_buttonQuit_clicked( ) {
@@ -49,8 +56,10 @@ void OptionsWindow::on_buttonQuit_clicked( ) {
 }
 
 void OptionsWindow::on_buttonCreateMenu_clicked( ) {
-    CreateServerWindow* w = new CreateServerWindow( );
-    w->setModal( false );
-    w->show( );
-    this->close( );
+    if(createWindow == NULL) {
+        createWindow = new CreateServerWindow( this );
+        createWindow->setModal( false );
+    }
+    createWindow->show( );
+    this->hide( );
 }

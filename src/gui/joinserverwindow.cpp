@@ -20,10 +20,9 @@ JoinServerWindow::~JoinServerWindow( ) {
 }
 
 void JoinServerWindow::on_buttonCancel_clicked( ) {
-    OptionsWindow* o = new OptionsWindow();
-    o->show();
+    this->parentWidget()->show();
     
-    close();
+    this->hide();
 }
 
 void JoinServerWindow::on_buttonJoinServer_clicked( ) {
@@ -43,7 +42,7 @@ void JoinServerWindow::on_buttonJoinServer_clicked( ) {
         g->setModal( false );
         g->show( );
 
-        close( );
+        this->hide( );
     }
 }
 

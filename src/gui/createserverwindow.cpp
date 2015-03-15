@@ -146,10 +146,9 @@ void CreateServerWindow::on_buttonCreateServer_clicked( ) {
 }
 
 void CreateServerWindow::on_buttonCancel_clicked( ) {
-    OptionsWindow* o = new OptionsWindow( );
-    o->show();
+    this->parentWidget()->show();
     
-    close();
+    this->hide();
 }
 
 
@@ -163,7 +162,6 @@ void CreateServerWindow::connectToServer( ) {
         displayError( status, this );
     } else {
 
-        // TODO: Replace the "" with an std::string from the UI when it's available
         std::string name = ui->editPlayerName->text( ).toStdString( );
         SetNameAction* setName = new SetNameAction( name );
         controller->addActionToQueue( ( Action* )setName );
@@ -171,6 +169,6 @@ void CreateServerWindow::connectToServer( ) {
         g->setModal( false );
         g->show( );
 
-        close( );
+        this->hide();
     }
 }
