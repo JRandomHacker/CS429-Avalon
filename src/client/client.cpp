@@ -150,7 +150,7 @@ void Client::recvPlayer( int bufLength ) {
     AddPlayerAction* action = new AddPlayerAction( pBuf.id(), p );
     queue->addAction( ( Action* )action );
 
-    delete playerBuf;
+    delete[] playerBuf;
 }
 
 // Helper function to receive a gamesettings protobuf
@@ -168,7 +168,7 @@ void Client::recvSettings( int bufLength ) {
     GameSettingsAction* action = new GameSettingsAction( sBuf );
     queue->addAction( ( Action* )action );
 
-    delete settingsBuf;
+    delete[] settingsBuf;
 }
 
 void Client::sendProtobuf( avalon::network::buffers_t bufType, std::string message ) {

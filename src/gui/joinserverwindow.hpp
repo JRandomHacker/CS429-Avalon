@@ -3,6 +3,9 @@
 
 #include <QDialog>
 
+#include "model.hpp"
+#include "clientController.hpp"
+
 namespace Ui {
 class JoinServerWindow;
 }
@@ -40,6 +43,17 @@ private:
      *  Join server ui field.
      */
     Ui::JoinServerWindow *ui;
+
+    /**
+     * The Model we will watch later
+     */
+    Model* model;
+
+    /**
+     * The ClientController to modify the model for us
+     */
+    ClientController* controller;
+
 };
 
 #endif // JOINSERVERWINDOW_H

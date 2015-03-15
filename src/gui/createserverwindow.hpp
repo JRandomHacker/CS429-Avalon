@@ -2,6 +2,8 @@
 #define CREATESERVERWINDOW_H
 
 #include <QDialog>
+#include "model.hpp"
+#include "clientController.hpp"
 
 #ifdef _WIN32
     #include <windows.h>
@@ -48,6 +50,16 @@ private:
  	 */
     Ui::CreateServerWindow *ui;
     
+    /**
+      *  The model we will watch for changes
+      */
+    Model* model;
+
+    /**
+      *  The ClientController that will update the model
+      */
+    ClientController* controller;
+
     #ifdef _WIN32
         /**
          *  Server handle

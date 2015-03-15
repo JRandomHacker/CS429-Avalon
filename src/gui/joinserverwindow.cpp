@@ -13,9 +13,14 @@ JoinServerWindow::JoinServerWindow( QWidget *parent ) :
 
     ui->fieldPortNum->insert( QString( std::to_string( DEFAULT_PORT ).c_str( ) ) );
     ui->fieldServerAddr->insert( QString( "localhost" ) );
+
+    model = new Model( );
+    controller = new ClientController( model );
 }
 
 JoinServerWindow::~JoinServerWindow( ) {
+    delete controller;
+    delete model;
     delete ui;
 }
 
@@ -29,8 +34,6 @@ void JoinServerWindow::on_buttonJoinServer_clicked( ) {
     std::string addr = ui->fieldServerAddr->text().toStdString( );
     int port = ui->fieldPortNum->text().toInt( );
 
-    Model* m = new Model( );
-    ClientController* controller = new ClientController( m );
     int status = controller->spawnNetwork( addr, port );
     if( status != EXIT_SUCCESS ) {
         displayError( status, this );
@@ -38,7 +41,7 @@ void JoinServerWindow::on_buttonJoinServer_clicked( ) {
 
         SetNameAction* setName = new SetNameAction( ui->fieldPlayerName->text( ).toStdString( ) );
         controller->addActionToQueue( ( Action* )setName );
-        GameWindow* g = new GameWindow( NULL, controller, m );
+        GameWindow* g = new GameWindow( NULL, controller, model );
         g->setModal( false );
         g->show( );
 

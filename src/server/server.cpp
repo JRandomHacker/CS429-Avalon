@@ -169,7 +169,7 @@ std::string Server::recvCustomName( SOCKET recvSock ) {
     // If it was the wrong type, print an error, free the buffer and return an empty string
     if( avalon::network::PLAYER_BUF != bufType ) {
         std::cerr << "[ SERVER ] Attempted to receive a custom player name, but got bufType " << bufType << std::endl;
-        delete buffer;
+        delete[] buffer;
         return "";
     }
 

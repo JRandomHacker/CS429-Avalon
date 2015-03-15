@@ -25,9 +25,14 @@ CreateServerWindow::CreateServerWindow( QWidget *parent ) :
     serverH = 0;
 
     ui->editPortNum->insert( QString( std::to_string( DEFAULT_PORT ).c_str( ) ) );
+
+    model = new Model( );
+    controller = new ClientController( model );
 }
 
 CreateServerWindow::~CreateServerWindow( ) {
+    delete controller;
+    delete model;
     delete ui;
 }
 
@@ -155,8 +160,6 @@ void CreateServerWindow::on_buttonCancel_clicked( ) {
 void CreateServerWindow::connectToServer( ) {
     int port = ui->editPortNum->text( ).toInt( );
 
-    Model* m = new Model( );
-    ClientController* controller = new ClientController( m );
     int status = controller->spawnNetwork( "localhost", port );
     if( status != EXIT_SUCCESS ) {
         displayError( status, this );
@@ -165,7 +168,7 @@ void CreateServerWindow::connectToServer( ) {
         std::string name = ui->editPlayerName->text( ).toStdString( );
         SetNameAction* setName = new SetNameAction( name );
         controller->addActionToQueue( ( Action* )setName );
-        GameWindow* g = new GameWindow( NULL, controller, m, serverH );
+        GameWindow* g = new GameWindow( NULL, controller, model, serverH );
         g->setModal( false );
         g->show( );
 
