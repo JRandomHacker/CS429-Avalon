@@ -15,29 +15,5 @@ all : $(OBJS)
 clean : 
 	rm -f $(OBJS)
 
-globals.o : globals.cpp globals.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-player.o : player.cpp player.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-model.o : model.cpp model.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-subscriber.o : subscriber.cpp subscriber.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-model_data.o : model_data.cpp model_data.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-data_block.o : data_block.cpp data_block.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-controllerState.o : controllerState.cpp controllerState.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-action.o : action.cpp action.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-actionHandler.o : actionHandler.cpp actionHandler.hpp
+%.o : %.cpp %.hpp
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<

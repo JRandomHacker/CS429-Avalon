@@ -8,7 +8,7 @@
 
 #include "actionHandler.hpp"
 #include "action.hpp"
-#include "clientCustomActions.hpp"
+#include "clientCustomActionsFromNet.hpp"
 #include "gtest/gtest.h"
 
 #include <string>

@@ -9,4 +9,5 @@ message GameSettings {
     required bool assassin = 6 [ default = false ];
     required bool oberon = 7 [ default = false ];
     required int32 client = 8;
+    required int32 evil_count = 9;
 }

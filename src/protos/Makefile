@@ -17,14 +17,8 @@ clean :
 protos :
 	protoc -I=$(PROTOS_DIR) --cpp_out=$(PROTOS_DIR) $(PROTOS_DIR)/*.proto
 
-settings.pb.cc :
-	$(MAKE) protos
+%.pb.cc %.pb.h : %.proto
+	protoc --proto_path=$(PROTOS_DIR) --cpp_out=$(PROTOS_DIR) $<
 
-player.pb.cc :
-	$(MAKE) protos
-
-settings.pb.o : settings.pb.cc
-	$(CXX) $(CXXOPTS) -c $<
-
-player.pb.o : player.pb.cc
+%.pb.o : %.pb.cc %.pb.h
 	$(CXX) $(CXXOPTS) -c $<

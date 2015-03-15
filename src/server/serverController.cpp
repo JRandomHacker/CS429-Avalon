@@ -8,6 +8,7 @@
 #include "serverController.hpp"
 #include "serverControllerState.hpp"
 #include "settings.pb.h"
+#include "globals.hpp"
 #include "player.pb.h"
 #include "serverInfo.hpp"
 
@@ -144,6 +145,7 @@ void ServerController::initModelCharacters( std::vector< avalon::special_roles_t
     // For some reason, the default of false in the protobuf file isn't working
     // So set them all to false ourselves
     model->settingsBuf.set_players( model->num_clients );
+    model->settingsBuf.set_evil_count( avalon::getEvilCount( model->num_clients ) );
     model->settingsBuf.set_merlin( false );
     model->settingsBuf.set_percival( false );
     model->settingsBuf.set_mordred( false );
@@ -151,32 +153,32 @@ void ServerController::initModelCharacters( std::vector< avalon::special_roles_t
     model->settingsBuf.set_assassin( false );
     model->settingsBuf.set_oberon( false );
 
-        // Figure out which roles we have in the game
-        for( std::vector< avalon::special_roles_t >::iterator it = special_roles.begin(); it != special_roles.end(); it++ ) {
-            switch( *it ) {
-                case avalon::MERLIN:
-                    model->settingsBuf.set_merlin( true );
-                    break;
-                case avalon::PERCIVAL:
-                    model->settingsBuf.set_percival( true );
-                    break;
-                case avalon::MORDRED:
-                    model->settingsBuf.set_mordred( true );
-                    break;
-                case avalon::MORGANA:
-                    model->settingsBuf.set_morgana( true );
-                    break;
-                case avalon::ASSASSIN:
-                    model->settingsBuf.set_assassin( true );
-                    break;
-                case avalon::OBERON:
-                    model->settingsBuf.set_oberon( true );
-                    break;
-                case avalon::NONE:
-                default:
-                    break;
-            }
+    // Figure out which roles we have in the game
+    for( std::vector< avalon::special_roles_t >::iterator it = special_roles.begin(); it != special_roles.end(); it++ ) {
+        switch( *it ) {
+            case avalon::MERLIN:
+                model->settingsBuf.set_merlin( true );
+                break;
+            case avalon::PERCIVAL:
+                model->settingsBuf.set_percival( true );
+                break;
+            case avalon::MORDRED:
+                model->settingsBuf.set_mordred( true );
+                break;
+            case avalon::MORGANA:
+                model->settingsBuf.set_morgana( true );
+                break;
+            case avalon::ASSASSIN:
+                model->settingsBuf.set_assassin( true );
+                break;
+            case avalon::OBERON:
+                model->settingsBuf.set_oberon( true );
+                break;
+            case avalon::NONE:
+            default:
+                break;
         }
+    }
 
 }
 // Creates Players, and randomizes them around the Players vector

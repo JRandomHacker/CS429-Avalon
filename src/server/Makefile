@@ -16,14 +16,5 @@ all : $(OBJS)
 clean : 
 	rm -f $(OBJS)
 
-server.o : server.cpp server.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-	
-serverController.o : serverController.cpp server.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-serverControllerState.o : serverControllerState.cpp serverControllerState.hpp
-	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
-
-serverCustomActions.o : serverCustomActions.cpp serverCustomActions.hpp
+%.o : %.cpp %.hpp
 	$(CXX) $(CXXOPTS) $(INCLUDES) -c $<
