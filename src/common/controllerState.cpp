@@ -10,4 +10,5 @@ ControllerState::~ControllerState() {
 
 void ControllerState::reportUnhandledAction(std::string action_type) {
 
+    std::cerr << "[ ControllerState ] Received unhandled action " << action_type << " in state " << state_type << std::endl;
 }

@@ -23,14 +23,14 @@
 ServerController::ServerController( ServInfo* model, int port ) {
 
     this->model = model;
-    this->server = new Server( model, port );
+    this->model->server = new Server( port );
 
     this->qSem = new sem_t;
     sem_init( qSem, 0, 0 ); // Initialize semaphore to 0 so wait immediately blocks
 
     // Set up the queue for actions so the network can send us actions
     action_queue = new ActionHandler( qSem );
-    server->initQueue( action_queue );
+    model->server->initQueue( action_queue );
 
     handling_state = NULL;
     setServerState( new WaitingForClientsState( model ) );
@@ -39,8 +39,8 @@ ServerController::ServerController( ServInfo* model, int port ) {
 // Destructor
 ServerController::~ServerController( ) {
 
-    // We didn't allocate the model, so leave it for the GUI
-    delete server;
+    // We didn't allocate the model, so leave it for whoever passed it to us
+    delete model->server;
     delete qSem;
     delete action_queue;
     releaseServerState( );
@@ -49,7 +49,7 @@ ServerController::~ServerController( ) {
 // Actually initialize the network thread and connection
 int ServerController::spawnNetwork( ) {
 
-    int retval = server->initServer( );
+    int retval = model->server->initServer( );
     if( retval != EXIT_SUCCESS ) {
         return retval;
     }
@@ -83,10 +83,10 @@ void* ServerController::networkThreadHelper( void* obj ) {
 
 // Actual network thread function
 void ServerController::networkThreadFunc( ) {
-    server->waitForClients( );
+    model->server->waitForClients( model->num_clients );
 
     while( true ) {
-        server->waitForData( );
+        model->server->waitForData( );
     }
 }
 
@@ -259,6 +259,9 @@ int ServerController::initModelPlayer( std::vector< avalon::special_roles_t > sp
 
         model->players.push_back( new Player( newName, newSpecial, newAlign ) );
     }
+
+    // Pick a leader
+    model->leader = rng() % model->num_clients;
 
     return EXIT_SUCCESS;
 }

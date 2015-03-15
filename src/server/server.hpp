@@ -9,8 +9,10 @@
 #ifndef _SERVER_HPP
 #define _SERVER_HPP
 
-#include "serverInfo.hpp"
+#include <vector>
+
 #include "actionHandler.hpp"
+#include "globals.hpp"
 
 #ifdef _WIN32
     #include <winsock2.h>
@@ -22,9 +24,11 @@
 class Server {
 
     private:
-        ServInfo* model;
+        SOCKET servsock;
+        std::vector< SOCKET > sockets;
         ActionHandler* queue;
         int port;
+        unsigned int num_clients;
         bool clients_connected;
 
         struct sockaddr_in servparm;
@@ -46,6 +50,7 @@ class Server {
         std::string recvCustomName( SOCKET recvSock );
 
     public:
+
         /**
          * Constructor for a Server
          *
@@ -53,7 +58,7 @@ class Server {
          * @param special_characters A list of the special characters we should include
          * @param port The port to connect to for sending/receiving data
          */
-        Server( ServInfo* model, int port );
+        Server( int port );
 
         /**
          * Deconstructor for a server
@@ -80,9 +85,10 @@ class Server {
          * This function will set the correct values in the sockets array
          * and send each player their Player object
          *
+         * @param num_clients The number of clients that we expect in the game
          * @return True if there are now num_clients connected, False if any errors occured
          */
-        bool waitForClients( );
+        bool waitForClients( unsigned int num_clients );
 
         /**
          * A function to select across the sockets looking for a players message
@@ -90,5 +96,16 @@ class Server {
          * @return True if there are now num_clients connected, False if any errors occured
          */
         void waitForData( );
+
+        /**
+         * Helper function to send a protobuf
+         *
+         * @param bufType The type of the buffer that is being sent
+         * @param destinationID The ID of the player that the buffer should be sent to
+         * @param message The protobuf to be sent, already serialized as a string (Using protobuf's method)
+         * @return None
+         */
+        void sendProtobuf( avalon::network::buffers_t bufType, unsigned int destinationID, std::string message );
+
 };
 #endif // _SERVER_HPP

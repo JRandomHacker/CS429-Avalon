@@ -9,7 +9,6 @@
 #include "server.hpp"
 #include "player.hpp"
 #include "globals.hpp"
-#include "serverInfo.hpp"
 #include "actionHandler.hpp"
 #include "serverCustomActions.hpp"
 
@@ -45,7 +44,7 @@ int Server::initServer( ) {
     #endif
 
     // Create a system socket
-    model->servsock = socket( AF_INET, SOCK_STREAM, 0 );
+    servsock = socket( AF_INET, SOCK_STREAM, 0 );
 
     memset( &servparm, 0, sizeof( struct sockaddr_in ) );
     servparm.sin_family = AF_INET;
@@ -53,13 +52,13 @@ int Server::initServer( ) {
     servparm.sin_addr.s_addr = htonl( INADDR_ANY ); // INET addresses to listen to
 
     // Bind the socket with our servparm settings
-    if( bind( model->servsock, ( struct sockaddr* )( &servparm ), sizeof( struct sockaddr_in ) ) < 0 ) {
+    if( bind( servsock, ( struct sockaddr* )( &servparm ), sizeof( struct sockaddr_in ) ) < 0 ) {
         std::cerr << "[ SERVER ] Unable to bind network socket" << std::endl;
         return EXIT_SOCKET_ERROR;
     }
 
     // Start listening for connections
-    if( listen( model->servsock, SOMAXCONN ) < 0 ) {
+    if( listen( servsock, SOMAXCONN ) < 0 ) {
         std::cerr << "[ SERVER ] Unable to listen on specified port" << std::endl;
         return EXIT_SOCKET_ERROR;
     }
@@ -76,9 +75,8 @@ void Server::initQueue( ActionHandler* queue ) {
 }
 
 // Constructor
-Server::Server( ServInfo* model, int port ) {
+Server::Server( int port ) {
 
-    this->model = model;
     this->port = port;
     this->queue = NULL;
     this->clients_connected = false;
@@ -106,16 +104,15 @@ void Server::waitForData( ) {
     // Set up the fd_set to select across
     fd_set clients;
     FD_ZERO( &clients );
-    for( std::vector< SOCKET >::iterator it = model->sockets.begin(); it != model->sockets.end(); it++ ) {
+    for( std::vector< SOCKET >::iterator it = sockets.begin(); it != sockets.end(); it++ ) {
         FD_SET( *it, &clients );
     }
 
-    select( model->num_clients, &clients, NULL, NULL, NULL );
+    select( num_clients, &clients, NULL, NULL, NULL );
 
     // Find the sockets that had data
-    for( std::vector< SOCKET >::iterator it = model->sockets.begin(); it != model->sockets.end(); it++ ) {
+    for( std::vector< SOCKET >::iterator it = sockets.begin(); it != sockets.end(); it++ ) {
         if( FD_ISSET( *it, &clients ) ) {
-
             recvData( *it );
         }
 
@@ -187,21 +184,33 @@ std::string Server::recvCustomName( SOCKET recvSock ) {
 
 // Wait for all the players to connect
 // Adds an action to the queue for the Controller when they do
-bool Server::waitForClients( ) {
+bool Server::waitForClients( unsigned int num_clients ) {
 
-    for( unsigned int i = 0; i < model->num_clients; i++ ) {
+    for( unsigned int i = 0; i < num_clients; i++ ) {
 
-        SOCKET new_sock = accept( model->servsock, NULL, NULL );
-        model->sockets.push_back( new_sock );
+        SOCKET new_sock = accept( servsock, NULL, NULL );
+        sockets.push_back( new_sock );
         std::string playerName = recvCustomName( new_sock );
-        if( !playerName.empty( ) ) {
-            model->players[ i ]->setName( playerName );
-        }
-
-        NewPlayerAction* action = new NewPlayerAction( i );
+        NewPlayerAction* action = new NewPlayerAction( i, playerName );
         queue->addAction( ( Action* )action );
     }
 
+    this->num_clients = num_clients;
     clients_connected = true;
     return true;
+}
+
+// Sends an arbitrary protobuf to an arbitrary player
+void Server::sendProtobuf( avalon::network::buffers_t bufType, unsigned int destinationID, std::string message ) {
+
+    if( destinationID > sockets.size( ) ) {
+        std::cerr << "[ SERVER ] Attempted to send a buffer to an invalid client ID" << std::endl;
+        return;
+    }
+    int messageSize = message.length( );
+
+    // Windows REQUIRES that model->sockets send char* rather than void*... so we have to do some bullshit to trick it
+    send( sockets[ destinationID ], (char*)(&bufType), sizeof( avalon::network::buffers_t ) / sizeof( char ), 0 );
+    send( sockets[ destinationID ], (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
+    send( sockets[ destinationID ], message.c_str( ), messageSize * sizeof( char ), 0 );
 }

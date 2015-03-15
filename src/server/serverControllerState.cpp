@@ -25,18 +25,7 @@
         }
 
         playerBuf.set_id( playerID );
-        sendProtobuf( avalon::network::PLAYER_BUF, destinationID, playerBuf.SerializeAsString( ) );
-    }
-
-    // Sends a protobuf to a player
-    void ServerControllerState::sendProtobuf( avalon::network::buffers_t bufType, int destinationID, std::string message ) {
-
-        int messageSize = message.length( );
-
-        // Windows REQUIRES that model->sockets send char* rather than void*... so we have to do some bullshit to trick it
-        send( model->sockets[ destinationID ], (char*)(&bufType), sizeof( avalon::network::buffers_t ) / sizeof( char ), 0 );
-        send( model->sockets[ destinationID ], (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
-        send( model->sockets[ destinationID ], message.c_str( ), messageSize * sizeof( char ), 0 );
+        model->server->sendProtobuf( avalon::network::PLAYER_BUF, destinationID, playerBuf.SerializeAsString( ) );
     }
 // }
 
@@ -54,6 +43,11 @@
         if( action_type == "NewPlayer" ) {
             auto action = dynamic_cast< NewPlayerAction* >( action_to_be_handled );
             unsigned int playerID = action->getPlayerID( );
+            std::string requestedName = action->getPlayerName( );
+            if( !requestedName.empty( ) ) {
+                model->players[ playerID ]->setName( requestedName );
+            }
+
             sendStartingInfo( playerID );
         } else {
             reportUnhandledAction( action_type );
@@ -67,7 +61,7 @@
     void WaitingForClientsState::sendStartingInfo( int playerID ) {
 
         model->settingsBuf.set_client( playerID );
-        sendProtobuf( avalon::network::SETTINGS_BUF, playerID, model->settingsBuf.SerializeAsString( ) );
+        model->server->sendProtobuf( avalon::network::SETTINGS_BUF, playerID, model->settingsBuf.SerializeAsString( ) );
 
         for( int i = 0; i < playerID; i++ ) {
             sendPlayer( i, playerID, false ); // Send each currently connected player to the new player

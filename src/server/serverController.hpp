@@ -22,11 +22,10 @@ class ServerController {
 
         // Holds the current game state
         ServInfo* model;
-
-        // A server for networking to the client 
-        Server* server;
-        pthread_t network_thread;
         bool server_started;
+
+        // The thread that the Server is running on
+        pthread_t network_thread;
 
         // The queue to put actions into so that the separate thread can process them later
         // (And associated helpers)

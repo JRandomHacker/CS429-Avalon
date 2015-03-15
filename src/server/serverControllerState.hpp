@@ -35,15 +35,6 @@ class ServerControllerState : public ControllerState {
          */
         void sendPlayer( int playerID, int destinationID, bool allInfo );
 
-        /**
-         * Helper function to send a protobuf
-         *
-         * @param bufType The type of the buffer that is being sent
-         * @param destinationID The ID of the player that the buffer should be sent to
-         * @param message The protobuf to be sent, already serialized as a string (Using protobuf's method)
-         * @return None
-         */
-        void sendProtobuf( avalon::network::buffers_t bufType, int destinationID, std::string message );
 };
 
 class WaitingForClientsState : public ServerControllerState {
@@ -64,6 +55,7 @@ class WaitingForClientsState : public ServerControllerState {
           * @return None
           */
         void sendStartingInfo( int playerID );
+
 };
 
 #endif // SERVER_CONTROLLER_STATE_HPP

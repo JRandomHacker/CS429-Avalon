@@ -50,6 +50,9 @@ int main( int argc, char** argv ) {
 
     controller->processActions( );
 
+    delete controller;
+    delete model;
+
     exit( EXIT_SUCCESS );
 }
 

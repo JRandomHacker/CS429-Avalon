@@ -3,6 +3,7 @@
 
 #include "settings.pb.h"
 #include "player.hpp"
+#include "server.hpp"
 #include <vector>
 #ifdef _WIN32
     #include <windows.h>
@@ -11,10 +12,10 @@
 #endif
 
 typedef struct {
-    SOCKET servsock;
+    Server* server;
     unsigned int num_clients;
+    unsigned int leader;
     std::vector< Player* > players;
-    std::vector< SOCKET > sockets;
     std::vector< bool > votes;
     avalon::network::GameSettings settingsBuf;
 } ServInfo;

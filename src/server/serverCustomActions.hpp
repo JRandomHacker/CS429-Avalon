@@ -12,9 +12,10 @@ public:
     /**
      * Public constructor
      *
-     * @param client_id The id of the client that just connected
+     * @param player_id The id of the player that just connected
+     * @param player_name The name the connecting player requested
      */
-    NewPlayerAction( unsigned int player_id );
+    NewPlayerAction( unsigned int player_id, std::string player_name );
     virtual ~NewPlayerAction( );
 
     /**
@@ -24,8 +25,16 @@ public:
      */
     unsigned int getPlayerID( );
 
+    /**
+     * Getter
+     *
+     * @return The name that the player requested
+     */
+    std::string getPlayerName( );
+
 private:
     unsigned int player_id;
+    std::string player_name;
 };
 
 #endif // SERVERCUSTOMACTIONS_HPP
