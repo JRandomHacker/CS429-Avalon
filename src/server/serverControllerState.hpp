@@ -45,6 +45,15 @@ class ServerControllerState : public ControllerState {
          */
         void sendPlayer( int playerID, int destinationID, bool allInfo );
 
+        /**
+         * Helper function to send a protobuf to all clients
+         *
+         * @param bufType The type of buffer that is being sent
+         * @param message The serialized string version of the protobuf
+         * @return None
+         */
+        void sendProtobufToAll( avalon::network::buffers_t bufType, std::string message );
+
 };
 
 /**
@@ -121,6 +130,17 @@ class TeamSelectionState : public ServerControllerState {
          * @param action_to_be_handled The action that this controllerState should parse
          */
         ServerControllerState* handleAction( Action* action_to_be_handled );
+
+    private:
+        /*
+         * A helper to toggle the selection of a player
+         * Removes the player from the team selection vector if they're in it
+         * Adds them otherwise
+         *
+         * @param player_id The id of the player to toggle
+         * @return Whether the player is now selected or not
+         */
+        bool toggleSelection( unsigned int player_id );
 };
 
 #endif // SERVER_CONTROLLER_STATE_HPP

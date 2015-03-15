@@ -1,0 +1,7 @@
+package avalon.network;
+
+message TeamSelection {
+    required int32 id = 1; // The ID of the player we're picking
+    required bool selected = 2; // Whether we're selecting, or deselecting, them
+    optional bool finished = 3; // If this is set, then they're confirming the selection, and the other values aren't relevant
+}

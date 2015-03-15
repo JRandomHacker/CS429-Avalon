@@ -42,12 +42,38 @@ class Server {
         void recvData( SOCKET recvSock );
 
         /*
+         * Helper function to get the TeamSelection protobuf and create an action
+         *
+         * @param recvSock The socket to recv from
+         * @param bufLength The length of the protobuf
+         * @return None
+         */
+        void recvTeamSelection( SOCKET recvSock, int bufLength );
+
+        /*
+         * Helper function to get the Vote protobuf and create an action
+         *
+         * @param recvSock The socket to recv from
+         * @param bufLength The length of the protobuf
+         * @return None
+         */
+        void recvVote( SOCKET recvSock, int bufLength );
+
+        /*
          * Helper function to receive a custom name from the player during setup
          *
          * @param recvSock The socket to recv from
          * @return The player's requested name
          */
         std::string recvCustomName( SOCKET recvSock );
+
+        /*
+         * Helper function to convert a SOCKET to an int in Windows
+         *
+         * @param recvSock The socket we want an int of
+         * @return The location of the SOCKET in the sockets vector
+         */
+        unsigned int getIdFromSocket( SOCKET recvSock );
 
     public:
 

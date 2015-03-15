@@ -20,8 +20,10 @@ typedef struct {
     unsigned int leader;
     //! A vector of all the players in the game
     std::vector< Player* > players;
-    //! A vector holding the votes
-    std::vector< bool > votes;
+    //! A vector holding the playerID and vote of anyone who's voted
+    std::vector< std::pair< unsigned int, bool > > votes;
+    //! A vector holding the current team selection
+    std::vector< unsigned int > team;
     //! A protobuf with the game's settings
     avalon::network::GameSettings settingsBuf;
 } ServInfo;

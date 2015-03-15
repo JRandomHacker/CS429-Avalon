@@ -83,7 +83,9 @@ namespace avalon {
         /*! An enumerator for different protobuf types */
         enum buffers_t {
             PLAYER_BUF, /*! An avalon::network::Player protobuf */
-            SETTINGS_BUF /*! An avalon::network::GameSettings protobuf */
+            SETTINGS_BUF, /*! An avalon::network::GameSettings protobuf */
+            TEAM_SELECTION_BUF, /*! An avalon::network::TeamSelection protobuf */
+            VOTE_BUF /*! An avalon::network::Vote protobuf */
         };
     }
 }

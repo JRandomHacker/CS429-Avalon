@@ -14,6 +14,8 @@
 
 #include "player.pb.h"
 #include "settings.pb.h"
+#include "teamselection.pb.h"
+#include "vote.pb.h"
 
 #include <iostream>
 
@@ -137,13 +139,59 @@ void Server::recvData( SOCKET recvSock ) {
 
     switch( bufType ) {
 
-        case avalon::network::PLAYER_BUF:
-            std::cout << "[ SERVER ] Received a player protobuf" << std::endl;
-//            recvPlayer( bufLength );
+        case avalon::network::TEAM_SELECTION_BUF:
+            std::cout << "[ SERVER ] Received a team selection protobuf" << std::endl;
+            recvTeamSelection( recvSock, bufLength );
+            break;
+        case avalon::network::VOTE_BUF:
+            std::cout << "[ SERVER ] Received a vote protobuf" << std::endl;
+            recvVote( recvSock, bufLength );
+            break;
         default:
             std::cerr << "[ SERVER ] Received an unknown type of protobuf" << std::endl;
             break;
     }
+}
+
+void Server::recvTeamSelection( SOCKET recvSock, int bufLength ) {
+
+    // Receive the buffer
+    char* buffer = new char[ bufLength ];
+    recv( recvSock, ( char* )buffer, bufLength * sizeof( char ), 0 );
+
+    // Parse the player
+    avalon::network::TeamSelection buf;
+    buf.ParseFromArray( buffer, bufLength );
+    delete[] buffer;
+
+    unsigned int selector = getIdFromSocket( recvSock );
+    Action* action = NULL;
+
+    // Check to see if they're done or not
+    if( buf.has_finished( ) && buf.finished( ) ) {
+        ConfirmTeamSelectionAction* tmp = new ConfirmTeamSelectionAction( selector );
+        action = ( Action* )tmp;
+    } else {
+
+        unsigned int selection = buf.id( );
+
+        ToggleTeamMemberAction* tmp = new ToggleTeamMemberAction( selector, selection );
+        action = ( Action* )tmp;
+    }
+
+    queue->addAction( ( Action* )action );
+}
+
+void Server::recvVote( SOCKET recvSock, int bufLength ) {
+
+    // Receive the buffer
+    char* buffer = new char[ bufLength ];
+    recv( recvSock, ( char* )buffer, bufLength * sizeof( char ), 0 );
+
+    // Parse the player
+    avalon::network::Vote buf;
+    buf.ParseFromArray( buffer, bufLength );
+    delete[] buffer;
 }
 
 std::string Server::recvCustomName( SOCKET recvSock ) {
@@ -218,4 +266,19 @@ void Server::sendProtobuf( avalon::network::buffers_t bufType, unsigned int dest
     send( sockets[ destinationID ], (char*)(&bufType), sizeof( avalon::network::buffers_t ) / sizeof( char ), 0 );
     send( sockets[ destinationID ], (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
     send( sockets[ destinationID ], message.c_str( ), messageSize * sizeof( char ), 0 );
+}
+
+unsigned int Server::getIdFromSocket( SOCKET sock ) {
+    #ifdef _WIN32
+        for( unsigned int i = 0; i < sockets.size( ); i++ ) {
+            if( sock == sockets[ i ] ) {
+                return i;
+            }
+        }
+
+        std::cerr << "[ SERVER ] Failed to parse socket to ID" << std::endl;
+        return -1;
+    #else
+        return sock;
+    #endif
 }

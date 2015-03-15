@@ -2,6 +2,8 @@
 #include "serverInfo.hpp"
 #include "serverCustomActions.hpp"
 
+#include "teamselection.pb.h"
+
 #ifdef _WIN32
     #include <winsock2.h>
 #else
@@ -25,6 +27,14 @@
 
         playerBuf.set_id( playerID );
         model->server->sendProtobuf( avalon::network::PLAYER_BUF, destinationID, playerBuf.SerializeAsString( ) );
+    }
+
+    // Sends a protobuf to all the clients
+    void ServerControllerState::sendProtobufToAll( avalon::network::buffers_t bufType, std::string message ) {
+
+        for( unsigned int i = 0; i < model->num_clients; i++ ) {
+            model->server->sendProtobuf( bufType, i, message );
+        }
     }
 // }
 
@@ -82,19 +92,60 @@
 
         std::string action_type = action_to_be_handled->getMessage();
 
-        if( action_type == "SelectTeamMember" ) {
-            //auto action = dynamic_cast< SelectTeamMemberAction* >( action_to_be_handled );
+        if( action_type == "ToggleTeamMember" ) {
+            auto action = dynamic_cast< ToggleTeamMemberAction* >( action_to_be_handled );
+            unsigned int selector = action->getSelectorID( );
+            if( selector == model->leader ) {
 
-        } else if( action_type == "CancelTeamSelection" ) {
-            //auto action = dynamic_cast< CancelTeamSelectionAction* >( action_to_be_handled );
+                unsigned int player = action->getPlayerID( );
+                bool selected = toggleSelection( player );
+
+                // Set up the protobuf to send to all the clients
+                avalon::network::TeamSelection buf;
+                buf.set_id( player );
+                buf.set_selected( selected );
+                std::string message = buf.SerializeAsString( );
+
+                // Send the protobuf to all the clients
+                sendProtobufToAll( avalon::network::TEAM_SELECTION_BUF, buf.SerializeAsString( ) );
+            } else {
+                std::cerr << "[ ServerController ] Received a team selection from someone who isn't the leader" << std::endl;
+            }
 
         } else if( action_type == "ConfirmTeamSelection" ) {
-            //auto action = dynamic_cast< ConfirmTeamSelectionAction* >( action_to_be_handled );
+
+            auto action = dynamic_cast< ConfirmTeamSelectionAction* >( action_to_be_handled );
+            unsigned int selector = action->getSelectorID( );
+            if( selector == model->leader ) {
+                // TODO Switch states and send a message to the clients
+            } else {
+                std::cerr << "[ ServerController ] Received a team confirmation from someone who isn't the leader" << std::endl;
+            }
 
         } else {
             reportUnhandledAction( action_type );
         }
 
         return NULL;
+    }
+
+    bool TeamSelectionState::toggleSelection( unsigned int player_id ) {
+        bool wasSelected = false;
+
+        // Look through the vector to see if the player is currently selected
+        for( unsigned int i = 0; i < model->team.size( ); i++ ) {
+            if( model->team[ i ] == player_id ) {
+                model->team.erase( model->team.begin( ) + i );
+                wasSelected = true;
+            }
+        }
+
+        // If they weren't selected, select them
+        if( !wasSelected ) {
+            model->team.push_back( player_id );
+        }
+
+        // If they hadn't been selected, they are now
+        return !wasSelected;
     }
 // }
