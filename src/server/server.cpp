@@ -178,7 +178,7 @@ std::string Server::recvCustomName( SOCKET recvSock ) {
     pbuf.ParseFromArray( buffer, bufLength );
     Player p( pbuf );
 
-    delete buffer;
+    delete[] buffer;
 
     // Return the name
     return p.getName( );

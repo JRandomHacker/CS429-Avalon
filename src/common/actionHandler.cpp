@@ -35,6 +35,7 @@ std::pair<int, std::list<Action*>::iterator> ActionHandler::freezeFrontActions()
 // Deletes the currently safe to read actions and releases read access
 void ActionHandler::releaseFrozenActions() {
     for (int i = 0; i < number_frozen_actions; i++) {
+        delete action_queue.front();
         action_queue.pop_front();
     }
     unfreezeFrontActions();
