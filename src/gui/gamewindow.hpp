@@ -2,6 +2,7 @@
 #define GAMEWINDOW_H
 
 #include <QDialog>
+#include <QKeyEvent>
 #include "clientController.hpp"
 #include "model.hpp"
 #include "subscriber.hpp"
@@ -43,6 +44,16 @@ public:
      *  On close, kills the server if this client is the host
      */
     void closeEvent(QCloseEvent* event);
+
+    /**
+     * @Override
+     *
+     * Overrides the escape key to clean up the server if on host
+     *
+     * @param event Information about the key that was pressed
+     * @return None
+     */
+    void keyPressEvent( QKeyEvent* event );
 
 signals:
     void gameSettingsReceived( );

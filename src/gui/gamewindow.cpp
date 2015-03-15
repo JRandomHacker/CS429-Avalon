@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <QStandardItem>
 #include <QCloseEvent>
+#include <QKeyEvent>
 #include <vector>
 
 #ifdef _WIN32
@@ -160,6 +161,16 @@ void GameWindow::closeEvent(QCloseEvent* e) {
     }
     
     e->accept();
+}
+
+// Overrides the keyPressEvent of QWidget to make the escape key
+// also clean up the server by emitting a close event
+// By default, the ESC key simply accept()'s, which doesn't call closeEvent
+void GameWindow::keyPressEvent( QKeyEvent* event ) {
+
+    if( Qt::Key_Escape == event->key( ) ) {
+        QWidget::close( );
+    }
 }
 
 void* GameWindow::controlThreadFn( void* clientController ) {
