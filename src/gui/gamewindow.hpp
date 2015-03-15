@@ -27,6 +27,9 @@ public:
      */
     explicit GameWindow( QWidget *parent = 0, ClientController* controller = NULL, Model * model = NULL, HANDLE serverHandle = 0 );
     #else
+    /**
+     *  Creates a game window, starts the controller thread.
+     */
     explicit GameWindow( QWidget *parent = 0, ClientController* controller = NULL, Model * model = NULL, int serverHandle = 0 );
     #endif
     
@@ -37,13 +40,14 @@ public:
     
     /**
      *  @Override
-     *  On close, kills the server if this client created the server
+     *  On close, kills the server if this client is the host
      */
     void closeEvent(QCloseEvent* event);
 
 signals:
     void gameSettingsReceived( );
-    void playerInfoUpdated( int playerNum );
+    void playerInfoUpdated( unsigned int playerNum );
+    void gameInfoUpdated( );
 
 private slots:
     /**
@@ -58,7 +62,12 @@ private slots:
      * Updates a player's entry in the player list
      * @param id The playerNum of the updated player
      */
-    void updatePlayer( int id );
+    void updatePlayer(unsigned int id );
+
+    /**
+     *  Updates the numEvil and roleList UI elements
+     */
+    void updateGameInfo();
 
 private:
     /**
@@ -90,20 +99,20 @@ private:
     
     Subscriber* roleList_subscriber;
     
-
     /**
      *  Subscriber vector that watches player objects.
      */
     std::vector<Subscriber*> player_subscribers;
     
+
     #ifdef _WIN32
         /**
-         *  Process handle of server
+         *  Process handle of server, if hosting
          */
         HANDLE serverH;
     #else
         /**
-         *  pid of the server
+         *  pid of the server, if hosting
          */
         int serverH;
     #endif
