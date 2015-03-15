@@ -16,3 +16,7 @@ unsigned int NewPlayerAction::getPlayerID( ) {
 std::string NewPlayerAction::getPlayerName( ) {
     return player_name;
 }
+
+EnterTeamSelectionAction::EnterTeamSelectionAction( ) : Action( "EnterTeamSelection" ) { }
+
+EnterTeamSelectionAction::~EnterTeamSelectionAction( ) { }

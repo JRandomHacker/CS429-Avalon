@@ -1,12 +1,6 @@
-/**
- * Main class for the server states
- * Individual states inherit from this class
- *
- * @class ServerStateHelpers
- * @author Ryan kerr
- * @date 2015-03-12
+/*
+ * File containing all the server controller states
  */
-
 #ifndef SERVER_CONTROLLER_STATE_HPP
 #define SERVER_CONTROLLER_STATE_HPP
 
@@ -17,9 +11,24 @@
 #include "serverInfo.hpp"
 #include "controllerState.hpp"
 
+/**
+ * Main class for the server states
+ * Individual states inherit from this class
+ *
+ * @class ServerControllerState
+ * @author Ryan kerr
+ * @date 2015-03-12
+ */
 class ServerControllerState : public ControllerState {
 
     public:
+
+        /**
+         * Constructor
+         *
+         * @param state_type_desc A string representation of the state we're in
+         * @param mod A pointer to the ServInfo struct that the clientController is using
+         */
         ServerControllerState( std::string state_type_desc, ServInfo* mod );
 
     protected:
@@ -37,25 +46,80 @@ class ServerControllerState : public ControllerState {
 
 };
 
+/**
+ * First state
+ * Waits for clients to connect, then switches to team selection
+ *
+ * @class WaitingForClientsState
+ * @author Ryan kerr
+ * @date 2015-03-12
+ */
 class WaitingForClientsState : public ServerControllerState {
 
     public:
+
+        /**
+         * Constructor
+         *
+         * @param mod A pointer to the ServInfo struct that the clientController is using
+         */
         WaitingForClientsState( ServInfo* mod );
+
+        /**
+         * Destructor
+         */
         ~WaitingForClientsState( );
 
+        /**
+         * The workhorse that actually takes care of an action
+         *
+         * @param action_to_be_handled The action that this controllerState should parse
+         */
         ServerControllerState* handleAction( Action* action_to_be_handled );
 
     private:
         /**
-          * Helper function to send everything a player needs upon connecting to the server
-          * Sends settings, their player object, and all currently connected players
-          * Also sends the new player to all currently connected players
-          *
-          * @param playerID the ID of the player that is connecting
-          * @return None
-          */
+         * Helper function to send everything a player needs upon connecting to the server
+         * Sends settings, their player object, and all currently connected players
+         * Also sends the new player to all currently connected players
+         *
+         * @param playerID the ID of the player that is connecting
+         * @return None
+         */
         void sendStartingInfo( int playerID );
 
+};
+
+/**
+ * Second state
+ * Waits for the leader to send us team members they want on a mission
+ *
+ * @class TeamSelectionState
+ * @author Ryan Kerr
+ * @date 2015-03-12
+ */
+class TeamSelectionState : public ServerControllerState {
+
+    public:
+
+        /**
+         * Constructor
+         *
+         * @param mod A pointer to the ServInfo struct that the clientController is using
+         */
+        TeamSelectionState( ServInfo* mod );
+
+        /**
+         * Destructor
+         */
+        ~TeamSelectionState( );
+
+        /**
+         * The workhorse that actually takes care of an action
+         *
+         * @param action_to_be_handled The action that this controllerState should parse
+         */
+        ServerControllerState* handleAction( Action* action_to_be_handled );
 };
 
 #endif // SERVER_CONTROLLER_STATE_HPP

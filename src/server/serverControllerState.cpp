@@ -10,8 +10,7 @@
 
 // ServerControllerState {
     ServerControllerState::ServerControllerState( std::string state_type_desc, ServInfo* mod )
-        : ControllerState(state_type_desc), model( mod ) {
-    }
+        : ControllerState(state_type_desc), model( mod ) { }
 
     // Sends one player another player's information
     void ServerControllerState::sendPlayer( int playerID, int destinationID, bool allInfo ) {
@@ -30,9 +29,7 @@
 // }
 
 // WaitingForClientsState {
-    WaitingForClientsState::WaitingForClientsState( ServInfo* mod ) : ServerControllerState( "Voting", mod ) {
-
-    }
+    WaitingForClientsState::WaitingForClientsState( ServInfo* mod ) : ServerControllerState( "Voting", mod ) { }
 
     WaitingForClientsState::~WaitingForClientsState( ) { }
 
@@ -49,6 +46,10 @@
             }
 
             sendStartingInfo( playerID );
+        } else if( action_type == "EnterTeamSelection" ) {
+            // TODO Send a message to the clients
+
+            return new TeamSelectionState( model );
         } else {
             reportUnhandledAction( action_type );
         }
@@ -69,5 +70,31 @@
         }
 
         sendPlayer( playerID, playerID, true ); // Send the new player their own info
+    }
+// }
+
+// TeamSelectionState {
+    TeamSelectionState::TeamSelectionState( ServInfo* mod ) : ServerControllerState( "Voting", mod ) { }
+
+    TeamSelectionState::~TeamSelectionState( ) { }
+
+    ServerControllerState* TeamSelectionState::handleAction( Action* action_to_be_handled ) {
+
+        std::string action_type = action_to_be_handled->getMessage();
+
+        if( action_type == "SelectTeamMember" ) {
+            //auto action = dynamic_cast< SelectTeamMemberAction* >( action_to_be_handled );
+
+        } else if( action_type == "CancelTeamSelection" ) {
+            //auto action = dynamic_cast< CancelTeamSelectionAction* >( action_to_be_handled );
+
+        } else if( action_type == "ConfirmTeamSelection" ) {
+            //auto action = dynamic_cast< ConfirmTeamSelectionAction* >( action_to_be_handled );
+
+        } else {
+            reportUnhandledAction( action_type );
+        }
+
+        return NULL;
     }
 // }

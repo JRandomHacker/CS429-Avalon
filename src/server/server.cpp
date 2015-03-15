@@ -178,6 +178,8 @@ std::string Server::recvCustomName( SOCKET recvSock ) {
     pbuf.ParseFromArray( buffer, bufLength );
     Player p( pbuf );
 
+    delete buffer;
+
     // Return the name
     return p.getName( );
 }
@@ -197,6 +199,9 @@ bool Server::waitForClients( unsigned int num_clients ) {
 
     this->num_clients = num_clients;
     clients_connected = true;
+
+    EnterTeamSelectionAction* action = new EnterTeamSelectionAction( );
+    queue->addAction( ( Action* )action );
     return true;
 }
 
