@@ -24,22 +24,31 @@ TEST_F( ActionTests, testActionClassesExist) {
 }
 
 TEST_F( ActionTests, testAddingActions) {
+
     sem_t mut;
     sem_init(&mut, 1, 1);
     ActionHandler ahandler(&mut);
-    Action act("CreateGame");
-    ASSERT_TRUE(act.getMessage() == "CreateGame");
-    Action act2("JoinGame");
-    ASSERT_TRUE(act2.getMessage() == "JoinGame");
-    ahandler.addAction(&act);
-    ahandler.addAction(&act2);
-    ASSERT_EQ(2,2);
+
+    Action* a1 = new Action("CreateGame");
+    ASSERT_TRUE(a1->getMessage() == "CreateGame");
+
+    Action* a2 = new Action("JoinGame");
+    ASSERT_TRUE(a2->getMessage() == "JoinGame");
+
     auto p = ahandler.freezeFrontActions();
+    ASSERT_EQ(std::get<0>(p), 0);
+    ahandler.releaseFrozenActions();
+
+    ahandler.addAction(a1);
+    ahandler.addAction(a2);
+
+    p = ahandler.freezeFrontActions();
     ASSERT_EQ(std::get<0>(p), 2);
     ahandler.releaseFrozenActions();
-    ASSERT_EQ(2,2);
+
     p = ahandler.freezeFrontActions();
     ASSERT_EQ(std::get<0>(p), 0);
+    ahandler.releaseFrozenActions();
 }
 
 /*

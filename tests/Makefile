@@ -78,33 +78,12 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 # END GTEST BUILD
 
-# ADD CUSTOM TESTS BELOW HERE AND ADD TO THE TESTS LIST AT THE TOP
-player_unittest.o : $(TESTS_DIR)/player_unittest.cpp
+# Just add your .exe to the top, this should all be able to figure everything out itself
+%.o : $(TESTS_DIR)/%.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
-player_unittest.exe : player_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
-	
-globals_unittest.o : $(TESTS_DIR)/globals_unittest.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
-	
-globals_unittest.exe : globals_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
-	
-model_unittest.o : $(TESTS_DIR)/model_unittest.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
-	
-model_unittest.exe : model_unittest.o gtest_main.a
+%.exe : %.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
 
-action_unittest.o : $(TESTS_DIR)/action_unittest.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
-	
-action_unittest.exe : action_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
-
-client_server_unittest.o : $(TESTS_DIR)/client_server_unittest.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
-
-client_server_unittest.exe : client_server_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
+all_unittests.exe : $(TESTS) gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) *.cpp gtest_main.a -o $@ $(LIBS)
