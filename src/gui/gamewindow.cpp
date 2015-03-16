@@ -38,6 +38,15 @@
 }
 
 GameWindow::~GameWindow( ) {
+    delete control;
+    delete model;
+    delete num_players_subscriber;
+    delete myID_subscriber;
+    delete numEvil_subscriber;
+    delete roleList_subscriber;
+    for(std::vector<Subscriber*>::iterator i = player_subscribers.begin(); i != player_subscribers.end(); i++)
+        delete *i;
+
     delete ui;
 }
 
