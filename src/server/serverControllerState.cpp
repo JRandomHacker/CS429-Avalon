@@ -18,7 +18,8 @@
             std::cout << "[ ServerController ] Entered " << state_type_desc << " state" << std::endl;
         }
 
-    // Sends one player another player's information
+    // Sends one player another player's information.
+    // If allInfo is false, it hides the players affiliation
     void ServerControllerState::sendPlayer( int playerID, int destinationID, bool allInfo ) {
 
         avalon::network::Player playerBuf;
@@ -51,15 +52,21 @@
 
         std::string action_type = action_to_be_handled->getMessage();
 
+        // Someone is connecting
         if( action_type == "NewPlayer" ) {
+
             auto action = dynamic_cast< NewPlayerAction* >( action_to_be_handled );
             unsigned int playerID = action->getPlayerID( );
+
+            // See if they requested a custom name
             std::string requestedName = action->getPlayerName( );
             if( !requestedName.empty( ) ) {
                 model->players[ playerID ]->setName( requestedName );
             }
 
             sendStartingInfo( playerID );
+
+        // Everyone is connected
         } else if( action_type == "EnterTeamSelection" ) {
 
             model->server->broadcastStateChange( avalon::network::ENTER_TEAM_SELECTION_BUF, model->leader );
@@ -69,6 +76,7 @@
             reportUnhandledAction( action_type );
         }
 
+        // We haven't changed states
         return NULL;
     }
 
@@ -97,9 +105,13 @@
 
         std::string action_type = action_to_be_handled->getMessage();
 
+        // We received a new team member, or are removing one
         if( action_type == "ToggleTeamMember" ) {
+
             auto action = dynamic_cast< ToggleTeamMemberAction* >( action_to_be_handled );
             unsigned int selector = action->getSelectorID( );
+
+            // Make sure the player is allowed to take this action
             if( selector == model->leader ) {
 
                 unsigned int player = action->getPlayerID( );
@@ -117,10 +129,14 @@
                 std::cerr << "[ ServerController ] Received a team selection from someone who isn't the leader" << std::endl;
             }
 
+        // The leader is happy with the proposed team, and wants to put it on a vote
+        // Makes sure that there aren't too many selections here, rather than during proposal
         } else if( action_type == "ConfirmTeamSelection" ) {
 
             auto action = dynamic_cast< ConfirmTeamSelectionAction* >( action_to_be_handled );
             unsigned int selector = action->getSelectorID( );
+
+            // Make sure the player is allowed to take this action
             if( selector == model->leader ) {
 
                 // TODO Add logic to make sure there aren't too many people
@@ -134,6 +150,7 @@
             reportUnhandledAction( action_type );
         }
 
+        // We haven't changed states
         return NULL;
     }
 
@@ -167,21 +184,31 @@
 
         std::string action_type = action_to_be_handled->getMessage();
 
+        // We received a vote from a player
         if( action_type == "TeamVote" ) {
 
             auto action = dynamic_cast< TeamVoteAction* >( action_to_be_handled );
             unsigned int voter = action->getVoter( );
             avalon::player_vote_t vote = action->getVote( );
+
+            // Checks to see if the voter modified their vote
+            // (It is modified if it is new, or changed)
+            // If they haven't changed their vote, we don't need to do anything
             if( modifyVote( voter, vote ) ) {
 
+                // During the voting phase, you shouldn't know other players votes
                 avalon::network::Vote buf;
                 buf.set_id( voter );
                 buf.set_vote( avalon::HIDDEN );
 
                 sendProtobufToAll( avalon::network::VOTE_BUF, buf.SerializeAsString( ) );
 
+                // If we've received a vote from every player, we're ready to tally the results,
+                // send the data to every player, and perform a state switch
                 if( model->votes.size( ) == model->num_clients ) {
-                    return sendVoteResults( );
+
+                    bool passed = sendVoteResults( );
+                    return decideNewState( passed );
                 }
             }
         } else {
@@ -191,13 +218,14 @@
         return NULL;
     }
 
-    // Goes through the votes array to see if you've already voted, changes your vote ( if you did ) and returns whether anything was changed
+    // Goes through the votes array to see if you've already voted
+    // changes your vote (if you did) and returns whether anything was changed
     bool VotingState::modifyVote( unsigned int voter, avalon::player_vote_t vote ) {
 
         bool changed = false;
         bool exists = false;
 
-        // Look through the vector to see if the player is currently selected
+        // Look through the votes vector to see if the player voted previously
         for( unsigned int i = 0; i < model->votes.size( ); i++ ) {
 
             if( model->votes[ i ].first == voter ) {
@@ -212,20 +240,23 @@
             }
         }
 
-        // If they weren't selected, select them
+        // If they hadn't voted previously, just add their vote
         if( !exists ) {
+
             std::pair < unsigned int, avalon::player_vote_t > newVote( voter, vote );
             model->votes.push_back( newVote );
             changed = true;
         }
 
-        // If they hadn't been selected, they are now
         return changed;
     }
 
-    // Sends the vote results and the state change and changes our state.
-    ServerControllerState* VotingState::sendVoteResults( ) {
+    // Calculates the vote results, sends them to the players, and returns it
+    bool VotingState::sendVoteResults( ) {
 
+        // This is functionally the end of the voting phase,
+        // so increase the vote track, switch the leader,
+        // and tally the votes
         model->vote_track++;
         model->leader++;
         model->leader %= model->num_clients;
@@ -247,33 +278,43 @@
         }
 
         // Send the protobuf to all the players
+        // We can't use broadcast, because we want to support hidden voting later
         for( unsigned int i = 0; i < model->num_clients; i++ ) {
 
             if( model->hidden_voting ) {
+
                 buf.set_votes( i, sorted_votes[ i ] );
-            }
-
-            model->server->sendProtobuf( avalon::network::VOTE_RESULTS_BUF, i, buf.SerializeAsString( ) );
-
-            if( model->hidden_voting ) {
+                model->server->sendProtobuf( avalon::network::VOTE_RESULTS_BUF, i, buf.SerializeAsString( ) );
                 buf.set_votes( i, avalon::HIDDEN );
-            }
-        }
+            } else {
 
-        // If we passed, go to quest vote
+                model->server->sendProtobuf( avalon::network::VOTE_RESULTS_BUF, i, buf.SerializeAsString( ) );
+            }
+
+        }
         model->votes.clear( );
-        if( passed ) {
+
+        return passed;
+    }
+
+    // Figure out what state we should be entering, based off the vote
+    // If it passed, go to quest vote
+    // If it failed, and there is more space on vote track, go to team selection
+    // If it failed, and there isn't more space on the vote track, go to end game
+    ServerControllerState* VotingState::decideNewState( bool vote_passed ) {
+
+        if( vote_passed ) {
 
             model->vote_track = 0;
-            model->server->broadcastStateChange( avalon::network::ENTER_QUEST_VOTE_BUF, 0 );
             // TODO change our state to quest vote
+            model->server->broadcastStateChange( avalon::network::ENTER_TEAM_SELECTION_BUF, 0 );
             return new TeamSelectionState( model );
         } else {
 
             // If these fuckers can't make up their mind, they lose.
             if( model->vote_track > model->vote_track_length ) {
-                model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
                 // TODO change our state to end game
+                model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
                 return NULL;
             }
 
@@ -281,6 +322,7 @@
             model->server->broadcastStateChange( avalon::network::ENTER_TEAM_SELECTION_BUF, model->leader );
             return new TeamSelectionState( model );
         }
+
     }
 
     // Iterates through the votes vector, counts the votes, and returns the results

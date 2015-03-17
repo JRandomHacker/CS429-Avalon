@@ -5,6 +5,7 @@
 #include "globals.hpp"
 #include "guihelpers.hpp"
 #include "clientCustomActionsFromGUI.hpp"
+#include <climits>
 #include <signal.h>
 #include <QStandardItem>
 #include <QCloseEvent>
@@ -172,19 +173,26 @@ void GameWindow::updateLeader() {
     if(lidpt != NULL) {
         unsigned int lid = *lidpt;
 
-        if(lid == myID) {
-            ui->leaderLabel->setText(QString("You are the leader!"));
-            ui->proposeTeamButton->show();
-        }
-        else {
+        if( lid == myID ) {
+
+            ui->leaderLabel->setText( QString( "You are the leader!" ) );
+            ui->proposeTeamButton->show( );
+        } else if( lid != UINT_MAX ) {
+
             Player** leader = player_subscribers[lid]->getData<Player*>();
-            if(leader != NULL)
+            if( leader != NULL ) {
                 ui->leaderLabel->setText(QString( ("Current Leader: "+(*leader)->getName()).c_str() ));
-            ui->proposeTeamButton->hide();
+            }
+            ui->proposeTeamButton->hide( );
+        } else {
+
+            ui->leaderLabel->setText( QString( "" ) );
+            ui->proposeTeamButton->hide( );
         }
-    }
-    else
+    } else {
+        // This else block may be unneeded now?
         ui->leaderLabel->setText(QString( "<leader unknown>" ));
+    }
 }
 
 void GameWindow::updateQuestingTeam() {

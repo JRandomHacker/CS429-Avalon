@@ -189,9 +189,16 @@ class VotingState : public ServerControllerState {
          * A helper to send the vote results at the end of the voting phase
          * Also sends the state change, and returns our new state
          *
-         * @return The new state we're entering, due to the vote results
+         * @return Whether the vote passed or failed
          */
-        ServerControllerState* sendVoteResults( );
+        bool sendVoteResults( );
+
+        /*
+         * A helper to decide the new server state based off the vote
+         *
+         * @return The state we should enter
+         */
+        ServerControllerState* decideNewState( bool vote_passed );
 
         /*
          * A helper to figure out the vote results

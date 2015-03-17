@@ -13,6 +13,8 @@
 #include "teamselection.pb.h"
 #include "vote.pb.h"
 
+#include <climits>
+
 // ClientControllerState {
     // Constructor for the parent class, ClientControllerState.
     // Sets the description and model internally to whatever it gets passed
@@ -171,13 +173,14 @@
             data->num_evil = sBuf->evil_count( );
             data->quest_track_length = sBuf->quest_track_len( );
             data->vote_track_length = sBuf->vote_track_len( );
+            data->leader = UINT_MAX;
 
             data->model->addData( "numberOfPlayers", data->num_players );
             data->model->addData( "myID", data->my_id );
             data->model->addData( "numEvilChars", data->num_evil );
             data->model->addData( "questTrackLength", data->quest_track_length );
             data->model->addData( "voteTrackLength", data->vote_track_length );
-            data->model->addData( "leaderID", -1 );
+            data->model->addData( "leaderID", data->leader );
             data->model->addData( "currentVoteTrack", 0 );
 
             for ( unsigned int i = 0; i < data->num_players; i++ ) {
