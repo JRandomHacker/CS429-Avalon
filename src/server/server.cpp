@@ -22,10 +22,9 @@
 #ifdef _WIN32
     #include <winsock2.h>
     #define WINSOCK_MAGIC 0x202
-    #define POLLIN POLLRDNORM | POLLRDBAND
 #else
     #include <netdb.h>
-    #include <poll.h>
+    #include <sys/select.h>
     #define SOCKET int
 #endif
 
@@ -103,24 +102,29 @@ void Server::waitForData( ) {
         return;
     }
 
-    struct pollfd clients[ num_clients ];
-    for( unsigned int i = 0; i < sockets.size( ); i++ ) {
-       clients[ i ].fd = sockets[ i ];
-       clients[ i ].events = POLLIN;
-    }
+    // Set up the fd_set to select across
+    fd_set clients;
+    FD_ZERO( &clients );
+    int fdnum = 0;
+    for( std::vector< SOCKET >::iterator it = sockets.begin(); it != sockets.end(); it++ ) {
+        FD_SET( *it, &clients );
 
-    #ifdef _WIN32
-        int ret = WSAPoll( clients, num_clients, -1 );
-    #else
-        int ret = poll( clients, num_clients, -1 );
-    #endif
-
-    if( ret > 0 ) {
-        for( unsigned int i = 0; i < num_clients; i++ ) {
-            if( clients[ i ].revents == POLLIN ) {
-                recvData( clients[ i ].fd );
+        #ifndef _WIN32
+            if( *it > fdnum ) {
+                fdnum = *it;
             }
+        #endif
+    }
+    fdnum++;
+
+    select( fdnum, &clients, NULL, NULL, NULL );
+
+    // Find the sockets that had data
+    for( std::vector< SOCKET >::iterator it = sockets.begin(); it != sockets.end(); it++ ) {
+        if( FD_ISSET( *it, &clients ) ) {
+            recvData( *it );
         }
+
     }
 }
 
