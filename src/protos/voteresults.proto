@@ -2,5 +2,6 @@ package avalon.network;
 
 message VoteResults {
     required bool passed = 1;
-    repeated int32 votes = 2;
+    required int32 vote_track = 2;
+    repeated int32 votes = 3;
 }

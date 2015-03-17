@@ -55,3 +55,37 @@
 
     EnterVoteStateAction::~EnterVoteStateAction( ) { }
 // }
+
+// ReceiveVoteAction {
+    ReceiveVoteAction::ReceiveVoteAction( unsigned int voter ) : Action( "ReceiveVote" ) {
+        this->voter = voter;
+    }
+
+    ReceiveVoteAction::~ReceiveVoteAction( ) { }
+
+    unsigned int ReceiveVoteAction::getVoter( ) {
+        return voter;
+    }
+// }
+
+// VoteResultsAction {
+    VoteResultsAction::VoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes ) : Action( "VoteResults" ) {
+        this->vote_result = vote_result;
+        this->vote_track = vote_track;
+        this->votes = votes;
+    }
+
+    VoteResultsAction::~VoteResultsAction( ) { }
+
+    bool VoteResultsAction::getVoteResult( ) {
+        return vote_result;
+    }
+
+    unsigned int VoteResultsAction::getVoteTrack( ) {
+        return vote_track;
+    }
+
+    std::vector< avalon::player_vote_t >* VoteResultsAction::getVotes( ) {
+        return votes;
+    }
+// }

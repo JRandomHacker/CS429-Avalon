@@ -19,15 +19,14 @@
     ClientControllerState::ClientControllerState( std::string state_type_desc, ClientInfo* dat )
         : ControllerState(state_type_desc), data( dat ) {
 
+            std::cout << "Entered " << state_type_desc << " state" << std::endl;
     }
 // }
 
 // VotingState {
 
     // Constructor for the VotingState, simply sets the correct state name
-    VotingState::VotingState( ClientInfo* dat ) : ClientControllerState( "Voting", dat ) {
-
-    }
+    VotingState::VotingState( ClientInfo* dat ) : ClientControllerState( "Voting", dat ) { }
 
     // Figures out what needs to be done with any given action, when we're in the voting state
     ControllerState* VotingState::handleAction( Action* action_to_be_handled ) {
@@ -43,6 +42,17 @@
             buf.set_vote( action->getPlayerVote( ) );
 
             data->client->sendProtobuf( avalon::network::VOTE_BUF, buf.SerializeAsString( ) );
+
+        } else if( action_type == "VoteResults" ) {
+
+            auto action = dynamic_cast< VoteResultsAction* >( action_to_be_handled );
+
+            if( action->getVoteResult( ) ) {
+                std::cout << "Vote passed." << std::endl;
+            } else {
+                std::cout << "Vote failed." << std::endl;
+            }
+
         } else {
 
             reportUnhandledAction( action_type );
@@ -75,7 +85,7 @@
 
                 data->client->sendProtobuf( avalon::network::TEAM_SELECTION_BUF, buf.SerializeAsString( ) );
             } else {
-                std::cerr << "[ ControllerState ] You attempted to select a quest goer, but you're not the leader. Asshole." << std::endl;
+                std::cerr << "[ ClientController ] You attempted to select a quest goer, but you're not the leader. Asshole." << std::endl;
             }
 
         } else if( action_type == "FinalizeTeamAction" ) {
@@ -88,7 +98,7 @@
 
                 data->client->sendProtobuf( avalon::network::TEAM_SELECTION_BUF, buf.SerializeAsString( ) );
             } else {
-                std::cerr << "[ ControllerState ] You attempted to finalize team selection, but you're not the leader. Asshole." << std::endl;
+                std::cerr << "[ ClientController ] You attempted to finalize team selection, but you're not the leader. Asshole." << std::endl;
             }
 
         } else if( action_type == "EnterVotingState" ) {
@@ -106,20 +116,15 @@
 
 // LobbyState {
     // Constructor for the LobbyState, simply sets the correct state name
-    LobbyState::LobbyState( ClientInfo* dat ) : ClientControllerState( "Lobby", dat ) {
-
-    }
+    LobbyState::LobbyState( ClientInfo* dat ) : ClientControllerState( "Lobby", dat ) { }
 
     // Figures out what needs to be done with any given action, when we're in the lobby state
     ControllerState* LobbyState::handleAction( Action* action_to_be_handled ) {
 
-        std::cerr << "Action being handled by lobby state" << std::endl;
         std::string action_type = action_to_be_handled->getMessage( );
 
         // We need to add all the information about the game to the model
         if( action_type == "GameSettings" ) {
-
-            std::cerr << "GameSettings action handled by lobby state" << std::endl;
 
             auto action = dynamic_cast< GameSettingsAction* >( action_to_be_handled );
             avalon::network::GameSettings* sBuf = action->getSettings( );
@@ -141,20 +146,15 @@
         // We need to update one of the players in the model with the real player
         } else if( action_type == "AddPlayer" ) {
 
-            std::cerr << "AddPlayer action handled by lobby state" << std::endl;
-
             auto action = dynamic_cast< AddPlayerAction* >( action_to_be_handled );
             unsigned int player_number = action->getPlayerNumber( );
             Player* p = action->getPlayerInfo( );
             data->players.push_back( p );
-            std::cerr << "AddPlayer player number: " << player_number << std::endl;
 
             data->model->updateData( std::string( "player" ) + std::to_string( player_number ), p );
 
         // We need to send the Server our preferred name
         } else if ( action_type == "SetName" ) {
-
-            std::cerr << "SetName action handled by lobby state" << std::endl;
 
             auto action = dynamic_cast< SetNameAction* >( action_to_be_handled );
             Player p( action->getName( ), avalon::UNKNOWN_ROLE, avalon::UNKNOWN_ALIGN );
@@ -163,8 +163,6 @@
             data->client->sendProtobuf( avalon::network::PLAYER_BUF, buf.SerializeAsString( ) );
 
         } else if ( action_type == "EnterTeamSelection" ) {
-
-            std::cerr << "Entering team selection state" << std::endl;
 
             auto action = dynamic_cast< EnterTeamSelectionAction* >( action_to_be_handled );
             data->leader = action->getLeader( );

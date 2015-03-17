@@ -14,7 +14,9 @@
 
 // ServerControllerState {
     ServerControllerState::ServerControllerState( std::string state_type_desc, ServInfo* mod )
-        : ControllerState(state_type_desc), model( mod ) { }
+        : ControllerState(state_type_desc), model( mod ) {
+            std::cout << "Enterting " << state_type_desc << " state" << std::endl;
+        }
 
     // Sends one player another player's information
     void ServerControllerState::sendPlayer( int playerID, int destinationID, bool allInfo ) {
@@ -173,19 +175,13 @@
 
                 avalon::network::Vote buf;
                 buf.set_id( voter );
-
-                if( model->hidden_voting ) {
-                    buf.set_vote( avalon::HIDDEN );
-                } else {
-                    buf.set_vote( vote );
-                }
+                buf.set_vote( avalon::HIDDEN );
 
                 sendProtobufToAll( avalon::network::VOTE_BUF, buf.SerializeAsString( ) );
 
                 if( model->votes.size( ) == model->num_clients ) {
                     return sendVoteResults( );
                 }
-
             }
         } else {
             reportUnhandledAction( action_type );
@@ -196,6 +192,7 @@
 
     // Goes through the votes array to see if you've already voted, changes your vote ( if you did ) and returns whether anything was changed
     bool VotingState::modifyVote( unsigned int voter, avalon::player_vote_t vote ) {
+
         bool changed = false;
         bool exists = false;
 
@@ -228,20 +225,22 @@
     // Sends the vote results and the state change and changes our state.
     ServerControllerState* VotingState::sendVoteResults( ) {
 
+        model->vote_track++;
         bool passed = figureOutResultsOfVote( );
-        avalon::player_vote_t sorted_votes[ model->num_clients ]; // A place we can sort the votes
+
+        // Sort the votes into player order
+        avalon::player_vote_t sorted_votes[ model->num_clients ];
+        for( std::vector< std::pair< unsigned int, avalon::player_vote_t > >::iterator it = model->votes.begin( ); it != model->votes.end( ); it++ ) {
+
+            sorted_votes[ (*it).first ] = (*it).second;
+        }
 
         // Create the protobuf
         avalon::network::VoteResults buf;
         buf.set_passed( passed );
-        for( std::vector< std::pair< unsigned int, avalon::player_vote_t > >::iterator it = model->votes.begin( ); it != model->votes.end( ); it++ ) {
-
-            sorted_votes[ (*it).first ] = (*it).second;
-            if( model->hidden_voting ) {
-                buf.set_votes( (*it).first, avalon::HIDDEN );
-            } else {
-                buf.set_votes( (*it).first, (*it).second );
-            }
+        buf.set_vote_track( model->vote_track );
+        for( unsigned int i = 0; i < model->num_clients; i++ ) {
+            buf.add_votes( sorted_votes[ i ] );
         }
 
         // Send the protobuf to all the players
@@ -265,17 +264,17 @@
             model->vote_track = 0;
             model->server->broadcastStateChange( avalon::network::ENTER_QUEST_VOTE_BUF, 0 );
             // TODO change our state to quest vote
-            return NULL;
+            return new TeamSelectionState( model );
         } else {
 
             // If these fuckers can't make up their mind, they lose.
             if( model->vote_track > 5 ) {
                 model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
                 // TODO change our state to end game
+                return NULL;
             }
 
             // Go back to the selection state, moving one step closer to annihilation
-            model->vote_track++;
             model->server->broadcastStateChange( avalon::network::ENTER_TEAM_VOTE_BUF, model->leader ); 
             return new TeamSelectionState( model );
         }

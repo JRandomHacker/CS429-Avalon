@@ -22,9 +22,10 @@
 #ifdef _WIN32
     #include <winsock2.h>
     #define WINSOCK_MAGIC 0x202
+    #define POLLIN POLLRDNORM | POLLRDBAND
 #else
     #include <netdb.h>
-    #include <sys/select.h>
+    #include <poll.h>
     #define SOCKET int
 #endif
 
@@ -98,25 +99,28 @@ Server::~Server( ) {
 // Should then add an action to the Queue
 void Server::waitForData( ) {
     if( !clients_connected ) {
-        std::cerr << "[ SERVER ] Waiting for data before connecting to clients" << std::endl;
+        std::cerr << "[ SERVER ] Attempted to wait for data before connecting to clients" << std::endl;
         return;
     }
 
-    // Set up the fd_set to select across
-    fd_set clients;
-    FD_ZERO( &clients );
-    for( std::vector< SOCKET >::iterator it = sockets.begin(); it != sockets.end(); it++ ) {
-        FD_SET( *it, &clients );
+    struct pollfd clients[ num_clients ];
+    for( unsigned int i = 0; i < sockets.size( ); i++ ) {
+       clients[ i ].fd = sockets[ i ];
+       clients[ i ].events = POLLIN;
     }
 
-    select( num_clients, &clients, NULL, NULL, NULL );
+    #ifdef _WIN32
+        int ret = WSAPoll( clients, num_clients, -1 );
+    #else
+        int ret = poll( clients, num_clients, -1 );
+    #endif
 
-    // Find the sockets that had data
-    for( std::vector< SOCKET >::iterator it = sockets.begin(); it != sockets.end(); it++ ) {
-        if( FD_ISSET( *it, &clients ) ) {
-            recvData( *it );
+    if( ret > 0 ) {
+        for( unsigned int i = 0; i < num_clients; i++ ) {
+            if( clients[ i ].revents == POLLIN ) {
+                recvData( clients[ i ].fd );
+            }
         }
-
     }
 }
 
@@ -285,16 +289,13 @@ void Server::broadcastStateChange( avalon::network::buffers_t bufType, unsigned 
 }
 
 unsigned int Server::getIdFromSocket( SOCKET sock ) {
-    #ifdef _WIN32
-        for( unsigned int i = 0; i < sockets.size( ); i++ ) {
-            if( sock == sockets[ i ] ) {
-                return i;
-            }
-        }
 
-        std::cerr << "[ SERVER ] Failed to parse socket to ID" << std::endl;
-        return -1;
-    #else
-        return sock;
-    #endif
+    for( unsigned int i = 0; i < sockets.size( ); i++ ) {
+        if( sock == sockets[ i ] ) {
+            return i;
+        }
+    }
+
+    std::cerr << "[ SERVER ] Failed to parse socket to ID" << std::endl;
+    return -1;
 }
