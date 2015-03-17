@@ -50,6 +50,23 @@
     }
 // }
 
+// ModifyTeamSelectionAction {
+    ModifyTeamSelectionAction::ModifyTeamSelectionAction( unsigned int selection, bool selected ) : Action( "ModifyTeamSelection" ) {
+        this->selection = selection;
+        this->selected = selected;
+    }
+
+    ModifyTeamSelectionAction::~ModifyTeamSelectionAction( ) { }
+
+    unsigned int ModifyTeamSelectionAction::getSelection( ) {
+        return selection;
+    }
+
+    bool ModifyTeamSelectionAction::getSelected( ) {
+        return selected;
+    }
+// }
+
 // EnterVoteStateAction {
     EnterVoteStateAction::EnterVoteStateAction( ) : Action( "EnterVoteState" ) { }
 

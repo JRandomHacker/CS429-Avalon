@@ -50,6 +50,7 @@
 
             data->model->updateData( "currentVoteTrack", action->getVoteTrack( ) );
 
+            // TODO Put everything in the model instead of printing
             if( action->getVoteResult( ) ) {
                 std::cout << "[ ClientController ] Vote passed." << std::endl;
             } else {
@@ -83,7 +84,7 @@
             auto action = dynamic_cast< ReceiveVoteAction* >( action_to_be_handled );
             unsigned int votingPlayer = action->getVoter( );
 
-            // TODO Update model with voting player
+            // TODO Update model with voting player instead of printing
             std::cout << "[ ClientController ] Received a vote from player " << votingPlayer << std::endl;
 
         } else if( action_type == "EnterTeamSelection" ) {

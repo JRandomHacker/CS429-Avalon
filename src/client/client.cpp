@@ -14,6 +14,7 @@
 
 #include "player.pb.h"
 #include "settings.pb.h"
+#include "teamselection.pb.h"
 #include "vote.pb.h"
 #include "voteresults.pb.h"
 
@@ -138,6 +139,10 @@ void Client::waitForData( ) {
             recvVoteResults( bufLength );
             break;
 
+        case avalon::network::TEAM_SELECTION_BUF:
+            recvTeamSelection( bufLength );
+            break;
+
         case avalon::network::ENTER_TEAM_SELECTION_BUF:
         case avalon::network::ENTER_TEAM_VOTE_BUF:
         case avalon::network::ENTER_QUEST_VOTE_BUF:
@@ -154,7 +159,7 @@ void Client::waitForData( ) {
 // Helper function to receive a player protobuf
 void Client::recvPlayer( unsigned int bufLength ) {
 
-    // Receive the player
+    // Receive the protobuf
     char* playerBuf = new char[ bufLength ];
     recv( sock, playerBuf, bufLength * sizeof( char ), 0);
 
@@ -170,24 +175,41 @@ void Client::recvPlayer( unsigned int bufLength ) {
     delete[] playerBuf;
 }
 
-// Helper function to receive a player protobuf
+// Helper function to receive a TeamSelection protobuf
+void Client::recvTeamSelection( unsigned int bufLength ) {
+
+    // Receive the protobuf
+    char* selectionBuf = new char[ bufLength ];
+    recv( sock, selectionBuf, bufLength * sizeof( char ), 0);
+
+    avalon::network::TeamSelection buf;
+    buf.ParseFromArray( selectionBuf, bufLength );
+
+    // Add an action to the queue
+    Action* action = new ModifyTeamSelectionAction( buf.id(), buf.selected( ) );
+    queue->addAction( action );
+
+    delete[] selectionBuf;
+}
+
+// Helper function to receive a Vote protobuf
 void Client::recvVote( unsigned int bufLength ) {
 
-    // Receive the player
+    // Receive the protobuf
     char* voteBuf = new char[ bufLength ];
     recv( sock, voteBuf, bufLength * sizeof( char ), 0);
 
-    // Create a new player object
     avalon::network::Vote buf;
     buf.ParseFromArray( voteBuf, bufLength );
 
+    // Add an action to the queue
     Action* action = new ReceiveVoteAction( buf.id( ) );
     queue->addAction( action );
 
     delete[] voteBuf;
 }
 
-// Helper function to receive a gamesettings protobuf
+// Helper function to receive a GameSettings protobuf
 void Client::recvSettings( unsigned int bufLength ) {
 
     // Receive the game settings
@@ -217,11 +239,11 @@ void Client::recvVoteResults( unsigned int bufLength ) {
     buf.ParseFromArray( voteBuf, bufLength );
     bool votePassed = buf.passed( );
     unsigned int voteTrack = buf.vote_track( );
+
     std::vector< avalon::player_vote_t >* votes = new std::vector< avalon::player_vote_t >( );
     for( auto it = buf.votes( ).begin( ); it != buf.votes( ).end( ); it++ ) {
         votes->push_back( ( avalon::player_vote_t )( *it ) );
     }
-    //std::copy( buf.votes( ).begin( ), buf.votes( ).end( ), std::back_inserter( *votes ) );
 
     // Add an action to the queue
     Action* action = new VoteResultsAction( votePassed, voteTrack, votes );

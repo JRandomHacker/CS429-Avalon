@@ -119,6 +119,48 @@ class EnterTeamSelectionAction : public Action {
 };
 
 /**
+ * An action corresponding to receiving a team selection
+ *
+ * @class ModifyTeamSelectionAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-03-16
+ */
+class ModifyTeamSelectionAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param selection The player who is being added or removed
+         * @param selected Whether the player is being added or removed
+         */
+        ModifyTeamSelectionAction( unsigned int selection, bool selected );
+
+        /**
+         * Destructor
+         */
+        virtual ~ModifyTeamSelectionAction( );
+
+        /**
+         * Getter
+         *
+         * @return The current selection
+         */
+        unsigned int getSelection( );
+
+        /**
+         * Getter
+         *
+         * @return Whether the player was selected, or deselected
+         */
+        bool getSelected( );
+
+    private:
+        unsigned int selection;
+        bool selected;
+};
+
+/**
  * An action corresponding to entering the vote state
  *
  * @class EnterVoteStateAction
