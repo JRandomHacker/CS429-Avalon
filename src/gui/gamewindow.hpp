@@ -160,12 +160,24 @@ private:
      */
     Subscriber* myID_subscriber;
     
+    /**
+     *  Subscriber that gets the number of evil players from the model.
+     */
     Subscriber* numEvil_subscriber;
     
+    /**
+     *  Subscriber that gets list of roles in the game from the model.
+     */
     Subscriber* roleList_subscriber;
 
+    /**
+     *  Subscriber that gets current leader's ID from the model.
+     */
     Subscriber* leaderID_subscriber;
 
+    /**
+     *  Subscriber that gets current questing team from the model.
+     */
     Subscriber* questingTeam_subscriber;
     
     /**

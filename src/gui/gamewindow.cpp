@@ -50,6 +50,8 @@ GameWindow::~GameWindow( ) {
     delete myID_subscriber;
     delete numEvil_subscriber;
     delete roleList_subscriber;
+    delete leaderID_subscriber;
+    delete questingTeam_subscriber;
     for(std::vector<Subscriber*>::iterator i = player_subscribers.begin(); i != player_subscribers.end(); i++)
         delete *i;
 
@@ -171,12 +173,18 @@ void GameWindow::updateLeader() {
         unsigned int lid = *lidpt;
 
         if(lid == myID) {
+            ui->leaderLabel->setText(QString("You are the leader!"));
             ui->proposeTeamButton->show();
         }
         else {
+            Player** leader = player_subscribers[lid]->getData<Player*>();
+            if(leader != NULL)
+                ui->leaderLabel->setText(QString( ("Current Leader: "+(*leader)->getName()).c_str() ));
             ui->proposeTeamButton->hide();
         }
     }
+    else
+        ui->leaderLabel->setText(QString( "<leader unknown>" ));
 }
 
 void GameWindow::updateQuestingTeam() {

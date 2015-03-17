@@ -40,7 +40,6 @@
             avalon::network::Vote buf;
             buf.set_id( data->my_id );
             buf.set_vote( action->getPlayerVote( ) );
-
             data->client->sendProtobuf( avalon::network::VOTE_BUF, buf.SerializeAsString( ) );
 
         } else if( action_type == "VoteResults" ) {
