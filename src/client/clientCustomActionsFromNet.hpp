@@ -152,7 +152,7 @@ class ReceiveVoteAction : public Action {
         /**
          * Public constructor
          *
-         * @param leader The player that voted
+         * @param voter The player that voted
          */
         ReceiveVoteAction( unsigned int voter );
 

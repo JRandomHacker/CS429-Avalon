@@ -57,8 +57,8 @@ namespace avalon {
     /**
      * A function to return the alignment of a role
      *
-     * @param avalon::special_roles_t the special role to examine - Passing in the special role NONE is undefined
-     * @return avalon::alignment_t The alignment of the role
+     * @param role the special role to examine - Passing in the special role NONE is undefined
+     * @return The alignment of the role
      */
     alignment_t getRoleAlignment( special_roles_t role );
 
@@ -66,7 +66,7 @@ namespace avalon {
      * A function to get the number of evil characters based on the number of players
      *
      * @param num_players The number of players in the game
-     * @return int The number of players who should be evil
+     * @return The number of players who should be evil
      */
     unsigned int getEvilCount( int num_players );
 

@@ -128,7 +128,7 @@ class ConfirmTeamSelectionAction : public Action {
         /**
          * Public constructor
          *
-         * @param player_id The ID of the player attempting to confirm
+         * @param selector_id The ID of the player attempting to confirm
          */
         ConfirmTeamSelectionAction( unsigned int selector_id );
 
@@ -161,7 +161,8 @@ class TeamVoteAction : public Action {
         /**
          * Public constructor
          *
-         * @param player_id The ID of the player attempting to confirm
+         * @param voter The ID of the player who sent the vote
+         * @param vote vote that the player sent
          */
         TeamVoteAction( unsigned int voter, avalon::player_vote_t vote );
 
