@@ -147,13 +147,13 @@ void Server::recvData( SOCKET recvSock ) {
     switch( bufType ) {
 
         case avalon::network::TEAM_SELECTION_BUF:
-            std::cout << "[ SERVER ] Received a team selection protobuf" << std::endl;
             recvTeamSelection( recvSock, bufLength );
             break;
+
         case avalon::network::VOTE_BUF:
-            std::cout << "[ SERVER ] Received a vote protobuf" << std::endl;
             recvVote( recvSock, bufLength );
             break;
+
         default:
             std::cerr << "[ SERVER ] Received an unknown type of protobuf" << std::endl;
             break;

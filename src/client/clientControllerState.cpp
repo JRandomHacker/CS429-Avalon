@@ -19,7 +19,7 @@
     ClientControllerState::ClientControllerState( std::string state_type_desc, ClientInfo* dat )
         : ControllerState(state_type_desc), data( dat ) {
 
-            std::cout << "Entered " << state_type_desc << " state" << std::endl;
+            std::cout << "[ ClientController ] Entered " << state_type_desc << " state" << std::endl;
     }
 // }
 
@@ -47,12 +47,51 @@
 
             auto action = dynamic_cast< VoteResultsAction* >( action_to_be_handled );
 
+            data->model->updateData( "currentVoteTrack", action->getVoteTrack( ) );
+
             if( action->getVoteResult( ) ) {
-                std::cout << "Vote passed." << std::endl;
+                std::cout << "[ ClientController ] Vote passed." << std::endl;
             } else {
-                std::cout << "Vote failed." << std::endl;
+                std::cout << "[ ClientController ] Vote failed." << std::endl;
             }
 
+            std::cout << "[ ClientController ]";
+            auto votes = action->getVotes( );
+            for( unsigned int i = 0; i < votes->size( ); i++ ) {
+                std::string pvote;
+                switch( ( *votes )[ i ] ) {
+                    case avalon::YES:
+                        pvote = "pass";
+                        break;
+                    case avalon::NO:
+                        pvote = "fail";
+                        break;
+                    case avalon::HIDDEN:
+                        pvote = "hidden";
+                        break;
+                    case avalon::NO_VOTE:
+                        pvote = "nothing";
+                        break;
+                }
+                std::cout << " Player " << i << " voted " << pvote;
+            }
+            std::cout << std::endl;
+
+        } else if( action_type == "ReceiveVote" ) {
+
+            auto action = dynamic_cast< ReceiveVoteAction* >( action_to_be_handled );
+            unsigned int votingPlayer = action->getVoter( );
+
+            // TODO Update model with voting player
+            std::cout << "[ ClientController ] Received a vote from player " << votingPlayer << std::endl;
+
+        } else if( action_type == "EnterTeamSelection" ) {
+
+            auto action = dynamic_cast< EnterTeamSelectionAction* >( action_to_be_handled );
+            data->leader = action->getLeader( );
+            data->model->updateData( "leaderID", data->leader );
+
+            return new TeamSelectionState( data );
         } else {
 
             reportUnhandledAction( action_type );
@@ -75,7 +114,7 @@
 
         std::string action_type = action_to_be_handled->getMessage( );
 
-        if( action_type == "SelectQuestGoerAction" ) {
+        if( action_type == "SelectQuestGoer" ) {
             if( data->leader == data->my_id ) {
 
                 auto action = dynamic_cast< SelectQuestGoerAction* >( action_to_be_handled );
@@ -88,7 +127,7 @@
                 std::cerr << "[ ClientController ] You attempted to select a quest goer, but you're not the leader. Asshole." << std::endl;
             }
 
-        } else if( action_type == "FinalizeTeamAction" ) {
+        } else if( action_type == "FinalizeTeam" ) {
             if( data->leader == data->my_id ) {
 
                 avalon::network::TeamSelection buf;
@@ -101,7 +140,7 @@
                 std::cerr << "[ ClientController ] You attempted to finalize team selection, but you're not the leader. Asshole." << std::endl;
             }
 
-        } else if( action_type == "EnterVotingState" ) {
+        } else if( action_type == "EnterVoteState" ) {
 
             return new VotingState( data );
         } else {
@@ -131,10 +170,16 @@
             data->num_players = sBuf->players( );
             data->my_id = sBuf->client( );
             data->num_evil = sBuf->evil_count( );
+            data->quest_track_length = sBuf->quest_track_len( );
+            data->vote_track_length = sBuf->vote_track_len( );
 
             data->model->addData( "numberOfPlayers", data->num_players );
             data->model->addData( "myID", data->my_id );
             data->model->addData( "numEvilChars", data->num_evil );
+            data->model->addData( "questTrackLength", data->quest_track_length );
+            data->model->addData( "voteTrackLength", data->vote_track_length );
+            data->model->addData( "leaderID", -1 );
+            data->model->addData( "currentVoteTrack", 0 );
 
             for ( unsigned int i = 0; i < data->num_players; i++ ) {
                 data->model->addData( std::string( "player" ) + std::to_string( i ), NULL );
@@ -166,6 +211,7 @@
 
             auto action = dynamic_cast< EnterTeamSelectionAction* >( action_to_be_handled );
             data->leader = action->getLeader( );
+            data->model->updateData( "leaderID", data->leader );
 
             return new TeamSelectionState( data );
         // We don't care about the action we received, since it isn't valid in this state

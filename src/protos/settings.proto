@@ -10,4 +10,6 @@ message GameSettings {
     required bool oberon = 7 [ default = false ];
     required int32 client = 8;
     required int32 evil_count = 9;
+    required int32 vote_track_len = 10;
+    required int32 quest_track_len = 11;
 }

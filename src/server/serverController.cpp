@@ -34,6 +34,8 @@ ServerController::ServerController( ServInfo* model, int port ) {
 
     model->vote_track = 0;
     model->hidden_voting = false;
+    model->vote_track_length = 5; // TODO get value from ini
+    model->quest_track_length = 5; // TODO get value from ini
 
     handling_state = NULL;
     setServerState( new WaitingForClientsState( model ) );
@@ -147,6 +149,8 @@ void ServerController::initModelCharacters( std::vector< avalon::special_roles_t
     // For some reason, the default of false in the protobuf file isn't working
     // So set them all to false ourselves
     model->settingsBuf.set_players( model->num_clients );
+    model->settingsBuf.set_vote_track_len( model->vote_track_length );
+    model->settingsBuf.set_quest_track_len( model->quest_track_length );
     model->settingsBuf.set_evil_count( avalon::getEvilCount( model->num_clients ) );
     model->settingsBuf.set_merlin( false );
     model->settingsBuf.set_percival( false );

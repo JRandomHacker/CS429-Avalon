@@ -16,6 +16,10 @@ typedef struct {
     Server* server;
     //! The number of clients who can connect
     unsigned int num_clients;
+    //! The number of times a team vote can be failed before losing
+    unsigned int vote_track_length;
+    //! The number of quests in the game
+    unsigned int quest_track_length;
     //! Whether votes should be hidden
     bool hidden_voting;
     //! The player ID of the current leader

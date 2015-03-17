@@ -15,7 +15,7 @@
 // ServerControllerState {
     ServerControllerState::ServerControllerState( std::string state_type_desc, ServInfo* mod )
         : ControllerState(state_type_desc), model( mod ) {
-            std::cout << "Enterting " << state_type_desc << " state" << std::endl;
+            std::cout << "[ ServerController ] Entered " << state_type_desc << " state" << std::endl;
         }
 
     // Sends one player another player's information
@@ -125,6 +125,7 @@
 
                 // TODO Add logic to make sure there aren't too many people
                 model->server->broadcastStateChange( avalon::network::ENTER_TEAM_VOTE_BUF, 0 );
+                return new VotingState( model );
             } else {
                 std::cerr << "[ ServerController ] Received a team confirmation from someone who isn't the leader" << std::endl;
             }
@@ -226,6 +227,8 @@
     ServerControllerState* VotingState::sendVoteResults( ) {
 
         model->vote_track++;
+        model->leader++;
+        model->leader %= model->num_clients;
         bool passed = figureOutResultsOfVote( );
 
         // Sort the votes into player order
@@ -268,14 +271,14 @@
         } else {
 
             // If these fuckers can't make up their mind, they lose.
-            if( model->vote_track > 5 ) {
+            if( model->vote_track > model->vote_track_length ) {
                 model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
                 // TODO change our state to end game
                 return NULL;
             }
 
             // Go back to the selection state, moving one step closer to annihilation
-            model->server->broadcastStateChange( avalon::network::ENTER_TEAM_VOTE_BUF, model->leader ); 
+            model->server->broadcastStateChange( avalon::network::ENTER_TEAM_SELECTION_BUF, model->leader );
             return new TeamSelectionState( model );
         }
     }
