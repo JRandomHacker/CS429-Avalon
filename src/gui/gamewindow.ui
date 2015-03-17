@@ -98,6 +98,16 @@
       <widget class="QListView" name="proposeTeamList"/>
      </item>
      <item>
+      <widget class="QLabel" name="leaderLabel">
+       <property name="text">
+        <string>Current Leader is ...</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="proposeTeamButton">
        <property name="text">
         <string>Propose Team</string>
