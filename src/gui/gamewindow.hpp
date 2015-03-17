@@ -78,6 +78,17 @@ signals:
      */
     void gameInfoUpdated( );
 
+    /**
+     * Function that is called when the leader ID is updated
+     * @return None
+     */
+    void leaderIDUpdated( );
+
+    /**
+     * Function that is called when the questing team is updated
+     */
+    void questingTeamUpdated( );
+
 private slots:
     /**
      *  Makes subscriber to get num of players.
@@ -97,6 +108,16 @@ private slots:
      *  Updates the numEvil and roleList UI elements
      */
     void updateGameInfo();
+
+    /**
+     *  Changes gui for leader and non-leaders
+     */
+    void updateLeader();
+
+    /**
+     * Display the current questing team.
+     */
+    void updateQuestingTeam();
     
     /**
      *  Callback for positive vote button
@@ -107,6 +128,11 @@ private slots:
      *  Callback for negative vote button
      */
     void on_buttonVoteFail_clicked();
+
+    /**
+     * Callback to propose a team
+     */
+    void on_proposeTeamButton_clicked();
 
 private:
     /**
@@ -134,9 +160,25 @@ private:
      */
     Subscriber* myID_subscriber;
     
+    /**
+     *  Subscriber that gets the number of evil players from the model.
+     */
     Subscriber* numEvil_subscriber;
     
+    /**
+     *  Subscriber that gets list of roles in the game from the model.
+     */
     Subscriber* roleList_subscriber;
+
+    /**
+     *  Subscriber that gets current leader's ID from the model.
+     */
+    Subscriber* leaderID_subscriber;
+
+    /**
+     *  Subscriber that gets current questing team from the model.
+     */
+    Subscriber* questingTeam_subscriber;
     
     /**
      *  Subscriber vector that watches player objects.

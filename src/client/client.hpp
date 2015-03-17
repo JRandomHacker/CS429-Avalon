@@ -43,6 +43,22 @@ class Client {
         void recvPlayer( unsigned int bufLength );
 
         /*
+         * Recv's an avalon::network::Vote protobuf, creates an Action, and adds it to the queue
+         *
+         * @param bufLength The size of the protobuf that needs to be received
+         * @return None
+         */
+        void recvVote( unsigned int bufLength );
+
+        /*
+         * Recv's an avalon::network::VoteResults protobuf, creates an Action, and adds it to the queue
+         *
+         * @param bufLength The size of the protobuf that needs to be received
+         * @return None
+         */
+        void recvVoteResults( unsigned int bufLength );
+
+        /*
          * Processes a state change method and creates the appropriate action
          *
          * @param bufLength The size of the protobuf that needs to be received

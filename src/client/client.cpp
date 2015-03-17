@@ -14,6 +14,8 @@
 
 #include "player.pb.h"
 #include "settings.pb.h"
+#include "vote.pb.h"
+#include "voteresults.pb.h"
 
 #ifdef _WIN32
     #include <ws2tcpip.h>
@@ -128,8 +130,18 @@ void Client::waitForData( ) {
             recvSettings( bufLength );
             break;
 
+        case avalon::network::VOTE_BUF:
+            recvVote( bufLength );
+            break;
+
+        case avalon::network::VOTE_RESULTS_BUF:
+            recvVoteResults( bufLength );
+            break;
+
         case avalon::network::ENTER_TEAM_SELECTION_BUF:
         case avalon::network::ENTER_TEAM_VOTE_BUF:
+        case avalon::network::ENTER_QUEST_VOTE_BUF:
+        case avalon::network::ENTER_END_GAME_BUF:
             recvStateChange( bufType, bufLength );
             break;
 
@@ -158,6 +170,23 @@ void Client::recvPlayer( unsigned int bufLength ) {
     delete[] playerBuf;
 }
 
+// Helper function to receive a player protobuf
+void Client::recvVote( unsigned int bufLength ) {
+
+    // Receive the player
+    char* voteBuf = new char[ bufLength ];
+    recv( sock, voteBuf, bufLength * sizeof( char ), 0);
+
+    // Create a new player object
+    avalon::network::Vote buf;
+    buf.ParseFromArray( voteBuf, bufLength );
+
+    Action* action = new ReceiveVoteAction( buf.id( ) );
+    queue->addAction( action );
+
+    delete[] voteBuf;
+}
+
 // Helper function to receive a gamesettings protobuf
 void Client::recvSettings( unsigned int bufLength ) {
 
@@ -174,6 +203,31 @@ void Client::recvSettings( unsigned int bufLength ) {
     queue->addAction( action );
 
     delete[] settingsBuf;
+}
+
+// Helper function to receive vote results
+void Client::recvVoteResults( unsigned int bufLength ) {
+
+    // Receive the game settings
+    char* voteBuf = new char[ bufLength ];
+    recv( sock, voteBuf, bufLength * sizeof( char ), 0);
+
+    // Create a local copy of the GameSettings protobuf
+    avalon::network::VoteResults buf;
+    buf.ParseFromArray( voteBuf, bufLength );
+    bool votePassed = buf.passed( );
+    unsigned int voteTrack = buf.vote_track( );
+    std::vector< avalon::player_vote_t >* votes = new std::vector< avalon::player_vote_t >( );
+    for( auto it = buf.votes( ).begin( ); it != buf.votes( ).end( ); it++ ) {
+        votes->push_back( ( avalon::player_vote_t )( *it ) );
+    }
+    //std::copy( buf.votes( ).begin( ), buf.votes( ).end( ), std::back_inserter( *votes ) );
+
+    // Add an action to the queue
+    Action* action = new VoteResultsAction( votePassed, voteTrack, votes );
+    queue->addAction( action );
+
+    delete[] voteBuf;
 }
 
 // Helper function for switching states

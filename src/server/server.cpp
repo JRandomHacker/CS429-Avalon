@@ -98,18 +98,26 @@ Server::~Server( ) {
 // Should then add an action to the Queue
 void Server::waitForData( ) {
     if( !clients_connected ) {
-        std::cerr << "[ SERVER ] Waiting for data before connecting to clients" << std::endl;
+        std::cerr << "[ SERVER ] Attempted to wait for data before connecting to clients" << std::endl;
         return;
     }
 
     // Set up the fd_set to select across
     fd_set clients;
     FD_ZERO( &clients );
+    int fdnum = 0;
     for( std::vector< SOCKET >::iterator it = sockets.begin(); it != sockets.end(); it++ ) {
         FD_SET( *it, &clients );
-    }
 
-    select( num_clients, &clients, NULL, NULL, NULL );
+        #ifndef _WIN32
+            if( *it > fdnum ) {
+                fdnum = *it;
+            }
+        #endif
+    }
+    fdnum++;
+
+    select( fdnum, &clients, NULL, NULL, NULL );
 
     // Find the sockets that had data
     for( std::vector< SOCKET >::iterator it = sockets.begin(); it != sockets.end(); it++ ) {
@@ -285,16 +293,13 @@ void Server::broadcastStateChange( avalon::network::buffers_t bufType, unsigned 
 }
 
 unsigned int Server::getIdFromSocket( SOCKET sock ) {
-    #ifdef _WIN32
-        for( unsigned int i = 0; i < sockets.size( ); i++ ) {
-            if( sock == sockets[ i ] ) {
-                return i;
-            }
-        }
 
-        std::cerr << "[ SERVER ] Failed to parse socket to ID" << std::endl;
-        return -1;
-    #else
-        return sock;
-    #endif
+    for( unsigned int i = 0; i < sockets.size( ); i++ ) {
+        if( sock == sockets[ i ] ) {
+            return i;
+        }
+    }
+
+    std::cerr << "[ SERVER ] Failed to parse socket to ID" << std::endl;
+    return -1;
 }
