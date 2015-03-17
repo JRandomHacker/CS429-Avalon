@@ -1,9 +1,9 @@
-# The list of all tests that exist
-TESTS=player_unittest.exe \
-	  globals_unittest.exe \
-	  model_unittest.exe \
-	  action_unittest.exe \
-	  client_server_unittest.exe
+
+TESTS=player_unittest.common.exe \
+	  globals_unittest.common.exe \
+	  model_unittest.common.exe \
+	  action_unittest.common.exe \
+	  clientControllerState_unittest.client.exe
 
 TESTS_DIR=.
 SRC_DIR=../src
@@ -15,7 +15,10 @@ PROTOS_DIR=$(SRC_DIR)/protos
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
 
 LIBS=-pthread $(PROTOS_LIB)
-OBJS=$(COMMON_DIR)/*.o $(CLIENT_DIR)/*.o $(SERVER_DIR)/*.o $(PROTOS_DIR)/*.o
+COMMON_OBJS=$(COMMON_DIR)/*.o
+SERVER_OBJS=$(SERVER_DIR)/*.o
+CLIENT_OBJS=$(CLIENT_DIR)/*.o
+PROTOS_OBJS=$(PROTOS_DIR)/*.o
 CUSTOM_CPPFLAGS= -I$(COMMON_DIR) -I$(CLIENT_DIR) -I$(SERVER_DIR) -I$(PROTOS_DIR)
 CUSTOM_CXXFLAGS= -Wall -Wextra -std=c++11 -ggdb
 CXX=g++
@@ -58,7 +61,7 @@ CXXFLAGS+=$(GTEST_CXXFLAGS) $(CUSTOM_CXXFLAGS)
 all : $(TESTS)
 
 clean :
-	rm -f $(TESTS) gtest.a gtest_main.a *.o
+	rm -f *.exe gtest.a gtest_main.a *.o
 
 gtest-all.o : $(GTEST_SRCS)
 	$(CXX) $(CPPFLAGS) -I$(GTEST_ROOT) $(CXXFLAGS) -c \
@@ -82,8 +85,20 @@ gtest_main.a : gtest-all.o gtest_main.o
 %.o : $(TESTS_DIR)/%.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $^
 
-%.exe : %.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) $^ -o $@ $(LIBS)
+%.common.exe : %.common.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(COMMON_OBJS) $(PROTOS_OBJS) $^ -o $@ $(LIBS)
 
-all_unittests.exe : $(TESTS) gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) *.cpp gtest_main.a -o $@ $(LIBS)
+%.client.exe : %.client.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(CLIENT_OBJS) $(COMMON_OBJS) $(PROTOS_OBJS) $^ -o $@ $(LIBS)
+
+%.server.exe : %.server.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(SERVER_OBJS) $(COMMON_OBJS) $(PROTOS_OBJS) $^ -o $@ $(LIBS)
+
+client_unittests.exe : gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(CLIENT_OBJS) $(COMMON_OBJS) $(PROTOS_OBJS) *.client.cpp gtest_main.a -o $@ $(LIBS)
+
+common_unittests.exe : gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(COMMON_OBJS) $(PROTOS_OBJS) *.common.cpp gtest_main.a -o $@ $(LIBS)
+
+server_unittests.exe : gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(SERVER_OBJS) $(COMMON_OBJS) $(PROTOS_OBJS) *.server.cpp gtest_main.a -o $@ $(LIBS)

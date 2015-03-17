@@ -108,7 +108,7 @@ class Client {
          *
          * @return None
          */
-        void sendProtobuf( avalon::network::buffers_t bufType, std::string message );
+        virtual void sendProtobuf( avalon::network::buffers_t bufType, std::string message );
 
 };
 #endif
