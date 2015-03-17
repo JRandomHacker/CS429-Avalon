@@ -33,6 +33,8 @@ typedef struct {
     unsigned int quest_track_length;
     //! The current leader - Person who proposes team
     unsigned int leader;
+    //! A vector of the currently selected team
+    std::vector< unsigned int > team;
     //! A vector of all the players in the game
     std::vector< Player* > players;
 

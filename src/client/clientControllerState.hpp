@@ -86,6 +86,17 @@ class TeamSelectionState : public ClientControllerState {
          * @param action_to_be_handled The action that we need to deal with in our current state
          */
         ControllerState* handleAction( Action* action_to_be_handled );
+
+    private:
+
+        /*
+         * Helper to add or remove a team mate from the proposed team
+         *
+         * @param player The player to add or remove
+         * @param add Whether the player should be added or removed
+         * @return Whether the team changed
+         */
+        bool addOrRemoveTeamMember( unsigned int player, bool add );
 };
 
 /**

@@ -92,6 +92,8 @@
             auto action = dynamic_cast< EnterTeamSelectionAction* >( action_to_be_handled );
             data->leader = action->getLeader( );
             data->model->updateData( "leaderID", data->leader );
+            data->team.clear( );
+            data->model->updateData( "questingTeam", data->team );
 
             return new TeamSelectionState( data );
         } else {
@@ -129,6 +131,18 @@
                 std::cerr << "[ ClientController ] You attempted to select a quest goer, but you're not the leader. Asshole." << std::endl;
             }
 
+        } else if( action_type == "ModifyTeamSelection" ) {
+
+            auto action = dynamic_cast< ModifyTeamSelectionAction* >( action_to_be_handled );
+
+            unsigned int player = action->getSelection( );
+            bool added = action->getSelected( );
+            bool changed = addOrRemoveTeamMember( player, added );
+
+            if( changed ) {
+                data->model->updateData( "questingTeam", data->team );
+            }
+
         } else if( action_type == "FinalizeTeam" ) {
             if( data->leader == data->my_id ) {
 
@@ -152,6 +166,33 @@
 
         // By default, we don't change states
         return NULL;
+    }
+
+    // Adds or removes the team member, if it corresponds to a change and returns whether it changed anything
+    bool TeamSelectionState::addOrRemoveTeamMember( unsigned int player, bool add ) {
+
+        bool changed = false;
+        unsigned int location;
+        bool exists = false;
+
+        // Check to see if the player is already proposed
+        for( unsigned int i = 0; i < data->team.size( ); i++ ) {
+            if( data->team[ i ] == player ) {
+                location = i;
+                exists = true;
+            }
+        }
+
+        // If the players status in the team has changed, make the change
+        if( add && !exists ) {
+           data->team.push_back( player );
+           changed = true;
+        } else if( !add && exists ) {
+            data->team.erase( data->team.begin( ) + location );
+            changed = true;
+        }
+
+        return changed;
     }
 // }
 
@@ -182,6 +223,7 @@
             data->model->addData( "questTrackLength", data->quest_track_length );
             data->model->addData( "voteTrackLength", data->vote_track_length );
             data->model->addData( "leaderID", data->leader );
+            data->model->addData( "questingTeam", data->team );
             data->model->addData( "currentVoteTrack", 0 );
 
             for ( unsigned int i = 0; i < data->num_players; i++ ) {
@@ -215,6 +257,8 @@
             auto action = dynamic_cast< EnterTeamSelectionAction* >( action_to_be_handled );
             data->leader = action->getLeader( );
             data->model->updateData( "leaderID", data->leader );
+            data->team.clear( );
+            data->model->updateData( "questingTeam", data->team );
 
             return new TeamSelectionState( data );
         // We don't care about the action we received, since it isn't valid in this state
