@@ -2,8 +2,8 @@
 #include "guihelpers.hpp"
 #include <string>
 
-std::string avalon::gui::roleToString(avalon::special_roles_t role) {
-    switch(role){
+std::string avalon::gui::roleToString( avalon::special_roles_t role ) {
+    switch( role ){
 
     case avalon::MERLIN:
         return "Merlin";
@@ -26,8 +26,8 @@ std::string avalon::gui::roleToString(avalon::special_roles_t role) {
     return 0;
 }
 
-std::string avalon::gui::alignmentToString(avalon::alignment_t align) {
-    switch(align) {
+std::string avalon::gui::alignmentToString( avalon::alignment_t align ) {
+    switch( align ) {
 
     case avalon::GOOD:
         return "Good";

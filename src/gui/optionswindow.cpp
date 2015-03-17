@@ -43,7 +43,7 @@ OptionsWindow::~OptionsWindow( ) {
 
 
 void OptionsWindow::on_buttonJoinMenu_clicked( ) {
-    if(joinWindow == NULL) {
+    if( joinWindow == NULL ) {
         joinWindow = new JoinServerWindow( this );
         joinWindow->setModal( false );
     }
@@ -56,7 +56,7 @@ void OptionsWindow::on_buttonQuit_clicked( ) {
 }
 
 void OptionsWindow::on_buttonCreateMenu_clicked( ) {
-    if(createWindow == NULL) {
+    if( createWindow == NULL ) {
         createWindow = new CreateServerWindow( this );
         createWindow->setModal( false );
     }
