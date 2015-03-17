@@ -32,6 +32,9 @@ ServerController::ServerController( ServInfo* model, int port ) {
     action_queue = new ActionHandler( qSem );
     model->server->initQueue( action_queue );
 
+    model->vote_track = 0;
+    model->hidden_voting = false;
+
     handling_state = NULL;
     setServerState( new WaitingForClientsState( model ) );
 }
@@ -114,8 +117,7 @@ void ServerController::processAction( Action* action ) {
     setServerState( static_cast< ServerControllerState* >( handling_state->handleAction( action ) ) );
 }
 
-// Infinite loop, waiting for actions from either the GUI or network
-// and processing them as they come in
+// Infinite loop waiting for clients to do things
 void ServerController::processActions( ) {
     while( true ) {
         sem_wait( qSem ); // Wait until there is an action to process, so we don't spinlock

@@ -55,3 +55,21 @@
             return selector_id;
     }
 // }
+
+// TeamVoteAction {
+
+    TeamVoteAction::TeamVoteAction( unsigned int voter, avalon::player_vote_t vote ) : Action( "TeamVote" ) {
+        this->voter = voter;
+        this->vote = vote;
+    }
+
+    TeamVoteAction::~TeamVoteAction( ) { }
+
+    unsigned int TeamVoteAction::getVoter( ) {
+            return voter;
+    }
+
+    avalon::player_vote_t TeamVoteAction::getVote( ) {
+            return vote;
+    }
+// }

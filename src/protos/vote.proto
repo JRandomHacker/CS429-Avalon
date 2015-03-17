@@ -2,5 +2,5 @@ package avalon.network;
 
 message Vote {
     required int32 id = 1;
-    required bool yes = 2; // Boolean for the vote, if true, they voted yes
+    required int32 vote = 2;
 }

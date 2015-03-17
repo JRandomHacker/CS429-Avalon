@@ -16,12 +16,16 @@ typedef struct {
     Server* server;
     //! The number of clients who can connect
     unsigned int num_clients;
+    //! Whether votes should be hidden
+    bool hidden_voting;
     //! The player ID of the current leader
     unsigned int leader;
+    //! The current place on the vote track
+    unsigned int vote_track;
     //! A vector of all the players in the game
     std::vector< Player* > players;
     //! A vector holding the playerID and vote of anyone who's voted
-    std::vector< std::pair< unsigned int, bool > > votes;
+    std::vector< std::pair< unsigned int, avalon::player_vote_t > > votes;
     //! A vector holding the current team selection
     std::vector< unsigned int > team;
     //! A protobuf with the game's settings

@@ -148,4 +148,45 @@ class ConfirmTeamSelectionAction : public Action {
         unsigned int selector_id;
 };
 
+/**
+ * An action for receiving a vote
+ *
+ * @class ConfirmTeamSelectionAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-03-16
+ */
+class TeamVoteAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param player_id The ID of the player attempting to confirm
+         */
+        TeamVoteAction( unsigned int voter, avalon::player_vote_t vote );
+
+        /**
+         * Public destructor
+         */
+        virtual ~TeamVoteAction( );
+
+        /**
+         * Getter
+         *
+         * @return The ID of the player attempting to vote
+         */
+        unsigned int getVoter( );
+
+        /**
+         * Getter
+         *
+         * @return The vote of the voting player
+         */
+        avalon::player_vote_t getVote( );
+
+    private:
+        unsigned int voter;
+        avalon::player_vote_t vote;
+};
+
 #endif // SERVERCUSTOMACTIONS_HPP

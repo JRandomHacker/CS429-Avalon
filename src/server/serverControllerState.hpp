@@ -143,4 +143,62 @@ class TeamSelectionState : public ServerControllerState {
         bool toggleSelection( unsigned int player_id );
 };
 
+/**
+ * Third state
+ * Waits for everyone to send a vote
+ *
+ * @class VotingState
+ * @author Ryan Kerr
+ * @date 2015-03-16
+ */
+class VotingState : public ServerControllerState {
+
+    public:
+
+        /**
+         * Constructor
+         *
+         * @param mod A pointer to the ServInfo struct that the clientController is using
+         */
+        VotingState( ServInfo* mod );
+
+        /**
+         * Destructor
+         */
+        ~VotingState( );
+
+        /**
+         * The workhorse that actually takes care of an action
+         *
+         * @param action_to_be_handled The action that this controllerState should parse
+         */
+        ServerControllerState* handleAction( Action* action_to_be_handled );
+
+    private:
+
+        /*
+         * A helper to change the player's vote or add it if they hadn't voted
+         *
+         * @param player_id The id of the player who sent a vote
+         * @param player_vote_t The vote that the player sent
+         * @return Whether the vote changed
+         */
+        bool modifyVote( unsigned int player_id, avalon::player_vote_t );
+
+        /*
+         * A helper to send the vote results at the end of the voting phase
+         * Also sends the state change, and returns our new state
+         *
+         * @return The new state we're entering, due to the vote results
+         */
+        ServerControllerState* sendVoteResults( );
+
+        /*
+         * A helper to figure out the vote results
+         *
+         * @return None
+         */
+        bool figureOutResultsOfVote( );
+};
+
 #endif // SERVER_CONTROLLER_STATE_HPP

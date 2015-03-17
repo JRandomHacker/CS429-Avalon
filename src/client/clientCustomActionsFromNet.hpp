@@ -26,6 +26,10 @@ class GameSettingsAction : public Action {
          * @param settings A GameSettings protobuf containing the game's settings
          */
         GameSettingsAction( avalon::network::GameSettings* settings );
+
+        /**
+         * Destructor
+         */
         virtual ~GameSettingsAction( );
 
         /**
@@ -56,6 +60,10 @@ class AddPlayerAction : public Action {
          * @param player The player object that is being added
          */
         AddPlayerAction( unsigned int player_number, Player* player );
+
+        /**
+         * Destructor
+         */
         virtual ~AddPlayerAction( );
 
         /**
@@ -75,6 +83,60 @@ class AddPlayerAction : public Action {
     private:
         unsigned int player_number;
         Player* player_info;
+};
+
+/**
+ * An action corresponding to entering the team selection state
+ *
+ * @class EnterTeamSelectionAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-03-16
+ */
+class EnterTeamSelectionAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param leader The current team leader
+         */
+        EnterTeamSelectionAction( unsigned int leader );
+
+        /**
+         * Destructor
+         */
+        virtual ~EnterTeamSelectionAction( );
+
+        /**
+         * Getter
+         *
+         * @return The current leader
+         */
+        unsigned int getLeader( );
+
+    private:
+        unsigned int leader;
+};
+
+/**
+ * An action corresponding to entering the vote state
+ *
+ * @class EnterVoteStateAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-03-16
+ */
+class EnterVoteStateAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         */
+        EnterVoteStateAction( );
+
+        /**
+         * Destructor
+         */
+        virtual ~EnterVoteStateAction( );
 };
 
 #endif // CLIENTCUSTOMACTIONSFROMNET_HPP

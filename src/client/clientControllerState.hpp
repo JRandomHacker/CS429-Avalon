@@ -64,6 +64,31 @@ class LobbyState : public ClientControllerState {
 };
 
 /**
+ * ClientControllerState for when a leader is selecting a team
+ *
+ * @class TeamSelectionState
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-03-16
+ */
+class TeamSelectionState : public ClientControllerState {
+    public:
+
+        /**
+         * Constructor
+         *
+         * @param mod A pointer to a ClientInfo struct with the clients data
+         */
+        TeamSelectionState( ClientInfo* mod );
+
+        /**
+         * Method to actually deal with the action we've received
+         *
+         * @param action_to_be_handled The action that we need to deal with in our current state
+         */
+        ControllerState* handleAction( Action* action_to_be_handled );
+};
+
+/**
  * ClientControllerState for when we're voting on something
  *
  * @class VotingState

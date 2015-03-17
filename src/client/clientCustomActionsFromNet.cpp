@@ -9,29 +9,49 @@
 #include "player.hpp"
 #include "settings.pb.h"
 
-//Public constructors
-GameSettingsAction::GameSettingsAction( avalon::network::GameSettings* settings ) : Action( "GameSettings" ) {
-    game_settings = settings;
-}
+// GameSettingsAction {
+    GameSettingsAction::GameSettingsAction( avalon::network::GameSettings* settings ) : Action( "GameSettings" ) {
+        game_settings = settings;
+    }
 
-GameSettingsAction::~GameSettingsAction( ) { }
+    GameSettingsAction::~GameSettingsAction( ) { }
 
-AddPlayerAction::AddPlayerAction( unsigned int player_num, Player* player ) : Action( "AddPlayer" ) {
-    player_number = player_num;
-    player_info = player;
-}
+    avalon::network::GameSettings* GameSettingsAction::getSettings( ) {
+        return game_settings;
+    }
+// }
 
-AddPlayerAction::~AddPlayerAction( ) { }
+// AddPlayerAction {
+    AddPlayerAction::AddPlayerAction( unsigned int player_num, Player* player ) : Action( "AddPlayer" ) {
+        player_number = player_num;
+        player_info = player;
+    }
 
-//Getters
-avalon::network::GameSettings* GameSettingsAction::getSettings( ) {
-    return game_settings;
-}
+    AddPlayerAction::~AddPlayerAction( ) { }
 
-unsigned int AddPlayerAction::getPlayerNumber( ) {
-    return player_number;
-}
+    unsigned int AddPlayerAction::getPlayerNumber( ) {
+        return player_number;
+    }
 
-Player* AddPlayerAction::getPlayerInfo( ) {
-    return player_info;
-}
+    Player* AddPlayerAction::getPlayerInfo( ) {
+        return player_info;
+    }
+// }
+
+// EnterTeamSelectionAction {
+    EnterTeamSelectionAction::EnterTeamSelectionAction( unsigned int leader ) : Action( "EnterTeamSelection" ) {
+        this->leader = leader;
+    }
+
+    EnterTeamSelectionAction::~EnterTeamSelectionAction( ) { }
+
+    unsigned int EnterTeamSelectionAction::getLeader( ) {
+        return leader;
+    }
+// }
+
+// EnterVoteStateAction {
+    EnterVoteStateAction::EnterVoteStateAction( ) : Action( "EnterVoteState" ) { }
+
+    EnterVoteStateAction::~EnterVoteStateAction( ) { }
+// }

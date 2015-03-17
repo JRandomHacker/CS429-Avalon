@@ -132,5 +132,14 @@ class Server {
          */
         void sendProtobuf( avalon::network::buffers_t bufType, unsigned int destinationID, std::string message );
 
+        /**
+         * Helper function to tell the clients to change states
+         *
+         * @param bufType The type of the buffer that is being sent
+         * @param randomness Possibly some data... or not... who knows
+         * @return None
+         */
+        void broadcastStateChange( avalon::network::buffers_t bufType, unsigned int randomness );
+
 };
 #endif // _SERVER_HPP

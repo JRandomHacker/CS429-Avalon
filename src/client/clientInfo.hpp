@@ -27,6 +27,8 @@ typedef struct {
     unsigned int my_id;
     //! The number of evil characters in the game
     unsigned int num_evil;
+    //! The current leader - Person who proposes team
+    unsigned int leader;
     //! A vector of all the players in the game
     std::vector< Player* > players;
 

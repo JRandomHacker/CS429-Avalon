@@ -40,7 +40,16 @@ class Client {
          * @param bufLength The size of the protobuf that needs to be received
          * @return None
          */
-        void recvPlayer( int bufLength );
+        void recvPlayer( unsigned int bufLength );
+
+        /*
+         * Processes a state change method and creates the appropriate action
+         *
+         * @param bufLength The size of the protobuf that needs to be received
+         * @param randomness Maybe data... maybe not... depends on our state
+         * @return None
+         */
+        void recvStateChange( int bufType, unsigned int randomness  );
 
         /*
          * Recv's an avalon::network::GameSettings protobuf, creates an Action, and adds it to the queue
@@ -48,7 +57,7 @@ class Client {
          * @param bufLength The size of the protobuf that needs to be received
          * @return None
          */
-        void recvSettings( int bufLength );
+        void recvSettings( unsigned int bufLength );
 
     public:
 

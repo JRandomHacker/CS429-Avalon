@@ -94,7 +94,6 @@ Server::~Server( ) {
     #endif
 }
 
-// TODO:
 // Selects across the sockets to find one ready to read
 // Should then add an action to the Queue
 void Server::waitForData( ) {
@@ -169,17 +168,15 @@ void Server::recvTeamSelection( SOCKET recvSock, int bufLength ) {
 
     // Check to see if they're done or not
     if( buf.has_finished( ) && buf.finished( ) ) {
-        ConfirmTeamSelectionAction* tmp = new ConfirmTeamSelectionAction( selector );
-        action = ( Action* )tmp;
+        action = new ConfirmTeamSelectionAction( selector );
     } else {
 
         unsigned int selection = buf.id( );
 
-        ToggleTeamMemberAction* tmp = new ToggleTeamMemberAction( selector, selection );
-        action = ( Action* )tmp;
+        action = new ToggleTeamMemberAction( selector, selection );
     }
 
-    queue->addAction( ( Action* )action );
+    queue->addAction( action );
 }
 
 void Server::recvVote( SOCKET recvSock, int bufLength ) {
@@ -192,6 +189,12 @@ void Server::recvVote( SOCKET recvSock, int bufLength ) {
     avalon::network::Vote buf;
     buf.ParseFromArray( buffer, bufLength );
     delete[] buffer;
+
+    avalon::player_vote_t vote = ( avalon::player_vote_t )buf.vote( );
+    unsigned int id = getIdFromSocket( recvSock );
+
+    Action* action = new TeamVoteAction( id, vote );
+    queue->addAction( action );
 }
 
 std::string Server::recvCustomName( SOCKET recvSock ) {
@@ -241,15 +244,15 @@ bool Server::waitForClients( unsigned int num_clients ) {
         SOCKET new_sock = accept( servsock, NULL, NULL );
         sockets.push_back( new_sock );
         std::string playerName = recvCustomName( new_sock );
-        NewPlayerAction* action = new NewPlayerAction( i, playerName );
-        queue->addAction( ( Action* )action );
+        Action* action = new NewPlayerAction( i, playerName );
+        queue->addAction( action );
     }
 
     this->num_clients = num_clients;
     clients_connected = true;
 
-    EnterTeamSelectionAction* action = new EnterTeamSelectionAction( );
-    queue->addAction( ( Action* )action );
+    Action* action = new EnterTeamSelectionAction( );
+    queue->addAction( action );
     return true;
 }
 
@@ -263,9 +266,22 @@ void Server::sendProtobuf( avalon::network::buffers_t bufType, unsigned int dest
     int messageSize = message.length( );
 
     // Windows REQUIRES that model->sockets send char* rather than void*... so we have to do some bullshit to trick it
-    send( sockets[ destinationID ], (char*)(&bufType), sizeof( avalon::network::buffers_t ) / sizeof( char ), 0 );
-    send( sockets[ destinationID ], (char*)(&messageSize), sizeof( int ) / sizeof( char ), 0 );
+    send( sockets[ destinationID ], ( char* )( &bufType ), sizeof( avalon::network::buffers_t ) / sizeof( char ), 0 );
+    send( sockets[ destinationID ], ( char* )( &messageSize ), sizeof( int ) / sizeof( char ), 0 );
     send( sockets[ destinationID ], message.c_str( ), messageSize * sizeof( char ), 0 );
+}
+
+void Server::broadcastStateChange( avalon::network::buffers_t bufType, unsigned int randomness ) {
+    
+    if( !clients_connected ) {
+        std::cerr << "[ SERVER ] Attempted to broadcast state change before everyone was connected." << std::endl;
+        return;
+    }
+
+    for( unsigned int i = 0; i < num_clients; i++ ) {
+        send( sockets[ i ], ( char* )( &bufType ), sizeof( avalon::network::buffers_t ) / sizeof( char ), 0 );
+        send( sockets[ i ], ( char* )( &randomness ), sizeof( int ) / sizeof( char ), 0 );
+    }
 }
 
 unsigned int Server::getIdFromSocket( SOCKET sock ) {

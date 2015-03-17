@@ -114,7 +114,7 @@ void Client::waitForData( ) {
     }
 
     // Receive the length of the protobuf we're looking for
-    int bufLength;
+    unsigned int bufLength;
     recv( sock, (char*) &bufLength, sizeof( int ), 0 );
 
     // Call the relevant helper method, depending on the type of the protobuf
@@ -128,6 +128,11 @@ void Client::waitForData( ) {
             recvSettings( bufLength );
             break;
 
+        case avalon::network::ENTER_TEAM_SELECTION_BUF:
+        case avalon::network::ENTER_TEAM_VOTE_BUF:
+            recvStateChange( bufType, bufLength );
+            break;
+
         default:
             std::cerr << "[ CLIENT ] Received an unknown type of protobuf" << std::endl;
             break;
@@ -135,7 +140,7 @@ void Client::waitForData( ) {
 }
 
 // Helper function to receive a player protobuf
-void Client::recvPlayer( int bufLength ) {
+void Client::recvPlayer( unsigned int bufLength ) {
 
     // Receive the player
     char* playerBuf = new char[ bufLength ];
@@ -147,14 +152,14 @@ void Client::recvPlayer( int bufLength ) {
     Player* p = new Player( pBuf );
 
     // Add an action to the queue
-    AddPlayerAction* action = new AddPlayerAction( pBuf.id(), p );
-    queue->addAction( ( Action* )action );
+    Action* action = new AddPlayerAction( pBuf.id(), p );
+    queue->addAction( action );
 
     delete[] playerBuf;
 }
 
 // Helper function to receive a gamesettings protobuf
-void Client::recvSettings( int bufLength ) {
+void Client::recvSettings( unsigned int bufLength ) {
 
     // Receive the game settings
     char* settingsBuf = new char[ bufLength ];
@@ -165,10 +170,34 @@ void Client::recvSettings( int bufLength ) {
     sBuf->ParseFromArray( settingsBuf, bufLength );
 
     // Add an action to the queue
-    GameSettingsAction* action = new GameSettingsAction( sBuf );
-    queue->addAction( ( Action* )action );
+    Action* action = new GameSettingsAction( sBuf );
+    queue->addAction( action );
 
     delete[] settingsBuf;
+}
+
+// Helper function for switching states
+void Client::recvStateChange( int bufType, unsigned int randomness ) {
+
+    Action* action = NULL;
+    switch( bufType ) {
+
+        case avalon::network::ENTER_TEAM_SELECTION_BUF:
+            action = new EnterTeamSelectionAction( randomness );
+            break;
+
+        case avalon::network::ENTER_TEAM_VOTE_BUF:
+            action = new EnterVoteStateAction( );
+            break;
+
+        default:
+            std::cerr << "Attempted to parse a state change from a not state change" << std::endl;
+            break;
+    }
+
+    if( action ) {
+        queue->addAction( action );
+    }
 }
 
 void Client::sendProtobuf( avalon::network::buffers_t bufType, std::string message ) {

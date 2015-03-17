@@ -75,8 +75,7 @@ namespace avalon {
         YES, /* A vote for the current team */
         NO, /* A vote against the current team */
         HIDDEN, /*! This represents a player who has voted but you don't know what they voted. */
-        NO_VOTE,  /* This represents a player who has not voted */
-        UNKNOWN_VOTE  /* This represents knowing nothing about whether a player has voted */
+        NO_VOTE  /* This represents a player who has not voted */
     };
 
     namespace network {
@@ -84,8 +83,13 @@ namespace avalon {
         enum buffers_t {
             PLAYER_BUF, /*! An avalon::network::Player protobuf */
             SETTINGS_BUF, /*! An avalon::network::GameSettings protobuf */
+            ENTER_TEAM_SELECTION_BUF, /*! A message corresponding to a state change */
             TEAM_SELECTION_BUF, /*! An avalon::network::TeamSelection protobuf */
-            VOTE_BUF /*! An avalon::network::Vote protobuf */
+            ENTER_TEAM_VOTE_BUF, /*! A message corresponding to a state change */
+            VOTE_BUF, /*! An avalon::network::Vote protobuf */
+            VOTE_RESULTS_BUF, /*! An avalon::network::VoteResults protobuf */
+            ENTER_QUEST_VOTE_BUF, /*! A message corresponding to a state change */
+            ENTER_END_GAME_BUF /*! A message corresponding to a state change */
         };
     }
 }
