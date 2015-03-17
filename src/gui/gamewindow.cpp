@@ -99,15 +99,6 @@ void GameWindow::createPlayerSubscribers( ) {
     // Subscribe to myID
     myID_subscriber = new ClosureSubscriber( NULL, NULL );
     model->subscribe( "myID", myID_subscriber );
-
-    // Subscribe to leaderID
-    leaderID_subscriber = new ClosureSubscriber(
-                [&]( Subscriber* ) {
-                    emit leaderIDUpdated( );
-            },
-            NULL );
-    model->subscribe( "leaderID", leaderID_subscriber );
-    updateLeader( );
     
     // Subscribe to questingTeam
     questingTeam_subscriber = new ClosureSubscriber(
@@ -137,6 +128,15 @@ void GameWindow::createPlayerSubscribers( ) {
 
         updatePlayer( i );
     }
+
+    // Subscribe to leaderID
+    leaderID_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit leaderIDUpdated( );
+            },
+            NULL );
+    model->subscribe( "leaderID", leaderID_subscriber );
+    updateLeader( );
 }
 
 void GameWindow::updatePlayer( unsigned int id ) {
