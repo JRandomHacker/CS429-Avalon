@@ -18,13 +18,15 @@ SOURCES  += main.cpp\
     gamewindow.cpp \
     createserverwindow.cpp \
     joinserverwindow.cpp \
-    displayerrors.cpp
+    displayerrors.cpp \
+    guihelpers.cpp
 
 HEADERS  += optionswindow.hpp \
     gamewindow.hpp \
     createserverwindow.hpp \
     joinserverwindow.hpp \
-    displayerrors.hpp
+    displayerrors.hpp \
+    guihelpers.hpp
 
 FORMS    += optionswindow.ui \
     gamewindow.ui \

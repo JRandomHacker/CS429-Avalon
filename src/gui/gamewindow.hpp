@@ -78,6 +78,17 @@ signals:
      */
     void gameInfoUpdated( );
 
+    /**
+     * Function that is called when the leader ID is updated
+     * @return None
+     */
+    void leaderIDUpdated( );
+
+    /**
+     * Function that is called when the questing team is updated
+     */
+    void questingTeamUpdated( );
+
 private slots:
     /**
      *  Makes subscriber to get num of players.
@@ -97,6 +108,16 @@ private slots:
      *  Updates the numEvil and roleList UI elements
      */
     void updateGameInfo();
+
+    /**
+     *  Changes gui for leader and non-leaders
+     */
+    void updateLeader();
+
+    /**
+     * Display the current questing team.
+     */
+    void updateQuestingTeam();
     
     /**
      *  Callback for positive vote button
@@ -107,6 +128,11 @@ private slots:
      *  Callback for negative vote button
      */
     void on_buttonVoteFail_clicked();
+
+    /**
+     * Callback to propose a team
+     */
+    void on_proposeTeamButton_clicked();
 
 private:
     /**
@@ -137,6 +163,10 @@ private:
     Subscriber* numEvil_subscriber;
     
     Subscriber* roleList_subscriber;
+
+    Subscriber* leaderID_subscriber;
+
+    Subscriber* questingTeam_subscriber;
     
     /**
      *  Subscriber vector that watches player objects.

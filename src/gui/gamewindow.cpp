@@ -3,11 +3,15 @@
 #include "subscriber.hpp"
 #include "player.hpp"
 #include "globals.hpp"
+#include "guihelpers.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include <signal.h>
 #include <QStandardItem>
 #include <QCloseEvent>
+#include <QStringList>
 #include <QKeyEvent>
+#include <QHeaderView>
+#include <QList>
 #include <vector>
 
 #ifdef _WIN32
@@ -28,6 +32,8 @@
     connect(this, SIGNAL(gameSettingsReceived()), this, SLOT(createPlayerSubscribers()));
     connect(this, SIGNAL(playerInfoUpdated(unsigned int)), this, SLOT(updatePlayer(unsigned int)));
     connect(this, SIGNAL(gameInfoUpdated()), this, SLOT(updateGameInfo()));
+    connect(this, SIGNAL(leaderIDUpdated()), this, SLOT(updateLeader()));
+    connect(this, SIGNAL(questingTeamUpdated()), this, SLOT(updateQuestingTeam()));
 
     // Start up thread for controller
     pthread_t controlThread;
@@ -91,9 +97,32 @@ void GameWindow::createPlayerSubscribers( ) {
     myID_subscriber = new ClosureSubscriber( NULL, NULL );
     model->subscribe( "myID", myID_subscriber );
 
+    // Subscribe to leaderID
+    leaderID_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit leaderIDUpdated();
+            },
+            NULL );
+    model->subscribe( "leaderID", leaderID_subscriber);
+    updateLeader();
+    
+    // Subscribe to questingTeam
+    questingTeam_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit questingTeamUpdated();
+            },
+            NULL );
+    model->subscribe( "leaderID", leaderID_subscriber);
+
     // Add list items and subscribers for each player
-    QStandardItemModel* listModel = new QStandardItemModel( );
+    QStandardItemModel* listModel = new QStandardItemModel(num_players, 3);
     ui->playerList->setModel( listModel );
+
+    QStringList headers;
+    headers.append( QString("Name") );
+    headers.append( QString("Alignment") );
+    headers.append( QString("Role"));
+    listModel->setHorizontalHeaderLabels(headers);
 
     for ( unsigned int i = 0; i < num_players; i++ ) {
         // Add subscriber for this player
@@ -103,9 +132,6 @@ void GameWindow::createPlayerSubscribers( ) {
             },
             NULL) );
         model->subscribe( std::string("player") + std::to_string( i ), player_subscribers[i] );
-
-        QStandardItem* pli = new QStandardItem( );
-        listModel->appendRow( pli );
 
         updatePlayer(i);
     }
@@ -127,10 +153,43 @@ void GameWindow::updatePlayer(unsigned int id) {
 
         if(id == 0)
             newString += " (host)";
-        else
-            newString += " (connected)";
+
+        listModel->setItem( id, 1, new QStandardItem(
+                                QString(avalon::gui::alignmentToString( (*p)->getAlignment() ).c_str() )));
+        listModel->setItem( id, 2, new QStandardItem(
+                                QString(avalon::gui::roleToString( (*p)->getRole() ).c_str() )));
     }
-    listModel->item( id )->setText( QString( newString.c_str( ) ) );
+    listModel->setItem( id, 0, new QStandardItem( QString( newString.c_str( ) )));
+    
+    ui->playerList->resizeColumnsToContents();
+}
+
+void GameWindow::updateLeader() {
+    unsigned int* lidpt = leaderID_subscriber->getData<unsigned int>();
+    unsigned int myID = *myID_subscriber->getData<unsigned int>();
+    if(lidpt != NULL) {
+        unsigned int lid = *lidpt;
+
+        if(lid == myID) {
+            ui->proposeTeamButton->show();
+        }
+        else {
+            ui->proposeTeamButton->hide();
+        }
+    }
+}
+
+void GameWindow::updateQuestingTeam() {
+    std::vector<unsigned int>* teamptr = questingTeam_subscriber->getData<std::vector<unsigned int>>();
+    if(teamptr != NULL) {
+        std::vector<unsigned int> team = *teamptr;
+
+        QStandardItemModel* qModel = new QStandardItemModel();
+        for(unsigned int i = 0; i < team.size(); i++) {
+            Player* p = *player_subscribers[i]->getData<Player*>();
+            qModel->appendRow(new QStandardItem( QString(p->getName().c_str())));
+        }
+    }
 }
 
 void GameWindow::updateGameInfo() {
@@ -146,7 +205,15 @@ void GameWindow::updateGameInfo() {
 
     std::vector<bool>* roleList = roleList_subscriber->getData<std::vector<bool>>();
     if(roleList != NULL)
-    { /* TODO: translate list of bool to list of roles in game */ }
+    {
+        QStandardItemModel* roleModel = new QStandardItemModel();
+        ui->currRolesList->setModel(roleModel);
+        for(unsigned int i = 0; i < roleList->size(); i++) {
+            avalon::special_roles_t role = (avalon::special_roles_t) i;
+            if((*roleList)[i])
+                roleModel->appendRow(new QStandardItem(QString(avalon::gui::roleToString(role).c_str())));
+        }
+    }
 }
 
 void GameWindow::on_buttonVotePass_clicked() {
@@ -157,6 +224,11 @@ void GameWindow::on_buttonVotePass_clicked() {
 void GameWindow::on_buttonVoteFail_clicked() {
     TeamVoteAction* vote = new TeamVoteAction(avalon::NO);
     control->addActionToQueue(vote);
+}
+
+void GameWindow::on_proposeTeamButton_clicked() {
+    FinalizeTeamAction* act = new FinalizeTeamAction();
+    control->addActionToQueue(act);
 }
 
 void GameWindow::closeEvent(QCloseEvent* e) {
