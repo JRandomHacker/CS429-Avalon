@@ -18,19 +18,19 @@ class Action {
          * @param mess_text The human readable message explaining the contents
          *     of the action
          */
-         Action(std::string mess_text);
+         Action( std::string mess_text );
 
          /**
           * Destructor
           */
-         virtual ~Action();
+         virtual ~Action( );
 
          /**
           * Getter
           *
           * @return The string representing this Action
           */
-         std::string getMessage();
+         std::string getMessage( );
 
     private:
         std::string message_text;

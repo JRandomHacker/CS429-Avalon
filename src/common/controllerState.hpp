@@ -21,12 +21,12 @@ class ControllerState {
          *
          * @param state_type_desc A string representing the state we're in
          */
-        ControllerState(std::string state_type_desc);
+        ControllerState( std::string state_type_desc );
 
         /**
          * Destructor
          */
-        virtual ~ControllerState();
+        virtual ~ControllerState( );
 
         /**
          * Virtual method for handling an action
@@ -35,7 +35,7 @@ class ControllerState {
          * @param action_to_be_handled The action that needs to be handled in the current state
          * @return A different ControllerState if the action causes a state switch. NULL otherwise
          */
-        virtual ControllerState* handleAction(Action* action_to_be_handled) = 0;
+        virtual ControllerState* handleAction( Action* action_to_be_handled ) = 0;
 
         /**
          * A method that can be called whenever you get an unwanted action in handleAction
@@ -44,7 +44,7 @@ class ControllerState {
          * @param action_type A string representing the action you weren't expecting
          * @return None
          */
-        void reportUnhandledAction(std::string action_type);
+        void reportUnhandledAction( std::string action_type );
 
         /**
          * A method to get the type of the current state

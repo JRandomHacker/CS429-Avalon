@@ -32,7 +32,7 @@ public:
      *     and an iterator to the first element to be read. Iterating past the
      *     last safe element is undefined.
      */
-    std::pair<int, std::list<Action*>::iterator> freezeFrontActions( void );
+    std::pair< int, std::list< Action* >::iterator > freezeFrontActions( void );
 
     /**
      * Releases read access gotten elsewhere.
@@ -46,7 +46,7 @@ public:
     void releaseFrozenActions( void );
 
 private:
-    std::list<Action*> action_queue;
+    std::list< Action* > action_queue;
     std::mutex queue_append_control;
     std::mutex queue_read_control;
 
