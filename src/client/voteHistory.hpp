@@ -18,18 +18,15 @@
 
 class VoteHistory {
     public:
-    
-        /**
-         * Default constructor
-         */
-        VoteHistory ( );
-        
         /**
          * Constructor that receives and stores vote vector
          *
-         * @param myVoteVec vector containing the votes of all players
+         * @param playerVotesVec vector containing the votes of all players indexed by player id
+         * @param teamVotedOn vector containing the player ids for each player on the team being voted on
+         * @param voteTrackDuringVote position of the vote track during the vote
+         * @param questTrackDuringVote position of the quest track during the vote
          */
-        VoteHistory ( std::vector< avalon::player_vote_t > myVoteVec );
+        VoteHistory ( std::vector< avalon::player_vote_t > playerVotesVec, std::vector< unsigned int > teamVotedOn, unsigned int voteTrackDuringVote, unsigned int questTrackDuringVote );
         
         /**
          * Returns the vote of the requested player
@@ -37,13 +34,43 @@ class VoteHistory {
          * @param playerNum the index of the player whose vote should be returned
          * @return vote at the index of the requested player
          */
-        < avalon::player_vote_t > getPlayerVote ( unsigned int playerNum );
+        avalon::player_vote_t getPlayerVote ( unsigned int playerNum );
+
+        /**
+         * Getter
+         *
+         * @return the votes for each player in a vector
+         */
+        std::std::vector< avalon::player_vote_t > getPlayerVotes();
+
+        /**
+         * Getter
+         *
+         * @return the proposed team
+         */
+        std::std::vector< unsigned int > getProposedTeam();
+
+        /**
+         * Getter
+         *
+         * @return the position on the vote track at the time of the vote
+         */
+        unsigned int getVoteTrackNum();
+
+        /**
+         * Getter
+         *
+         * @return the position on the quest track at the time of the vote
+         */
+        unsigned int getQuestTrackNum();
+
+        
         
     private:
     
-        std::vector< avalon::player_vote_t > voteVec;
+        std::vector< avalon::player_vote_t > playerVotes;
         
-        std::vector< unsigned int > playerNumVec;
+        std::vector< unsigned int > proposedTeam;
         
         unsigned int voteTrackNum;
         
