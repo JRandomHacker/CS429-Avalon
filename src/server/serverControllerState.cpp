@@ -262,6 +262,11 @@
         model->leader %= model->num_clients;
         bool passed = figureOutResultsOfVote( );
 
+        // If it passed, we need to reset the vote track
+        if( passed ) {
+            model->vote_track = 0;
+        }
+
         // Sort the votes into player order
         avalon::player_vote_t sorted_votes[ model->num_clients ];
         for( std::vector< std::pair< unsigned int, avalon::player_vote_t > >::iterator it = model->votes.begin( ); it != model->votes.end( ); it++ ) {
@@ -305,20 +310,18 @@
 
         if( vote_passed ) {
 
-            model->vote_track = 0;
             // TODO change our state to quest vote
             model->server->broadcastStateChange( avalon::network::ENTER_TEAM_SELECTION_BUF, model->leader );
             return new TeamSelectionState( model );
+
+        // If these fuckers can't make up their mind, they lose.
+        } else if( model->vote_track >= model->vote_track_length ) {
+            // TODO change our state to end game
+            model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
+            return NULL;
+
+        // Go back to the selection state, moving one step closer to annihilation
         } else {
-
-            // If these fuckers can't make up their mind, they lose.
-            if( model->vote_track > model->vote_track_length ) {
-                // TODO change our state to end game
-                model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
-                return NULL;
-            }
-
-            // Go back to the selection state, moving one step closer to annihilation
             model->server->broadcastStateChange( avalon::network::ENTER_TEAM_SELECTION_BUF, model->leader );
             return new TeamSelectionState( model );
         }
