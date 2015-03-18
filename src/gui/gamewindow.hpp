@@ -86,11 +86,15 @@ signals:
 
     /**
      * A signal that is emitted when the questing team is updated
+     *
+     * @return None
      */
     void questingTeamUpdated( );
 
     /**
      * Signal emitted when vote track or quest track is updated
+     *
+     * @return None
      */
     void trackUpdated( );
 
@@ -100,52 +104,71 @@ private slots:
      *  Makes subscribers to current player ID.
      *  Creates and displays the list of players.
      *  Makes a subscriber list and registers them for each of the players.
+     *
+     * @return None
      */
     void createPlayerSubscribers( );
 
     /**
      * Updates a player's entry in the player list
      * @param id The playerNum of the updated player
+     * @return None
      */
     void updatePlayer( unsigned int id );
 
     /**
      *  Updates the numEvil and roleList UI elements
+     *
+     * @return None
      */
     void updateGameInfo( );
 
     /**
      *  Changes gui for leader and non-leaders
+     *
+     * @return None
      */
     void updateLeader( );
 
     /**
      * Display the current questing team.
+     *
+     * @return None
      */
     void updateQuestingTeam( );
 
     /**
      * Displays info about vote/quest tracks
+     *
+     * @return None
      */
     void updateTrack( );
     
     /**
      * When the leader clicks a player, they are toggled on/off the team
+     *
+     * @return None
      */
     void on_playerList_clicked(const QModelIndex &index );
 
     /**
      *  Callback for positive vote button
+     *
+     * @return None
      */
     void on_buttonVotePass_clicked( );
     
     /**
      *  Callback for negative vote button
+     *
+     * @return None
      */
     void on_buttonVoteFail_clicked( );
 
     /**
      * Callback to propose a team
+     *
+     * @return None
      */
     void on_proposeTeamButton_clicked( );
 
@@ -232,6 +255,8 @@ private:
     /**
      *  Create a subscriber that checks if the model has game settings, 
      *  and if it does, create player subscribers
+     *
+     * @return None
      */
     void startWatchOnHasGameSettings( );
 
@@ -239,6 +264,7 @@ private:
      *  Process the action queue for given client controller. 
      * 
      *  @param   data    pointer to client controller
+     * @return None
      */
     static void* controlThreadFn( void* clientController );
 };

@@ -30,27 +30,36 @@ public:
 private slots:
     /**
      *  Opens joins server window on click, closes the current window
+     * @return None
      */
     void on_buttonJoinMenu_clicked( );
 
     /**
      *  Closes the current window
+     * @return None
      */
     void on_buttonQuit_clicked( );
 
     /**
      *  Opens create server window on click, closes the current window
+     * @return None
      */
     void on_buttonCreateMenu_clicked( );
 
 private:
     /**
-     *  Options window field.
+     *  The field for the options window (its self).
      */
     Ui::OptionsWindow *ui;
     
+    /**
+     * Field for the window the join server button will lead to
+     */
     JoinServerWindow* joinWindow;
     
+    /**
+     * Field for the button that the create server button will lead to
+     */
     CreateServerWindow* createWindow;
 };
 
