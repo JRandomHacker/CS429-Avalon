@@ -10,7 +10,7 @@
 #include <string>
 #include <iostream>
 
-MockServer::MockServer( ) : Server( 11111 ) { 
+MockServer::MockServer( ) : Server( 11111 ) {
     lastBuf = "";
 };
 
@@ -21,7 +21,7 @@ void MockServer::sendProtobuf( avalon::network::buffers_t bufType, unsigned int 
 }
 
 std::string MockServer::getLastProtobuf( ) {
-    
+
     return lastBuf;
 }
 

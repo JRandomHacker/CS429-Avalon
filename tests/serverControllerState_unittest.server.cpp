@@ -125,11 +125,11 @@ TEST_F( ServerControllerStateTestFixture, TestTeamStateToggleActionLeader ) {
 
     ASSERT_EQ( NULL, resultState );
     ASSERT_EQ( avalon::network::TEAM_SELECTION_BUF, testServer->getLastBufType( ) );
-    
+
     std::string sentBuf = testServer->getLastProtobuf( );
     avalon::network::TeamSelection sentSelection;
     sentSelection.ParseFromString( sentBuf );
-    
+
     ASSERT_EQ( 2, sentSelection.id( ) );
     ASSERT_EQ( true, sentSelection.selected( ) );
 }
@@ -145,11 +145,11 @@ TEST_F( ServerControllerStateTestFixture, TestTeamStateToggleActionDeselect ) {
 
     ASSERT_EQ( NULL, resultState );
     ASSERT_EQ( avalon::network::TEAM_SELECTION_BUF, testServer->getLastBufType( ) );
-    
+
     std::string sentBuf = testServer->getLastProtobuf( );
     avalon::network::TeamSelection sentSelection;
     sentSelection.ParseFromString( sentBuf );
-    
+
     ASSERT_EQ( 2, sentSelection.id( ) );
     ASSERT_EQ( false, sentSelection.selected( ) );
 }
@@ -176,30 +176,30 @@ TEST_F( ServerControllerStateTestFixture, TestTeamStateConfirmActionLeader ) {
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionNew ) {
     VotingState testState( testInfo );
-    
+
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testInfo->votes = testVotes;
-    
+
     testAction = new TeamVoteAction( 2, avalon::YES );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( NULL, resultState );
-    
+
     std::string sentBuf = testServer->getLastProtobuf( );
     avalon::network::Vote sentVote;
     sentVote.ParseFromString( sentBuf );
-    
+
     ASSERT_EQ( 2, sentVote.id( ) );
     ASSERT_EQ( avalon::HIDDEN, sentVote.vote( ) );
 }
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionRepeat ) {
     VotingState testState( testInfo );
-    
+
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 2, avalon::YES ) );
     testInfo->votes = testVotes;
-    
+
     testAction = new TeamVoteAction( 2, avalon::YES );
     ControllerState* resultState = testState.handleAction( testAction );
 
@@ -209,85 +209,85 @@ TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionRepeat ) {
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionChange ) {
     VotingState testState( testInfo );
-    
+
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 2, avalon::NO ) );
     testInfo->votes = testVotes;
-    
+
     testAction = new TeamVoteAction( 2, avalon::YES );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( NULL, resultState );
-    
+
     std::string sentBuf = testServer->getLastProtobuf( );
     avalon::network::Vote sentVote;
     sentVote.ParseFromString( sentBuf );
-    
+
     ASSERT_EQ( 2, sentVote.id( ) );
     ASSERT_EQ( avalon::HIDDEN, sentVote.vote( ) );
 }
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionSuccess ) {
     VotingState testState( testInfo );
-    
+
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 1, avalon::YES ) );
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 3, avalon::NO ) );
     testInfo->votes = testVotes;
-    
+
     testAction = new TeamVoteAction( 2, avalon::YES );
     ControllerState* resultState = testState.handleAction( testAction );
 
     EXPECT_EQ( "QuestVote", resultState->getType( ) );
-    
+
     std::string sentBuf = testServer->getLastProtobuf( );
     avalon::network::VoteResults sentResults;
     sentResults.ParseFromString( sentBuf );
-    
+
     ASSERT_EQ( true, sentResults.passed( ) );
     EXPECT_EQ( avalon::network::ENTER_QUEST_VOTE_BUF, testServer->getLastState( ) );
 }
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionFailure ) {
     VotingState testState( testInfo );
-    
+
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 1, avalon::YES ) );
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 3, avalon::NO ) );
     testInfo->votes = testVotes;
     testInfo->vote_track = 1;
-    
+
     testAction = new TeamVoteAction( 2, avalon::NO );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( "TeamSelection", resultState->getType( ) );
-    
+
     std::string sentBuf = testServer->getLastProtobuf( );
     avalon::network::VoteResults sentResults;
     sentResults.ParseFromString( sentBuf );
-    
+
     ASSERT_EQ( false, sentResults.passed( ) );
     ASSERT_EQ( avalon::network::ENTER_TEAM_SELECTION_BUF, testServer->getLastState( ) );
 }
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionLoss ) {
     VotingState testState( testInfo );
-    
+
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 1, avalon::YES ) );
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 3, avalon::NO ) );
     testInfo->votes = testVotes;
     testInfo->vote_track = 5;
-    
+
     testAction = new TeamVoteAction( 2, avalon::NO );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( NULL, resultState );
-    
+
     std::string sentBuf = testServer->getLastProtobuf( );
     avalon::network::VoteResults sentResults;
     sentResults.ParseFromString( sentBuf );
-    
+
     ASSERT_EQ( false, sentResults.passed( ) );
     ASSERT_EQ( avalon::network::ENTER_END_GAME_BUF, testServer->getLastState( ) );
 }

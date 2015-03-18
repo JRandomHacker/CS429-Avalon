@@ -51,7 +51,7 @@ class MockServer : public Server {
          * @return The client index
          */
         unsigned int getLastClient( );
-        
+
         /**
          * Returns the last random data from the state change
          *
@@ -65,7 +65,7 @@ class MockServer : public Server {
          * @return The state transition that was sent
          */
         avalon::network::buffers_t getLastState( );
-        
+
         /**
          * Normally a function to send a state-change message to all clients
          * In the mock, allows us to examine the state-change to ensure the proper data was inserted
