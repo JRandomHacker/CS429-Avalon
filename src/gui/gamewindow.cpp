@@ -217,6 +217,7 @@ void GameWindow::updateQuestingTeam( ) {
         Player* p = *player_subscribers[i]->getData<Player*>( );
         qModel->appendRow( new QStandardItem( QString( p->getName( ).c_str( ) ) ) );
     }
+    ui->proposeTeamList->setModel( qModel );
 }
 
 void GameWindow::updateGameInfo( ) {
