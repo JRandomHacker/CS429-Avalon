@@ -50,17 +50,3 @@ TEST_F( ActionTests, testAddingActions) {
     ASSERT_EQ(std::get<0>(p), 0);
     ahandler.releaseFrozenActions();
 }
-
-/*
-TEST_F( ActionTests, testCustomActions) {
-    GameSettings settings;
-    GameSettingsAction gsact(&settings);
-    ASSERT_TRUE(gsact.GetMessage() == "GameSettings");
-    ASSERT_EQ(gsact.getSettings(), &settings);
-    Player play;
-    AddPlayerAction plact(2, &play);
-    ASSERT_TRUE(plact.GetMessage() == "AddPlayer");
-    ASSERT_EQ(plact.getPlayerNumber(), 2);
-    ASSERT_EQ(plact.getPlayerInfo(), &play);
-}
-*/
