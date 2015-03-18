@@ -8,6 +8,14 @@
 #include <iostream>
 #include <functional>
 
+/**
+ * A virtual class for an object that can subscribe to a block of data in the
+ * Model class
+ *
+ * @class Subscriber
+ * @author Matthew Hoffman
+ * @date 2015-03-18
+ */
 class Subscriber {
 public:
     /**
@@ -59,7 +67,14 @@ T* Subscriber::getData() {
     return data_block->getData<T>( );
 }
 
-
+/**
+ * A subclass of Subscriber that takes closures for its subscription callbacks
+ * Model class
+ *
+ * @class ClosureSubscriber
+ * @author Matthew Hoffman
+ * @date 2015-03-18
+ */
 class ClosureSubscriber : public Subscriber {
 public:
     /**
@@ -93,6 +108,14 @@ private:
     std::function<void ((Subscriber*))> dataDestroyedClosure;
 };
 
+/**
+ * A mock subclass of Subscriber that counts how many times it was updated and
+ * checks whether it was destroyed.
+ *
+ * @class MockSubscriber
+ * @author Matthew Hoffman
+ * @date 2015-03-18
+ */
 class MockSubscriber : public Subscriber {
 public:
 

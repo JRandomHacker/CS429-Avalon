@@ -9,6 +9,15 @@
 #include <semaphore.h>
 #include "action.hpp"
 
+/**
+ * A class storing a queue of actions to be handled. Actions can be thread
+ * safely written on one end and read from the other by freezing the front of
+ * the queue when reading is attempted.
+ *
+ * @class ActionHandler
+ * @author Matthew Hoffman
+ * @date 2015-03-18
+ */
 class ActionHandler {
 public:
     /**
@@ -41,7 +50,7 @@ public:
 
     /**
      * Removes all actions that are currently safe for reading and then
-     * releases read access.
+     * releases read access after freeing the memory of the stored actions.
      */
     void releaseFrozenActions( void );
 

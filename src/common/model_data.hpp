@@ -7,6 +7,10 @@
 /**
  * A class representing model data. It doesn't actually do anything, but is
  * to be subclassed for actual use.
+ *
+ * @class ModelData
+ * @author Matthew Hoffman
+ * @date 2015-03-18
  */
 class ModelData {
 public:
@@ -27,6 +31,15 @@ private:
     ModelData( const ModelData& that );
 };
 
+
+/**
+ * A class subclassing ModelData. It stores a single payload of a given type
+ * based on its template, and can return references to the payload.
+ *
+ * @class TypedModelData
+ * @author Matthew Hoffman
+ * @date 2015-03-18
+ */
 template < typename T >
 class TypedModelData : public ModelData {
 public:

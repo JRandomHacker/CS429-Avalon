@@ -9,6 +9,16 @@
 #include "data_block.hpp"
 #include "subscriber.hpp"
 
+/**
+ * A class for storing key, value pairs where the values are of arbitrary
+ * types. Also, the data is retrieved by setting up subscriptions with
+ * Subscriber objects who have their update called whenever their subscribed
+ * data changes.
+ *
+ * @class Model
+ * @author Matthew Hoffman
+ * @date 2015-03-18
+ */
 class Model {
 public:
     Model( );

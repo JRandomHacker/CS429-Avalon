@@ -9,6 +9,15 @@
 
 class Subscriber;
 
+/**
+ * A class representing a block of data in the model. It both stores a
+ * ModelData for its payload and has a list of subscribers that it updates when
+ * the data changes.
+ *
+ * @class DataBlock
+ * @author Matthew Hoffman
+ * @date 2015-03-18
+ */
 class DataBlock{
 public:
     DataBlock( );
