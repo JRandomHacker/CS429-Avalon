@@ -24,8 +24,9 @@ class VoteHistory {
          * @param teamVotedOn vector containing the player ids for each player on the team being voted on
          * @param voteTrackDuringVote position of the vote track during the vote
          * @param questTrackDuringVote position of the quest track during the vote
+         * @param didVotePass boolean for whether vote passed or not
          */
-        VoteHistory ( std::vector< avalon::player_vote_t > playerVotesVec, std::vector< unsigned int > teamVotedOn, unsigned int voteTrackDuringVote, unsigned int questTrackDuringVote );
+        VoteHistory ( std::vector< avalon::player_vote_t > playerVotesVec, std::vector< unsigned int > teamVotedOn, unsigned int voteTrackDuringVote, unsigned int questTrackDuringVote, bool didVotePass );
         
         /**
          * Returns the vote of the requested player
@@ -62,11 +63,20 @@ class VoteHistory {
          * @return the position on the quest track at the time of the vote
          */
         unsigned int getQuestTrackNum();
+        
+        /**
+         * Getter
+         * 
+         * @return bool for whether vote passed or not
+         */
+        bool getVotePassed();
 
         
         
     private:
     
+        bool votePassed;
+        
         std::vector< avalon::player_vote_t > playerVotes;
         
         std::vector< unsigned int > proposedTeam;
