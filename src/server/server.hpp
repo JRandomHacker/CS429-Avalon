@@ -130,7 +130,7 @@ class Server {
          * @param message The protobuf to be sent, already serialized as a string (Using protobuf's method)
          * @return None
          */
-        void sendProtobuf( avalon::network::buffers_t bufType, unsigned int destinationID, std::string message );
+        virtual void sendProtobuf( avalon::network::buffers_t bufType, unsigned int destinationID, std::string message );
 
         /**
          * Helper function to tell the clients to change states
@@ -139,7 +139,7 @@ class Server {
          * @param randomness Possibly some data... or not... who knows
          * @return None
          */
-        void broadcastStateChange( avalon::network::buffers_t bufType, unsigned int randomness );
+        virtual void broadcastStateChange( avalon::network::buffers_t bufType, unsigned int randomness );
 
 };
 #endif // _SERVER_HPP

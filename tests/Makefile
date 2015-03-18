@@ -3,7 +3,8 @@ TESTS=player_unittest.common.exe \
 	  globals_unittest.common.exe \
 	  model_unittest.common.exe \
 	  action_unittest.common.exe \
-	  clientControllerState_unittest.client.exe
+	  clientControllerState_unittest.client.exe \
+	  serverControllerState_unittest.server.exe
 
 TESTS_DIR=.
 SRC_DIR=../src

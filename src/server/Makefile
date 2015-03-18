@@ -1,4 +1,4 @@
-OBJS=server.o serverController.o serverControllerState.o serverCustomActions.o
+OBJS=server.o serverController.o serverControllerState.o serverCustomActions.o mockServer.o
 
 COMMON_DIR=../common
 PROTOS_DIR=../protos
