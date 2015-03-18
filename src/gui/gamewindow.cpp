@@ -12,6 +12,7 @@
 #include <QStringList>
 #include <QKeyEvent>
 #include <QHeaderView>
+#include <QModelIndex>
 #include <QList>
 #include <vector>
 
@@ -71,6 +72,9 @@ void GameWindow::startWatchOnHasGameSettings( ) {
 }
 
 void GameWindow::createPlayerSubscribers( ) {
+
+    ui->buttonVoteFail->setDisabled(true);
+    ui->buttonVotePass->setDisabled(true);
 
     // Add subscriber for number of players
     num_players_subscriber = new ClosureSubscriber( NULL, NULL );
@@ -214,6 +218,31 @@ void GameWindow::updateGameInfo( ) {
             if( ( *roleList )[i] )
                 roleModel->appendRow( new QStandardItem( QString( avalon::gui::roleToString( role ).c_str( ) ) ) );
         }
+    }
+}
+
+void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
+    if(leaderID_subscriber == NULL)
+        return;
+
+    unsigned int row = (unsigned int) index.row( );
+
+    unsigned int lid = *leaderID_subscriber->getData<unsigned int>( );
+
+    unsigned int myID = *myID_subscriber->getData<unsigned int>( );
+
+    if( lid == myID ) {
+        std::vector<unsigned int> qTeam = *questingTeam_subscriber->getData<std::vector<unsigned int>>( );
+        for( unsigned int i = 0; i < qTeam.size( ); i++ ) {
+            if( qTeam[i] == row ) {
+                SelectQuestGoerAction* act = new SelectQuestGoerAction( false, row );
+                control->addActionToQueue( act );
+                return;
+            }
+        }
+
+        SelectQuestGoerAction* act = new SelectQuestGoerAction( true, row );
+        control->addActionToQueue( act );
     }
 }
 

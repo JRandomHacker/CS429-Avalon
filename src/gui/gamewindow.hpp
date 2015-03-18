@@ -45,7 +45,7 @@ public:
      *  @param event The CloseEvent that happened, causing this function to be called
      *  @return None
      */
-    void closeEvent(QCloseEvent* event);
+    void closeEvent( QCloseEvent* event );
 
     /**
      * Overrides the escape key to clean up the server if on host
@@ -102,37 +102,42 @@ private slots:
      * Updates a player's entry in the player list
      * @param id The playerNum of the updated player
      */
-    void updatePlayer(unsigned int id );
+    void updatePlayer( unsigned int id );
 
     /**
      *  Updates the numEvil and roleList UI elements
      */
-    void updateGameInfo();
+    void updateGameInfo( );
 
     /**
      *  Changes gui for leader and non-leaders
      */
-    void updateLeader();
+    void updateLeader( );
 
     /**
      * Display the current questing team.
      */
-    void updateQuestingTeam();
+    void updateQuestingTeam( );
     
+    /**
+     * When the leader clicks a player, they are toggled on/off the team
+     */
+    void on_playerList_clicked(const QModelIndex &index );
+
     /**
      *  Callback for positive vote button
      */
-    void on_buttonVotePass_clicked();
+    void on_buttonVotePass_clicked( );
     
     /**
      *  Callback for negative vote button
      */
-    void on_buttonVoteFail_clicked();
+    void on_buttonVoteFail_clicked( );
 
     /**
      * Callback to propose a team
      */
-    void on_proposeTeamButton_clicked();
+    void on_proposeTeamButton_clicked( );
 
 private:
     /**

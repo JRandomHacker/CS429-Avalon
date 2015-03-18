@@ -14,8 +14,8 @@ my $code = <FILE>;
 close FILE;
 
 # Add spaces inside of ( or )
-$code =~ s/\((?=\w)/\( /g;
-$code =~ s/(?<=\w)\)/ \)/g;
+$code =~ s/\((?=\w|\))/\( /g;
+$code =~ s/(?<=\w|\))\)/ \)/g;
 
 # Make sure braces are on same line as if/else/function
 $code =~ s/(\(.*?\))\s*\{/$1 \{/g;
