@@ -8,11 +8,12 @@
 
 #include "voteHistory.hpp"
 
-VoteHistory::VoteHistory( std::vector< avalon::player_vote_t > playerVotesVec, std::vector< unsigned int > teamVotedOn, unsigned int voteTrackDuringVote, unsigned int questTrackDuringVote ) {
+VoteHistory::VoteHistory( std::vector< avalon::player_vote_t > playerVotesVec, std::vector< unsigned int > teamVotedOn, unsigned int voteTrackDuringVote, unsigned int questTrackDuringVote, bool didVotePass ) {
     playerVotes = playerVotesVec;
     proposedTeam = teamVotedOn;
     voteTrackNum = voteTrackDuringVote;
     questTrackNum = questTrackDuringVote;
+    votePassed = didVotePass;
 }
 
 avalon::player_vote_t getPlayerVote ( unsigned int playerNum ) {
@@ -22,18 +23,22 @@ avalon::player_vote_t getPlayerVote ( unsigned int playerNum ) {
     return NO_VOTE;
 }
 
-std::vector< avalon::player_vote_t > getPlayerVotes( ) {
+std::vector< avalon::player_vote_t > getPlayerVotes() {
     return playerVotes;
 }
 
-std::vector< unsigned int > getProposedTeam( ) {
+std::vector< unsigned int > getProposedTeam() {
     return proposedTeam;
 }
 
-unsigned int getVoteTrackNum( ) {
+unsigned int getVoteTrackNum() {
     return voteTrackNum;
 }
 
-unsigned int getQuestTrackNum( ) {
+unsigned int getQuestTrackNum() {
     return questTrackNum;
+}
+
+bool getVotePassed() {
+    return votePassed;
 }
