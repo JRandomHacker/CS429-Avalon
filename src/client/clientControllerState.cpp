@@ -109,9 +109,7 @@
 // TeamSelectionState {
 
     // Constructor for the TeamSelectionState, simply sets the correct state name
-    TeamSelectionState::TeamSelectionState( ClientInfo* dat ) : ClientControllerState( "TeamSelection", dat ) {
-
-    }
+    TeamSelectionState::TeamSelectionState( ClientInfo* dat ) : ClientControllerState( "TeamSelection", dat ) { }
 
     // Figures out what needs to be done with any given action, when we're in the voting state
     ControllerState* TeamSelectionState::handleAction( Action* action_to_be_handled ) {

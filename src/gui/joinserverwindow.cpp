@@ -25,14 +25,14 @@ JoinServerWindow::~JoinServerWindow( ) {
 }
 
 void JoinServerWindow::on_buttonCancel_clicked( ) {
-    this->parentWidget()->show();
+    this->parentWidget( )->show( );
     
-    this->hide();
+    this->hide( );
 }
 
 void JoinServerWindow::on_buttonJoinServer_clicked( ) {
-    std::string addr = ui->fieldServerAddr->text().toStdString( );
-    int port = ui->fieldPortNum->text().toInt( );
+    std::string addr = ui->fieldServerAddr->text( ).toStdString( );
+    int port = ui->fieldPortNum->text( ).toInt( );
 
     int status = controller->spawnNetwork( addr, port );
     if( status != EXIT_SUCCESS ) {

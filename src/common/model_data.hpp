@@ -6,6 +6,9 @@
 
 class ModelData {
 public:
+    /**
+     * Public constructor
+    */
     ModelData() = default;
     virtual ~ModelData() = default;
 
@@ -20,6 +23,10 @@ public:
     explicit TypedModelData(const T& payload_in) : payload(payload_in) {}
     virtual ~TypedModelData() = default;
 
+    /**
+     * Returns payload
+     * @return payload
+    */
     T& getPayload() { return payload; };
     T* getPayloadReference() { return &payload; };
 

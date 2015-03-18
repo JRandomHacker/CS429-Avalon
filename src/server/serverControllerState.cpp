@@ -307,7 +307,7 @@
 
             model->vote_track = 0;
             // TODO change our state to quest vote
-            model->server->broadcastStateChange( avalon::network::ENTER_TEAM_SELECTION_BUF, 0 );
+            model->server->broadcastStateChange( avalon::network::ENTER_TEAM_SELECTION_BUF, model->leader );
             return new TeamSelectionState( model );
         } else {
 

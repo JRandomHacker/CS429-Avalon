@@ -45,7 +45,7 @@ int CreateServerWindow::createServer( ) {
         execStr += std::to_string( ui->sbNumPlayers->value( ) );
         // Get the port number
         execStr += " --port=";
-        execStr += ui->editPortNum->text().toStdString( );
+        execStr += ui->editPortNum->text( ).toStdString( );
 
         QList<QListWidgetItem* > roles = ui->listWidget->selectedItems( );
 
@@ -151,9 +151,9 @@ void CreateServerWindow::on_buttonCreateServer_clicked( ) {
 }
 
 void CreateServerWindow::on_buttonCancel_clicked( ) {
-    this->parentWidget()->show();
+    this->parentWidget( )->show( );
     
-    this->hide();
+    this->hide( );
 }
 
 
@@ -172,6 +172,6 @@ void CreateServerWindow::connectToServer( ) {
         g->setModal( false );
         g->show( );
 
-        this->hide();
+        this->hide( );
     }
 }
