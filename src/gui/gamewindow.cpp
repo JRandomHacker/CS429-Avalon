@@ -27,7 +27,6 @@
     this->model = model;
     ui->setupUi( this );
     this->serverH = serverHandle;
-
     startWatchOnHasGameSettings( );
 
     // Connect slots and signals for updating UI elements
@@ -74,8 +73,8 @@ void GameWindow::startWatchOnHasGameSettings( ) {
 
 void GameWindow::createPlayerSubscribers( ) {
 
-    ui->buttonVoteFail->setDisabled(true);
-    ui->buttonVotePass->setDisabled(true);
+    ui->buttonVoteFail->setDisabled( true );
+    ui->buttonVotePass->setDisabled( true );
 
     // Add subscriber for number of players
     num_players_subscriber = new ClosureSubscriber( NULL, NULL );
@@ -158,6 +157,7 @@ void GameWindow::createPlayerSubscribers( ) {
             NULL );
     model->subscribe( "leaderID", leaderID_subscriber );
     updateLeader( );
+
 }
 
 void GameWindow::updatePlayer( unsigned int id ) {
@@ -173,7 +173,7 @@ void GameWindow::updatePlayer( unsigned int id ) {
         if( id == *myID_subscriber->getData<unsigned int>( ) )
             newString += " (me)";
 
-        if( id == 0)
+        if( id == 0 )
             newString += " (host)";
 
         listModel->setItem( id, 1, new QStandardItem(
@@ -241,15 +241,10 @@ void GameWindow::updateGameInfo( ) {
 void GameWindow::updateTrack( ) {
     unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
     unsigned int vLength = *voteTrackLength_subscriber->getData<unsigned int>( );
-    unsigned int* currVote = currentVoteTrack_subscriber->getData<unsigned int>( );
+    unsigned int currVote = *currentVoteTrack_subscriber->getData<unsigned int>( );
 
     std::string questStr = "Quest Track Length: " + std::to_string( qLength );
-    std::string voteStr = "";
-    if( currVote != NULL ) {
-        voteStr = "Vote " + std::to_string( *currVote + 1 ) + "/" + std::to_string( vLength );
-    } else {
-        voteStr = "Vote ? / " + std::to_string( vLength );
-    }
+    std::string voteStr = "Vote " + std::to_string( currVote + 1 ) + "/" + std::to_string( vLength );
 
     QStandardItemModel* trackModel = ( QStandardItemModel* ) ui->voteTrackList->model( );
     QStandardItem* questItem = new QStandardItem( QString( questStr.c_str( ) ) );
@@ -259,28 +254,22 @@ void GameWindow::updateTrack( ) {
 }
 
 void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
-    if(leaderID_subscriber == NULL)
+    if(leaderID_subscriber == NULL || myID_subscriber == NULL )
         return;
 
     unsigned int row = (unsigned int) index.row( );
 
-    unsigned int lid = *leaderID_subscriber->getData<unsigned int>( );
-
-    unsigned int myID = *myID_subscriber->getData<unsigned int>( );
-
-    if( lid == myID ) {
-        std::vector<unsigned int> qTeam = *questingTeam_subscriber->getData<std::vector<unsigned int>>( );
-        for( unsigned int i = 0; i < qTeam.size( ); i++ ) {
-            if( qTeam[i] == row ) {
-                SelectQuestGoerAction* act = new SelectQuestGoerAction( false, row );
-                control->addActionToQueue( act );
-                return;
-            }
+    std::vector<unsigned int> qTeam = *questingTeam_subscriber->getData<std::vector<unsigned int>>( );
+    for( unsigned int i = 0; i < qTeam.size( ); i++ ) {
+        if( qTeam[i] == row ) {
+            SelectQuestGoerAction* act = new SelectQuestGoerAction( false, row );
+            control->addActionToQueue( act );
+            return;
         }
-
-        SelectQuestGoerAction* act = new SelectQuestGoerAction( true, row );
-        control->addActionToQueue( act );
     }
+
+    SelectQuestGoerAction* act = new SelectQuestGoerAction( true, row );
+    control->addActionToQueue( act );
 }
 
 void GameWindow::on_buttonVotePass_clicked( ) {

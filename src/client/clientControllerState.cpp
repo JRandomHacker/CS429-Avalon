@@ -222,7 +222,7 @@
             data->model->addData( "voteTrackLength", data->vote_track_length );
             data->model->addData( "leaderID", data->leader );
             data->model->addData( "questingTeam", data->team );
-            data->model->addData( "currentVoteTrack", 0 );
+            data->model->addData( "currentVoteTrack", (unsigned int) 0 );
 
             for ( unsigned int i = 0; i < data->num_players; i++ ) {
                 data->model->addData( std::string( "player" ) + std::to_string( i ), NULL );
