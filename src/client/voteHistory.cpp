@@ -17,28 +17,28 @@ VoteHistory::VoteHistory( std::vector< avalon::player_vote_t > playerVotesVec, s
 }
 
 avalon::player_vote_t getPlayerVote ( unsigned int playerNum ) {
-    if (playerNum >=0 && playerNum < playerVotes.size())
-        return playerVotes.at(playerNum);
+    if (playerNum >=0 && playerNum < playerVotes.size( ))
+        return playerVotes.at( playerNum );
     std::cout << "getPlayerVote received bad playerNum!";
     return NO_VOTE;
 }
 
-std::vector< avalon::player_vote_t > getPlayerVotes() {
+std::vector< avalon::player_vote_t > getPlayerVotes( ) {
     return playerVotes;
 }
 
-std::vector< unsigned int > getProposedTeam() {
+std::vector< unsigned int > getProposedTeam( ) {
     return proposedTeam;
 }
 
-unsigned int getVoteTrackNum() {
+unsigned int getVoteTrackNum( ) {
     return voteTrackNum;
 }
 
-unsigned int getQuestTrackNum() {
+unsigned int getQuestTrackNum( ) {
     return questTrackNum;
 }
 
-bool getVotePassed() {
+bool getVotePassed( ) {
     return votePassed;
 }
