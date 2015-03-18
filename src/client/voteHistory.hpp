@@ -10,7 +10,6 @@
 #define _VOTEHISTORY_HPP
 
 #include <string>
-#include <iostream>
 #include globals.hpp
 
 #include "vote.pb.h"
@@ -41,14 +40,14 @@ class VoteHistory {
          *
          * @return the votes for each player in a vector
          */
-        std::std::vector< avalon::player_vote_t > getPlayerVotes();
+        std::vector< avalon::player_vote_t > getPlayerVotes();
 
         /**
          * Getter
          *
          * @return the proposed team
          */
-        std::std::vector< unsigned int > getProposedTeam();
+        std::vector< unsigned int > getProposedTeam();
 
         /**
          * Getter
