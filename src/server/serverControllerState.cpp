@@ -15,7 +15,7 @@
 // ServerControllerState {
     ServerControllerState::ServerControllerState( std::string state_type_desc, ServInfo* mod )
         : ControllerState(state_type_desc), model( mod ) {
-            std::cout << "[ ServerController ] Entered " << state_type_desc << " state" << std::endl;
+            std::cerr << "[ ServerController ] Entered " << state_type_desc << " state" << std::endl;
         }
 
     // Sends one player another player's information.
