@@ -41,35 +41,35 @@ class VoteHistory {
          *
          * @return the votes for each player in a vector
          */
-        std::vector< avalon::player_vote_t > getPlayerVotes();
+        std::vector< avalon::player_vote_t > getPlayerVotes( );
 
         /**
          * Getter
          *
          * @return the proposed team
          */
-        std::vector< unsigned int > getProposedTeam();
+        std::vector< unsigned int > getProposedTeam( );
 
         /**
          * Getter
          *
          * @return the position on the vote track at the time of the vote
          */
-        unsigned int getVoteTrackNum();
+        unsigned int getVoteTrackNum( );
 
         /**
          * Getter
          *
          * @return the position on the quest track at the time of the vote
          */
-        unsigned int getQuestTrackNum();
+        unsigned int getQuestTrackNum( );
         
         /**
          * Getter
          * 
          * @return bool for whether vote passed or not
          */
-        bool getVotePassed();
+        bool getVotePassed( );
 
         
         
