@@ -17,6 +17,12 @@ public:
     virtual ~Subscriber();
 
     // Interface functions
+    
+    /**
+     * Gets data from Subscriber
+     * 
+     * @return Subscriber's data with type T
+     */
     template <typename T>
     T* getData();
 

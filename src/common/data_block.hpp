@@ -13,6 +13,12 @@ class DataBlock{
 public:
     DataBlock();
     ~DataBlock();
+    
+    /**
+     * Public constructor
+     * 
+     * @param that DataBlock to initialize with
+     */
     DataBlock(const DataBlock& that);
 
     /**
@@ -25,6 +31,7 @@ public:
     
     /**
      * Releases an old subscriber
+     * 
      * @param old_subscriber Pointer to the Subscriber object for the old subscriber to be released
      * @return true if subscriber successfully released, false if not found
      */
@@ -32,6 +39,7 @@ public:
     
     /**
      * Removes an old subscriber without destroying its data
+     * 
      * @param old_subscriber Pointer to the Subscriber object for the old subscriber to be removed
      * @return true if subscriber successfully removed, false if not found
      */
@@ -44,6 +52,7 @@ public:
 
     /**
      * Updates the DataBlcok with new data and notifies all subscribers.
+     * 
      * @param new_data the new data to add to the DataBlock
      */
     template <typename T>
@@ -51,6 +60,7 @@ public:
 
     /**
      * Returns the current data, if there is any.
+     * 
      * @return current data or null if no data exists
      */
     template <typename T>

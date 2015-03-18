@@ -23,7 +23,7 @@ std::string avalon::gui::roleToString( avalon::special_roles_t role ) {
         return "Unknown";
     }
 
-    return 0;
+    return "Role not recognized";
 }
 
 std::string avalon::gui::alignmentToString( avalon::alignment_t align ) {
@@ -37,5 +37,5 @@ std::string avalon::gui::alignmentToString( avalon::alignment_t align ) {
         return "Unknown";
     }
 
-    return 0;
+    return "Alignment not recognized";
 }
