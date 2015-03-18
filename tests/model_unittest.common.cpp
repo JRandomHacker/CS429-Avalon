@@ -32,12 +32,29 @@ int ConDestructTester::constcount = 0;
 int ConDestructTester::destcount = 0;
 int ConDestructTester::copycount = 0;
 
-TEST_F( ModelTests, testAddingData) {
+TEST_F( ModelTests, testAddingData ) {
     // Adds data successfully twice, but then fails by trying to duplicate a
     // data name.
     ASSERT_TRUE(model.addData<int>("data_name", 0));
     ASSERT_TRUE(model.addData<bool>("second_data_name", false));
     ASSERT_FALSE(model.addData<int>("data_name", 0));
+}
+
+TEST_F( ModelTests, testRetrievingData ) {
+    // Adds data
+    ASSERT_TRUE( model.addData< int >( "data_name", 0 ) );
+    ASSERT_TRUE( model.addData< bool >( "second_data_name", false ) );
+
+    // Ensures that the data is referenced correctly, and that attempting to
+    // get data with either a bad id or a wrong type gets NULL
+    ASSERT_EQ( 0, *model.referenceData< int >( "data_name" ) );
+    ASSERT_EQ( false, *model.referenceData< bool >( "second_data_name" ) );
+    ASSERT_EQ( NULL, model.referenceData< unsigned int >( "data_name" ) );
+    ASSERT_EQ( NULL, model.referenceData< bool >( "not a data name" ) );
+
+    // Does an update and gets a new reference, ensuring its still correct
+    ASSERT_TRUE( model.updateData< int >( "data_name", 10 ) );
+    ASSERT_EQ( 10, *model.referenceData< int >( "data_name" ) );
 }
 
 TEST_F( ModelTests, testAddingConstructedData ) {

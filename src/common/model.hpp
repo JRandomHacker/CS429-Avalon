@@ -91,6 +91,16 @@ public:
      */
     bool removeData( std::string data_id );
 
+    /**
+     * Gets a constant pointer to the data at data_id. Note that this pointer
+     * WILL NOT be valid after an update, it must be used by the same thread
+     * that does the updates.
+     * @param data_id id to search for
+     * @return pointer to the data, NULL if there is no data
+     */
+    template < typename T >
+    const T* referenceData( std::string data_id );
+
 private:
     /**
      * Returns whether data exists for given data_id.
@@ -125,6 +135,15 @@ bool Model::addData( std::string data_id, const T& initial_value ) {
 
 template < typename T >
 T* Model::getDataForUpdate( std::string data_id ) {
+    auto data_iter = flat_data.find( data_id );
+    if ( data_iter == flat_data.end( ) ) {
+        return NULL;
+    }
+    return data_iter->second.getData<T>();
+}
+
+template < typename T >
+const T* Model::referenceData( std::string data_id ) {
     auto data_iter = flat_data.find( data_id );
     if ( data_iter == flat_data.end( ) ) {
         return NULL;
