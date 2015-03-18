@@ -16,7 +16,10 @@ VoteHistory::VoteHistory( std::vector< avalon::player_vote_t > playerVotesVec, s
 }
 
 avalon::player_vote_t getPlayerVote ( unsigned int playerNum ) {
-    return playerVotes.at(playerNum);
+    if (playerNum >=0 && playerNum < playerVotes.size())
+        return playerVotes.at(playerNum);
+    std::cout << "getPlayerVote received bad playerNum!";
+    return NO_VOTE;
 }
 
 std::vector< avalon::player_vote_t > getPlayerVotes( ) {
