@@ -214,7 +214,9 @@ void GameWindow::updateQuestingTeam( ) {
 
     QStandardItemModel* qModel = new QStandardItemModel( );
     for( unsigned int i = 0; i < team.size( ); i++ ) {
-        Player* p = *player_subscribers[i]->getData<Player*>( );
+
+        unsigned int player_num = team[ i ];
+        Player* p = *player_subscribers[ player_num ]->getData< Player* >( );
         qModel->appendRow( new QStandardItem( QString( p->getName( ).c_str( ) ) ) );
     }
     ui->proposeTeamList->setModel( qModel );
