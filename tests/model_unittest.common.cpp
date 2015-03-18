@@ -148,6 +148,45 @@ TEST_F( ModelTests, testAbleToUpdateAndRetrieveData) {
     ASSERT_TRUE(model.unsubscribe("data_name", &sub2));
 }
 
+TEST_F( ModelTests, testAbleToUpdateAndRetrieveDataWithoutReplacement) {
+    MockSubscriber sub1;
+    MockSubscriber sub2;
+
+    // Adds data to subscribe to
+    model.addData<int>("data_name", 0);
+
+    // Successfully subscribe to the new data
+    ASSERT_TRUE(model.subscribe("data_name", &sub1));
+
+    // Ensure that the subscriber can access the data
+    ASSERT_EQ(0, *sub1.getData<int>());
+
+    // Updates the data by reference rather than replacement and ensures that
+    // the subscriber is still accurate and that its update method was called
+    int* data_ref1 = model.getDataForUpdate<int>("data_name");
+    *data_ref1 = 1;
+    model.flagDataForUpdate("data_name");
+    ASSERT_EQ(1, *sub1.getData<int>());
+    ASSERT_EQ(1, sub1.updatedCount);
+
+    // Adds a second subscriber
+    ASSERT_TRUE(model.subscribe("data_name", &sub2));
+    ASSERT_EQ(1, *sub2.getData<int>());
+
+    // Updates the data and ensures that both subscribers were updated
+    int* data_ref2 = model.getDataForUpdate<int>("data_name");
+    *data_ref2 = 2;
+    model.flagDataForUpdate("data_name");
+    ASSERT_EQ(2, *sub1.getData<int>());
+    ASSERT_EQ(2, sub1.updatedCount);
+    ASSERT_EQ(2, *sub2.getData<int>());
+    ASSERT_EQ(1, sub2.updatedCount);
+
+    // Since the subscribers are being destroyed they need to be freed
+    ASSERT_TRUE(model.unsubscribe("data_name", &sub1));
+    ASSERT_TRUE(model.unsubscribe("data_name", &sub2));
+}
+
 TEST_F( ModelTests, testDeletingDataRemovesSubscribers) {
     MockSubscriber sub1;
 

@@ -34,11 +34,30 @@ public:
     bool subscribe( std::string data_id, Subscriber* new_subscriber );
     
     /**
+     * Remove the old_subscriber from the list of subscribers to data_id
+
      * @param data_id id to search for
      * @param old_subscriber Pointer to Subscriber object to remove from subscribers
      * @return true if successfully removed, false if data_id not found
      */
     bool unsubscribe( std::string data_id, Subscriber* old_subscriber );
+
+    /**
+     * Returns a reference to the data in the model so it can be updated without replacement
+     * 
+     * @param data_id id to search for
+     * @return pointer to the data stored at data_id, NULL if there is no block there with that type
+     */
+    template < typename T >
+    T* getDataForUpdate( std::string data_id );
+
+    /**
+     * Treats the data at data_id as if it is new and triggers updates for the subscribers.
+     * This is for use after data gotten from getDataForUpdate was modified
+     * 
+     * @param data_id id to search for
+     */
+    bool flagDataForUpdate( std::string data_id );
 
     /**
      * If the given data_id is found, updates current data with new_data.
@@ -102,6 +121,15 @@ bool Model::addData( std::string data_id, const T& initial_value ) {
         return false;
     }
     return updateData<T>( data_id, initial_value );
+}
+
+template < typename T >
+T* Model::getDataForUpdate( std::string data_id ) {
+    auto data_iter = flat_data.find( data_id );
+    if ( data_iter == flat_data.end( ) ) {
+        return NULL;
+    }
+    return data_iter->second.getData<T>();
 }
 
 #endif // MODEL_HPP

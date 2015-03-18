@@ -24,6 +24,14 @@ bool Model::unsubscribe(std::string data_id, Subscriber* old_subscriber) {
     return data_iter->second.detachSubscriber(old_subscriber);
 }
 
+bool Model::flagDataForUpdate( std::string data_id ) {
+    auto data_iter = flat_data.find( data_id );
+    if ( data_iter == flat_data.end( )) {
+        return false;
+    }
+    data_iter->second.alertAllSubscribersToUpdate();
+}
+
 bool Model::addData(std::string data_id) {
     auto data_iter = flat_data.find(data_id);
     if (data_iter != flat_data.end()) {

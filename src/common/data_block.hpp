@@ -75,6 +75,11 @@ public:
     template < typename T >
     T* getData( );
 
+    /**
+     * Notifies all subscribers that data was updated.
+     */
+    void alertAllSubscribersToUpdate( );
+
 private:
     ModelData* data_payload = NULL;
     std::vector< Subscriber* > subscribers;
@@ -91,11 +96,6 @@ private:
      * @param old_subscriber Pointer to Subscriber object whose data will be deleted
      **/
     void releaseSubscriber( Subscriber* old_subscriber );
-
-    /**
-     * Notifies all subscribers that data was updated.
-     */
-    void alertAllSubscribersToUpdate( );
 };
 
 template < typename T >
