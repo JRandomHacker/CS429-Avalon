@@ -111,6 +111,7 @@ void GameWindow::createPlayerSubscribers( ) {
                     emit questingTeamUpdated( );
             },
             NULL );
+    model->subscribe( "questingTeam", questingTeam_subscriber );
 
     // Subscribe to quest and vote tracks
     voteTrackLength_subscriber = new ClosureSubscriber( NULL, NULL );
