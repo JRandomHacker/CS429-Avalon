@@ -36,6 +36,7 @@
     connect( this, SIGNAL( gameInfoUpdated( ) ), this, SLOT( updateGameInfo( ) ) );
     connect( this, SIGNAL( leaderIDUpdated( ) ), this, SLOT( updateLeader( ) ) );
     connect( this, SIGNAL( questingTeamUpdated( ) ), this, SLOT( updateQuestingTeam( ) ) );
+    connect( this, SIGNAL( trackUpdated( ) ), this, SLOT( updateTrack( ) ) );
 
     // Start up thread for controller
     pthread_t controlThread;
@@ -110,6 +111,21 @@ void GameWindow::createPlayerSubscribers( ) {
                     emit questingTeamUpdated( );
             },
             NULL );
+
+    // Subscribe to quest and vote tracks
+    voteTrackLength_subscriber = new ClosureSubscriber( NULL, NULL );
+    currentVoteTrack_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit trackUpdated( );
+            },
+            NULL );
+    questTrackLength_subscriber = new ClosureSubscriber( NULL, NULL );
+    model->subscribe( "voteTrackLength", voteTrackLength_subscriber );
+    model->subscribe( "currentVoteTrack", currentVoteTrack_subscriber );
+    model->subscribe( "questTrackLength", questTrackLength_subscriber );
+    QStandardItemModel* trackModel = new QStandardItemModel( 2, 1 );
+    ui->voteTrackList->setModel( trackModel );
+    updateTrack( );
 
     // Add list items and subscribers for each player
     QStandardItemModel* listModel = new QStandardItemModel( num_players, 3 );
@@ -219,6 +235,26 @@ void GameWindow::updateGameInfo( ) {
                 roleModel->appendRow( new QStandardItem( QString( avalon::gui::roleToString( role ).c_str( ) ) ) );
         }
     }
+}
+
+void GameWindow::updateTrack( ) {
+    unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
+    unsigned int vLength = *voteTrackLength_subscriber->getData<unsigned int>( );
+    unsigned int* currVote = currentVoteTrack_subscriber->getData<unsigned int>( );
+
+    std::string questStr = "Quest Track Length: " + std::to_string( qLength );
+    std::string voteStr = "";
+    if( currVote != NULL ) {
+        voteStr = "Vote " + std::to_string( *currVote + 1 ) + "/" + std::to_string( vLength );
+    } else {
+        voteStr = "Vote ? / " + std::to_string( vLength );
+    }
+
+    QStandardItemModel* trackModel = ( QStandardItemModel* ) ui->voteTrackList->model( );
+    QStandardItem* questItem = new QStandardItem( QString( questStr.c_str( ) ) );
+    QStandardItem* voteItem = new QStandardItem( QString( voteStr.c_str( ) ) );
+    trackModel->setItem( 0, questItem );
+    trackModel->setItem( 1, voteItem );
 }
 
 void GameWindow::on_playerList_clicked( const QModelIndex& index ) {

@@ -57,14 +57,14 @@ public:
 
 signals:
     /**
-     * A function that is called whenever the GameSettings protobuf is received
+     * A signal that is emitted whenever the GameSettings protobuf is received
      *
      * @return None
      */
     void gameSettingsReceived( );
 
     /**
-     * A function that is called whenever a player gets updated information
+     * A signal that is emitted whenever a player gets updated information
      *
      * @param playerNum The ID of the player that is being updated
      * @return None
@@ -72,22 +72,27 @@ signals:
     void playerInfoUpdated( unsigned int playerNum );
 
     /**
-     * A function that is called when the GameSettings have finished setting things up
+     * A signal that is emitted when the GameSettings have finished setting things up
      *
      * @return None
      */
     void gameInfoUpdated( );
 
     /**
-     * Function that is called when the leader ID is updated
+     * A signal that is emitted when the leader ID is updated
      * @return None
      */
     void leaderIDUpdated( );
 
     /**
-     * Function that is called when the questing team is updated
+     * A signal that is emitted when the questing team is updated
      */
     void questingTeamUpdated( );
+
+    /**
+     * Signal emitted when vote track or quest track is updated
+     */
+    void trackUpdated( );
 
 private slots:
     /**
@@ -118,6 +123,11 @@ private slots:
      * Display the current questing team.
      */
     void updateQuestingTeam( );
+
+    /**
+     * Displays info about vote/quest tracks
+     */
+    void updateTrack( );
     
     /**
      * When the leader clicks a player, they are toggled on/off the team
@@ -184,7 +194,23 @@ private:
      *  Subscriber that gets current questing team from the model.
      */
     Subscriber* questingTeam_subscriber;
+
+    /**
+     *  Subscriber for vote track length
+     */
+    Subscriber* voteTrackLength_subscriber;
+
+    /**
+     *  Subscriber for current vote number
+     */
+    Subscriber* currentVoteTrack_subscriber;
     
+    /**
+     *  Subscriber for quest track length
+     */
+    Subscriber* questTrackLength_subscriber;
+
+
     /**
      *  Subscriber vector that watches player objects.
      */
