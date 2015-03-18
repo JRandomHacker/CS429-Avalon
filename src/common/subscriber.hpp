@@ -10,6 +10,9 @@
 
 class Subscriber {
 public:
+    /**
+     * Public constructor
+     */
     Subscriber();
     virtual ~Subscriber();
 
@@ -53,6 +56,9 @@ T* Subscriber::getData() {
 
 class ClosureSubscriber : public Subscriber {
 public:
+    /**
+     * Public constructor
+     */
     ClosureSubscriber(std::function<void ((Subscriber*))> duc,
         std::function<void ((Subscriber*))> ddc);
 
@@ -68,7 +74,16 @@ public:
     virtual void dataDestroyed();
 
 private:
+    /**
+     * Tells Subscriber data was updated
+     * @param Pointer to Subscriber
+     */
     std::function<void ((Subscriber*))> dataUpdatedClosure;
+    
+    /**
+     * Tells Subscriber data was destroyed
+     * @param Pointer to Subscriber
+     */
     std::function<void ((Subscriber*))> dataDestroyedClosure;
 };
 
