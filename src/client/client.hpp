@@ -18,11 +18,13 @@
 
 #ifdef _WIN32
     #include <winsock2.h>
+    //! A magic number that needs to be passed for Windows socket initialization
     #define WINSOCK_MAGIC 0x202
 #else
     #include <netdb.h>
+    //! In windows, socket returns a specific value, INVALID_SOCKET, on failure. This allows us to use the same code in Linux
     #define INVALID_SOCKET -1
-    // Linux SOCKETS are just ints
+    //! Allows us to use the SOCKET type in both Windows and Linux
     #define SOCKET int
 #endif
 

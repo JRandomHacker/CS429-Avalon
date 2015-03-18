@@ -21,10 +21,12 @@
 
 #ifdef _WIN32
     #include <winsock2.h>
+    //! A constant that needs to be passed into Windows socket initialization
     #define WINSOCK_MAGIC 0x202
 #else
     #include <netdb.h>
     #include <sys/select.h>
+    //! Allows us to use the SOCKET type in both Windows and Linux
     #define SOCKET int
 #endif
 

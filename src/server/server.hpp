@@ -17,6 +17,7 @@
 #ifdef _WIN32
     #include <winsock2.h>
 #else
+    //! Allows us to use the SOCKET type in both Windows and Linux
     #define SOCKET int
     #include <netdb.h>
 #endif

@@ -33,25 +33,49 @@
 
 namespace avalon {
 
+    //! The number of special characters that exist in general
     static const int NUM_SPECIALS = 6;
 
     /*! An enumerator for the possible special roles */
     enum special_roles_t {
-        MERLIN,   /*! Merlin (Good) Knows evil players */
-        PERCIVAL, /*! Percival (Good) Knows of Morgana and Merlin*/
-        MORDRED,  /*! Mordred (Evil) Unknown to Merlin */
-        MORGANA,  /*! Morgana (Evil) Known to Percival (Disguises Merlin) */
-        ASSASSIN, /*! Assassin (Evil) Gets a last ditch chance to kill Merlin, making Evil win */
-        OBERON,   /*! Oberon (Evil) Unknown to other Evil players */
-        NONE,     /*! None Corresponds to being a generic good/evil person */
-        UNKNOWN_ROLE      /*! Unknown Corresponds to another player in the game whose alignment should not be known*/
+        /*! Merlin (Good) Knows evil players */
+        MERLIN,
+        /*! Percival (Good) Knows of Morgana and Merlin*/
+        PERCIVAL,
+        /*! Mordred (Evil) Unknown to Merlin */
+        MORDRED,
+        /*! Morgana (Evil) Known to Percival (Disguises Merlin) */
+        MORGANA,
+        /*! Assassin (Evil) Gets a last ditch chance to kill Merlin, making Evil win */
+        ASSASSIN,
+        /*! Oberon (Evil) Unknown to other Evil players */
+        OBERON,
+        /*! None Corresponds to being a generic good/evil person */
+        NONE,
+        /*! Unknown Corresponds to another player in the game whose alignment should not be known*/
+        UNKNOWN_ROLE
     };
 
     /*! An enumerator of the possible alignments */
     enum alignment_t {
-        GOOD, /*! Good (Wants missions to pass) */
-        EVIL, /*! Evil (Wants missions to fail) */
-        UNKNOWN_ALIGN      /*! Unknown Corresponds to another player in the game whose alignment should not be known */
+        /*! Good (Wants missions to pass) */
+        GOOD,
+        /*! Evil (Wants missions to fail) */
+        EVIL,
+        /*! Unknown Corresponds to another player in the game whose alignment should not be known */
+        UNKNOWN_ALIGN
+    };
+
+    /*! An enumerator of all possible voting states */
+    enum player_vote_t {
+        /*! A vote for the current team */
+        YES,
+        /*! A vote against the current team */
+        NO,
+        /*! This represents a player who has voted but you don't know what they voted. */
+        HIDDEN,
+        /*! This represents a player who has not voted */
+        NO_VOTE
     };
 
     /**
@@ -70,26 +94,27 @@ namespace avalon {
      */
     unsigned int getEvilCount( int num_players );
 
-    /*! An enumerator of all possible voting states */
-    enum player_vote_t {
-        YES, /* A vote for the current team */
-        NO, /* A vote against the current team */
-        HIDDEN, /*! This represents a player who has voted but you don't know what they voted. */
-        NO_VOTE  /* This represents a player who has not voted */
-    };
-
     namespace network {
         /*! An enumerator for different protobuf types */
         enum buffers_t {
-            PLAYER_BUF, /*! An avalon::network::Player protobuf */
-            SETTINGS_BUF, /*! An avalon::network::GameSettings protobuf */
-            ENTER_TEAM_SELECTION_BUF, /*! A message corresponding to a state change */
-            TEAM_SELECTION_BUF, /*! An avalon::network::TeamSelection protobuf */
-            ENTER_TEAM_VOTE_BUF, /*! A message corresponding to a state change */
-            VOTE_BUF, /*! An avalon::network::Vote protobuf */
-            VOTE_RESULTS_BUF, /*! An avalon::network::VoteResults protobuf */
-            ENTER_QUEST_VOTE_BUF, /*! A message corresponding to a state change */
-            ENTER_END_GAME_BUF /*! A message corresponding to a state change */
+            /*! An avalon::network::Player protobuf */
+            PLAYER_BUF,
+            /*! An avalon::network::GameSettings protobuf */
+            SETTINGS_BUF,
+            /*! A message corresponding to a state change to TeamSelectionState */
+            ENTER_TEAM_SELECTION_BUF,
+            /*! An avalon::network::TeamSelection protobuf */
+            TEAM_SELECTION_BUF,
+            /*! A message corresponding to a state change to VotingState */
+            ENTER_TEAM_VOTE_BUF,
+            /*! An avalon::network::Vote protobuf */
+            VOTE_BUF,
+            /*! An avalon::network::VoteResults protobuf */
+            VOTE_RESULTS_BUF,
+            /*! A message corresponding to a state change to QuestVotingState */
+            ENTER_QUEST_VOTE_BUF,
+            /*! A message corresponding to a state change to EndGameState */
+            ENTER_END_GAME_BUF
         };
     }
 }

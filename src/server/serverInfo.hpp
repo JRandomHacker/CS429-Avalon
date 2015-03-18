@@ -8,9 +8,11 @@
 #ifdef _WIN32
     #include <windows.h>
 #else
+    //! Allows us to use SOCKET whether we're in Windows or Linux
     #define SOCKET int
 #endif
 
+//! Stores all the information the server needs to keep a game state
 typedef struct {
     //! A pointer to the server that clients should connect to
     Server* server;
