@@ -46,6 +46,14 @@ class ControllerState {
          */
         void reportUnhandledAction(std::string action_type);
 
+        /**
+         * A method to get the type of the current state
+         * Mostly used for testing
+         *
+         * @return A string identifying the type of state
+         */
+         std::string getType( );
+
     private:
         //! A string containing the type of state this is
         std::string state_type;

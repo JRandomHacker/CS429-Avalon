@@ -21,7 +21,7 @@
     ClientControllerState::ClientControllerState( std::string state_type_desc, ClientInfo* dat )
         : ControllerState(state_type_desc), data( dat ) {
 
-            std::cout << "[ ClientController ] Entered " << state_type_desc << " state" << std::endl;
+            std::cerr << "[ ClientController ] Entered " << state_type_desc << " state" << std::endl;
     }
 // }
 
