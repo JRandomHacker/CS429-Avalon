@@ -110,7 +110,7 @@ T* DataBlock::getData( ) {
     if ( data_payload != NULL ) {
         TypedModelData< T >* data_payload_typed = dynamic_cast< TypedModelData< T >* >( data_payload );
         if ( data_payload_typed != NULL ) {
-            return data_payload_typed- >getPayloadReference( );
+            return data_payload_typed->getPayloadReference( );
         }
     }
     return NULL;
