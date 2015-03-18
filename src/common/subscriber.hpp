@@ -18,9 +18,22 @@ public:
     T* getData();
 
     // Model access functions
+    
+    /**
+     * Sets subscriber's data block to given DataBlock
+     * 
+     * @param new_data_block Pointer to DataBlock to give to the subscriber
+     */
     void setDataBlock(DataBlock* new_data_block);
 
+    /**
+     * If data was updated, sends subscriber pointer to proper method
+     */
     virtual void dataUpdated() = 0;
+    
+    /**
+     * If data was destroyed, sends subscriber pointer to proper method
+     */
     virtual void dataDestroyed() = 0;
 
 private:
@@ -43,7 +56,15 @@ public:
     ClosureSubscriber(std::function<void ((Subscriber*))> duc,
         std::function<void ((Subscriber*))> ddc);
 
+    /**
+     * If data was updated, sends subscriber pointer to dataUpdatedClosure method
+     */
     virtual void dataUpdated();
+    
+    
+    /**
+     * If data was destroyed, sends subscriber pointer to dataDestroyedClosure method
+     */
     virtual void dataDestroyed();
 
 private:
@@ -53,7 +74,16 @@ private:
 
 class MockSubscriber : public Subscriber {
 public:
+
+    /**
+     * If data was updated, sends subscriber pointer to proper method
+     */
     virtual void dataUpdated();
+    
+    
+    /**
+     * If data was updated, sends subscriber pointer to proper method
+     */
     virtual void dataDestroyed();
 
     int updatedCount = 0;
