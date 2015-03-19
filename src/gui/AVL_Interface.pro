@@ -19,19 +19,25 @@ SOURCES  += main.cpp\
     createserverwindow.cpp \
     joinserverwindow.cpp \
     displayerrors.cpp \
-    guihelpers.cpp
+    guihelpers.cpp \
+    votedialog.cpp \
+    resultsdialog.cpp
 
 HEADERS  += optionswindow.hpp \
     gamewindow.hpp \
     createserverwindow.hpp \
     joinserverwindow.hpp \
     displayerrors.hpp \
-    guihelpers.hpp
+    guihelpers.hpp \
+    votedialog.h \
+    resultsdialog.h
 
 FORMS    += optionswindow.ui \
     gamewindow.ui \
     createserverwindow.ui \
-    joinserverwindow.ui
+    joinserverwindow.ui \
+    votedialog.ui \
+    resultsdialog.ui
 
 INCLUDEPATH  += ../protos/
 INCLUDEPATH  += ../common/
