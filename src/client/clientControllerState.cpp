@@ -236,6 +236,8 @@
             data->model->addData< unsigned int >( "currentQuestTrack", 0 );
             data->model->addData( "voteHistory", std::vector< VoteHistory >( ) );
 
+            data->model->addData( "voteState", false );
+
             for ( unsigned int i = 0; i < sBuf->players( ); i++ ) {
                 data->model->addData( std::string( "player" ) + std::to_string( i ), NULL );
             }
