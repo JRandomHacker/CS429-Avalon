@@ -29,6 +29,7 @@
     this->model = model;
     ui->setupUi( this );
     this->serverH = serverHandle;
+    sync_sem = new sem_t;
     sem_init( sync_sem, 0, 0 );
 
     startWatchOnHasGameSettings( );
