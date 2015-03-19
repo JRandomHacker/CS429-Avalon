@@ -26,7 +26,7 @@ CXX=g++
 
 # If we're on Windows, add these flags for static linking, so the executables are portable
 ifeq ($(OS), Windows_NT)
-	LIBS += lws_32
+	LIBS += -lws2_32
     CUSTOM_CXXFLAGS += -static-libgcc -static-libstdc++
 endif
 
