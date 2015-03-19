@@ -8,37 +8,37 @@
 
 #include "voteHistory.hpp"
 
-VoteHistory::VoteHistory( std::vector< avalon::player_vote_t > playerVotesVec, std::vector< unsigned int > teamVotedOn, unsigned int voteTrackDuringVote, unsigned int questTrackDuringVote, bool didVotePass ) {
+VoteHistory::VoteHistory( bool didVotePass, std::vector< avalon::player_vote_t > playerVotesVec, std::vector< unsigned int > teamVotedOn, unsigned int voteTrackDuringVote, unsigned int questTrackDuringVote ) {
+    votePassed = didVotePass;
     playerVotes = playerVotesVec;
     proposedTeam = teamVotedOn;
     voteTrackNum = voteTrackDuringVote;
     questTrackNum = questTrackDuringVote;
-    votePassed = didVotePass;
 }
 
-avalon::player_vote_t getPlayerVote ( unsigned int playerNum ) {
-    if (playerNum >=0 && playerNum < playerVotes.size( ))
+avalon::player_vote_t VoteHistory::getPlayerVote ( unsigned int playerNum ) {
+    if (playerNum < playerVotes.size( ))
         return playerVotes.at( playerNum );
     std::cout << "getPlayerVote received bad playerNum!";
-    return NO_VOTE;
+    return avalon::NO_VOTE;
 }
 
-std::vector< avalon::player_vote_t > getPlayerVotes( ) {
+std::vector< avalon::player_vote_t > VoteHistory::getPlayerVotes( ) {
     return playerVotes;
 }
 
-std::vector< unsigned int > getProposedTeam( ) {
+std::vector< unsigned int > VoteHistory::getProposedTeam( ) {
     return proposedTeam;
 }
 
-unsigned int getVoteTrackNum( ) {
+unsigned int VoteHistory::getVoteTrackNum( ) {
     return voteTrackNum;
 }
 
-unsigned int getQuestTrackNum( ) {
+unsigned int VoteHistory::getQuestTrackNum( ) {
     return questTrackNum;
 }
 
-bool getVotePassed( ) {
+bool VoteHistory::getVotePassed( ) {
     return votePassed;
 }

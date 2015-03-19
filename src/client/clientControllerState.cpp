@@ -9,6 +9,7 @@
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
 #include "clientInfo.hpp"
+#include "voteHistory.hpp"
 
 #include "teamselection.pb.h"
 #include "vote.pb.h"
@@ -47,6 +48,16 @@
         } else if( action_type == "VoteResults" ) {
 
             auto action = dynamic_cast< VoteResultsAction* >( action_to_be_handled );
+
+            // Construct a new VoteHistory from the current data
+            VoteHistory record( action->getVoteResult(), *action->getVotes(), data->team,
+                data->vote_track_position, data->quest_track_position );
+
+            // Pull the vote history vector from the model, append our new
+            // history, and flag it as updated
+            auto voteHistories = data->model->getDataForUpdate< std::vector< VoteHistory > >( "voteHistory" );
+            voteHistories->push_back( record );
+            data->model->flagDataForUpdate( "voteHistory" );
 
             data->model->updateData( "currentVoteTrack", action->getVoteTrack( ) );
 
@@ -223,6 +234,8 @@
             data->model->addData( "leaderID", data->leader );
             data->model->addData( "questingTeam", data->team );
             data->model->addData( "currentVoteTrack", ( unsigned int )0 );
+            data->model->addData( "currentQuestTrack", ( unsigned int )0 );
+            data->model->addData( "voteHistory", std::vector< VoteHistory >() );
 
             for ( unsigned int i = 0; i < data->num_players; i++ ) {
                 data->model->addData( std::string( "player" ) + std::to_string( i ), NULL );

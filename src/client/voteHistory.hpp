@@ -10,7 +10,9 @@
 #define _VOTEHISTORY_HPP
 
 #include <string>
-#include globals.hpp
+#include <iostream>
+
+#include "globals.hpp"
 
 #include "vote.pb.h"
 #include "voteresults.pb.h"
@@ -20,13 +22,13 @@ class VoteHistory {
         /**
          * Constructor that receives and stores vote vector
          *
+         * @param didVotePass boolean for whether vote passed or not
          * @param playerVotesVec vector containing the votes of all players indexed by player id
          * @param teamVotedOn vector containing the player ids for each player on the team being voted on
          * @param voteTrackDuringVote position of the vote track during the vote
          * @param questTrackDuringVote position of the quest track during the vote
-         * @param didVotePass boolean for whether vote passed or not
          */
-        VoteHistory ( std::vector< avalon::player_vote_t > playerVotesVec, std::vector< unsigned int > teamVotedOn, unsigned int voteTrackDuringVote, unsigned int questTrackDuringVote, bool didVotePass );
+        VoteHistory ( bool didVotePass, std::vector< avalon::player_vote_t > playerVotesVec, std::vector< unsigned int > teamVotedOn, unsigned int voteTrackDuringVote, unsigned int questTrackDuringVote );
         
         /**
          * Returns the vote of the requested player

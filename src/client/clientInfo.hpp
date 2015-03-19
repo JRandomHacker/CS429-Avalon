@@ -29,8 +29,12 @@ typedef struct {
     unsigned int num_evil;
     //! The number of times a team vote can fail before you lose
     unsigned int vote_track_length;
+    //! The current position on the vote track
+    unsigned int vote_track_position;
     //! The number of quests in the game
     unsigned int quest_track_length;
+    //! The current position on the quest track
+    unsigned int quest_track_position;
     //! The current leader - Person who proposes team
     unsigned int leader;
     //! A vector of the currently selected team
