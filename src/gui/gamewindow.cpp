@@ -164,12 +164,12 @@ void GameWindow::updatePlayer( unsigned int id ) {
 
     QStandardItemModel* listModel = ( QStandardItemModel* ) ui->playerList->model( );
 
-    Player** p = player_subscribers[id]->getData<Player*>( );
+    Player* p = player_subscribers[id]->getData<Player>( );
 
     // Update the player's info in GUI
     std::string newString = "<waiting for player>";
     if( p != NULL ) {
-        newString = ( *p )->getName( );
+        newString = p->getName( );
         if( id == *myID_subscriber->getData<unsigned int>( ) )
             newString += " (me)";
 
@@ -177,9 +177,9 @@ void GameWindow::updatePlayer( unsigned int id ) {
             newString += " (host)";
 
         listModel->setItem( id, 1, new QStandardItem(
-                                QString( avalon::gui::alignmentToString( ( *p )->getAlignment( ) ).c_str( ) ) ) );
+                                QString( avalon::gui::alignmentToString( p->getAlignment( ) ).c_str( ) ) ) );
         listModel->setItem( id, 2, new QStandardItem(
-                                QString( avalon::gui::roleToString( ( *p )->getRole( ) ).c_str( ) ) ) );
+                                QString( avalon::gui::roleToString( p->getRole( ) ).c_str( ) ) ) );
     }
     listModel->setItem( id, 0, new QStandardItem( QString( newString.c_str( ) ) ) );
     
@@ -197,9 +197,9 @@ void GameWindow::updateLeader( ) {
         ui->proposeTeamButton->show( );
     } else if( lid != UINT_MAX ) {
 
-        Player** leader = player_subscribers[lid]->getData<Player*>( );
+        Player* leader = player_subscribers[lid]->getData<Player>( );
         if( leader != NULL ) {
-            ui->leaderLabel->setText( QString( ( "Current Leader: "+( *leader )->getName( ) ).c_str( ) ) );
+            ui->leaderLabel->setText( QString( ( "Current Leader: "+leader->getName( ) ).c_str( ) ) );
         }
         ui->proposeTeamButton->hide( );
     } else {
@@ -216,7 +216,7 @@ void GameWindow::updateQuestingTeam( ) {
     for( unsigned int i = 0; i < team.size( ); i++ ) {
 
         unsigned int player_num = team[ i ];
-        Player* p = *player_subscribers[ player_num ]->getData< Player* >( );
+        Player* p = player_subscribers[ player_num ]->getData< Player >( );
         qModel->appendRow( new QStandardItem( QString( p->getName( ).c_str( ) ) ) );
     }
     ui->proposeTeamList->setModel( qModel );

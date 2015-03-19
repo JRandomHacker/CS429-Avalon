@@ -14,6 +14,9 @@
 #include "controllerState.hpp"
 #include "globals.hpp"
 
+#define FROMMODEL(class, name) *data->model->referenceData< class >( name )
+#define FROMMODELREF(class, name) data->model->referenceData< class >( name )
+
 /**
  * Parent class for for the ClientControllerStates
  * Inherits from ControllerState

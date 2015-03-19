@@ -42,12 +42,6 @@ ClientController::~ClientController( ) {
     // We didn't allocate the model, so leave it for the GUI
     delete client;
 
-    // Clean up the Players that we've stored
-    for( std::vector< Player* >::iterator it = data->players.begin( ); it != data->players.end( ); it++ ) {
-        delete *it;
-    }
-    data->players.empty( );
-
     delete data;
     delete qSem;
     delete action_queue;
