@@ -252,7 +252,7 @@
 
             data->model->addData( "voteState", false );
 
-            for ( unsigned int i = 0; i < sBuf->players( ); i++ ) {
+            for ( unsigned int i = 0; i < ( unsigned int )sBuf->players( ); i++ ) {
                 data->model->addData( std::string( "player" ) + std::to_string( i ), NULL );
             }
 
