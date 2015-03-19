@@ -22,7 +22,7 @@
 class Model {
 public:
     Model( );
-    virtual ~Model( );
+    ~Model( );
 
     /**
      * If the given data_id is found, adds new subscriber.
@@ -31,7 +31,7 @@ public:
      * @param new_subscriber Pointer to Subscriber object to add to subscribers
      * @return true if successfully added, false if data_id not found
      */
-    virtual bool subscribe( std::string data_id, Subscriber* new_subscriber );
+    bool subscribe( std::string data_id, Subscriber* new_subscriber );
     
     /**
      * Remove the old_subscriber from the list of subscribers to data_id
@@ -40,7 +40,7 @@ public:
      * @param old_subscriber Pointer to Subscriber object to remove from subscribers
      * @return true if successfully removed, false if data_id not found
      */
-    virtual bool unsubscribe( std::string data_id, Subscriber* old_subscriber );
+    bool unsubscribe( std::string data_id, Subscriber* old_subscriber );
 
     /**
      * Returns a reference to the data in the model so it can be updated without replacement
@@ -49,7 +49,7 @@ public:
      * @return pointer to the data stored at data_id, NULL if there is no block there with that type
      */
     template < typename T >
-    virtual T* getDataForUpdate( std::string data_id );
+    T* getDataForUpdate( std::string data_id );
 
     /**
      * Treats the data at data_id as if it is new and triggers updates for the subscribers.
@@ -57,7 +57,7 @@ public:
      * 
      * @param data_id id to search for
      */
-    virtual bool flagDataForUpdate( std::string data_id );
+    bool flagDataForUpdate( std::string data_id );
 
     /**
      * If the given data_id is found, updates current data with new_data.
@@ -66,7 +66,7 @@ public:
      * @return true if data successfully updated, false if data_id not found
      */
     template < typename T >
-    virtual bool updateData( std::string data_id, const T& new_data );
+    bool updateData( std::string data_id, const T& new_data );
     
     /**
      * Adds the initial data.
@@ -75,21 +75,21 @@ public:
      * @return true if data successfully added, false if data_id not found
      */
     template < typename T >
-    virtual bool addData( std::string data_id, const T& initial_data );
+    bool addData( std::string data_id, const T& initial_data );
     
     /**
      * Adds data to new DataBlock.
      * @param data_id id to search for
      * @return true if data successfully added, false if data_id not found
      */
-    virtual bool addData( std::string data_id );
+    bool addData( std::string data_id );
     
     /**
      * Removes data for given data_id.
      * @param data_id id to search for
      * @return true if data successfully removed, false if data_id not found
      */
-    virtual bool removeData( std::string data_id );
+    bool removeData( std::string data_id );
 
     /**
      * Gets a constant pointer to the data at data_id. Note that this pointer
@@ -99,7 +99,7 @@ public:
      * @return pointer to the data, NULL if there is no data
      */
     template < typename T >
-    virtual const T* referenceData( std::string data_id );
+    const T* referenceData( std::string data_id );
 
 private:
     /**
