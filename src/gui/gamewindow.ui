@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>766</width>
-    <height>670</height>
+    <width>830</width>
+    <height>656</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Avalon Online</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" rowspan="5">
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0" rowspan="4">
     <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0">
      <item>
       <widget class="QGraphicsView" name="playerAvatar"/>
@@ -66,7 +66,14 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="3" colspan="2">
+   <item row="0" column="1" rowspan="4">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QListView" name="voteTrackList">
@@ -77,120 +84,126 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="1" rowspan="5" colspan="2">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="proposeTeamLabel">
-       <property name="text">
-        <string>Proposed Team</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="4">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="votingLabel">
-       <property name="text">
-        <string>Voting</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="3">
+   <item row="1" column="2">
     <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
-      <widget class="QListView" name="proposeTeamList">
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Proposed Questing Team</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="leaderLabel">
-       <property name="text">
-        <string>Current Leader is ...</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="proposeTeamButton">
-       <property name="text">
-        <string>Propose Team</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="4" column="3" colspan="2">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>402</width>
-          <height>69</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTextEdit" name="textEdit"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="sendMsgButton">
-       <property name="text">
-        <string>Send Message</string>
-       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="1" column="0">
+         <widget class="QListView" name="proposeTeamList">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QPushButton" name="proposeTeamButton">
+          <property name="text">
+           <string>Propose Team</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="leaderLabel">
+          <property name="text">
+           <string>Current Leader is ...</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+       <zorder>proposeTeamList</zorder>
+       <zorder>proposeTeamButton</zorder>
+       <zorder>proposeTeamList</zorder>
+       <zorder>leaderLabel</zorder>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="3" column="2" colspan="3">
+   <item row="1" column="3">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Quest Voting</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QPushButton" name="buttonVotePass">
+          <property name="text">
+           <string>PASS!!!</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonVoteFail">
+          <property name="text">
+           <string>FAIL!!!</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="2" colspan="2">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="2" column="4">
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item row="3" column="2" colspan="2">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="buttonVotePass">
-       <property name="text">
-        <string>PASS!!!</string>
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="title">
+        <string>Chat</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonVoteFail">
-       <property name="text">
-        <string>FAIL!!!</string>
-       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>430</width>
+             <height>85</height>
+            </rect>
+           </property>
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextEdit" name="textEdit"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="sendMsgButton">
+          <property name="text">
+           <string>Send Message</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
    </item>
   </layout>
+  <zorder>line</zorder>
+  <zorder>line_2</zorder>
+  <zorder></zorder>
+  <zorder>groupBox</zorder>
  </widget>
  <resources/>
  <connections/>
