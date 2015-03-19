@@ -40,6 +40,7 @@
     connect( this, SIGNAL( trackUpdated( ) ), this, SLOT( updateTrack( ) ) );
     connect( this, SIGNAL( voteStateUpdated( ) ), this, SLOT( updateVoteState( ) ) );
     connect( this, SIGNAL( voteHistoryUpdated( ) ), this, SLOT( updateVoteHistory( ) ) );
+    connect( this, SIGNAL( currentVotesUpdated( ) ), this, SLOT( updateCurrentVotes( ) ) );
 
     // Start up thread for controller
     pthread_t controlThread;
@@ -173,7 +174,6 @@ void GameWindow::createPlayerSubscribers( ) {
     voteHistory_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                     emit voteHistoryUpdated( );
-
                 },
                 NULL );
     model->subscribe( "voteHistory", voteHistory_subscriber );
@@ -277,10 +277,36 @@ void GameWindow::updateTrack( ) {
 
 void GameWindow::updateVoteState( ) {
     bool inVoteState = *voteState_subscriber->getData<bool>( );
+    QStandardItemModel* listModel = (QStandardItemModel*) ui->playerList->model( );
     if( inVoteState ) {
+        // Create the "Has Voted" column
+        for( int i = 0; i < listModel->rowCount( ); i++ ) {
+            listModel->setItem( i, 3, new QStandardItem( "No" ) );
+        }
+        listModel->setHorizontalHeaderItem( 3, new QStandardItem( QString( "Has Voted" ) ) );
         ui->votingSection->show( );
+
+        // Subscribe to the data
+        currentVotes_subscriber = new ClosureSubscriber(
+                    [&]( Subscriber* ) {
+                        emit currentVotesUpdated( );
+                    },
+                    NULL);
+        model->subscribe( "currentVotes", currentVotes_subscriber );
     } else {
+        listModel->removeColumn( 3 );
         ui->votingSection->hide( );
+    }
+}
+
+void GameWindow::updateCurrentVotes( ) {
+
+    std::vector<avalon::player_vote_t> votes = *currentVotes_subscriber->getData<std::vector<avalon::player_vote_t>>( );
+    for( unsigned int i = 0; i < votes.size( ); i++ ) {
+        if( votes[i] != avalon::NO_VOTE ) {
+            QStandardItemModel* listModel = ( QStandardItemModel* ) ui->playerList->model( );
+            listModel->item( i, 3 )->setText( QString( "Yes" ) );
+        }
     }
 }
 

@@ -112,6 +112,13 @@ signals:
      */
     void voteHistoryUpdated( );
 
+    /**
+     * Signal emitted when current votes is updated
+     *
+     * @result None
+     */
+    void currentVotesUpdated( );
+
 private slots:
     /**
      *  Makes subscriber to get num of players.
@@ -168,6 +175,11 @@ private slots:
      * Pops up vote result
      */
     void updateVoteHistory( );
+
+    /**
+     * Updates who has voted
+     */
+    void updateCurrentVotes( );
     
     /**
      * When the leader clicks a player, they are toggled on/off the team
@@ -267,6 +279,11 @@ private:
      * Subscriber for vote history
      */
     Subscriber* voteHistory_subscriber;
+
+    /**
+     * Subscriber for current votes
+     */
+    Subscriber* currentVotes_subscriber;
 
 
     /**
