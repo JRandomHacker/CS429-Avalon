@@ -106,7 +106,7 @@ void GameWindow::createPlayerSubscribers( ) {
                 sem_wait( sync_sem );
             }
             , NULL );
-    model->subscribe( "isRoleInGame", roleList_subscriber );
+    model->subscribe( "roleList", roleList_subscriber );
 
     // Update numEvil and roleList
     updateGameInfo( );
@@ -264,14 +264,13 @@ void GameWindow::updateGameInfo( ) {
 
     ui->numOfEvilPlayers->setText( QString( num_evil_string.c_str( ) ) );
 
-    std::vector<bool>* roleList = roleList_subscriber->getData<std::vector<bool>>( );
+    std::vector< avalon::special_roles_t >* roleList = roleList_subscriber->getData< std::vector< avalon::special_roles_t > >( );
     if( roleList != NULL ) {
         QStandardItemModel* roleModel = new QStandardItemModel( );
         ui->currRolesList->setModel( roleModel );
         for( unsigned int i = 0; i < roleList->size( ); i++ ) {
-            avalon::special_roles_t role = ( avalon::special_roles_t ) i;
-            if( ( *roleList )[i] )
-                roleModel->appendRow( new QStandardItem( QString( avalon::gui::roleToString( role ).c_str( ) ) ) );
+            avalon::special_roles_t role = ( *roleList )[ i ];
+            roleModel->appendRow( new QStandardItem( QString( avalon::gui::roleToString( role ).c_str( ) ) ) );
         }
     }
 
@@ -299,6 +298,10 @@ void GameWindow::updateVoteState( ) {
     bool inVoteState = *voteState_subscriber->getData<bool>( );
     QStandardItemModel* listModel = (QStandardItemModel*) ui->playerList->model( );
     if( inVoteState ) {
+
+        // Hide the propose team button
+        ui->proposeTeamButton->hide( );
+
         // Create the "Has Voted" column
         for( int i = 0; i < listModel->rowCount( ); i++ ) {
             listModel->setItem( i, 3, new QStandardItem( "No" ) );

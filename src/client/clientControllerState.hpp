@@ -64,6 +64,16 @@ class LobbyState : public ClientControllerState {
          * @param action_to_be_handled The action that we need to deal with in our current state
          */
         ControllerState* handleAction( Action* action_to_be_handled );
+
+    private:
+
+        /*
+         * Helper function to populate the roleList vector
+         *
+         * @param buf The GameSettings buffer to get the roles from
+         * @return None
+         */
+        void populateSpecialRoles( avalon::network::GameSettings* buf );
 };
 
 /**

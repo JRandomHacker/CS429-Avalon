@@ -249,8 +249,8 @@
             data->model->addData< unsigned int >( "currentVoteTrack", 0 );
             data->model->addData< unsigned int >( "currentQuestTrack", 0 );
             data->model->addData( "voteHistory", std::vector< VoteHistory >( ) );
-
             data->model->addData( "voteState", false );
+            populateSpecialRoles( sBuf );
 
             for ( unsigned int i = 0; i < ( unsigned int )sBuf->players( ); i++ ) {
                 data->model->addData( std::string( "player" ) + std::to_string( i ), NULL );
@@ -297,5 +297,30 @@
 
         // By default, we haven't changed states
         return NULL;
+    }
+
+    void LobbyState::populateSpecialRoles( avalon::network::GameSettings* buf ) {
+        std::vector< avalon::special_roles_t > roles;
+
+        if( buf->merlin( ) ) {
+            roles.push_back( avalon::MERLIN );
+        }
+        if( buf->percival( ) ) {
+            roles.push_back( avalon::PERCIVAL );
+        }
+        if( buf->mordred( ) ) {
+            roles.push_back( avalon::MORDRED );
+        }
+        if( buf->morgana( ) ) {
+            roles.push_back( avalon::MORGANA );
+        }
+        if( buf->assassin( ) ) {
+            roles.push_back( avalon::ASSASSIN );
+        }
+        if( buf->oberon( ) ) {
+            roles.push_back( avalon::OBERON );
+        }
+
+        data->model->addData( "roleList", roles );
     }
 // }
