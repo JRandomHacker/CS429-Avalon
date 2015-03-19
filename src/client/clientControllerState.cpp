@@ -104,6 +104,7 @@
 
             auto currentVotes = data->model->getDataForUpdate< std::vector< avalon::player_vote_t > >( "currentVotes" );
             (*currentVotes)[votingPlayer] = avalon::HIDDEN;
+            data->model->flagDataForUpdate( "currentVotes" );
 
         } else if( action_type == "EnterTeamSelection" ) {
 
