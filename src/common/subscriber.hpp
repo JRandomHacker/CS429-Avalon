@@ -50,8 +50,9 @@ public:
     
     /**
      * If data was destroyed, sends subscriber pointer to proper method
+     * @return Should this subscriber be automatically free'd by the model
      */
-    virtual void dataDestroyed( ) = 0;
+    virtual bool dataDestroyed( ) = 0;
 
 private:
     DataBlock* data_block = NULL;
@@ -84,6 +85,12 @@ public:
         std::function<void ((Subscriber*))> ddc );
 
     /**
+     * Public constructor
+     */
+    ClosureSubscriber( std::function<void ((Subscriber*))> duc,
+        std::function<void ((Subscriber*))> ddc, bool freeSelfOnDestruction );
+
+    /**
      * If data was updated, sends subscriber pointer to dataUpdatedClosure method
      */
     virtual void dataUpdated();
@@ -91,10 +98,15 @@ public:
     
     /**
      * If data was destroyed, sends subscriber pointer to dataDestroyedClosure method
+     * If this returns true, the model containing it is given ownership of
+     * the subscriber, which basically means its destroyed automatically
+     * @return Should this subscriber be automatically cleaned up
      */
-    virtual void dataDestroyed( );
+    virtual bool dataDestroyed( );
 
 private:
+    bool freeOnDestruction;
+
     /**
      * Tells Subscriber data was updated
      * @param Pointer to Subscriber
@@ -127,8 +139,9 @@ public:
     
     /**
      * If data was updated, sends subscriber pointer to proper method
+     * @return Should this object be automatically destroyed
      */
-    virtual void dataDestroyed( );
+    virtual bool dataDestroyed( );
 
     int updatedCount = 0;
     bool wasDestroyed = false;

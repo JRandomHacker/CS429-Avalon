@@ -16,7 +16,12 @@ void Subscriber::setDataBlock(DataBlock* new_data_block) {
 
 ClosureSubscriber::ClosureSubscriber(std::function<void (Subscriber*)> duc,
         std::function<void (Subscriber*)> ddc) : dataUpdatedClosure(duc), dataDestroyedClosure(ddc) {
+    freeOnDestruction = false;
+}
 
+ClosureSubscriber::ClosureSubscriber(std::function<void (Subscriber*)> duc,
+        std::function<void (Subscriber*)> ddc, bool freeSelfOnDestruction ) : dataUpdatedClosure(duc), dataDestroyedClosure(ddc) {
+    freeOnDestruction = freeSelfOnDestruction;
 }
 
 void ClosureSubscriber::dataUpdated() {
@@ -25,16 +30,18 @@ void ClosureSubscriber::dataUpdated() {
     }
 }
 
-void ClosureSubscriber::dataDestroyed() {
+bool ClosureSubscriber::dataDestroyed() {
     if (dataDestroyedClosure) {
         dataDestroyedClosure((Subscriber*)this);
     }
+    return freeOnDestruction;
 }
 
 void MockSubscriber::dataUpdated() {
     updatedCount++;
 }
 
-void MockSubscriber::dataDestroyed() {
+bool MockSubscriber::dataDestroyed() {
     wasDestroyed = true;
+    return false;
 }

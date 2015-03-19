@@ -282,3 +282,16 @@ TEST_F( ModelTests, testClosureSubscriber) {
 
     ASSERT_TRUE(subscriber_destroyed);
 }
+
+TEST_F( ModelTests, testClosureSubscriberAutoFree ) {
+    ClosureSubscriber* sub = new ClosureSubscriber(
+        [&](Subscriber* s){},
+        [&](Subscriber* s){}, true);
+
+    model.addData<int>("data_name", 0);
+    model.subscribe("data_name", sub);
+
+    model.updateData<int>("data_name", 5);
+
+    model.removeData("data_name");
+}

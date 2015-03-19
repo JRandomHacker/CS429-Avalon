@@ -24,7 +24,9 @@ bool DataBlock::addSubscriber(Subscriber* new_subscriber) {
 
 void DataBlock::releaseSubscriber(Subscriber* old_subscriber) {
     old_subscriber->setDataBlock(NULL);
-    old_subscriber->dataDestroyed();
+    if ( old_subscriber->dataDestroyed() ) {
+        delete old_subscriber;
+    }
 }
 
 bool DataBlock::detachSubscriber(Subscriber* old_subscriber) {
