@@ -8,6 +8,7 @@
 
 #include "clientControllerState.hpp"
 #include "model.hpp"
+#include "voteHistory.hpp"
 #include "mockClient.hpp"
 #include "clientInfo.hpp"
 #include "clientCustomActionsFromGUI.hpp"
@@ -23,6 +24,7 @@
 
 #include <string>
 #include <vector>
+#include <climits>
 
 class ClientControllerStateTestFixture: public ::testing::Test {
 
@@ -41,8 +43,8 @@ class ClientControllerStateTestFixture: public ::testing::Test {
 
             testInfo->client = testClient;
             testInfo->model = testModel;
-            testInfo->my_id = 3;
-            testInfo->leader = 2;
+            testInfo->model->addData< unsigned int >( "myID", 3 );
+            testInfo->model->addData< unsigned int >( "leaderID", 2 );
         }
 
         // Run after every test
@@ -87,7 +89,11 @@ TEST_F( ClientControllerStateTestFixture, TestVotingStateVoteAction ) {
 TEST_F( ClientControllerStateTestFixture, TestVotingStateResultsAction ) {
     VotingState testState( testInfo );
 
-    testModel->addData( "currentVoteTrack" );
+    testModel->addData< unsigned int >( "currentVoteTrack" , 0);
+    testModel->addData< unsigned int >( "voteTrackLength", 5 );
+    testModel->addData< unsigned int >( "questTrackLength", 5 );
+    testModel->addData( "questingTeam", std::vector< unsigned int >( ) );
+    testModel->addData( "voteHistory", std::vector< VoteHistory >( ) );
     std::vector< avalon::player_vote_t >* testVotes = new std::vector< avalon::player_vote_t >( );
     testVotes->push_back( avalon::YES );
     testVotes->push_back( avalon::NO );
@@ -109,14 +115,14 @@ TEST_F( ClientControllerStateTestFixture, TestVotingStateTeamStateAction ) {
     VotingState testState( testInfo );
 
     std::vector< unsigned int > testTeam { 2, 3, 5 };
-    testInfo->team = testTeam;
+    testInfo->model->addData( "questingTeam", testTeam );
 
     testAction = new EnterTeamSelectionAction( 4 );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( "TeamSelection", resultState->getType( ) );
-    ASSERT_EQ( 4, testInfo->leader );
-    ASSERT_EQ( 0, testInfo->team.size( ) );
+    ASSERT_EQ( 4, *testInfo->model->referenceData< unsigned int >( "leaderID" ) );
+    ASSERT_EQ( 0, testInfo->model->referenceData< std::vector< unsigned int > >( "questingTeam" )->size( ) );
 
 }
 
@@ -133,7 +139,7 @@ TEST_F( ClientControllerStateTestFixture, TestTeamStateSelectActionNotLeader ) {
 TEST_F( ClientControllerStateTestFixture, TestTeamStateSelectActionLeader ) {
     TeamSelectionState testState( testInfo );
 
-    testInfo->leader = 3;
+    testInfo->model->updateData< unsigned int >( "leaderID", 3 );
 
     testAction = new SelectQuestGoerAction( true, 1 );
     ControllerState* resultState = testState.handleAction( testAction );
@@ -162,7 +168,7 @@ TEST_F( ClientControllerStateTestFixture, TestTeamStateFinalizeActionNotLeader )
 TEST_F( ClientControllerStateTestFixture, TestTeamStateFinalizeActionLeader ) {
     TeamSelectionState testState( testInfo );
 
-    testInfo->leader = 3;
+    testInfo->model->updateData< unsigned int >( "leaderID", 3 );
 
     testAction = new FinalizeTeamAction( );
     ControllerState* resultState = testState.handleAction( testAction );
@@ -181,14 +187,15 @@ TEST_F( ClientControllerStateTestFixture, TestTeamStateModifyAction ) {
     TeamSelectionState testState( testInfo );
 
     std::vector< unsigned int > testTeam { 2, 3, 5 };
-    testInfo->team = testTeam;
+    testInfo->model->addData( "questingTeam", testTeam );
 
     testAction = new ModifyTeamSelectionAction( 1, true );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( NULL, resultState );
 
-    ASSERT_EQ( 1, testInfo->team.back( ) );
+    unsigned int member = testInfo->model->referenceData< std::vector< unsigned int > >( "questingTeam" )->back( );
+    ASSERT_EQ( 1, member );
 }
 
 TEST_F( ClientControllerStateTestFixture, TestLobbyStateSettingsAction ) {
@@ -200,14 +207,15 @@ TEST_F( ClientControllerStateTestFixture, TestLobbyStateSettingsAction ) {
     testSettings->set_evil_count( 2 );
     testSettings->set_quest_track_len( 5 );
     testSettings->set_vote_track_len( 5 );
-    testModel->addData( "hasGameSettings" );
+    testModel->addData( "hasGameSettings", false );
 
     testAction = new GameSettingsAction( testSettings );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( NULL, resultState );
 
-    ASSERT_EQ( 4, testInfo->num_players );
+    unsigned int players = *testInfo->model->referenceData< unsigned int >( "numberOfPlayers" );
+    ASSERT_EQ( 4, players );
 
     ClosureSubscriber* sub = new ClosureSubscriber( [&](Subscriber*){ }, [&](Subscriber*){ } );
     testModel->subscribe( "hasGameSettings", sub );
@@ -222,22 +230,19 @@ TEST_F( ClientControllerStateTestFixture, TestLobbyStatePlayerAction ) {
 
     Player* testPlayer = new Player( "Test", avalon::NONE, avalon::GOOD );
     testModel->addData( "player2" );
-    std::vector< Player* > testPlayers;
-    testInfo->players = testPlayers;
 
     testAction = new AddPlayerAction( 2, testPlayer );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( NULL, resultState );
 
-    ASSERT_EQ( 1, testInfo->players.size( ) );
-
     ClosureSubscriber* sub = new ClosureSubscriber( [&](Subscriber*){ }, [&](Subscriber*){ } );
     testModel->subscribe( "player2", sub );
 
-    ASSERT_EQ( testPlayer, *( sub->getData< Player* >( ) ) );
+    ASSERT_EQ( "Test", sub->getData< Player >( )->getName( ) );
+    ASSERT_EQ( avalon::GOOD, sub->getData< Player >( )->getAlignment( ) );
+    ASSERT_EQ( avalon::NONE, sub->getData< Player >( )->getRole( ) );
 
-    delete testPlayer;
     delete sub;
 }
 
@@ -262,14 +267,16 @@ TEST_F( ClientControllerStateTestFixture, TestLobbyStateTeamStateAction ) {
     LobbyState testState( testInfo );
 
     std::vector< unsigned int > testTeam { 2, 3, 5 };
-    testInfo->team = testTeam;
-    testModel->addData( "leaderID" );
-    testModel->addData( "questingTeam" );
+    testModel->addData( "leaderID", UINT_MAX );
+    testModel->addData( "questingTeam", testTeam );
 
     testAction = new EnterTeamSelectionAction( 1 );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( "TeamSelection", resultState->getType( ) );
-    ASSERT_EQ( 0, testInfo->team.size( ) );
-    ASSERT_EQ( 1, testInfo->leader );
+
+    unsigned int size = testInfo->model->referenceData< std::vector< unsigned int > >( "questingTeam" )->size( );
+    unsigned int leader = *testInfo->model->referenceData< unsigned int >( "leaderID" );
+    ASSERT_EQ( 0, size );
+    ASSERT_EQ( 1, leader );
 }
