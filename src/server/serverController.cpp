@@ -201,7 +201,6 @@ int ServerController::initModelPlayer( std::vector< avalon::special_roles_t > sp
 
     // Add the characters from the special_roles array to the good or evil array
     for( std::vector< avalon::special_roles_t >::iterator it = special_roles.begin(); it != special_roles.end(); it++ ) {
-        std::cout << "Special role present: " << *it << std::endl;
         if( avalon::getRoleAlignment( *it ) == avalon::EVIL ) {
             evilChars.push_back( *it );
         } else {
@@ -264,8 +263,6 @@ int ServerController::initModelPlayer( std::vector< avalon::special_roles_t > sp
 
         std::string newName = "Player ";
         newName += std::to_string( i + 1 );
-
-        std::cout << "New Player: " << newName << ", Role: " << newSpecial << ", Alignment: " << newAlign << std::endl;
 
         model->players.push_back( new Player( newName, newSpecial, newAlign ) );
     }

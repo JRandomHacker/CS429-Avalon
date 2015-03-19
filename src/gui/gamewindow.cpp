@@ -35,15 +35,15 @@
     startWatchOnHasGameSettings( );
 
     // Connect slots and signals for updating UI elements
-    connect( this, SIGNAL( gameSettingsReceived( ) ), this, SLOT( createPlayerSubscribers( ) ) );
-    connect( this, SIGNAL( playerInfoUpdated( unsigned int ) ), this, SLOT( updatePlayer( unsigned int ) ) );
-    connect( this, SIGNAL( gameInfoUpdated( ) ), this, SLOT( updateGameInfo( ) ) );
-    connect( this, SIGNAL( leaderIDUpdated( ) ), this, SLOT( updateLeader( ) ) );
-    connect( this, SIGNAL( questingTeamUpdated( ) ), this, SLOT( updateQuestingTeam( ) ) );
-    connect( this, SIGNAL( trackUpdated( ) ), this, SLOT( updateTrack( ) ) );
-    connect( this, SIGNAL( voteStateUpdated( ) ), this, SLOT( updateVoteState( ) ) );
-    connect( this, SIGNAL( voteHistoryUpdated( ) ), this, SLOT( updateVoteHistory( ) ) );
-    connect( this, SIGNAL( currentVotesUpdated( ) ), this, SLOT( updateCurrentVotes( ) ) );
+    connect( this, SIGNAL( gameSettingsReceived( ) ), this, SLOT( createPlayerSubscribersSlot( ) ) );
+    connect( this, SIGNAL( playerInfoUpdated( unsigned int ) ), this, SLOT( updatePlayerSlot( unsigned int ) ) );
+    connect( this, SIGNAL( gameInfoUpdated( ) ), this, SLOT( updateGameInfoSlot( ) ) );
+    connect( this, SIGNAL( leaderIDUpdated( ) ), this, SLOT( updateLeaderSlot( ) ) );
+    connect( this, SIGNAL( questingTeamUpdated( ) ), this, SLOT( updateQuestingTeamSlot( ) ) );
+    connect( this, SIGNAL( trackUpdated( ) ), this, SLOT( updateTrackSlot( ) ) );
+    connect( this, SIGNAL( voteStateUpdated( ) ), this, SLOT( updateVoteStateSlot( ) ) );
+    connect( this, SIGNAL( voteHistoryUpdated( ) ), this, SLOT( updateVoteHistorySlot( ) ) );
+    connect( this, SIGNAL( currentVotesUpdated( ) ), this, SLOT( updateCurrentVotesSlot( ) ) );
 
     // Start up thread for controller
     pthread_t controlThread;
@@ -79,6 +79,11 @@ void GameWindow::startWatchOnHasGameSettings( ) {
             }
         },
         NULL ) );
+}
+
+void GameWindow::createPlayerSubscribersSlot( ) {
+    createPlayerSubscribers( );
+    sem_post( sync_sem );
 }
 
 void GameWindow::createPlayerSubscribers( ) {
@@ -191,6 +196,11 @@ void GameWindow::createPlayerSubscribers( ) {
     model->subscribe( "voteHistory", voteHistory_subscriber );
 }
 
+void GameWindow::updatePlayerSlot( unsigned int id ) {
+    updatePlayer( id );
+    sem_post( sync_sem );
+}
+
 void GameWindow::updatePlayer( unsigned int id ) {
 
     QStandardItemModel* listModel = ( QStandardItemModel* ) ui->playerList->model( );
@@ -217,10 +227,15 @@ void GameWindow::updatePlayer( unsigned int id ) {
     ui->playerList->resizeColumnsToContents( );
 }
 
+void GameWindow::updateLeaderSlot( ) {
+    updateLeader( );
+    sem_post( sync_sem );
+}
+
 void GameWindow::updateLeader( ) {
+
     unsigned int lid = *leaderID_subscriber->getData<unsigned int>( );
     unsigned int myID = *myID_subscriber->getData<unsigned int>( );
-
 
     if( lid == myID ) {
 
@@ -238,7 +253,10 @@ void GameWindow::updateLeader( ) {
         ui->leaderLabel->setText( QString( "" ) );
         ui->proposeTeamButton->hide( );
     }
+}
 
+void GameWindow::updateQuestingTeamSlot( ) {
+    updateQuestingTeam( );
     sem_post( sync_sem );
 }
 
@@ -253,7 +271,10 @@ void GameWindow::updateQuestingTeam( ) {
         qModel->appendRow( new QStandardItem( QString( p->getName( ).c_str( ) ) ) );
     }
     ui->proposeTeamList->setModel( qModel );
+}
 
+void GameWindow::updateGameInfoSlot( ) {
+    updateGameInfo( );
     sem_post( sync_sem );
 }
 
@@ -273,11 +294,15 @@ void GameWindow::updateGameInfo( ) {
             roleModel->appendRow( new QStandardItem( QString( avalon::gui::roleToString( role ).c_str( ) ) ) );
         }
     }
+}
 
+void GameWindow::updateTrackSlot( ) {
+    updateTrack( );
     sem_post( sync_sem );
 }
 
 void GameWindow::updateTrack( ) {
+
     unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
     unsigned int vLength = *voteTrackLength_subscriber->getData<unsigned int>( );
     unsigned int currVote = *currentVoteTrack_subscriber->getData<unsigned int>( );
@@ -290,11 +315,16 @@ void GameWindow::updateTrack( ) {
     QStandardItem* voteItem = new QStandardItem( QString( voteStr.c_str( ) ) );
     trackModel->setItem( 0, questItem );
     trackModel->setItem( 1, voteItem );
+}
 
+
+void GameWindow::updateVoteStateSlot( ) {
+    updateVoteState( );
     sem_post( sync_sem );
 }
 
 void GameWindow::updateVoteState( ) {
+
     bool inVoteState = *voteState_subscriber->getData<bool>( );
     QStandardItemModel* listModel = (QStandardItemModel*) ui->playerList->model( );
     if( inVoteState ) {
@@ -321,7 +351,10 @@ void GameWindow::updateVoteState( ) {
         listModel->removeColumn( 3 );
         ui->votingSection->hide( );
     }
+}
 
+void GameWindow::updateCurrentVotesSlot( ) {
+    updateCurrentVotes( );
     sem_post( sync_sem );
 }
 
@@ -334,7 +367,10 @@ void GameWindow::updateCurrentVotes( ) {
             listModel->item( i, 3 )->setText( QString( "Yes" ) );
         }
     }
+}
 
+void GameWindow::updateVoteHistorySlot( ) {
+    updateVoteHistory( );
     sem_post( sync_sem );
 }
 
@@ -345,8 +381,6 @@ void GameWindow::updateVoteHistory( ) {
 
     ResultsDialog results( NULL, thisVote.getVotePassed( ) );
     results.exec( );
-
-    sem_post( sync_sem );
 }
 
 
