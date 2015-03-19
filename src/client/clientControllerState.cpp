@@ -29,7 +29,9 @@
 // VotingState {
 
     // Constructor for the VotingState, simply sets the correct state name
-    VotingState::VotingState( ClientInfo* dat ) : ClientControllerState( "Voting", dat ) { }
+    VotingState::VotingState( ClientInfo* dat ) : ClientControllerState( "Voting", dat ) {
+        data->model->updateData( "voteState", true );
+    }
 
     // Figures out what needs to be done with any given action, when we're in the voting state
     ControllerState* VotingState::handleAction( Action* action_to_be_handled ) {
@@ -105,6 +107,7 @@
             auto action = dynamic_cast< EnterTeamSelectionAction* >( action_to_be_handled );
             data->model->updateData( "leaderID", action->getLeader( ) );
             data->model->updateData( "questingTeam", std::vector< unsigned int >( ) );
+            data->model->updateData( "voteState", false );
 
             return new TeamSelectionState( data );
         } else {

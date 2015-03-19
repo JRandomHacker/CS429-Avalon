@@ -36,6 +36,7 @@
     connect( this, SIGNAL( leaderIDUpdated( ) ), this, SLOT( updateLeader( ) ) );
     connect( this, SIGNAL( questingTeamUpdated( ) ), this, SLOT( updateQuestingTeam( ) ) );
     connect( this, SIGNAL( trackUpdated( ) ), this, SLOT( updateTrack( ) ) );
+    connect( this, SIGNAL( voteStateUpdated( ) ), this, SLOT( updateVoteState( ) ) );
 
     // Start up thread for controller
     pthread_t controlThread;
@@ -54,6 +55,7 @@ GameWindow::~GameWindow( ) {
     delete roleList_subscriber;
     delete leaderID_subscriber;
     delete questingTeam_subscriber;
+    delete voteState_subscriber;
     for( std::vector<Subscriber*>::iterator i = player_subscribers.begin( ); i != player_subscribers.end( ); i++ )
         delete *i;
 
@@ -73,8 +75,7 @@ void GameWindow::startWatchOnHasGameSettings( ) {
 
 void GameWindow::createPlayerSubscribers( ) {
 
-    ui->buttonVoteFail->setDisabled( true );
-    ui->buttonVotePass->setDisabled( true );
+    ui->votingSection->hide( );
 
     // Add subscriber for number of players
     num_players_subscriber = new ClosureSubscriber( NULL, NULL );
@@ -158,6 +159,13 @@ void GameWindow::createPlayerSubscribers( ) {
     model->subscribe( "leaderID", leaderID_subscriber );
     updateLeader( );
 
+    // Subscribe to voteState
+    voteState_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit voteStateUpdated( );
+            },
+            NULL );
+    model->subscribe( "voteState", voteState_subscriber );
 }
 
 void GameWindow::updatePlayer( unsigned int id ) {
@@ -255,6 +263,15 @@ void GameWindow::updateTrack( ) {
     trackModel->setItem( 0, questItem );
     trackModel->setItem( 1, voteItem );
 }
+
+void GameWindow::updateVoteState( ) {
+    bool inVoteState = *voteState_subscriber->getData<bool>( );
+    if( inVoteState )
+        ui->votingSection->show( );
+    else
+        ui->votingSection->hide( );
+}
+
 
 void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
     if(leaderID_subscriber == NULL || myID_subscriber == NULL )

@@ -15,24 +15,33 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0" rowspan="4">
-    <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0">
+    <layout class="QVBoxLayout" name="rolesLayout" stretch="0,0,0,0">
      <item>
       <widget class="QGraphicsView" name="playerAvatar"/>
      </item>
      <item>
-      <widget class="QTableView" name="playerList">
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
+      <widget class="QGroupBox" name="playersListSection">
+       <property name="title">
+        <string>Players</string>
        </property>
-       <property name="showGrid">
-        <bool>true</bool>
-       </property>
-       <attribute name="horizontalHeaderStretchLastSection">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="QTableView" name="playerList">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="showGrid">
+           <bool>true</bool>
+          </property>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
@@ -74,7 +83,7 @@
     </widget>
    </item>
    <item row="0" column="2" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="votingTrackLayout">
      <item>
       <widget class="QListView" name="voteTrackList">
        <property name="editTriggers">
@@ -85,24 +94,24 @@
     </layout>
    </item>
    <item row="1" column="2">
-    <layout class="QVBoxLayout" name="verticalLayout_4">
+    <layout class="QVBoxLayout" name="proposedTeamLayout">
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="proposedTeamSection">
        <property name="title">
         <string>Proposed Questing Team</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="1" column="0">
-         <widget class="QListView" name="proposeTeamList">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-         </widget>
-        </item>
         <item row="3" column="0">
          <widget class="QPushButton" name="proposeTeamButton">
           <property name="text">
            <string>Propose Team</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QListView" name="proposeTeamList">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
           </property>
          </widget>
         </item>
@@ -117,18 +126,14 @@
          </widget>
         </item>
        </layout>
-       <zorder>proposeTeamList</zorder>
-       <zorder>proposeTeamButton</zorder>
-       <zorder>proposeTeamList</zorder>
-       <zorder>leaderLabel</zorder>
       </widget>
      </item>
     </layout>
    </item>
    <item row="1" column="3">
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout" name="votingLayout">
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="votingSection">
        <property name="title">
         <string>Quest Voting</string>
        </property>
@@ -160,9 +165,9 @@
     </widget>
    </item>
    <item row="3" column="2" colspan="2">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="chatLayout">
      <item>
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QGroupBox" name="chatSection">
        <property name="title">
         <string>Chat</string>
        </property>
@@ -203,7 +208,6 @@
   <zorder>line</zorder>
   <zorder>line_2</zorder>
   <zorder></zorder>
-  <zorder>groupBox</zorder>
  </widget>
  <resources/>
  <connections/>
