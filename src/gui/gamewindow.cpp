@@ -29,6 +29,8 @@
     this->model = model;
     ui->setupUi( this );
     this->serverH = serverHandle;
+    sem_init( sync_sem, 0, 0 );
+
     startWatchOnHasGameSettings( );
 
     // Connect slots and signals for updating UI elements
@@ -72,6 +74,7 @@ void GameWindow::startWatchOnHasGameSettings( ) {
             if ( s->getData<bool>( ) ) {
                 // Signal the UI to run createPlayerSubscribers( )
                 emit gameSettingsReceived( );
+                sem_wait( sync_sem );
             }
         },
         NULL ) );
@@ -90,6 +93,7 @@ void GameWindow::createPlayerSubscribers( ) {
     numEvil_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                 emit gameInfoUpdated( );
+                sem_wait( sync_sem );
             },
             NULL );
     model->subscribe( "numEvilChars", numEvil_subscriber );
@@ -98,6 +102,7 @@ void GameWindow::createPlayerSubscribers( ) {
     roleList_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                 emit gameInfoUpdated( );
+                sem_wait( sync_sem );
             }
             , NULL );
     model->subscribe( "isRoleInGame", roleList_subscriber );
@@ -113,6 +118,7 @@ void GameWindow::createPlayerSubscribers( ) {
     questingTeam_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                     emit questingTeamUpdated( );
+                    sem_wait( sync_sem );
             },
             NULL );
     model->subscribe( "questingTeam", questingTeam_subscriber );
@@ -122,6 +128,7 @@ void GameWindow::createPlayerSubscribers( ) {
     currentVoteTrack_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                     emit trackUpdated( );
+                    sem_wait( sync_sem );
             },
             NULL );
     questTrackLength_subscriber = new ClosureSubscriber( NULL, NULL );
@@ -147,6 +154,7 @@ void GameWindow::createPlayerSubscribers( ) {
         player_subscribers.push_back( new ClosureSubscriber(
             [&,i]( Subscriber* ){
                 emit playerInfoUpdated( i );
+                sem_wait( sync_sem );
             },
             NULL ) );
         model->subscribe( std::string( "player" ) + std::to_string( i ), player_subscribers[i] );
@@ -158,6 +166,7 @@ void GameWindow::createPlayerSubscribers( ) {
     leaderID_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                     emit leaderIDUpdated( );
+                    sem_wait( sync_sem );
             },
             NULL );
     model->subscribe( "leaderID", leaderID_subscriber );
@@ -167,6 +176,7 @@ void GameWindow::createPlayerSubscribers( ) {
     voteState_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                     emit voteStateUpdated( );
+                    sem_wait( sync_sem );
             },
             NULL );
     model->subscribe( "voteState", voteState_subscriber );
@@ -174,6 +184,7 @@ void GameWindow::createPlayerSubscribers( ) {
     voteHistory_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                     emit voteHistoryUpdated( );
+                    sem_wait( sync_sem );
                 },
                 NULL );
     model->subscribe( "voteHistory", voteHistory_subscriber );
@@ -226,6 +237,8 @@ void GameWindow::updateLeader( ) {
         ui->leaderLabel->setText( QString( "" ) );
         ui->proposeTeamButton->hide( );
     }
+
+    sem_post( sync_sem );
 }
 
 void GameWindow::updateQuestingTeam( ) {
@@ -239,6 +252,8 @@ void GameWindow::updateQuestingTeam( ) {
         qModel->appendRow( new QStandardItem( QString( p->getName( ).c_str( ) ) ) );
     }
     ui->proposeTeamList->setModel( qModel );
+
+    sem_post( sync_sem );
 }
 
 void GameWindow::updateGameInfo( ) {
@@ -258,6 +273,8 @@ void GameWindow::updateGameInfo( ) {
                 roleModel->appendRow( new QStandardItem( QString( avalon::gui::roleToString( role ).c_str( ) ) ) );
         }
     }
+
+    sem_post( sync_sem );
 }
 
 void GameWindow::updateTrack( ) {
@@ -273,6 +290,8 @@ void GameWindow::updateTrack( ) {
     QStandardItem* voteItem = new QStandardItem( QString( voteStr.c_str( ) ) );
     trackModel->setItem( 0, questItem );
     trackModel->setItem( 1, voteItem );
+
+    sem_post( sync_sem );
 }
 
 void GameWindow::updateVoteState( ) {
@@ -290,6 +309,7 @@ void GameWindow::updateVoteState( ) {
         currentVotes_subscriber = new ClosureSubscriber(
                     [&]( Subscriber* ) {
                         emit currentVotesUpdated( );
+                        sem_wait( sync_sem );
                     },
                     NULL);
         model->subscribe( "currentVotes", currentVotes_subscriber );
@@ -297,6 +317,8 @@ void GameWindow::updateVoteState( ) {
         listModel->removeColumn( 3 );
         ui->votingSection->hide( );
     }
+
+    sem_post( sync_sem );
 }
 
 void GameWindow::updateCurrentVotes( ) {
@@ -308,6 +330,8 @@ void GameWindow::updateCurrentVotes( ) {
             listModel->item( i, 3 )->setText( QString( "Yes" ) );
         }
     }
+
+    sem_post( sync_sem );
 }
 
 void GameWindow::updateVoteHistory( ) {
@@ -317,6 +341,8 @@ void GameWindow::updateVoteHistory( ) {
 
     ResultsDialog results( NULL, thisVote.getVotePassed( ) );
     results.exec( );
+
+    sem_post( sync_sem );
 }
 
 

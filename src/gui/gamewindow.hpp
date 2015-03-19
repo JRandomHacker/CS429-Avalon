@@ -6,6 +6,7 @@
 #include "clientController.hpp"
 #include "model.hpp"
 #include "subscriber.hpp"
+#include <semaphore.h>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -224,6 +225,8 @@ private:
      *  Pointer to model for client
      */
     Model * model;
+
+    sem_t * sync_sem;
 
     /**
      *  Subscriber that gets num of players from the model.
