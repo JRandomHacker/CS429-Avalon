@@ -26,7 +26,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QPushButton" name="acceotButton">
+    <widget class="QPushButton" name="acceptButton">
      <property name="text">
       <string>Accept</string>
      </property>

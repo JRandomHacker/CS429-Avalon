@@ -1,4 +1,4 @@
-#include "votedialog.h"
+#include "votedialog.hpp"
 #include "ui_votedialog.h"
 
 VoteDialog::VoteDialog(QWidget *parent) :

@@ -5,6 +5,8 @@
 #include "globals.hpp"
 #include "guihelpers.hpp"
 #include "clientCustomActionsFromGUI.hpp"
+#include "voteHistory.hpp"
+#include "resultsdialog.hpp"
 #include <climits>
 #include <signal.h>
 #include <QStandardItem>
@@ -37,6 +39,7 @@
     connect( this, SIGNAL( questingTeamUpdated( ) ), this, SLOT( updateQuestingTeam( ) ) );
     connect( this, SIGNAL( trackUpdated( ) ), this, SLOT( updateTrack( ) ) );
     connect( this, SIGNAL( voteStateUpdated( ) ), this, SLOT( updateVoteState( ) ) );
+    connect( this, SIGNAL( voteHistoryUpdated( ) ), this, SLOT( updateVoteHistory( ) ) );
 
     // Start up thread for controller
     pthread_t controlThread;
@@ -166,6 +169,14 @@ void GameWindow::createPlayerSubscribers( ) {
             },
             NULL );
     model->subscribe( "voteState", voteState_subscriber );
+
+    voteHistory_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit voteHistoryUpdated( );
+
+                },
+                NULL );
+    model->subscribe( "voteHistory", voteHistory_subscriber );
 }
 
 void GameWindow::updatePlayer( unsigned int id ) {
@@ -266,10 +277,20 @@ void GameWindow::updateTrack( ) {
 
 void GameWindow::updateVoteState( ) {
     bool inVoteState = *voteState_subscriber->getData<bool>( );
-    if( inVoteState )
+    if( inVoteState ) {
         ui->votingSection->show( );
-    else
+    } else {
         ui->votingSection->hide( );
+    }
+}
+
+void GameWindow::updateVoteHistory( ) {
+    std::vector<VoteHistory> hist = *voteHistory_subscriber->getData<std::vector<VoteHistory>>( );
+
+    VoteHistory thisVote = hist.back( );
+
+    ResultsDialog results( NULL, thisVote.getVotePassed( ) );
+    results.exec( );
 }
 
 

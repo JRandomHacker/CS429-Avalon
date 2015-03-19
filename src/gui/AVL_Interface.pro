@@ -29,8 +29,8 @@ HEADERS  += optionswindow.hpp \
     joinserverwindow.hpp \
     displayerrors.hpp \
     guihelpers.hpp \
-    votedialog.h \
-    resultsdialog.h
+    votedialog.hpp \
+    resultsdialog.hpp
 
 FORMS    += optionswindow.ui \
     gamewindow.ui \
