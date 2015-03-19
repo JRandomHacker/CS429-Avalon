@@ -29,6 +29,16 @@ class ControllerState {
         virtual ~ControllerState( );
 
         /**
+         * Setup stuff in other objects that is needed for the lifetime of the state
+         */
+        virtual void setupState( );
+
+        /**
+         * Tear down stuff from the setup that is no longer needed.
+         */
+        virtual void teardownState( );
+
+        /**
          * Virtual method for handling an action
          * All ControllerStates must be able to handle an action
          *

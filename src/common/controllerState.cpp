@@ -7,6 +7,14 @@ ControllerState::ControllerState( std::string state_type_desc ) :
 // Destructor. We have nothing to clean up
 ControllerState::~ControllerState( ) { }
 
+void ControllerState::setupState( ) {
+
+}
+
+void ControllerState::teardownState( ) {
+
+}
+
 // Prints an error message containing the state we were in, and the action we received
 void ControllerState::reportUnhandledAction( std::string action_type ) {
 

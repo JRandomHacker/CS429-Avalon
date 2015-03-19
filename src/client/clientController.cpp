@@ -87,6 +87,9 @@ void ClientController::setControllerState( ControllerState* new_state ) {
 
     releaseControllerState( ); // Clean up the old ControllerState before changing
     handling_state = new_state;
+    if ( handling_state != NULL ) {
+        handling_state->setupState( );
+    }
 }
 
 // Helper function to clean up the ControllerState
@@ -94,6 +97,7 @@ void ClientController::releaseControllerState( ) {
 
     // Make sure we'd actually GOTTEN a state
     if( handling_state != NULL ) {
+        handling_state->teardownState( );
         delete handling_state;
         handling_state = NULL;
     }

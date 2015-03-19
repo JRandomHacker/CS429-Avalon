@@ -102,6 +102,9 @@
             // TODO Update model with voting player instead of printing
             std::cout << "[ ClientController ] Received a vote from player " << votingPlayer << std::endl;
 
+            auto currentVotes = data->model->getDataForUpdate< std::vector< avalon::player_vote_t > >( "currentVotes" );
+            (*currentVotes)[votingPlayer] = avalon::HIDDEN;
+
         } else if( action_type == "EnterTeamSelection" ) {
 
             auto action = dynamic_cast< EnterTeamSelectionAction* >( action_to_be_handled );
@@ -117,6 +120,16 @@
 
         // By default, we don't change states
         return NULL;
+    }
+
+    void VotingState::setupState( ) {
+        std::vector< avalon::player_vote_t > votes;
+        votes.resize( FROMMODEL( unsigned int, "numberOfPlayers" ), avalon::NO_VOTE );
+        data->model->addData( "currentVotes", votes );
+    }
+
+    void VotingState::teardownState( ) {
+        data->model->removeData( "currentVotes" );
     }
 // }
 
