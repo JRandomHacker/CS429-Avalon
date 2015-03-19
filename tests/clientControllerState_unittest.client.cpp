@@ -8,6 +8,7 @@
 
 #include "clientControllerState.hpp"
 #include "model.hpp"
+#include "voteHistory.hpp"
 #include "mockClient.hpp"
 #include "clientInfo.hpp"
 #include "clientCustomActionsFromGUI.hpp"
@@ -85,7 +86,6 @@ TEST_F( ClientControllerStateTestFixture, TestVotingStateVoteAction ) {
     ASSERT_EQ( 3, sentVote.id( ) );
 }
 
-/*
 TEST_F( ClientControllerStateTestFixture, TestVotingStateResultsAction ) {
     VotingState testState( testInfo );
 
@@ -93,7 +93,7 @@ TEST_F( ClientControllerStateTestFixture, TestVotingStateResultsAction ) {
     testModel->addData< unsigned int >( "voteTrackLength", 5 );
     testModel->addData< unsigned int >( "questTrackLength", 5 );
     testModel->addData( "questingTeam", std::vector< unsigned int >( ) );
-    testModel->addData( "voteHistory", std::vector< unsigned int >( ) );
+    testModel->addData( "voteHistory", std::vector< VoteHistory >( ) );
     std::vector< avalon::player_vote_t >* testVotes = new std::vector< avalon::player_vote_t >( );
     testVotes->push_back( avalon::YES );
     testVotes->push_back( avalon::NO );
@@ -110,7 +110,6 @@ TEST_F( ClientControllerStateTestFixture, TestVotingStateResultsAction ) {
 
     delete sub;
 }
-*/
 
 TEST_F( ClientControllerStateTestFixture, TestVotingStateTeamStateAction ) {
     VotingState testState( testInfo );
@@ -226,7 +225,6 @@ TEST_F( ClientControllerStateTestFixture, TestLobbyStateSettingsAction ) {
     delete sub;
 }
 
-/*
 TEST_F( ClientControllerStateTestFixture, TestLobbyStatePlayerAction ) {
     LobbyState testState( testInfo );
 
@@ -241,14 +239,12 @@ TEST_F( ClientControllerStateTestFixture, TestLobbyStatePlayerAction ) {
     ClosureSubscriber* sub = new ClosureSubscriber( [&](Subscriber*){ }, [&](Subscriber*){ } );
     testModel->subscribe( "player2", sub );
 
-    ASSERT_EQ( testPlayer->getName( ), sub->getData< Player >( )->getName( ) );
-    ASSERT_EQ( testPlayer->getAlignment( ), sub->getData< Player >( )->getAlignment( ) );
-    ASSERT_EQ( testPlayer->getRole( ), sub->getData< Player >( )->getRole( ) );
+    ASSERT_EQ( "Test", sub->getData< Player >( )->getName( ) );
+    ASSERT_EQ( avalon::GOOD, sub->getData< Player >( )->getAlignment( ) );
+    ASSERT_EQ( avalon::NONE, sub->getData< Player >( )->getRole( ) );
 
-    delete testPlayer;
     delete sub;
 }
-*/
 
 TEST_F( ClientControllerStateTestFixture, TestLobbyStateNameAction ) {
     LobbyState testState( testInfo );
