@@ -98,6 +98,13 @@ signals:
      */
     void trackUpdated( );
 
+    /**
+     * Signal emitted when vote state is entered or exited
+     *
+     * @return None
+     */
+    void voteStateUpdated( );
+
 private slots:
     /**
      *  Makes subscriber to get num of players.
@@ -143,6 +150,12 @@ private slots:
      * @return None
      */
     void updateTrack( );
+
+    /**
+     * Changes gui to enable/disable VotingState
+     * @return None
+     */
+    void updateVoteState( );
     
     /**
      * When the leader clicks a player, they are toggled on/off the team
@@ -232,6 +245,11 @@ private:
      *  Subscriber for quest track length
      */
     Subscriber* questTrackLength_subscriber;
+
+    /**
+     *  Subscriber for vote state flag
+     */
+    Subscriber* voteState_subscriber;
 
 
     /**

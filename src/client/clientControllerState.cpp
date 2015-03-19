@@ -29,7 +29,9 @@
 // VotingState {
 
     // Constructor for the VotingState, simply sets the correct state name
-    VotingState::VotingState( ClientInfo* dat ) : ClientControllerState( "Voting", dat ) { }
+    VotingState::VotingState( ClientInfo* dat ) : ClientControllerState( "Voting", dat ) {
+        data->model->updateData( "voteState", true );
+    }
 
     // Figures out what needs to be done with any given action, when we're in the voting state
     ControllerState* VotingState::handleAction( Action* action_to_be_handled ) {
@@ -105,6 +107,7 @@
             data->model->updateData( "leaderID", data->leader );
             data->team.clear( );
             data->model->updateData( "questingTeam", data->team );
+            data->model->updateData( "voteState", false );
 
             return new TeamSelectionState( data );
         } else {
@@ -236,6 +239,7 @@
             data->model->addData( "currentVoteTrack", ( unsigned int )0 );
             data->model->addData( "currentQuestTrack", ( unsigned int )0 );
             data->model->addData( "voteHistory", std::vector< VoteHistory >() );
+            data->model->addData( "voteState", false );
 
             for ( unsigned int i = 0; i < data->num_players; i++ ) {
                 data->model->addData( std::string( "player" ) + std::to_string( i ), NULL );
