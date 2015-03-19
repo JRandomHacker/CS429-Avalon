@@ -379,7 +379,7 @@ void GameWindow::updateVoteHistory( ) {
 
     VoteHistory thisVote = hist.back( );
 
-    ResultsDialog results( NULL, thisVote.getVotePassed( ) );
+    ResultsDialog results( NULL, thisVote, player_subscribers );
     results.exec( );
 }
 

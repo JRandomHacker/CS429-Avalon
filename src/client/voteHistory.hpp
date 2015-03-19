@@ -28,7 +28,11 @@ class VoteHistory {
          * @param voteTrackDuringVote position of the vote track during the vote
          * @param questTrackDuringVote position of the quest track during the vote
          */
-        VoteHistory ( bool didVotePass, std::vector< avalon::player_vote_t > playerVotesVec, std::vector< unsigned int > teamVotedOn, unsigned int voteTrackDuringVote, unsigned int questTrackDuringVote );
+        VoteHistory ( bool didVotePass,
+            std::vector< avalon::player_vote_t > playerVotesVec,
+            std::vector< unsigned int > teamVotedOn,
+            unsigned int voteTrackDuringVote,
+            unsigned int questTrackDuringVote );
         
         /**
          * Returns the vote of the requested player
@@ -36,42 +40,42 @@ class VoteHistory {
          * @param playerNum the index of the player whose vote should be returned
          * @return vote at the index of the requested player
          */
-        avalon::player_vote_t getPlayerVote ( unsigned int playerNum );
+        avalon::player_vote_t getPlayerVote ( unsigned int playerNum ) const;
 
         /**
          * Getter
          *
          * @return the votes for each player in a vector
          */
-        std::vector< avalon::player_vote_t > getPlayerVotes( );
+        std::vector< avalon::player_vote_t > getPlayerVotes( ) const;
 
         /**
          * Getter
          *
          * @return the proposed team
          */
-        std::vector< unsigned int > getProposedTeam( );
+        std::vector< unsigned int > getProposedTeam( ) const;
 
         /**
          * Getter
          *
          * @return the position on the vote track at the time of the vote
          */
-        unsigned int getVoteTrackNum( );
+        unsigned int getVoteTrackNum( ) const;
 
         /**
          * Getter
          *
          * @return the position on the quest track at the time of the vote
          */
-        unsigned int getQuestTrackNum( );
+        unsigned int getQuestTrackNum( ) const;
         
         /**
          * Getter
          * 
          * @return bool for whether vote passed or not
          */
-        bool getVotePassed( );
+        bool getVotePassed( ) const;
 
         
         
