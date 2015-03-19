@@ -30,6 +30,7 @@ bool Model::flagDataForUpdate( std::string data_id ) {
         return false;
     }
     data_iter->second.alertAllSubscribersToUpdate();
+    return true;
 }
 
 bool Model::addData(std::string data_id) {
