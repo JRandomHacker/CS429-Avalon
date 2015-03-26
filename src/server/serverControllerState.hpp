@@ -35,15 +35,27 @@ class ServerControllerState : public ControllerState {
         //! A pointer to the model containing the game state
         ServInfo* model;
 
+        //! The enum that sendPlayer expects
+        enum info_level_t {
+            //! Send the players role and alignment
+            ALLINFO,
+            //! Send the players alignment
+            ALIGNMENTINFO,
+            //! Set the players role to Merlin (Used for Percival)
+            LOOKSLIKEMERLININFO,
+            //! Send neither the players role, nor their alignment
+            NOINFO
+        };
+
         /**
          * Helper function to send a player to another player
          *
          * @param playerID The ID of the player to be sent
          * @param destinationID The ID of the player to send the player to
-         * @param allInfo Whether the player should know the role and alignment of the sent player
+         * @param infoLevel The amount of information you wish to be sent
          * @return None
          */
-        void sendPlayer( int playerID, int destinationID, bool allInfo );
+        void sendPlayer( unsigned int playerID, unsigned int destinationID, info_level_t infoLevel );
 
         /**
          * Helper function to send a protobuf to all clients
@@ -96,7 +108,17 @@ class WaitingForClientsState : public ServerControllerState {
          * @param playerID the ID of the player that is connecting
          * @return None
          */
-        void sendStartingInfo( int playerID );
+        void sendStartingInfo( unsigned int playerID );
+
+        /**
+         * Helper function to decide what information the recipient should get about the player
+         * and send the player info
+         *
+         * @param recipient The ID of the player receiving information about a new player
+         * @param player The player that the recipient is receiving
+         * @return None
+         */
+        void sendRelevantInfo( unsigned int player, unsigned int recipient );
 
 };
 

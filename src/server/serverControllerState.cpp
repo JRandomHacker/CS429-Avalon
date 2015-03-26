@@ -20,14 +20,30 @@
 
     // Sends one player another player's information.
     // If allInfo is false, it hides the players affiliation
-    void ServerControllerState::sendPlayer( int playerID, int destinationID, bool allInfo ) {
+    void ServerControllerState::sendPlayer( unsigned int playerID, unsigned int destinationID, info_level_t infoLevel ) {
 
         avalon::network::Player playerBuf;
 
-        if ( allInfo ) {
-            playerBuf = model->players[ playerID ]->getBuf( );
-        } else {
-            playerBuf = model->players[ playerID ]->getHiddenBuf( );
+        switch( infoLevel ) {
+
+            case ALLINFO:
+                playerBuf = model->players[ playerID ]->getBuf( );
+                break;
+
+            case ALIGNMENTINFO:
+                playerBuf = model->players[ playerID ]->getHiddenBuf( );
+                playerBuf.set_alignment( model->players[ playerID ]->getAlignment( ) );
+                break;
+
+            case LOOKSLIKEMERLININFO:
+                playerBuf = model->players[ playerID ]->getHiddenBuf( );
+                playerBuf.set_role( avalon::MERLIN );
+                break;
+
+            case NOINFO:
+            default:
+                playerBuf = model->players[ playerID ]->getHiddenBuf( );
+                break;
         }
 
         playerBuf.set_id( playerID );
@@ -82,17 +98,54 @@
 
 
     // Sends the beginning information when a player connects
-    void WaitingForClientsState::sendStartingInfo( int playerID ) {
+    void WaitingForClientsState::sendStartingInfo( unsigned int playerID ) {
 
         model->settingsBuf.set_client( playerID );
         model->server->sendProtobuf( avalon::network::SETTINGS_BUF, playerID, model->settingsBuf.SerializeAsString( ) );
 
-        for( int i = 0; i < playerID; i++ ) {
-            sendPlayer( i, playerID, false ); // Send each currently connected player to the new player
-            sendPlayer( playerID, i, false ); // Send the new player to each player already connected
+        // Trade the information the player should know with each already connected player
+        for( unsigned int i = 0; i < playerID; i++ ) {
+
+            sendRelevantInfo( i, playerID );
+
+            sendRelevantInfo( playerID, i );
         }
 
-        sendPlayer( playerID, playerID, true ); // Send the new player their own info
+        sendPlayer( playerID, playerID, ALLINFO ); // Send the new player their own info
+    }
+
+    void WaitingForClientsState::sendRelevantInfo( unsigned int player, unsigned int recipient ) {
+
+        bool sent = false;
+
+        // Merlin should know of all the evil players who aren't Mordred
+        if( model->players[ recipient ]->getRole( ) == avalon::MERLIN ) {
+            if( model->players[ player ]->getAlignment( ) == avalon::EVIL && model->players[ player ]->getRole( ) != avalon::MORDRED ) {
+                sent = true;
+                sendPlayer( player, recipient, ALIGNMENTINFO );
+            }
+        }
+
+        // Evil players, who aren't Oberon, should know of each other
+        if( model->players[ recipient ]->getAlignment( ) == avalon::EVIL && model->players[ player ]->getAlignment( ) == avalon::EVIL ) {
+            if( model->players[ recipient ]->getRole( ) != avalon::OBERON && model->players[ player ]->getRole( ) != avalon::OBERON ) {
+                sent = true;
+                sendPlayer( player, recipient, ALIGNMENTINFO );
+            }
+        }
+
+        // Percival should know of Merlin and Morgana
+        if( model->players[ recipient ]->getRole( ) == avalon::PERCIVAL ) {
+            if( model->players[ player ]->getRole( ) == avalon::MERLIN || model->players[ player ]->getRole( ) == avalon::MORGANA ) {
+                sent = true;
+                sendPlayer( player, recipient, LOOKSLIKEMERLININFO );
+            }
+        }
+
+        // No special rules, so they shouldn't know anything
+        if( !sent ) {
+            sendPlayer( player, recipient, NOINFO );
+        }
     }
 // }
 
