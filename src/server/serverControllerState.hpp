@@ -11,6 +11,9 @@
 #include "serverInfo.hpp"
 #include "controllerState.hpp"
 
+namespace avalon {
+namespace server {
+
 /**
  * Main class for the server states
  * Individual states inherit from this class
@@ -229,5 +232,8 @@ class VotingState : public ServerControllerState {
          */
         bool figureOutResultsOfVote( );
 };
+
+} // server
+} // avalon
 
 #endif // SERVER_CONTROLLER_STATE_HPP

@@ -17,6 +17,9 @@
 #define FROMMODEL(class, name) *data->model->referenceData< class >( name )
 #define FROMMODELREF(class, name) data->model->referenceData< class >( name )
 
+namespace avalon {
+namespace client {
+
 /**
  * Parent class for for the ClientControllerStates
  * Inherits from ControllerState
@@ -146,5 +149,8 @@ class VotingState : public ClientControllerState {
          */
         ControllerState* handleAction( Action* action_to_be_handled );
 };
+
+} // client
+} // avalon
 
 #endif // CLIENT_CONTROLLER_STATE_HPP

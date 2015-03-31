@@ -12,6 +12,9 @@
     #include <netdb.h>
 #endif
 
+namespace avalon {
+namespace server {
+
 // ServerControllerState {
     ServerControllerState::ServerControllerState( std::string state_type_desc, ServInfo* mod )
         : ControllerState(state_type_desc), model( mod ) {
@@ -398,3 +401,6 @@
         return yes > no;
     }
 // }
+
+} // server
+} // avalon
