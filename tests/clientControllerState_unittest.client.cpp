@@ -70,7 +70,7 @@ class ClientControllerStateTestFixture: public ::testing::Test {
 };
 
 TEST_F( ClientControllerStateTestFixture, TestVotingStateVoteAction ) {
-    VotingState testState( testInfo );
+    avalon::client::VotingState testState( testInfo );
 
     testAction = new TeamVoteAction( avalon::YES );
     ControllerState* resultState = testState.handleAction( testAction );
@@ -87,7 +87,7 @@ TEST_F( ClientControllerStateTestFixture, TestVotingStateVoteAction ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestVotingStateResultsAction ) {
-    VotingState testState( testInfo );
+    avalon::client::VotingState testState( testInfo );
 
     testModel->addData< unsigned int >( "currentVoteTrack" , 0);
     testModel->addData< unsigned int >( "voteTrackLength", 5 );
@@ -112,7 +112,7 @@ TEST_F( ClientControllerStateTestFixture, TestVotingStateResultsAction ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestVotingStateTeamStateAction ) {
-    VotingState testState( testInfo );
+    avalon::client::VotingState testState( testInfo );
 
     std::vector< unsigned int > testTeam { 2, 3, 5 };
     testInfo->model->addData( "questingTeam", testTeam );
@@ -127,7 +127,7 @@ TEST_F( ClientControllerStateTestFixture, TestVotingStateTeamStateAction ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestTeamStateSelectActionNotLeader ) {
-    TeamSelectionState testState( testInfo );
+    avalon::client::TeamSelectionState testState( testInfo );
 
     testAction = new SelectQuestGoerAction( true, 1 );
     ControllerState* resultState = testState.handleAction( testAction );
@@ -137,7 +137,7 @@ TEST_F( ClientControllerStateTestFixture, TestTeamStateSelectActionNotLeader ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestTeamStateSelectActionLeader ) {
-    TeamSelectionState testState( testInfo );
+    avalon::client::TeamSelectionState testState( testInfo );
 
     testInfo->model->updateData< unsigned int >( "leaderID", 3 );
 
@@ -156,7 +156,7 @@ TEST_F( ClientControllerStateTestFixture, TestTeamStateSelectActionLeader ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestTeamStateFinalizeActionNotLeader ) {
-    TeamSelectionState testState( testInfo );
+    avalon::client::TeamSelectionState testState( testInfo );
 
     testAction = new FinalizeTeamAction( );
     ControllerState* resultState = testState.handleAction( testAction );
@@ -166,7 +166,7 @@ TEST_F( ClientControllerStateTestFixture, TestTeamStateFinalizeActionNotLeader )
 }
 
 TEST_F( ClientControllerStateTestFixture, TestTeamStateFinalizeActionLeader ) {
-    TeamSelectionState testState( testInfo );
+    avalon::client::TeamSelectionState testState( testInfo );
 
     testInfo->model->updateData< unsigned int >( "leaderID", 3 );
 
@@ -184,7 +184,7 @@ TEST_F( ClientControllerStateTestFixture, TestTeamStateFinalizeActionLeader ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestTeamStateModifyAction ) {
-    TeamSelectionState testState( testInfo );
+    avalon::client::TeamSelectionState testState( testInfo );
 
     std::vector< unsigned int > testTeam { 2, 3, 5 };
     testInfo->model->addData( "questingTeam", testTeam );
@@ -199,7 +199,7 @@ TEST_F( ClientControllerStateTestFixture, TestTeamStateModifyAction ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestLobbyStateSettingsAction ) {
-    LobbyState testState( testInfo );
+    avalon::client::LobbyState testState( testInfo );
 
     avalon::network::GameSettings* testSettings = new avalon::network::GameSettings( );
     testSettings->set_players( 4 );
@@ -226,7 +226,7 @@ TEST_F( ClientControllerStateTestFixture, TestLobbyStateSettingsAction ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestLobbyStatePlayerAction ) {
-    LobbyState testState( testInfo );
+    avalon::client::LobbyState testState( testInfo );
 
     Player* testPlayer = new Player( "Test", avalon::NONE, avalon::GOOD );
     testModel->addData( "player2" );
@@ -247,7 +247,7 @@ TEST_F( ClientControllerStateTestFixture, TestLobbyStatePlayerAction ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestLobbyStateNameAction ) {
-    LobbyState testState( testInfo );
+    avalon::client::LobbyState testState( testInfo );
 
     testAction = new SetNameAction( "Test" );
     ControllerState* resultState = testState.handleAction( testAction );
@@ -264,7 +264,7 @@ TEST_F( ClientControllerStateTestFixture, TestLobbyStateNameAction ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestLobbyStateTeamStateAction ) {
-    LobbyState testState( testInfo );
+    avalon::client::LobbyState testState( testInfo );
 
     std::vector< unsigned int > testTeam { 2, 3, 5 };
     testModel->addData( "leaderID", UINT_MAX );
