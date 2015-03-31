@@ -38,7 +38,7 @@ ServerController::ServerController( ServInfo* model, int port ) {
     model->quest_track_length = 5; // TODO get value from ini
 
     handling_state = NULL;
-    setServerState( new WaitingForClientsState( model ) );
+    setServerState( new avalon::server::WaitingForClientsState( model ) );
 }
 
 // Destructor
@@ -96,7 +96,7 @@ void ServerController::networkThreadFunc( ) {
 }
 
 // Helper function to change the controller's state
-void ServerController::setServerState( ServerControllerState* new_state ) {
+void ServerController::setServerState( avalon::server::ServerControllerState* new_state ) {
     if( new_state != NULL ) {
         releaseServerState( ); // Clean up the old ControllerState before changing
         handling_state = new_state;
@@ -116,7 +116,7 @@ void ServerController::releaseServerState( ) {
 // Helper function to process an action
 // Calls the ActionHandler to do the work and changes our state accordingly
 void ServerController::processAction( Action* action ) {
-    setServerState( static_cast< ServerControllerState* >( handling_state->handleAction( action ) ) );
+    setServerState( static_cast< avalon::server::ServerControllerState* >( handling_state->handleAction( action ) ) );
 }
 
 // Infinite loop waiting for clients to do things

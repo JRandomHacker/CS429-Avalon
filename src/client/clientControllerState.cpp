@@ -16,6 +16,9 @@
 
 #include <climits>
 
+namespace avalon {
+namespace client {
+
 // ClientControllerState {
     // Constructor for the parent class, ClientControllerState.
     // Sets the description and model internally to whatever it gets passed
@@ -325,3 +328,6 @@
         data->model->addData( "roleList", roles );
     }
 // }
+
+} // client
+} // avalon

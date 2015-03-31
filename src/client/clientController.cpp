@@ -32,7 +32,7 @@ ClientController::ClientController( Model* model ) {
     data->client = client;
 
     handling_state = NULL;
-    setControllerState( new LobbyState( data ) ); // When the controller first starts, we're in the lobby waiting for players
+    setControllerState( new avalon::client::LobbyState( data ) ); // When the controller first starts, we're in the lobby waiting for players
 
 }
 

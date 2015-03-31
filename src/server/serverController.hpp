@@ -30,7 +30,7 @@ class ServerController {
         // The queue to put actions into so that the separate thread can process them later
         // (And associated helpers)
         ActionHandler* action_queue;
-        ServerControllerState* handling_state;
+        avalon::server::ServerControllerState* handling_state;
         sem_t* qSem;
 
         /*
@@ -66,7 +66,7 @@ class ServerController {
          * @param new_state The new state to put the ControllerState in
          * @return None
          */
-        void setServerState( ServerControllerState* new_state );
+        void setServerState( avalon::server::ServerControllerState* new_state );
 
         /*
          * Helper function to clear the ServerState's data
