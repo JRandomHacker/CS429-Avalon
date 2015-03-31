@@ -34,6 +34,14 @@ class ServerControllerState : public ControllerState {
          */
         ServerControllerState( std::string state_type_desc, ServInfo* mod );
 
+        /**
+         * Method that deals with actions in a way common to all server states.
+         * 
+         * @param action_to_be_handled The action that we need to deal with in our current state
+         */
+        ControllerState* handleAction( Action* action_to_be_handled );
+
+
     protected:
         //! A pointer to the model containing the game state
         ServInfo* model;

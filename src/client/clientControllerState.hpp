@@ -39,6 +39,13 @@ class ClientControllerState : public ControllerState {
          */
         ClientControllerState( std::string state_type_desc, ClientInfo* dat );
 
+        /**
+         * Method that deals with actions in a way common to all client states.
+         * 
+         * @param action_to_be_handled The action that we need to deal with in our current state
+         */
+        ControllerState* handleAction( Action* action_to_be_handled );
+
     protected:
         //! The data that is being passed between the controller states
         ClientInfo* data;

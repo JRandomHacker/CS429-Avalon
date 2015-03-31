@@ -8,6 +8,7 @@
 #include "clientControllerState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
+#include "clientCustomActionsForChat.hpp"
 #include "clientInfo.hpp"
 #include "voteHistory.hpp"
 
@@ -26,6 +27,28 @@ namespace client {
         : ControllerState(state_type_desc), data( dat ) {
 
             std::cerr << "[ ClientController ] Entered " << state_type_desc << " state" << std::endl;
+    }
+
+    // Default action handler for all actions unhandled by individual client controller states.
+    ControllerState* ClientControllerState::handleAction( Action* action_to_be_handled ) {
+
+        std::string action_type = action_to_be_handled->getMessage( );
+
+        if ( action_type == "ChatMessageSent" ) {
+            // Handle a chat message sent to this client
+
+            auto action = dynamic_cast< ChatMessageSentAction* >( action_to_be_handled );
+
+        } else if ( action_type == "ChatMessageRecv" ) {
+            // Handle sending a chat message to the server 
+
+            auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
+            
+        } else {
+            return ControllerState::handleAction( action_to_be_handled );
+        }
+
+        return NULL;
     }
 // }
 
@@ -116,8 +139,7 @@ namespace client {
             
             return new TeamSelectionState( data );
         } else {
-
-            reportUnhandledAction( action_type );
+            return ClientControllerState::handleAction( action_to_be_handled );
         }
 
         // By default, we don't change states
@@ -191,7 +213,7 @@ namespace client {
             return new VotingState( data );
         } else {
 
-            reportUnhandledAction( action_type );
+            return ClientControllerState::handleAction( action_to_be_handled );
         }
 
         // By default, we don't change states
@@ -296,7 +318,7 @@ namespace client {
         // We don't care about the action we received, since it isn't valid in this state
         } else {
 
-            reportUnhandledAction( action_type );
+            return ClientControllerState::handleAction( action_to_be_handled );
         }
 
         // By default, we haven't changed states

@@ -40,12 +40,14 @@ class ControllerState {
 
         /**
          * Virtual method for handling an action
-         * All ControllerStates must be able to handle an action
+         * All ControllerStates must be able to handle an action.
+         * If a subclass doesn't know how to handle an action it should pass the action up to its
+         * parent for handling, which will eventually reach this default that logs it as an error
          *
          * @param action_to_be_handled The action that needs to be handled in the current state
          * @return A different ControllerState if the action causes a state switch. NULL otherwise
          */
-        virtual ControllerState* handleAction( Action* action_to_be_handled ) = 0;
+        virtual ControllerState* handleAction( Action* action_to_be_handled );
 
         /**
          * A method that can be called whenever you get an unwanted action in handleAction

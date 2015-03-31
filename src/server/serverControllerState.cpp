@@ -19,7 +19,11 @@ namespace server {
     ServerControllerState::ServerControllerState( std::string state_type_desc, ServInfo* mod )
         : ControllerState(state_type_desc), model( mod ) {
             std::cerr << "[ ServerController ] Entered " << state_type_desc << " state" << std::endl;
-        }
+    }
+
+    ControllerState* ServerControllerState::handleAction( Action* action_to_be_handled ) {
+        return ControllerState::handleAction( action_to_be_handled );
+    }
 
     // Sends one player another player's information.
     // If allInfo is false, it hides the players affiliation

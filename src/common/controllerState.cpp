@@ -15,6 +15,11 @@ void ControllerState::teardownState( ) {
 
 }
 
+ControllerState* ControllerState::handleAction( Action* action_to_be_handled ) {
+	reportUnhandledAction( action_to_be_handled->getMessage( ) );
+	return NULL;
+}
+
 // Prints an error message containing the state we were in, and the action we received
 void ControllerState::reportUnhandledAction( std::string action_type ) {
 
