@@ -97,6 +97,8 @@ namespace avalon {
     namespace network {
         /*! An enumerator for different protobuf types */
         enum buffers_t {
+            /*! An avalon::network::ChatMessage protobuf */
+            CHAT_MSG_BUF,
             /*! An avalon::network::Player protobuf */
             PLAYER_BUF,
             /*! An avalon::network::GameSettings protobuf */

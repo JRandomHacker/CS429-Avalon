@@ -14,6 +14,7 @@
 
 #include "teamselection.pb.h"
 #include "vote.pb.h"
+#include "chatmessage.pb.h"
 
 #include <climits>
 
@@ -38,6 +39,9 @@ namespace client {
             // Handle a chat message sent to this client
 
             auto action = dynamic_cast< ChatMessageSentAction* >( action_to_be_handled );
+            auto buf = action->getMessage( ).toProtoBuf( );
+            data->client->sendProtobuf( avalon::network::CHAT_MSG_BUF, buf.SerializeAsString( ) );
+
 
         } else if ( action_type == "ChatMessageRecv" ) {
             // Handle sending a chat message to the server 

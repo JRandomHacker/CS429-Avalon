@@ -8,6 +8,7 @@
 
 #include "action.hpp"
 #include "globals.hpp"
+#include "chat_message.hpp"
 
 /**
  * An action to send a chat message to the server
@@ -18,7 +19,6 @@
  */
 class ChatMessageSentAction : public Action {
     public:
-
         /**
          * Public constructor
          *
@@ -32,15 +32,15 @@ class ChatMessageSentAction : public Action {
         virtual ~ChatMessageSentAction( );
 
         /**
-         * Gets what this client's player is saying
+         * Gets the message to send
          *
-         * @return std::string What the message text is
+         * @return ChatMessage What the message text is
          */
-        std::string getMessage( );
+        ChatMessage getMessage( );
 
     private:
         //! The message being sent
-        std::string message;
+        ChatMessage message;
 };
 
 /**
@@ -68,23 +68,13 @@ class ChatMessageRecvAction : public Action {
         /**
          * Gets what some other client is saying
          *
-         * @return std::string What the message text is
+         * @return ChatMessage What the message is
          */
-        std::string getMessage( );
-
-        /**
-         * Gets who sent this message
-         *
-         * @return unsigned int Who sent the message
-         */
-        unsigned int getPlayerId( );
+        ChatMessage getMessage( );
 
     private:
         //! The message received
-        std::string message;
-
-        //! The player id of the player who sent the message
-        unsigned int player_id;
+        ChatMessage message;
 };
 
-#endif // CLIENTCUSTOMACTIONSFROMGUI_HPP
+#endif // CLIENTCUSTOMACTIONSFORCHAT_HPP
