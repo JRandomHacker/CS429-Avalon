@@ -42,7 +42,7 @@ void JoinServerWindow::on_buttonJoinServer_clicked( ) {
         SetNameAction* setName = new SetNameAction( ui->fieldPlayerName->text( ).toStdString( ) );
         controller->addActionToQueue( ( Action* )setName );
         GameWindow* g = new GameWindow( NULL, controller, model );
-        g->setModal( false );
+        //g->setModal( false );
         g->show( );
 
         this->hide( );

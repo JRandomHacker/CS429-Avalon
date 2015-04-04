@@ -169,7 +169,7 @@ void CreateServerWindow::connectToServer( ) {
         SetNameAction* setName = new SetNameAction( name );
         controller->addActionToQueue( ( Action* )setName );
         GameWindow* g = new GameWindow( NULL, controller, model, serverH );
-        g->setModal( false );
+        //g->setModal( false );
         g->show( );
 
         this->hide( );

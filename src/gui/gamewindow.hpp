@@ -19,7 +19,7 @@ class GameWindow;
  *  Game window class. This is the window where the game is played.
  *  Displays the progress of the game.
  */
-class GameWindow : public QDialog {
+class GameWindow : public QWidget {
     Q_OBJECT
 
 public:

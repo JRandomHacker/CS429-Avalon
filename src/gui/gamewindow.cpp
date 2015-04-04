@@ -23,7 +23,7 @@
 #else     
 	GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model, int serverHandle ) :
 #endif
-    QDialog( parent ),
+    QWidget( parent ),
     ui( new Ui::GameWindow ) {
     this->control = controller;
     this->model = model;
