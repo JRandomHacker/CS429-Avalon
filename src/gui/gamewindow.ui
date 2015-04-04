@@ -52,24 +52,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="currRolesList">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
+      <widget class="QLabel" name="currRolesList">
+       <property name="text">
+        <string>currRolesList</string>
        </property>
       </widget>
      </item>
@@ -182,8 +167,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>430</width>
-             <height>85</height>
+             <width>426</width>
+             <height>69</height>
             </rect>
            </property>
           </widget>

@@ -287,12 +287,15 @@ void GameWindow::updateGameInfo( ) {
 
     std::vector< avalon::special_roles_t >* roleList = roleList_subscriber->getData< std::vector< avalon::special_roles_t > >( );
     if( roleList != NULL ) {
-        QStandardItemModel* roleModel = new QStandardItemModel( );
-        ui->currRolesList->setModel( roleModel );
+        QString roles = QString( "" );
         for( unsigned int i = 0; i < roleList->size( ); i++ ) {
             avalon::special_roles_t role = ( *roleList )[ i ];
-            roleModel->appendRow( new QStandardItem( QString( avalon::gui::roleToString( role ).c_str( ) ) ) );
+            if( i != 0 ) {
+                roles.append( ", " );
+            }
+            roles.append( avalon::gui::roleToString( role ).c_str( ) );
         }
+        ui->currRolesList->setText( roles );
     }
 }
 
