@@ -6,6 +6,7 @@
  * @date 2015-03-03
  */
 #include "clientController.hpp"
+#include "lobbyState.hpp"
 #include "model.hpp"
 #include "clientInfo.hpp"
 #include <semaphore.h>
