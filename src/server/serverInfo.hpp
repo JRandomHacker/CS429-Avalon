@@ -5,6 +5,8 @@
 #include "player.hpp"
 #include "server.hpp"
 #include <vector>
+#include <random>
+#include <algorithm>
 #ifdef _WIN32
     #include <windows.h>
 #else
@@ -28,6 +30,8 @@ typedef struct {
     unsigned int leader;
     //! The current place on the vote track
     unsigned int vote_track;
+    //! The current place on the quest track
+    unsigned int quest_track;
     //! A vector of all the players in the game
     std::vector< Player* > players;
     //! A vector holding the playerID and vote of anyone who's voted
@@ -36,6 +40,11 @@ typedef struct {
     std::vector< unsigned int > team;
     //! A protobuf with the game's settings
     avalon::network::GameSettings settingsBuf;
+    //! The seeded RNG for shuffling vectors
+    std::mt19937* rng;
 } ServInfo;
+
+template < typename T >
+static void randomizeVector( std::vector< T >& vec, std::mt19937* rng );
 
 #endif // SERVERINFO_HPP

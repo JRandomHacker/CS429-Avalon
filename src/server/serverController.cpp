@@ -17,7 +17,6 @@
 #include <pthread.h>
 #include <vector>
 #include <random>
-#include <algorithm>
 #include <string>
 
 // Constructor
@@ -40,6 +39,9 @@ ServerController::ServerController( ServInfo* model, int port ) {
 
     handling_state = NULL;
     setServerState( new avalon::server::WaitingForClientsState( model ) );
+
+    std::random_device rd; // Seed
+    model->rng = new std::mt19937( rd( ) ); // Actual generator
 }
 
 // Destructor
@@ -49,6 +51,7 @@ ServerController::~ServerController( ) {
     delete model->server;
     delete qSem;
     delete action_queue;
+    delete model->rng;
     releaseServerState( );
 }
 
@@ -244,11 +247,9 @@ int ServerController::initModelPlayer( std::vector< avalon::special_roles_t > sp
     }
 
     // Now randomize the vectors
-    std::random_device rd; // Seed
-    std::mt19937 rng( rd() ); // Actual generator
-    std::shuffle( possibleChars.begin(), possibleChars.end(), rng );
-    std::shuffle( goodChars.begin(), goodChars.end(), rng );
-    std::shuffle( evilChars.begin(), evilChars.end(), rng );
+    randomizeVector( possibleChars, model->rng );
+    randomizeVector( goodChars, model->rng );
+    randomizeVector( evilChars, model->rng );
 
     for( unsigned int i = 0; i < possibleChars.size(); i++ ) {
         avalon::alignment_t newAlign = possibleChars[ i ];
@@ -269,7 +270,7 @@ int ServerController::initModelPlayer( std::vector< avalon::special_roles_t > sp
     }
 
     // Pick a leader
-    model->leader = rng() % model->num_clients;
+    model->leader = ( *model->rng )( ) % model->num_clients;
 
     return EXIT_SUCCESS;
 }
