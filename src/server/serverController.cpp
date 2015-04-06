@@ -7,6 +7,7 @@
  */
 #include "serverController.hpp"
 #include "serverControllerState.hpp"
+#include "waitingForClientsState.hpp"
 #include "settings.pb.h"
 #include "globals.hpp"
 #include "player.pb.h"
