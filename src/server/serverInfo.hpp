@@ -6,7 +6,6 @@
 #include "server.hpp"
 #include <vector>
 #include <random>
-#include <algorithm>
 #ifdef _WIN32
     #include <windows.h>
 #else
@@ -46,5 +45,8 @@ typedef struct {
 
 template < typename T >
 static void randomizeVector( std::vector< T >& vec, std::mt19937* rng );
+
+// Weird template bullshit
+#include "serverInfo.cpp"
 
 #endif // SERVERINFO_HPP
