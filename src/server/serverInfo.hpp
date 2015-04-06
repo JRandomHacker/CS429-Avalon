@@ -6,6 +6,7 @@
 #include "server.hpp"
 #include <vector>
 #include <random>
+#include <algorithm>
 #ifdef _WIN32
     #include <windows.h>
 #else
@@ -31,6 +32,8 @@ typedef struct {
     unsigned int vote_track;
     //! The current place on the quest track
     unsigned int quest_track;
+    //! The number of missions that have failed so far
+    unsigned int quests_failed;
     //! A vector of all the players in the game
     std::vector< Player* > players;
     //! A vector holding the playerID and vote of anyone who's voted
@@ -46,7 +49,6 @@ typedef struct {
 template < typename T >
 static void randomizeVector( std::vector< T >& vec, std::mt19937* rng );
 
-// Weird template bullshit
 #include "serverInfo.cpp"
 
 #endif // SERVERINFO_HPP

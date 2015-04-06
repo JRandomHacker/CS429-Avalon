@@ -52,13 +52,22 @@ class Server {
         void recvTeamSelection( SOCKET recvSock, int bufLength );
 
         /*
-         * Helper function to get the Vote protobuf and create an action
+         * Helper function to get the Vote protobuf for a team vote and create an action
          *
          * @param recvSock The socket to recv from
          * @param bufLength The length of the protobuf
          * @return None
          */
-        void recvVote( SOCKET recvSock, int bufLength );
+        void recvTeamVote( SOCKET recvSock, int bufLength );
+        
+        /*
+         * Helper function to get the Vote protobuf for a quest vote and create an action
+         *
+         * @param recvSock The socket to recv from
+         * @param bufLength The length of the protobuf
+         * @return None
+         */
+        void recvQuestVote( SOCKET recvSock, int bufLength );
 
         /*
          * Helper function to receive a custom name from the player during setup

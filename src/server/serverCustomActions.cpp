@@ -73,3 +73,21 @@
             return vote;
     }
 // }
+
+// QuestVoteAction {
+
+    QuestVoteAction::QuestVoteAction( unsigned int voter, avalon::player_vote_t vote ) : Action( "QuestVote" ) {
+        this->voter = voter;
+        this->vote = vote;
+    }
+
+    QuestVoteAction::~QuestVoteAction( ) { }
+
+    unsigned int QuestVoteAction::getVoter( ) {
+            return voter;
+    }
+
+    avalon::player_vote_t QuestVoteAction::getVote( ) {
+            return vote;
+    }
+// }

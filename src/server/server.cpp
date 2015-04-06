@@ -153,7 +153,11 @@ void Server::recvData( SOCKET recvSock ) {
             break;
 
         case avalon::network::VOTE_BUF:
-            recvVote( recvSock, bufLength );
+            recvTeamVote( recvSock, bufLength );
+            break;
+        
+        case avalon::network::QUEST_VOTE_BUF:
+            recvQuestVote( recvSock, bufLength );
             break;
 
         default:
@@ -189,13 +193,13 @@ void Server::recvTeamSelection( SOCKET recvSock, int bufLength ) {
     queue->addAction( action );
 }
 
-void Server::recvVote( SOCKET recvSock, int bufLength ) {
+void Server::recvTeamVote( SOCKET recvSock, int bufLength ) {
 
     // Receive the buffer
     char* buffer = new char[ bufLength ];
     recv( recvSock, ( char* )buffer, bufLength * sizeof( char ), 0 );
 
-    // Parse the player
+    // Parse the vote
     avalon::network::Vote buf;
     buf.ParseFromArray( buffer, bufLength );
     delete[] buffer;
@@ -204,6 +208,24 @@ void Server::recvVote( SOCKET recvSock, int bufLength ) {
     unsigned int id = getIdFromSocket( recvSock );
 
     Action* action = new TeamVoteAction( id, vote );
+    queue->addAction( action );
+}
+
+void Server::recvQuestVote( SOCKET recvSock, int bufLength ) {
+
+    // Receive the buffer
+    char* buffer = new char[ bufLength ];
+    recv( recvSock, ( char* )buffer, bufLength * sizeof( char ), 0 );
+
+    // Parse the vote
+    avalon::network::Vote buf;
+    buf.ParseFromArray( buffer, bufLength );
+    delete[] buffer;
+
+    avalon::player_vote_t vote = ( avalon::player_vote_t )buf.vote( );
+    unsigned int id = getIdFromSocket( recvSock );
+
+    Action* action = new QuestVoteAction( id, vote );
     queue->addAction( action );
 }
 

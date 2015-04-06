@@ -190,4 +190,46 @@ class TeamVoteAction : public Action {
         avalon::player_vote_t vote;
 };
 
+/**
+ * An action for receiving a quest vote
+ *
+ * @class ConfirmTeamSelectionAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-06
+ */
+class QuestVoteAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param voter The ID of the player who sent the vote
+         * @param vote vote that the player sent
+         */
+        QuestVoteAction( unsigned int voter, avalon::player_vote_t vote );
+
+        /**
+         * Public destructor
+         */
+        virtual ~QuestVoteAction( );
+
+        /**
+         * Getter
+         *
+         * @return The ID of the player attempting to vote
+         */
+        unsigned int getVoter( );
+
+        /**
+         * Getter
+         *
+         * @return The vote of the voting player
+         */
+        avalon::player_vote_t getVote( );
+
+    private:
+        unsigned int voter;
+        avalon::player_vote_t vote;
+};
+
 #endif // SERVERCUSTOMACTIONS_HPP

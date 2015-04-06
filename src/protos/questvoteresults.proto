@@ -1,0 +1,8 @@
+package avalon.network;
+
+message QuestVoteResults {
+    required bool passed = 1;
+    required int32 quest_track = 2;
+    required int32 my_vote = 3;
+    repeated int32 votes = 4;
+}

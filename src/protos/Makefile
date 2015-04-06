@@ -1,4 +1,4 @@
-OBJS=settings.pb.o player.pb.o teamselection.pb.o vote.pb.o voteresults.pb.o chatmessage.pb.o
+OBJS=settings.pb.o player.pb.o teamselection.pb.o vote.pb.o voteresults.pb.o chatmessage.pb.o questvoteresults.pb.o
 
 PROTOS_DIR=.
 
