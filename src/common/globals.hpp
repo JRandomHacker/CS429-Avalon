@@ -110,11 +110,13 @@ namespace avalon {
             /*! A message corresponding to a state change to VotingState */
             ENTER_TEAM_VOTE_BUF,
             /*! An avalon::network::Vote protobuf TODO change this to team vote*/
-            VOTE_BUF,
+            TEAM_VOTE_BUF,
             /*! An avalon::network::Vote protobuf used for quest voting */
             QUEST_VOTE_BUF,
             /*! An avalon::network::VoteResults protobuf */
-            VOTE_RESULTS_BUF,
+            TEAM_VOTE_RESULTS_BUF,
+            /*! An avalon::network::QuestVoteResults protobuf */
+            QUEST_VOTE_RESULTS_BUF,
             /*! A message corresponding to a state change to QuestVotingState */
             ENTER_QUEST_VOTE_BUF,
             /*! A message corresponding to a state change to EndGameState */

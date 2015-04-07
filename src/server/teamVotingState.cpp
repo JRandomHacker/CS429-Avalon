@@ -1,6 +1,6 @@
 #include "serverControllerState.hpp"
 #include "teamSelectionState.hpp"
-#include "votingState.hpp"
+#include "teamVotingState.hpp"
 #include "questVotingState.hpp"
 #include "serverInfo.hpp"
 #include "serverCustomActions.hpp"
@@ -17,11 +17,11 @@
 
 namespace avalon {
 namespace server {
-    VotingState::VotingState( ServInfo* mod ) : ServerControllerState( "Voting", mod ) { }
+    TeamVotingState::TeamVotingState( ServInfo* mod ) : ServerControllerState( "Voting", mod ) { }
 
-    VotingState::~VotingState( ) { }
+    TeamVotingState::~TeamVotingState( ) { }
 
-    ServerControllerState* VotingState::handleAction( Action* action_to_be_handled ) {
+    ServerControllerState* TeamVotingState::handleAction( Action* action_to_be_handled ) {
 
         std::string action_type = action_to_be_handled->getMessage();
 
@@ -42,7 +42,7 @@ namespace server {
                 buf.set_id( voter );
                 buf.set_vote( avalon::HIDDEN );
 
-                sendProtobufToAll( avalon::network::VOTE_BUF, buf.SerializeAsString( ) );
+                sendProtobufToAll( avalon::network::TEAM_VOTE_BUF, buf.SerializeAsString( ) );
 
                 // If we've received a vote from every player, we're ready to tally the results,
                 // send the data to every player, and perform a state switch
@@ -61,7 +61,7 @@ namespace server {
 
     // Goes through the votes array to see if you've already voted
     // changes your vote (if you did) and returns whether anything was changed
-    bool VotingState::modifyVote( unsigned int voter, avalon::player_vote_t vote ) {
+    bool TeamVotingState::modifyVote( unsigned int voter, avalon::player_vote_t vote ) {
 
         bool changed = false;
         bool exists = false;
@@ -93,7 +93,7 @@ namespace server {
     }
 
     // Calculates the vote results, sends them to the players, and returns it
-    bool VotingState::sendVoteResults( ) {
+    bool TeamVotingState::sendVoteResults( ) {
 
         // This is functionally the end of the voting phase,
         // so increase the vote track, switch the leader,
@@ -130,11 +130,11 @@ namespace server {
             if( model->hidden_voting ) {
 
                 buf.set_votes( i, sorted_votes[ i ] );
-                model->server->sendProtobuf( avalon::network::VOTE_RESULTS_BUF, i, buf.SerializeAsString( ) );
+                model->server->sendProtobuf( avalon::network::TEAM_VOTE_RESULTS_BUF, i, buf.SerializeAsString( ) );
                 buf.set_votes( i, avalon::HIDDEN );
             } else {
 
-                model->server->sendProtobuf( avalon::network::VOTE_RESULTS_BUF, i, buf.SerializeAsString( ) );
+                model->server->sendProtobuf( avalon::network::TEAM_VOTE_RESULTS_BUF, i, buf.SerializeAsString( ) );
             }
 
         }
@@ -147,11 +147,9 @@ namespace server {
     // If it passed, go to quest vote
     // If it failed, and there is more space on vote track, go to team selection
     // If it failed, and there isn't more space on the vote track, go to end game
-    ServerControllerState* VotingState::decideNewState( bool vote_passed ) {
+    ServerControllerState* TeamVotingState::decideNewState( bool vote_passed ) {
 
         if( vote_passed ) {
-
-            // TODO change our state to quest vote
             model->server->broadcastStateChange( avalon::network::ENTER_QUEST_VOTE_BUF, model->leader );
             return new QuestVotingState( model );
 
@@ -170,7 +168,7 @@ namespace server {
     }
 
     // Iterates through the votes vector, counts the votes, and returns the results
-    bool VotingState::figureOutResultsOfVote( ) {
+    bool TeamVotingState::figureOutResultsOfVote( ) {
 
         unsigned int yes = 0;
         unsigned int no = 0;

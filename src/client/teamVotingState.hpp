@@ -1,13 +1,13 @@
 /**
- * ClientControllerState for when we're voting on something
+ * ClientControllerState for when we're voting on a team
  *
  * @class VotingState
  * @author Ryan Kerr && Matt Hoffman
  * @date 2015-03-14
  */
 
-#ifndef _VOTING_STATE_HPP
-#define _VOTING_STATE_HPP
+#ifndef _TEAM_VOTING_STATE_HPP
+#define _TEAM_VOTING_STATE_HPP
 
 #include <string>
 #include <iostream>
@@ -20,7 +20,7 @@
 namespace avalon {
 namespace client {
 
-class VotingState : public ClientControllerState {
+class TeamVotingState : public ClientControllerState {
     public:
 
         /**
@@ -28,7 +28,7 @@ class VotingState : public ClientControllerState {
          *
          * @param mod A pointer to a ClientInfo struct with the clients data
          */
-        VotingState( ClientInfo* mod );
+        TeamVotingState( ClientInfo* mod );
 
         /**
          * Create the values in the model saying who has already voted
@@ -51,4 +51,4 @@ class VotingState : public ClientControllerState {
 } // client
 } // avalon
 
-#endif // _VOTING_STATE_HPP
+#endif // _TEAM_VOTING_STATE_HPP

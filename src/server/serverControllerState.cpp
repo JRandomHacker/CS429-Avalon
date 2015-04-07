@@ -1,7 +1,6 @@
 #include "serverControllerState.hpp"
 #include "waitingForClientsState.hpp"
 #include "teamSelectionState.hpp"
-#include "votingState.hpp"
 #include "serverInfo.hpp"
 #include "serverCustomActions.hpp"
 

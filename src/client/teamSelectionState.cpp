@@ -1,5 +1,5 @@
 #include "teamSelectionState.hpp"
-#include "votingState.hpp"
+#include "teamVotingState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
 #include "clientCustomActionsForChat.hpp"
@@ -60,9 +60,9 @@ namespace client {
                 std::cerr << "[ ClientController ] You attempted to finalize team selection, but you're not the leader. Asshole." << std::endl;
             }
 
-        } else if( action_type == "EnterVoteState" ) {
+        } else if( action_type == "EnterTeamVoteState" ) {
 
-            return new VotingState( data );
+            return new TeamVotingState( data );
         } else {
 
             return ClientControllerState::handleAction( action_to_be_handled );

@@ -17,6 +17,7 @@
 #include "teamselection.pb.h"
 #include "vote.pb.h"
 #include "voteresults.pb.h"
+#include "questvoteresults.pb.h"
 
 #ifdef _WIN32
     #include <ws2tcpip.h>
@@ -135,7 +136,7 @@ void Client::waitForData( ) {
             recvMessage( bufLength );
             break;
 
-        case avalon::network::VOTE_BUF:
+        case avalon::network::TEAM_VOTE_BUF:
             recvTeamVote( bufLength );
             break;
 
@@ -143,8 +144,12 @@ void Client::waitForData( ) {
             recvQuestVote( bufLength );
             break;
 
-        case avalon::network::VOTE_RESULTS_BUF:
-            recvVoteResults( bufLength );
+        case avalon::network::QUEST_VOTE_RESULTS_BUF:
+            recvQuestVoteResults( bufLength );
+            break;
+
+        case avalon::network::TEAM_VOTE_RESULTS_BUF:
+            recvTeamVoteResults( bufLength );
             break;
 
         case avalon::network::TEAM_SELECTION_BUF:
@@ -228,7 +233,7 @@ void Client::recvTeamVote( unsigned int bufLength ) {
     buf.ParseFromArray( voteBuf, bufLength );
 
     // Add an action to the queue
-    Action* action = new ReceiveVoteAction( buf.id( ) );
+    Action* action = new ReceiveTeamVoteAction( buf.id( ) );
     queue->addAction( action );
 
     delete[] voteBuf;
@@ -270,7 +275,7 @@ void Client::recvSettings( unsigned int bufLength ) {
 }
 
 // Helper function to receive vote results
-void Client::recvVoteResults( unsigned int bufLength ) {
+void Client::recvTeamVoteResults( unsigned int bufLength ) {
 
     // Receive the game settings
     char* voteBuf = new char[ bufLength ];
@@ -288,7 +293,32 @@ void Client::recvVoteResults( unsigned int bufLength ) {
     }
 
     // Add an action to the queue
-    Action* action = new VoteResultsAction( votePassed, voteTrack, votes );
+    Action* action = new TeamVoteResultsAction( votePassed, voteTrack, votes );
+    queue->addAction( action );
+
+    delete[] voteBuf;
+}
+
+// Helper function to receive vote results
+void Client::recvQuestVoteResults( unsigned int bufLength ) {
+
+    // Receive the game settings
+    char* voteBuf = new char[ bufLength ];
+    recv( sock, voteBuf, bufLength * sizeof( char ), 0);
+
+    // Create a local copy of the GameSettings protobuf
+    avalon::network::QuestVoteResults buf;
+    buf.ParseFromArray( voteBuf, bufLength );
+    bool votePassed = buf.passed( );
+    unsigned int voteTrack = buf.quest_track( );
+
+    std::vector< avalon::player_vote_t >* votes = new std::vector< avalon::player_vote_t >( );
+    for( auto it = buf.votes( ).begin( ); it != buf.votes( ).end( ); it++ ) {
+        votes->push_back( ( avalon::player_vote_t )( *it ) );
+    }
+
+    // Add an action to the queue
+    Action* action = new QuestVoteResultsAction( votePassed, voteTrack, votes );
     queue->addAction( action );
 
     delete[] voteBuf;
@@ -305,7 +335,7 @@ void Client::recvStateChange( int bufType, unsigned int randomness ) {
             break;
 
         case avalon::network::ENTER_TEAM_VOTE_BUF:
-            action = new EnterVoteStateAction( );
+            action = new EnterTeamVoteStateAction( );
             break;
 
         case avalon::network::ENTER_QUEST_VOTE_BUF:

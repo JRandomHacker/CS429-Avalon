@@ -127,7 +127,7 @@ namespace server {
         // We can't use broadcast, because we want to support hidden voting later
         for( unsigned int i = 0; i < model->num_clients; i++ ) {
             buf.set_my_vote( getVote( i ) );
-            model->server->sendProtobuf( avalon::network::VOTE_RESULTS_BUF, i, buf.SerializeAsString( ) );
+            model->server->sendProtobuf( avalon::network::QUEST_VOTE_RESULTS_BUF, i, buf.SerializeAsString( ) );
         }
         model->votes.clear( );
     }

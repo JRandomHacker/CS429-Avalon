@@ -2,13 +2,13 @@
  * Third state
  * Waits for everyone to send a vote
  *
- * @class VotingState
+ * @class TeamVotingState
  * @author Ryan Kerr
  * @date 2015-03-16
  */
 
-#ifndef _VOTING_STATE_HPP
-#define _VOTING_STATE_HPP
+#ifndef _TEAM_VOTING_STATE_HPP
+#define _TEAM_VOTING_STATE_HPP
 
 #include <string>
 #include <iostream>
@@ -20,7 +20,7 @@
 namespace avalon {
 namespace server {
 
-class VotingState : public ServerControllerState {
+class TeamVotingState : public ServerControllerState {
 
     public:
 
@@ -29,12 +29,12 @@ class VotingState : public ServerControllerState {
          *
          * @param mod A pointer to the ServInfo struct that the clientController is using
          */
-        VotingState( ServInfo* mod );
+        TeamVotingState( ServInfo* mod );
 
         /**
          * Destructor
          */
-        ~VotingState( );
+        ~TeamVotingState( );
 
         /**
          * The workhorse that actually takes care of an action

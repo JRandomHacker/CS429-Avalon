@@ -1,6 +1,6 @@
 #include "serverControllerState.hpp"
 #include "teamSelectionState.hpp"
-#include "votingState.hpp"
+#include "teamVotingState.hpp"
 #include "serverInfo.hpp"
 #include "serverCustomActions.hpp"
 
@@ -63,7 +63,7 @@ namespace server {
 
                 // TODO Add logic to make sure there aren't too many people
                 model->server->broadcastStateChange( avalon::network::ENTER_TEAM_VOTE_BUF, 0 );
-                return new VotingState( model );
+                return new TeamVotingState( model );
             } else {
                 std::cerr << "[ ServerController ] Received a team confirmation from someone who isn't the leader" << std::endl;
             }

@@ -167,18 +167,18 @@ class ModifyTeamSelectionAction : public Action {
  * @author Ryan Kerr && Justin Koehler
  * @date 2015-03-16
  */
-class EnterVoteStateAction : public Action {
+class EnterTeamVoteStateAction : public Action {
     public:
 
         /**
          * Public constructor
          */
-        EnterVoteStateAction( );
+        EnterTeamVoteStateAction( );
 
         /**
          * Destructor
          */
-        virtual ~EnterVoteStateAction( );
+        virtual ~EnterTeamVoteStateAction( );
 };
 
 /**
@@ -209,7 +209,7 @@ class EnterQuestVoteStateAction : public Action {
  * @author Ryan Kerr && Justin Koehler
  * @date 2015-03-16
  */
-class ReceiveVoteAction : public Action {
+class ReceiveTeamVoteAction : public Action {
     public:
 
         /**
@@ -217,12 +217,12 @@ class ReceiveVoteAction : public Action {
          *
          * @param voter The player that voted
          */
-        ReceiveVoteAction( unsigned int voter );
+        ReceiveTeamVoteAction( unsigned int voter );
 
         /**
          * Destructor
          */
-        virtual ~ReceiveVoteAction( );
+        virtual ~ReceiveTeamVoteAction( );
 
         /**
          * Getter
@@ -275,7 +275,7 @@ class ReceiveQuestVoteAction : public Action {
  * @author Ryan Kerr && Justin Koehler
  * @date 2015-03-16
  */
-class VoteResultsAction : public Action {
+class TeamVoteResultsAction : public Action {
     public:
 
         /**
@@ -285,12 +285,12 @@ class VoteResultsAction : public Action {
          * @param vote_track The new position of the vote track (0-indexed)
          * @param votes A pointer containing the votes of all players
          */
-        VoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes );
+        TeamVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes );
 
         /**
          * Destructor
          */
-        virtual ~VoteResultsAction( );
+        virtual ~TeamVoteResultsAction( );
 
         /**
          * Getter

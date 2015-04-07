@@ -75,7 +75,15 @@ class Client {
          * @param bufLength The size of the protobuf that needs to be received
          * @return None
          */
-        void recvVoteResults( unsigned int bufLength );
+        void recvTeamVoteResults( unsigned int bufLength );
+        
+        /*
+         * Recv's an avalon::network::QuestVoteResults protobuf, creates an Action, and adds it to the queue
+         *
+         * @param bufLength The size of the protobuf that needs to be received
+         * @return None
+         */
+        void recvQuestVoteResults( unsigned int bufLength );
 
         /*
          * Recv's an avalon::network::TeamSelection protobuf, creates an Action, and adds it to the queue

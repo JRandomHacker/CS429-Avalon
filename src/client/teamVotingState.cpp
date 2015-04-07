@@ -1,4 +1,4 @@
-#include "votingState.hpp"
+#include "teamVotingState.hpp"
 #include "questVotingState.hpp"
 #include "teamSelectionState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
@@ -16,10 +16,10 @@ namespace avalon {
 namespace client {
     
     // Constructor for the VotingState, simply sets the correct state name
-    VotingState::VotingState( ClientInfo* dat ) : ClientControllerState( "Voting", dat ) { }
+    TeamVotingState::TeamVotingState( ClientInfo* dat ) : ClientControllerState( "TeamVoting", dat ) { }
 
     // Figures out what needs to be done with any given action, when we're in the voting state
-    ControllerState* VotingState::handleAction( Action* action_to_be_handled ) {
+    ControllerState* TeamVotingState::handleAction( Action* action_to_be_handled ) {
 
         std::string action_type = action_to_be_handled->getMessage( );
 
@@ -30,11 +30,11 @@ namespace client {
             avalon::network::Vote buf;
             buf.set_id( FROMMODEL(unsigned int, "myID") );
             buf.set_vote( action->getPlayerVote( ) );
-            data->client->sendProtobuf( avalon::network::VOTE_BUF, buf.SerializeAsString( ) );
+            data->client->sendProtobuf( avalon::network::TEAM_VOTE_BUF, buf.SerializeAsString( ) );
 
-        } else if( action_type == "VoteResults" ) {
+        } else if( action_type == "TeamVoteResults" ) {
 
-            auto action = dynamic_cast< VoteResultsAction* >( action_to_be_handled );
+            auto action = dynamic_cast< TeamVoteResultsAction* >( action_to_be_handled );
 
             // Construct a new VoteHistory from the current data
             VoteHistory record( action->getVoteResult(), *action->getVotes(),
@@ -79,9 +79,9 @@ namespace client {
             }
             std::cout << std::endl;
 
-        } else if( action_type == "ReceiveVote" ) {
+        } else if( action_type == "ReceiveTeamVote" ) {
 
-            auto action = dynamic_cast< ReceiveVoteAction* >( action_to_be_handled );
+            auto action = dynamic_cast< ReceiveTeamVoteAction* >( action_to_be_handled );
             unsigned int votingPlayer = action->getVoter( );
 
             // TODO Update model with voting player instead of printing
@@ -108,14 +108,14 @@ namespace client {
         return NULL;
     }
 
-    void VotingState::setupState( ) {
+    void TeamVotingState::setupState( ) {
         std::vector< avalon::player_vote_t > votes;
         votes.resize( FROMMODEL( unsigned int, "numberOfPlayers" ), avalon::NO_VOTE );
         data->model->addData( "currentVotes", votes );
         data->model->updateData( "voteState", true );
     }
 
-    void VotingState::teardownState( ) {
+    void TeamVotingState::teardownState( ) {
         data->model->updateData( "voteState", false );
         data->model->removeData( "currentVotes" );
 

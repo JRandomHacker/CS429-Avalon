@@ -152,7 +152,7 @@ void Server::recvData( SOCKET recvSock ) {
             recvTeamSelection( recvSock, bufLength );
             break;
 
-        case avalon::network::VOTE_BUF:
+        case avalon::network::TEAM_VOTE_BUF:
             recvTeamVote( recvSock, bufLength );
             break;
         

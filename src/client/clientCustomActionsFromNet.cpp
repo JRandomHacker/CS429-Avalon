@@ -68,9 +68,9 @@
 // }
 
 // EnterVoteStateAction {
-    EnterVoteStateAction::EnterVoteStateAction( ) : Action( "EnterVoteState" ) { }
+    EnterTeamVoteStateAction::EnterTeamVoteStateAction( ) : Action( "EnterTeamVoteState" ) { }
 
-    EnterVoteStateAction::~EnterVoteStateAction( ) { }
+    EnterTeamVoteStateAction::~EnterTeamVoteStateAction( ) { }
 // }
 
 // EnterQuestVoteStateAction {
@@ -80,13 +80,13 @@
 // }
 
 // ReceiveVoteAction {
-    ReceiveVoteAction::ReceiveVoteAction( unsigned int voter ) : Action( "ReceiveVote" ) {
+    ReceiveTeamVoteAction::ReceiveTeamVoteAction( unsigned int voter ) : Action( "ReceiveTeamVote" ) {
         this->voter = voter;
     }
 
-    ReceiveVoteAction::~ReceiveVoteAction( ) { }
+    ReceiveTeamVoteAction::~ReceiveTeamVoteAction( ) { }
 
-    unsigned int ReceiveVoteAction::getVoter( ) {
+    unsigned int ReceiveTeamVoteAction::getVoter( ) {
         return voter;
     }
 // }
@@ -104,23 +104,23 @@
 // }
 
 // VoteResultsAction {
-    VoteResultsAction::VoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes ) : Action( "VoteResults" ) {
+    TeamVoteResultsAction::TeamVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes ) : Action( "TeamVoteResults" ) {
         this->vote_result = vote_result;
         this->vote_track = vote_track;
         this->votes = votes;
     }
 
-    VoteResultsAction::~VoteResultsAction( ) { }
+    TeamVoteResultsAction::~TeamVoteResultsAction( ) { }
 
-    bool VoteResultsAction::getVoteResult( ) {
+    bool TeamVoteResultsAction::getVoteResult( ) {
         return vote_result;
     }
 
-    unsigned int VoteResultsAction::getVoteTrack( ) {
+    unsigned int TeamVoteResultsAction::getVoteTrack( ) {
         return vote_track;
     }
 
-    std::vector< avalon::player_vote_t >* VoteResultsAction::getVotes( ) {
+    std::vector< avalon::player_vote_t >* TeamVoteResultsAction::getVotes( ) {
         return votes;
     }
 // }
