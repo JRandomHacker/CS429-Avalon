@@ -131,10 +131,14 @@ void Client::waitForData( ) {
             recvSettings( bufLength );
             break;
 
+        case avalon::network::CHAT_MSG_BUF:
+            recvMessage( bufLength );
+            break;
+
         case avalon::network::VOTE_BUF:
             recvTeamVote( bufLength );
             break;
-        
+
         case avalon::network::QUEST_VOTE_BUF:
             recvQuestVote( bufLength );
             break;
@@ -177,6 +181,23 @@ void Client::recvPlayer( unsigned int bufLength ) {
     queue->addAction( action );
 
     delete[] playerBuf;
+}
+
+// Helper function to receive a ChatMessage protobuf
+void Client::recvMessage( unsigned int bufLength ) {
+
+    // Receive the protobuf
+    char* chatBuf = new char[ bufLength ];
+    recv( sock, chatBuf, bufLength * sizeof( char ), 0);
+
+    avalon::network::ChatMessage buf;
+    buf.ParseFromArray( chatBuf, bufLength );
+
+    // Add an action to the queue
+    Action* action = new ChatMessageRecvAction( buf.message_text( ), buf.sender_id( ) );
+    queue->addAction( action );
+
+    delete[] chatBuf;
 }
 
 // Helper function to receive a TeamSelection protobuf
@@ -286,7 +307,7 @@ void Client::recvStateChange( int bufType, unsigned int randomness ) {
         case avalon::network::ENTER_TEAM_VOTE_BUF:
             action = new EnterVoteStateAction( );
             break;
-        
+
         case avalon::network::ENTER_QUEST_VOTE_BUF:
             action = new EnterQuestVoteStateAction( );
             break;

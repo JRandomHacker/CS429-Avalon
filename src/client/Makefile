@@ -1,4 +1,4 @@
-OBJS=client.o clientController.o clientControllerState.o clientCustomActionsFromNet.o clientCustomActionsFromGUI.o voteHistory.o mockClient.o lobbyState.o teamSelectionState.o votingState.o questVotingState.o
+OBJS=client.o clientController.o clientControllerState.o clientCustomActionsForChat.o clientCustomActionsFromNet.o clientCustomActionsFromGUI.o voteHistory.o mockClient.o lobbyState.o teamSelectionState.o votingState.o questVotingState.o
 
 COMMON_DIR=../common
 PROTOS_DIR=../protos
