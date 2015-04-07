@@ -91,3 +91,17 @@
             return vote;
     }
 // }
+
+// ChatMessageRecvAction {
+
+    ChatMessageRecvAction::ChatMessageRecvAction( std::string message_text, unsigned int other_player_num ) :
+	Action( "ChatMessageRecv" ), message( other_player_num, message_text, 1 ) {
+
+	}
+
+	ChatMessageRecvAction::~ChatMessageRecvAction( ) { }
+
+	ChatMessage ChatMessageRecvAction::getMessage( ) {
+            return message;
+	}
+// }

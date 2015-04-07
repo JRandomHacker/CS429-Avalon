@@ -1,3 +1,5 @@
+#include <string>
+
 #include "serverControllerState.hpp"
 #include "teamSelectionState.hpp"
 #include "questVotingState.hpp"
@@ -31,7 +33,7 @@ namespace server {
             auto action = dynamic_cast< QuestVoteAction* >( action_to_be_handled );
             unsigned int voter = action->getVoter( );
             avalon::player_vote_t vote = action->getVote( );
-            
+
             bool isOnQuest = false;
             for( unsigned int i = 0; i < model->team.size( ); i++ ) {
                 if( voter == model->team[ i ] ) {
@@ -64,6 +66,18 @@ namespace server {
                     return decideNewState( );
                 }
             }
+        } else if( action_type == "ChatMessageRecv" ) {
+
+            auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
+            unsigned int sender = action->getMessage( ).getSenderId( );
+            std::string message_text = action->getMessage( ).getMessageText( );
+            unsigned int time = action->getMessage( ).getTimestamp( );
+
+            avalon::network::ChatMessage buf;
+            buf.set_sender_id( sender );
+            buf.set_message_text( message_text );
+            buf.set_timestamp( time );
+            sendProtobufToAll( avalon::network::CHAT_MSG_BUF, buf.SerializeAsString( ) );
         } else {
             reportUnhandledAction( action_type );
         }
@@ -139,7 +153,7 @@ namespace server {
     ServerControllerState* QuestVotingState::decideNewState( ) {
 
         if( model->quests_failed > ( model->quest_track_length / 2 + 1 ) ) {
-            // TODO change our state to endgame 
+            // TODO change our state to endgame
             model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
             return NULL;
 
@@ -164,25 +178,25 @@ namespace server {
         for( std::vector< std::pair< unsigned int, avalon::player_vote_t > >::iterator it = model->votes.begin( ); it != model->votes.end( ); it++ ) {
             if( (*it).second == avalon::NO ) {
                 no++;
-            } 
+            }
         }
 
         // TODO figure out how many nos needed to fail
         return no > 0;
     }
-    
+
     avalon::player_vote_t QuestVotingState::getVote( unsigned int player_id ) {
         avalon::player_vote_t vote = avalon::NO_VOTE;
-        
+
         for( unsigned int i = 0; i < model->votes.size( ); i++ ) {
             if ( model->votes[ i ].first == player_id ) {
                 vote = model->votes[ i ].second;
             }
         }
-        
+
         return vote;
     }
-    
+
 } // server
 } // avalon
 
