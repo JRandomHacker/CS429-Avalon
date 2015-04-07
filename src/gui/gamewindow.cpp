@@ -185,7 +185,7 @@ void GameWindow::createPlayerSubscribers( ) {
                     sem_wait( sync_sem );
             },
             NULL );
-    model->subscribe( "voteState", voteState_subscriber );
+    model->subscribe( "teamVoteState", voteState_subscriber );
 
     voteHistory_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {

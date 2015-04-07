@@ -126,11 +126,11 @@ namespace client {
         std::vector< avalon::player_vote_t > votes;
         votes.resize( FROMMODEL( unsigned int, "numberOfPlayers" ), avalon::NO_VOTE );
         data->model->addData( "currentVotes", votes );
-        data->model->updateData( "voteState", true );
+        data->model->updateData( "teamVoteState", true );
     }
 
     void TeamVotingState::teardownState( ) {
-        data->model->updateData( "voteState", false );
+        data->model->updateData( "teamVoteState", false );
         data->model->removeData( "currentVotes" );
 
     }

@@ -7,7 +7,7 @@
 
 #include "teamselection.pb.h"
 #include "vote.pb.h"
-#include "voteresults.pb.h"
+#include "teamvoteresults.pb.h"
 #include <string>
 
 #ifdef _WIN32
