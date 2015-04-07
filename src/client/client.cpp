@@ -16,7 +16,7 @@
 #include "settings.pb.h"
 #include "teamselection.pb.h"
 #include "vote.pb.h"
-#include "voteresults.pb.h"
+#include "teamvoteresults.pb.h"
 #include "questvoteresults.pb.h"
 
 #ifdef _WIN32

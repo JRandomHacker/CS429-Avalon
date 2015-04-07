@@ -6,7 +6,6 @@
 
 #include "teamselection.pb.h"
 #include "vote.pb.h"
-#include "voteresults.pb.h"
 
 #ifdef _WIN32
     #include <winsock2.h>

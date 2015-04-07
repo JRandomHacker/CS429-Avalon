@@ -42,7 +42,8 @@ namespace client {
             data->model->addData< unsigned int >( "currentQuestTrack", 0 );
             data->model->addData( "questHistory", std::vector< QuestVoteHistory >( ) );
             data->model->addData( "voteHistory", std::vector< VoteHistory >( ) );
-            data->model->addData( "voteState", false );
+            data->model->addData( "teamVoteState", false );
+            data->model->addData( "questVoteState", false );
             populateSpecialRoles( sBuf );
 
             for ( unsigned int i = 0; i < ( unsigned int )sBuf->players( ); i++ ) {
