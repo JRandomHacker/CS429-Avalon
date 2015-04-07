@@ -4,7 +4,7 @@
 #include "clientCustomActionsFromNet.hpp"
 #include "clientCustomActionsForChat.hpp"
 #include "clientInfo.hpp"
-#include "voteHistory.hpp"
+#include "questVoteHistory.hpp"
 #include "chat_message.hpp"
 
 #include "teamselection.pb.h"
@@ -35,10 +35,12 @@ namespace client {
 
             auto action = dynamic_cast< QuestVoteResultsAction* >( action_to_be_handled );
 
+            QuestVoteHistory record( action->getVoteResult(), *action->getVotes(), FROMMODEL( unsigned int, "questTrackLength" ) );
+
             // Pull the vote history vector from the model, append our new
             // history, and flag it as updated
-            auto questHistory = data->model->getDataForUpdate< std::vector< bool > >( "questHistory" );
-            questHistory->push_back( action->getVoteResult( ) );
+            auto questHistory = data->model->getDataForUpdate< std::vector< QuestVoteHistory > >( "questHistory" );
+            questHistory->push_back( record );
             data->model->flagDataForUpdate( "questHistory" );
             
             data->model->updateData( "currentQuestTrack", action->getQuestVoteTrack( ) );

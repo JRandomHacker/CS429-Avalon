@@ -5,6 +5,7 @@
 #include "clientCustomActionsForChat.hpp"
 #include "clientInfo.hpp"
 #include "voteHistory.hpp"
+#include "questVoteHistory.hpp"
 #include "chat_message.hpp"
 
 #include "teamselection.pb.h"
@@ -39,7 +40,7 @@ namespace client {
             data->model->addData( "questingTeam", std::vector< unsigned int >() );
             data->model->addData< unsigned int >( "currentVoteTrack", 0 );
             data->model->addData< unsigned int >( "currentQuestTrack", 0 );
-            data->model->addData( "questHistory", std::vector< bool >( ) );
+            data->model->addData( "questHistory", std::vector< QuestVoteHistory >( ) );
             data->model->addData( "voteHistory", std::vector< VoteHistory >( ) );
             data->model->addData( "voteState", false );
             populateSpecialRoles( sBuf );

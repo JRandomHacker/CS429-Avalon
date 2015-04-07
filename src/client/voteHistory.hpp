@@ -10,12 +10,10 @@
 #define _VOTEHISTORY_HPP
 
 #include <string>
+#include <vector>
 #include <iostream>
 
 #include "globals.hpp"
-
-#include "vote.pb.h"
-#include "voteresults.pb.h"
 
 class VoteHistory {
     public:
