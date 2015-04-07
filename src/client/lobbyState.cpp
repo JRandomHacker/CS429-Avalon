@@ -50,13 +50,13 @@ namespace client {
             for( auto it = sBuf->players_per_quest( ).begin( ); it != sBuf->players_per_quest( ).end( ); it++ ) {
                 players_per_quest.push_back( ( unsigned int )( *it ) );
             }
-            data->model->addData( "players_per_quest", players_per_quest );
+            data->model->addData( "playersPerQuest", players_per_quest );
             
             std::vector< unsigned int > fails_per_quest;
             for( auto it = sBuf->fails_per_quest( ).begin( ); it != sBuf->fails_per_quest( ).end( ); it++ ) {
                 fails_per_quest.push_back( ( unsigned int )( *it ) );
             }
-            data->model->addData( "fails_per_quest", fails_per_quest );
+            data->model->addData( "failsPerQuest", fails_per_quest );
             
             populateSpecialRoles( sBuf );
 
