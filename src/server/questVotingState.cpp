@@ -31,6 +31,18 @@ namespace server {
             auto action = dynamic_cast< QuestVoteAction* >( action_to_be_handled );
             unsigned int voter = action->getVoter( );
             avalon::player_vote_t vote = action->getVote( );
+            
+            bool isOnQuest = false;
+            for( unsigned int i = 0; i < model->team.size( ); i++ ) {
+                if( voter == model->team[ i ] ) {
+                    isOnQuest = true;
+                }
+            }
+
+            if ( !isOnQuest ) {
+                std::cerr << "[ ServerController ] Received a quest vote from someone who wasn't on the team" << std::endl;
+                return NULL;
+            }
 
             // Checks to see if the voter modified their vote
             // (It is modified if it is new, or changed)

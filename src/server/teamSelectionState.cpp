@@ -19,7 +19,9 @@ namespace server {
 
     TeamSelectionState::TeamSelectionState( ServInfo* mod ) : ServerControllerState( "TeamSelection", mod ) { }
 
-    TeamSelectionState::~TeamSelectionState( ) { }
+    TeamSelectionState::~TeamSelectionState( ) {
+        model->team.clear( );
+    }
 
     ServerControllerState* TeamSelectionState::handleAction( Action* action_to_be_handled ) {
 
