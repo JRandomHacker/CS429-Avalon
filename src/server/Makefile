@@ -1,4 +1,13 @@
-OBJS=server.o serverController.o serverControllerState.o serverCustomActions.o mockServer.o waitingForClientsState.o teamSelectionState.o teamVotingState.o serverInfo.o questVotingState.o
+OBJS=server.o \
+	serverController.o \
+	serverControllerState.o \
+	serverCustomActions.o \
+	mockServer.o \
+	waitingForClientsState.o \
+	teamSelectionState.o \
+	teamVotingState.o \
+	serverInfo.o \
+	questVotingState.o
 
 COMMON_DIR=../common
 PROTOS_DIR=../protos
