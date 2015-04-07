@@ -19,7 +19,7 @@ VoteHistory::VoteHistory( bool didVotePass, std::vector< avalon::player_vote_t >
 avalon::player_vote_t VoteHistory::getPlayerVote ( unsigned int playerNum ) const {
     if (playerNum < playerVotes.size( ))
         return playerVotes.at( playerNum );
-    std::cout << "getPlayerVote received bad playerNum!";
+    std::cerr << "getPlayerVote received bad playerNum!";
     return avalon::NO_VOTE;
 }
 

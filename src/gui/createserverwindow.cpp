@@ -145,7 +145,6 @@ void CreateServerWindow::on_buttonCreateServer_clicked( ) {
     if( serverCreation != EXIT_SUCCESS ) {
         displayError( serverCreation, this );
     } else {
-        std::cout << "Connecting to server" << std::endl;
         connectToServer( );
     }
 }

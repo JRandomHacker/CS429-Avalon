@@ -58,42 +58,10 @@ namespace client {
 
             data->model->updateData( "currentQuestTrack", action->getQuestVoteTrack( ) );
 
-            // TODO Put everything in the model instead of printing
-            if( action->getVoteResult( ) ) {
-                std::cout << "[ ClientController ] Vote passed." << std::endl;
-            } else {
-                std::cout << "[ ClientController ] Vote failed." << std::endl;
-            }
-
-            std::cout << "[ ClientController ]";
-            auto votes = action->getVotes( );
-            for( unsigned int i = 0; i < votes->size( ); i++ ) {
-                std::string pvote;
-                switch( ( *votes )[ i ] ) {
-                    case avalon::YES:
-                        pvote = "pass";
-                        break;
-                    case avalon::NO:
-                        pvote = "fail";
-                        break;
-                    case avalon::HIDDEN:
-                        pvote = "hidden";
-                        break;
-                    case avalon::NO_VOTE:
-                        pvote = "nothing";
-                        break;
-                }
-                std::cout << " Vote " << i << " is " << pvote;
-            }
-            std::cout << std::endl;
-
         } else if( action_type == "ReceiveQuestVote" ) {
 
             auto action = dynamic_cast< ReceiveQuestVoteAction* >( action_to_be_handled );
             unsigned int votingPlayer = action->getVoter( );
-
-            // TODO Update model with voting player instead of printing
-            std::cout << "[ ClientController ] Received a quest vote from player " << votingPlayer << std::endl;
 
             auto currentVotes = data->model->getDataForUpdate< std::vector< avalon::player_vote_t > >( "currentVotes" );
             (*currentVotes)[votingPlayer] = avalon::HIDDEN;
