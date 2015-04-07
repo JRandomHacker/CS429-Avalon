@@ -52,6 +52,15 @@ class Server {
         void recvTeamSelection( SOCKET recvSock, int bufLength );
 
         /*
+         * Helper function to get the ChatMessage protobuf and create an action
+         *
+         * @param recvSock The socket to recv from
+         * @param bufLength The length of the protobuf
+         * @return None
+         */
+        void recvMessage( SOCKET recvSock, int bufLength );
+
+        /*
          * Helper function to get the Vote protobuf for a team vote and create an action
          *
          * @param recvSock The socket to recv from
@@ -59,7 +68,7 @@ class Server {
          * @return None
          */
         void recvTeamVote( SOCKET recvSock, int bufLength );
-        
+
         /*
          * Helper function to get the Vote protobuf for a quest vote and create an action
          *
@@ -101,7 +110,7 @@ class Server {
         ~Server( );
 
         /**
-         * Actually initializes the servers action queue 
+         * Actually initializes the servers action queue
          *
          * @param action_queue The action queue we should put actions into
          * @return None

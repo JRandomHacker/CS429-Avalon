@@ -11,10 +11,11 @@
 #include "teamselection.pb.h"
 #include "vote.pb.h"
 #include "chatmessage.pb.h"
+#include <string>
 
 namespace avalon {
 namespace client {
-    
+
     // Constructor for the VotingState, simply sets the correct state name
     VotingState::VotingState( ClientInfo* dat ) : ClientControllerState( "Voting", dat ) { }
 
@@ -32,6 +33,19 @@ namespace client {
             buf.set_vote( action->getPlayerVote( ) );
             data->client->sendProtobuf( avalon::network::VOTE_BUF, buf.SerializeAsString( ) );
 
+        } else if( action_type == "ChatMessageRecv" ) {
+
+            auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
+            unsigned int sender = action->getMessage( ).getSenderId( );
+            std::string message_text = action->getMessage( ).getMessageText( );
+            unsigned int time = action->getMessage( ).getTimestamp( );
+
+            avalon::network::ChatMessage buf;
+            buf.set_sender_id( sender );
+            buf.set_message_text( message_text );
+            buf.set_timestamp( time );
+
+            //Display stuff here
         } else if( action_type == "VoteResults" ) {
 
             auto action = dynamic_cast< VoteResultsAction* >( action_to_be_handled );
@@ -96,7 +110,7 @@ namespace client {
             auto action = dynamic_cast< EnterTeamSelectionAction* >( action_to_be_handled );
             data->model->updateData( "leaderID", action->getLeader( ) );
             data->model->updateData( "questingTeam", std::vector< unsigned int >( ) );
-            
+
             return new TeamSelectionState( data );
         } else if( action_type == "EnterQuestVoteState" ) {
             return new QuestVotingState( data );

@@ -152,10 +152,14 @@ void Server::recvData( SOCKET recvSock ) {
             recvTeamSelection( recvSock, bufLength );
             break;
 
+        case avalon::network::CHAT_MSG_BUF:
+            recvMessage( recvSock, bufLength );
+            break;
+
         case avalon::network::VOTE_BUF:
             recvTeamVote( recvSock, bufLength );
             break;
-        
+
         case avalon::network::QUEST_VOTE_BUF:
             recvQuestVote( recvSock, bufLength );
             break;
@@ -190,6 +194,21 @@ void Server::recvTeamSelection( SOCKET recvSock, int bufLength ) {
         action = new ToggleTeamMemberAction( selector, selection );
     }
 
+    queue->addAction( action );
+}
+
+void Server::recvMessage( SOCKET recvSock, int bufLength ) {
+
+    // Receive the buffer
+    char* buffer = new char[ bufLength ];
+    recv( recvSock, ( char* )buffer, bufLength * sizeof( char ), 0 );
+
+    // Parse the ChatMessage
+    avalon::network::ChatMessage buf;
+    buf.ParseFromArray( buffer, bufLength );
+    delete[] buffer;
+
+    Action* action = new ChatMessageRecvAction( buf.message_text( ), buf.sender_id( ) );
     queue->addAction( action );
 }
 
@@ -304,7 +323,7 @@ void Server::sendProtobuf( avalon::network::buffers_t bufType, unsigned int dest
 }
 
 void Server::broadcastStateChange( avalon::network::buffers_t bufType, unsigned int randomness ) {
-    
+
     if( !clients_connected ) {
         std::cerr << "[ SERVER ] Attempted to broadcast state change before everyone was connected." << std::endl;
         return;

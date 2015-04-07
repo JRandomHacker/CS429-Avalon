@@ -8,6 +8,7 @@
 
 #include "action.hpp"
 #include "player.hpp"
+#include "chat_message.hpp"
 #include "settings.pb.h"
 
 /**
@@ -230,6 +231,40 @@ class QuestVoteAction : public Action {
     private:
         unsigned int voter;
         avalon::player_vote_t vote;
+};
+
+/**
+ * An action to receive a chat message from a client
+ *
+ * @class ChatMessageRecvAction
+ * @author Matt Hoffman
+ * @date 2015-03-31
+ */
+class ChatMessageRecvAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param message_text The text of the message recieved
+         */
+        ChatMessageRecvAction( std::string message_text, unsigned int other_player_num );
+
+        /**
+         * Destructor
+         */
+        virtual ~ChatMessageRecvAction( );
+
+        /**
+         * Gets what some client is saying
+         *
+         * @return ChatMessage What the message is
+         */
+        ChatMessage getMessage( );
+
+    private:
+        //! The message received
+        ChatMessage message;
 };
 
 #endif // SERVERCUSTOMACTIONS_HPP

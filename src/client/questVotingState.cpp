@@ -1,3 +1,5 @@
+#include <string>
+
 #include "questVotingState.hpp"
 #include "teamSelectionState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
@@ -13,7 +15,7 @@
 
 namespace avalon {
 namespace client {
-    
+
     // Constructor for the QuestVotingState, simply sets the correct state name
     QuestVotingState::QuestVotingState( ClientInfo* dat ) : ClientControllerState( "QuestVoting", dat ) { }
 
@@ -31,6 +33,17 @@ namespace client {
             buf.set_vote( action->getPlayerVote( ) );
             data->client->sendProtobuf( avalon::network::QUEST_VOTE_BUF, buf.SerializeAsString( ) );
 
+        } else if( action_type == "ChatMessageRecv" ) {
+
+            auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
+            unsigned int sender = action->getMessage( ).getSenderId( );
+            std::string message_text = action->getMessage( ).getMessageText( );
+            unsigned int time = action->getMessage( ).getTimestamp( );
+
+            avalon::network::ChatMessage buf;
+            buf.set_sender_id( sender );
+            buf.set_message_text( message_text );
+            buf.set_timestamp( time );
         } else if( action_type == "QuestVoteResults" ) {
 
             auto action = dynamic_cast< QuestVoteResultsAction* >( action_to_be_handled );
@@ -42,7 +55,7 @@ namespace client {
             auto questHistory = data->model->getDataForUpdate< std::vector< QuestVoteHistory > >( "questHistory" );
             questHistory->push_back( record );
             data->model->flagDataForUpdate( "questHistory" );
-            
+
             data->model->updateData( "currentQuestTrack", action->getQuestVoteTrack( ) );
 
             // TODO Put everything in the model instead of printing
@@ -91,7 +104,7 @@ namespace client {
             auto action = dynamic_cast< EnterTeamSelectionAction* >( action_to_be_handled );
             data->model->updateData( "leaderID", action->getLeader( ) );
             data->model->updateData( "questingTeam", std::vector< unsigned int >( ) );
-            
+
             return new TeamSelectionState( data );
         } else {
             return ClientControllerState::handleAction( action_to_be_handled );

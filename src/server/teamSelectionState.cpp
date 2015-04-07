@@ -1,3 +1,5 @@
+#include <string>
+
 #include "serverControllerState.hpp"
 #include "teamSelectionState.hpp"
 #include "votingState.hpp"
@@ -68,6 +70,18 @@ namespace server {
                 std::cerr << "[ ServerController ] Received a team confirmation from someone who isn't the leader" << std::endl;
             }
 
+        } else if( action_type == "ChatMessageRecv" ) {
+
+            auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
+            unsigned int sender = action->getMessage( ).getSenderId( );
+            std::string message_text = action->getMessage( ).getMessageText( );
+            unsigned int time = action->getMessage( ).getTimestamp( );
+
+            avalon::network::ChatMessage buf;
+            buf.set_sender_id( sender );
+            buf.set_message_text( message_text );
+            buf.set_timestamp( time );
+            sendProtobufToAll( avalon::network::CHAT_MSG_BUF, buf.SerializeAsString( ) );
         } else {
             reportUnhandledAction( action_type );
         }
