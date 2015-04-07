@@ -134,10 +134,12 @@ void GameWindow::createPlayerSubscribers( ) {
                     sem_wait( sync_sem );
             },
             NULL );
+    currentQuestTrack_subscriber = currentVoteTrack_subscriber;
     questTrackLength_subscriber = new ClosureSubscriber( NULL, NULL );
     model->subscribe( "voteTrackLength", voteTrackLength_subscriber );
     model->subscribe( "currentVoteTrack", currentVoteTrack_subscriber );
     model->subscribe( "questTrackLength", questTrackLength_subscriber );
+    model->subscribe( "currentQuestTrack", currentQuestTrack_subscriber);
     QStandardItemModel* trackModel = new QStandardItemModel( 2, 1 );
     ui->voteTrackList->setModel( trackModel );
     updateTrack( );
@@ -284,7 +286,7 @@ void GameWindow::updateGameInfo( ) {
 
     std::vector< avalon::special_roles_t >* roleList = roleList_subscriber->getData< std::vector< avalon::special_roles_t > >( );
     if( roleList != NULL ) {
-        QString roles = QString( "" );
+        QString roles = QString( "Roles: " );
         for( unsigned int i = 0; i < roleList->size( ); i++ ) {
             avalon::special_roles_t role = ( *roleList )[ i ];
             if( i != 0 ) {
@@ -306,8 +308,9 @@ void GameWindow::updateTrack( ) {
     unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
     unsigned int vLength = *voteTrackLength_subscriber->getData<unsigned int>( );
     unsigned int currVote = *currentVoteTrack_subscriber->getData<unsigned int>( );
+    unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
 
-    std::string questStr = "Quest Track Length: " + std::to_string( qLength );
+    std::string questStr = "Quest " + std::to_string( currQuest + 1 ) + "/" + std::to_string( qLength );
     std::string voteStr = "Vote " + std::to_string( currVote + 1 ) + "/" + std::to_string( vLength );
 
     QStandardItemModel* trackModel = ( QStandardItemModel* ) ui->voteTrackList->model( );

@@ -267,6 +267,11 @@ private:
      *  Subscriber for current vote number
      */
     Subscriber* currentVoteTrack_subscriber;
+
+    /**
+     *  Subscriber for current quest number
+     */
+    Subscriber* currentQuestTrack_subscriber;
     
     /**
      *  Subscriber for quest track length
