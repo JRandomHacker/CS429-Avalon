@@ -45,12 +45,20 @@ class Client {
         void recvPlayer( unsigned int bufLength );
 
         /*
-         * Recv's an avalon::network::Vote protobuf, creates an Action, and adds it to the queue
+         * Recv's an avalon::network::Vote protobuf for a team vote, creates an Action, and adds it to the queue
          *
          * @param bufLength The size of the protobuf that needs to be received
          * @return None
          */
-        void recvVote( unsigned int bufLength );
+        void recvTeamVote( unsigned int bufLength );
+        
+        /*
+         * Recv's an avalon::network::Vote protobuf for a quet vote, creates an Action, and adds it to the queue
+         *
+         * @param bufLength The size of the protobuf that needs to be received
+         * @return None
+         */
+        void recvQuestVote( unsigned int bufLength );
 
         /*
          * Recv's an avalon::network::VoteResults protobuf, creates an Action, and adds it to the queue

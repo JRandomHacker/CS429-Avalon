@@ -17,7 +17,7 @@
 
 namespace avalon {
 namespace server {
-    QuestVotingState::QuestVotingState( ServInfo* mod ) : ServerControllerState( "Voting", mod ) { }
+    QuestVotingState::QuestVotingState( ServInfo* mod ) : ServerControllerState( "QuestVoting", mod ) { }
 
     QuestVotingState::~QuestVotingState( ) { }
 
@@ -48,7 +48,7 @@ namespace server {
                 // send the data to every player, and perform a state switch
                 if( model->votes.size( ) == model->team.size( ) ) {
 
-                    bool passed = sendVoteResults( );
+                    sendVoteResults( );
                     return decideNewState( );
                 }
             }
@@ -90,7 +90,7 @@ namespace server {
     }
 
     // Calculates the vote results, sends them to the players, and returns it
-    bool QuestVotingState::sendVoteResults( ) {
+    void QuestVotingState::sendVoteResults( ) {
 
         // This is functionally the end of the voting phase,
         // so increase the vote track, switch the leader,
@@ -118,8 +118,6 @@ namespace server {
             model->server->sendProtobuf( avalon::network::VOTE_RESULTS_BUF, i, buf.SerializeAsString( ) );
         }
         model->votes.clear( );
-
-        return passed;
     }
 
     // Figure out what state we should be entering, based off the vote

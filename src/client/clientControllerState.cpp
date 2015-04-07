@@ -49,7 +49,7 @@ namespace client {
 
             // auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
             
-        } else {
+        } else if ( action_type == "EnterQuestVoteState" ) {
             return ControllerState::handleAction( action_to_be_handled );
         }
 

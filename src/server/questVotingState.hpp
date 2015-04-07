@@ -58,9 +58,8 @@ class QuestVotingState : public ServerControllerState {
          * A helper to send the vote results at the end of the voting phase
          * Also sends the state change, and returns our new state
          *
-         * @return Whether the vote passed or failed
          */
-        bool sendVoteResults( );
+        void sendVoteResults( );
 
         /*
          * A helper to decide the new server state based off the vote

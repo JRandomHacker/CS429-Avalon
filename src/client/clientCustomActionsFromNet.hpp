@@ -182,6 +182,27 @@ class EnterVoteStateAction : public Action {
 };
 
 /**
+ * An action corresponding to entering the quest vote state
+ *
+ * @class EnterQuestVoteStateAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-06
+ */
+class EnterQuestVoteStateAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         */
+        EnterQuestVoteStateAction( );
+
+        /**
+         * Destructor
+         */
+        virtual ~EnterQuestVoteStateAction( );
+};
+
+/**
  * An action corresponding to receiving a notification that a player has voted
  *
  * @class ReceiveVoteAction
@@ -202,6 +223,39 @@ class ReceiveVoteAction : public Action {
          * Destructor
          */
         virtual ~ReceiveVoteAction( );
+
+        /**
+         * Getter
+         *
+         * @return The current leader
+         */
+        unsigned int getVoter( );
+
+    private:
+        unsigned int voter;
+};
+
+/**
+ * An action corresponding to receiving a notification that a player has voted on a quest
+ *
+ * @class ReceiveQuestVoteAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-06
+ */
+class ReceiveQuestVoteAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param voter The player that voted
+         */
+        ReceiveQuestVoteAction( unsigned int voter );
+
+        /**
+         * Destructor
+         */
+        virtual ~ReceiveQuestVoteAction( );
 
         /**
          * Getter
@@ -256,6 +310,57 @@ class VoteResultsAction : public Action {
          * Getter
          *
          * @return votes A pointer containing the votes of all players
+         */
+        std::vector< avalon::player_vote_t >* getVotes( );
+
+    private:
+        bool vote_result;
+        unsigned int vote_track;
+        std::vector< avalon::player_vote_t >* votes;
+};
+
+/**
+ * An action to deal with Quest Vote results
+ *
+ * @class QuestVoteResultsAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-06
+ */
+class QuestVoteResultsAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param QuestVote_result The result of the QuestVote.
+         * @param QuestVote_track The new position of the QuestVote track (0-indexed)
+         * @param QuestVotes A pointer containing the QuestVotes of all players
+         */
+        QuestVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes );
+
+        /**
+         * Destructor
+         */
+        virtual ~QuestVoteResultsAction( );
+
+        /**
+         * Getter
+         *
+         * @return The result of the vote.
+         */
+        bool getVoteResult( );
+
+        /**
+         * Getter
+         *
+         * @return The new position of the vote track (0-indexed)
+         */
+        unsigned int getQuestVoteTrack( );
+
+        /**
+         * Getter
+         *
+         * @return QuestVotes A pointer containing the votes of all players
          */
         std::vector< avalon::player_vote_t >* getVotes( );
 

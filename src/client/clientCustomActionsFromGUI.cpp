@@ -29,6 +29,14 @@ avalon::player_vote_t TeamVoteAction::getPlayerVote( ) {
 	return vote;
 }
 
+QuestVoteAction::QuestVoteAction( avalon::player_vote_t new_vote ) : Action( "QuestVote" ), vote( new_vote ) {
+} 
+
+QuestVoteAction::~QuestVoteAction( ) { }
+
+avalon::player_vote_t QuestVoteAction::getPlayerVote( ) {
+	return vote;
+}
 
 SelectQuestGoerAction::SelectQuestGoerAction( bool is_selected, unsigned int selected_player_id )
 	: Action( "SelectQuestGoer" ), selected( is_selected ), selected_player( selected_player_id ) {

@@ -1,4 +1,5 @@
 #include "votingState.hpp"
+#include "questVotingState.hpp"
 #include "teamSelectionState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
@@ -97,6 +98,8 @@ namespace client {
             data->model->updateData( "questingTeam", std::vector< unsigned int >( ) );
             
             return new TeamSelectionState( data );
+        } else if( action_type == "EnterQuestVoteState" ) {
+            return new QuestVotingState( data );
         } else {
             return ClientControllerState::handleAction( action_to_be_handled );
         }

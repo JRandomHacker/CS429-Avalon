@@ -78,6 +78,40 @@ class TeamVoteAction : public Action {
 };
 
 /**
+ * An action to vote on a quest
+ *
+ * @class QuestVoteAction
+ * @author Justin Koehler && Ryan Kerr
+ * @date 2015-04-06
+ */
+class QuestVoteAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param new_vote The vote I wish to cast
+         */
+        QuestVoteAction( avalon::player_vote_t new_vote );
+
+        /**
+         * Destructor
+         */
+        virtual ~QuestVoteAction( );
+
+        /**
+         * Gets what this client's player just voted
+         *
+         * @return avalon::player_vote_t What the player just voted, should be YES, NO, or NO_VOTE
+         */
+        avalon::player_vote_t getPlayerVote( );
+
+    private:
+        //! My vote
+        avalon::player_vote_t vote;
+};
+
+/**
  * An action to select a player to go on a quest
  *
  * @class SelectQuestGoerAction

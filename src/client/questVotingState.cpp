@@ -1,4 +1,5 @@
 #include "questVotingState.hpp"
+#include "teamSelectionState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
 #include "clientCustomActionsForChat.hpp"
@@ -36,12 +37,11 @@ namespace client {
 
             // Pull the vote history vector from the model, append our new
             // history, and flag it as updated
-            auto voteHistories = data->model->getDataForUpdate< std::vector< VoteHistory > >( "voteHistory" );
-            voteHistories->back( ).setQuestResults( action.getVoteResult( ), action.getVotes( ) );
+            auto questHistory = data->model->getDataForUpdate< std::vector< bool > >( "questHistory" );
+            questHistory->push_back( action->getVoteResult( ) );
+            data->model->flagDataForUpdate( "questHistory" );
             
-            data->model->flagDataForUpdate( "voteHistory" );
-
-            data->model->updateData( "currentVoteTrack", action->getVoteTrack( ) );
+            data->model->updateData( "currentQuestTrack", action->getQuestVoteTrack( ) );
 
             // TODO Put everything in the model instead of printing
             if( action->getVoteResult( ) ) {

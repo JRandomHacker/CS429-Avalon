@@ -73,6 +73,12 @@
     EnterVoteStateAction::~EnterVoteStateAction( ) { }
 // }
 
+// EnterQuestVoteStateAction {
+    EnterQuestVoteStateAction::EnterQuestVoteStateAction( ) : Action( "EnterQuestVoteState" ) { }
+
+    EnterQuestVoteStateAction::~EnterQuestVoteStateAction( ) { }
+// }
+
 // ReceiveVoteAction {
     ReceiveVoteAction::ReceiveVoteAction( unsigned int voter ) : Action( "ReceiveVote" ) {
         this->voter = voter;
@@ -81,6 +87,18 @@
     ReceiveVoteAction::~ReceiveVoteAction( ) { }
 
     unsigned int ReceiveVoteAction::getVoter( ) {
+        return voter;
+    }
+// }
+
+// ReceiveQuestVoteAction {
+    ReceiveQuestVoteAction::ReceiveQuestVoteAction( unsigned int voter ) : Action( "ReceiveQuestVote" ) {
+        this->voter = voter;
+    }
+
+    ReceiveQuestVoteAction::~ReceiveQuestVoteAction( ) { }
+
+    unsigned int ReceiveQuestVoteAction::getVoter( ) {
         return voter;
     }
 // }
@@ -103,6 +121,28 @@
     }
 
     std::vector< avalon::player_vote_t >* VoteResultsAction::getVotes( ) {
+        return votes;
+    }
+// }
+
+// QuestVoteResultsAction {
+    QuestVoteResultsAction::QuestVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes ) : Action( "QuestVoteResults" ) {
+        this->vote_result = vote_result;
+        this->vote_track = vote_track;
+        this->votes = votes;
+    }
+
+    QuestVoteResultsAction::~QuestVoteResultsAction( ) { }
+
+    bool QuestVoteResultsAction::getVoteResult( ) {
+        return vote_result;
+    }
+
+    unsigned int QuestVoteResultsAction::getQuestVoteTrack( ) {
+        return vote_track;
+    }
+
+    std::vector< avalon::player_vote_t >* QuestVoteResultsAction::getVotes( ) {
         return votes;
     }
 // }

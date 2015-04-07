@@ -1,6 +1,7 @@
 #include "serverControllerState.hpp"
 #include "teamSelectionState.hpp"
 #include "votingState.hpp"
+#include "questVotingState.hpp"
 #include "serverInfo.hpp"
 #include "serverCustomActions.hpp"
 
@@ -151,8 +152,8 @@ namespace server {
         if( vote_passed ) {
 
             // TODO change our state to quest vote
-            model->server->broadcastStateChange( avalon::network::ENTER_TEAM_SELECTION_BUF, model->leader );
-            return new TeamSelectionState( model );
+            model->server->broadcastStateChange( avalon::network::ENTER_QUEST_VOTE_BUF, model->leader );
+            return new QuestVotingState( model );
 
         // If these fuckers can't make up their mind, they lose.
         } else if( model->vote_track >= model->vote_track_length ) {
