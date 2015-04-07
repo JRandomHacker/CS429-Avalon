@@ -40,6 +40,10 @@ typedef struct {
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > votes;
     //! A vector holding the current team selection
     std::vector< unsigned int > team;
+    //! A vector holding the number of players required on each quest
+    std::vector< unsigned int > players_per_quest;
+    //! A vector holding the number of no votes required to fail a quest
+    std::vector< unsigned int > fails_per_quest;
     //! A protobuf with the game's settings
     avalon::network::GameSettings settingsBuf;
     //! The seeded RNG for shuffling vectors

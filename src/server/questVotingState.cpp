@@ -120,8 +120,8 @@ namespace server {
         // This is functionally the end of the voting phase,
         // so increase the vote track, switch the leader,
         // and tally the votes
-        model->quest_track++;
         bool passed = figureOutResultsOfVote( );
+        model->quest_track++;
         if ( !passed ) {
             model->quests_failed++;
         }
@@ -180,8 +180,7 @@ namespace server {
             }
         }
 
-        // TODO figure out how many nos needed to fail
-        return no > 0;
+        return no >= model->fails_per_quest[ model->quest_track ];
     }
 
     avalon::player_vote_t QuestVotingState::getVote( unsigned int player_id ) {

@@ -12,4 +12,6 @@ message GameSettings {
     required int32 evil_count = 9;
     required int32 vote_track_len = 10;
     required int32 quest_track_len = 11;
+    repeated int32 players_per_quest = 12;
+    repeated int32 fails_per_quest = 13;
 }

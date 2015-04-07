@@ -90,6 +90,28 @@ class ServerController {
          * @return EXIT_SUCCESS on success, an error code otherwise
          */
         int initModelPlayer( std::vector< avalon::special_roles_t > special_roles );
+        
+        unsigned int all_players_per_quest[ 10 ][ 5 ] = { { 1, 1, 1, 1, 1 },
+                                                    { 1, 2, 1, 2, 2 },
+                                                    { 1, 2, 2, 3, 2 },
+                                                    { 2, 2, 3, 2, 3 },
+                                                    { 2, 3, 2, 3, 3 },
+                                                    { 2, 3, 4, 3, 4 },
+                                                    { 2, 3, 3, 4, 4 },
+                                                    { 3, 4, 4, 5, 5 },
+                                                    { 3, 4, 4, 5, 5 },
+                                                    { 3, 4, 4, 5, 5 } };
+
+        unsigned int all_fails_per_quest[ 10 ][ 5 ] = { { 1, 1, 1, 1, 1 },
+                                                { 1, 1, 1, 1, 1 },
+                                                { 1, 1, 1, 1, 1 },
+                                                { 1, 1, 1, 1, 1 },
+                                                { 1, 1, 1, 1, 1 },
+                                                { 1, 1, 1, 1, 1 },
+                                                { 1, 1, 1, 2, 1 },
+                                                { 1, 1, 1, 2, 1 },
+                                                { 1, 1, 1, 2, 1 },
+                                                { 1, 1, 1, 2, 1 } };
 
     public:
 

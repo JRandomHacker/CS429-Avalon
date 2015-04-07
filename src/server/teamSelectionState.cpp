@@ -62,7 +62,10 @@ namespace server {
             // Make sure the player is allowed to take this action
             if( selector == model->leader ) {
 
-                // TODO Add logic to make sure there aren't too many people
+                if ( model->team.size( ) != model->players_per_quest[ model->quest_track ] ) {
+                    std::cerr << "[ ServerController ] Received a team confirmation with an incorrect number of players" << std::endl;
+                    return NULL;
+                }
                 model->server->broadcastStateChange( avalon::network::ENTER_TEAM_VOTE_BUF, 0 );
                 return new TeamVotingState( model );
             } else {

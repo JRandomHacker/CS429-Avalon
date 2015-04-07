@@ -109,7 +109,7 @@ namespace avalon {
             TEAM_SELECTION_BUF,
             /*! A message corresponding to a state change to VotingState */
             ENTER_TEAM_VOTE_BUF,
-            /*! An avalon::network::Vote protobuf TODO change this to team vote*/
+            /*! An avalon::network::Vote protobuf */
             TEAM_VOTE_BUF,
             /*! An avalon::network::Vote protobuf used for quest voting */
             QUEST_VOTE_BUF,

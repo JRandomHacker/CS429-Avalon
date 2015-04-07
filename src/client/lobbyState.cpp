@@ -13,6 +13,7 @@
 #include "chatmessage.pb.h"
 
 #include <climits>
+#include <vector>
 
 namespace avalon {
 namespace client {
@@ -44,6 +45,19 @@ namespace client {
             data->model->addData( "voteHistory", std::vector< VoteHistory >( ) );
             data->model->addData( "teamVoteState", false );
             data->model->addData( "questVoteState", false );
+            
+            std::vector< unsigned int > players_per_quest;
+            for( auto it = sBuf->players_per_quest( ).begin( ); it != sBuf->players_per_quest( ).end( ); it++ ) {
+                players_per_quest.push_back( ( unsigned int )( *it ) );
+            }
+            data->model->addData( "players_per_quest", players_per_quest );
+            
+            std::vector< unsigned int > fails_per_quest;
+            for( auto it = sBuf->fails_per_quest( ).begin( ); it != sBuf->fails_per_quest( ).end( ); it++ ) {
+                fails_per_quest.push_back( ( unsigned int )( *it ) );
+            }
+            data->model->addData( "fails_per_quest", fails_per_quest );
+            
             populateSpecialRoles( sBuf );
 
             for ( unsigned int i = 0; i < ( unsigned int )sBuf->players( ); i++ ) {

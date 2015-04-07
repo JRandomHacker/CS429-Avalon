@@ -32,11 +32,6 @@ ServerController::ServerController( ServInfo* model, int port ) {
     action_queue = new ActionHandler( qSem );
     model->server->initQueue( action_queue );
 
-    model->vote_track = 0;
-    model->hidden_voting = false;
-    model->vote_track_length = 5; // TODO get value from ini
-    model->quest_track_length = 5; // TODO get value from ini
-
     handling_state = NULL;
     setServerState( new avalon::server::WaitingForClientsState( model ) );
 
@@ -77,6 +72,14 @@ int ServerController::spawnNetwork( ) {
 // Initializes the model
 int ServerController::initModel( unsigned int num_clients, std::vector< avalon::special_roles_t > special_roles ) {
     model->num_clients = num_clients;
+    model->vote_track = 0;
+    model->quest_track = 0;
+    model->hidden_voting = false;
+    model->vote_track_length = 5; // TODO get value from ini
+    model->quest_track_length = 5; // TODO get value from ini
+    model->players_per_quest.insert( model->players_per_quest.end( ), &all_players_per_quest[ model->num_clients - 1 ][ 0 ], &all_players_per_quest[ model->num_clients - 1 ][ 5 ] ); // TODO get value from ini
+    model->fails_per_quest.insert( model->fails_per_quest.end( ), &all_fails_per_quest[ model->num_clients - 1 ][ 0 ], &all_fails_per_quest[ model->num_clients - 1 ][ 5 ] ); // TODO get value from ini
+
     initModelCharacters( special_roles );
     return initModelPlayer( special_roles );
 }
@@ -156,6 +159,12 @@ void ServerController::initModelCharacters( std::vector< avalon::special_roles_t
     model->settingsBuf.set_vote_track_len( model->vote_track_length );
     model->settingsBuf.set_quest_track_len( model->quest_track_length );
     model->settingsBuf.set_evil_count( avalon::getEvilCount( model->num_clients ) );
+    for( unsigned int i = 0; i < model->players_per_quest.size( ); i++ ) {
+        model->settingsBuf.add_players_per_quest( model->players_per_quest[ i ] );
+    }
+    for( unsigned int i = 0; i < model->fails_per_quest.size( ); i++ ) {
+        model->settingsBuf.add_fails_per_quest( model->fails_per_quest[ i ] );
+    }
     model->settingsBuf.set_merlin( false );
     model->settingsBuf.set_percival( false );
     model->settingsBuf.set_mordred( false );
