@@ -38,7 +38,7 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
     connect( this, SIGNAL( leaderIDUpdated( ) ), this, SLOT( updateLeaderSlot( ) ) );
     connect( this, SIGNAL( questingTeamUpdated( ) ), this, SLOT( updateQuestingTeamSlot( ) ) );
     connect( this, SIGNAL( trackUpdated( ) ), this, SLOT( updateTrackSlot( ) ) );
-    connect( this, SIGNAL( voteStateUpdated( ) ), this, SLOT( updateVoteStateSlot( ) ) );
+    connect( this, SIGNAL( teamVoteStateUpdated( ) ), this, SLOT( updateTeamVoteStateSlot( ) ) );
     connect( this, SIGNAL( voteHistoryUpdated( ) ), this, SLOT( updateVoteHistorySlot( ) ) );
     connect( this, SIGNAL( currentVotesUpdated( ) ), this, SLOT( updateCurrentVotesSlot( ) ) );
 
@@ -59,7 +59,7 @@ GameWindow::~GameWindow( ) {
     delete roleList_subscriber;
     delete leaderID_subscriber;
     delete questingTeam_subscriber;
-    delete voteState_subscriber;
+    delete teamVoteState_subscriber;
     for( std::vector<Subscriber*>::iterator i = player_subscribers.begin( ); i != player_subscribers.end( ); i++ )
         delete *i;
 
@@ -139,7 +139,7 @@ void GameWindow::createPlayerSubscribers( ) {
     model->subscribe( "voteTrackLength", voteTrackLength_subscriber );
     model->subscribe( "currentVoteTrack", currentVoteTrack_subscriber );
     model->subscribe( "questTrackLength", questTrackLength_subscriber );
-    model->subscribe( "currentQuestTrack", currentQuestTrack_subscriber);
+    model->subscribe( "currentQuestTrack", currentQuestTrack_subscriber );
     QStandardItemModel* trackModel = new QStandardItemModel( 2, 1 );
     ui->voteTrackList->setModel( trackModel );
     updateTrack( );
@@ -178,13 +178,21 @@ void GameWindow::createPlayerSubscribers( ) {
     updateLeader( );
 
     // Subscribe to voteState
-    voteState_subscriber = new ClosureSubscriber(
+    teamVoteState_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
-                    emit voteStateUpdated( );
+                    emit teamVoteStateUpdated( );
                     sem_wait( sync_sem );
             },
             NULL );
-    model->subscribe( "teamVoteState", voteState_subscriber );
+    model->subscribe( "teamVoteState", teamVoteState_subscriber );
+
+    questVoteState_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit questVoteStateUpdated( );
+                    sem_wait( sync_sem );
+            },
+            NULL );
+    model->subscribe( "questVoteState", questVoteState_subscriber );
 
     voteHistory_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
@@ -321,14 +329,14 @@ void GameWindow::updateTrack( ) {
 }
 
 
-void GameWindow::updateVoteStateSlot( ) {
-    updateVoteState( );
+void GameWindow::updateTeamVoteStateSlot( ) {
+    updateTeamVoteState( );
     sem_post( sync_sem );
 }
 
-void GameWindow::updateVoteState( ) {
+void GameWindow::updateTeamVoteState( ) {
 
-    bool inVoteState = *voteState_subscriber->getData<bool>( );
+    bool inVoteState = *teamVoteState_subscriber->getData<bool>( );
     QStandardItemModel* listModel = (QStandardItemModel*) ui->playerList->model( );
     if( inVoteState ) {
 
@@ -354,6 +362,15 @@ void GameWindow::updateVoteState( ) {
         listModel->removeColumn( 3 );
         ui->votingSection->hide( );
     }
+}
+
+void GameWindow::updateQuestVoteStateSlot( ) {
+    updateQuestVoteState( );
+    sem_post( sync_sem );
+}
+
+void GameWindow::updateQuestVoteState( ) {
+    // update UI for quest vote
 }
 
 void GameWindow::updateCurrentVotesSlot( ) {
@@ -382,6 +399,7 @@ void GameWindow::updateVoteHistory( ) {
 
     VoteHistory thisVote = hist.back( );
 
+    // Show pop-up with results
     ResultsDialog results( NULL, thisVote, player_subscribers );
     results.exec( );
 }

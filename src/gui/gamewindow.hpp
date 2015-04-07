@@ -100,23 +100,30 @@ signals:
     void trackUpdated( );
 
     /**
-     * Signal emitted when vote state is entered or exited
+     * Signal emitted when team vote state is entered or exited
      *
      * @return None
      */
-    void voteStateUpdated( );
+    void teamVoteStateUpdated( );
+
+    /**
+     * Signal emitted when quest vote state is entered or exited
+     *
+     * @return None
+     */
+    void questVoteStateUpdated( );
 
     /**
      * Signal emitted when vote history is updated
      *
-     * @result None
+     * @return  None
      */
     void voteHistoryUpdated( );
 
     /**
      * Signal emitted when current votes is updated
      *
-     * @result None
+     * @return None
      */
     void currentVotesUpdated( );
 
@@ -167,10 +174,15 @@ private slots:
     void updateTrackSlot( );
 
     /**
-     * Changes gui to enable/disable VotingState
+     * Changes gui to enable/disable team vote state
      * @return None
      */
-    void updateVoteStateSlot( );
+    void updateTeamVoteStateSlot( );
+
+    /**
+     * Changes gui to enable/disable quest vote state
+     */
+    void updateQuestVoteStateSlot( );
 
     /**
      * Pops up vote result
@@ -279,9 +291,14 @@ private:
     Subscriber* questTrackLength_subscriber;
 
     /**
-     *  Subscriber for vote state flag
+     *  Subscriber for team vote state flag
      */
-    Subscriber* voteState_subscriber;
+    Subscriber* teamVoteState_subscriber;
+
+    /**
+     *  Subscriber for quest voting flag
+     */
+    Subscriber* questVoteState_subscriber;
 
     /**
      * Subscriber for vote history
@@ -363,10 +380,15 @@ private:
     void updateTrack( );
 
     /**
-     * Changes gui to enable/disable VotingState
+     * Changes gui to enable/disable team voting
      * @return None
      */
-    void updateVoteState( );
+    void updateTeamVoteState( );
+
+    /**
+     * Changes gui to enable/disable quest voting
+     */
+    void updateQuestVoteState( );
 
     /**
      * Pops up vote result

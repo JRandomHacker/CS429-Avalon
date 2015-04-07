@@ -54,7 +54,7 @@
      <item>
       <widget class="QLabel" name="currRolesList">
        <property name="text">
-        <string>currRolesList</string>
+        <string>Roles:</string>
        </property>
       </widget>
      </item>
