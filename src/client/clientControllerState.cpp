@@ -5,6 +5,8 @@
  * @date 2015-03-14
  * @file clientControllerState.cpp
  */
+#include <string>
+
 #include "clientControllerState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
@@ -44,11 +46,17 @@ namespace client {
             data->client->sendProtobuf( avalon::network::CHAT_MSG_BUF, buf.SerializeAsString( ) );
             */
 
-        } else if ( action_type == "ChatMessageRecv" ) {
-            // Handle sending a chat message to the server 
+        } else if( action_type == "ChatMessageRecv" ) {
 
-            // auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
-            
+            auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
+            unsigned int sender = action->getMessage( ).getSenderId( );
+            std::string message_text = action->getMessage( ).getMessageText( );
+            unsigned int time = action->getMessage( ).getTimestamp( );
+
+            avalon::network::ChatMessage buf;
+            buf.set_sender_id( sender );
+            buf.set_message_text( message_text );
+            buf.set_timestamp( time );
         } else if ( action_type == "EnterQuestVoteState" ) {
             return ControllerState::handleAction( action_to_be_handled );
         }

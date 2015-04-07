@@ -1,3 +1,5 @@
+#include <string>
+
 #include "serverControllerState.hpp"
 #include "waitingForClientsState.hpp"
 #include "teamSelectionState.hpp"
@@ -23,6 +25,25 @@ namespace server {
     }
 
     ControllerState* ServerControllerState::handleAction( Action* action_to_be_handled ) {
+
+        std::string action_type = action_to_be_handled->getMessage( );
+
+        if( action_type == "ChatMessageRecv" ) {
+
+            auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
+            unsigned int sender = action->getMessage( ).getSenderId( );
+            std::string message_text = action->getMessage( ).getMessageText( );
+            unsigned int time = action->getMessage( ).getTimestamp( );
+
+            avalon::network::ChatMessage buf;
+            buf.set_sender_id( sender );
+            buf.set_message_text( message_text );
+            buf.set_timestamp( time );
+            sendProtobufToAll( avalon::network::CHAT_MSG_BUF, buf.SerializeAsString( ) );
+
+            return NULL;
+        }
+
         return ControllerState::handleAction( action_to_be_handled );
     }
 

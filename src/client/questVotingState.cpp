@@ -4,7 +4,6 @@
 #include "teamSelectionState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
-#include "clientCustomActionsForChat.hpp"
 #include "clientInfo.hpp"
 #include "questVoteHistory.hpp"
 #include "chat_message.hpp"
@@ -33,17 +32,6 @@ namespace client {
             buf.set_vote( action->getPlayerVote( ) );
             data->client->sendProtobuf( avalon::network::QUEST_VOTE_BUF, buf.SerializeAsString( ) );
 
-        } else if( action_type == "ChatMessageRecv" ) {
-
-            auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
-            unsigned int sender = action->getMessage( ).getSenderId( );
-            std::string message_text = action->getMessage( ).getMessageText( );
-            unsigned int time = action->getMessage( ).getTimestamp( );
-
-            avalon::network::ChatMessage buf;
-            buf.set_sender_id( sender );
-            buf.set_message_text( message_text );
-            buf.set_timestamp( time );
         } else if( action_type == "QuestVoteResults" ) {
 
             auto action = dynamic_cast< QuestVoteResultsAction* >( action_to_be_handled );
