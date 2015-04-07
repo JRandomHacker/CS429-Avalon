@@ -9,27 +9,25 @@
 #include "globals.hpp"
 
 #include <string>
+#include <time.h>
 
-ChatMessageSentAction::ChatMessageSentAction( std::string message_text ) : Action( "ChatMessageSent" ), message( message_text ) {
+ChatMessageSentAction::ChatMessageSentAction( std::string message_text ) : Action( "ChatMessageSent" ), message( 1, message_text, 1 ) {
+
 }
 
 ChatMessageSentAction::~ChatMessageSentAction( ) { }
 
-std::string ChatMessageSentAction::getMessage( ) {
+ChatMessage ChatMessageSentAction::getMessage( ) {
 	return message;
 }
 
 ChatMessageRecvAction::ChatMessageRecvAction( std::string message_text, unsigned int other_player_num ) :
-	Action( "ChatMessageRecv" ), message( message_text ), player_id( other_player_num ) {
+	Action( "ChatMessageRecv" ), message( other_player_num, message_text, 1 ) {
 
 }
 
 ChatMessageRecvAction::~ChatMessageRecvAction( ) { }
 
-std::string ChatMessageRecvAction::getMessage( ) {
+ChatMessage ChatMessageRecvAction::getMessage( ) {
 	return message;
-}
-
-unsigned int ChatMessageRecvAction::getPlayerId( ) {
-	return player_id;
 }

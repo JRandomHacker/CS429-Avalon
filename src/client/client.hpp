@@ -15,6 +15,7 @@
 #include "actionHandler.hpp"
 #include "action.hpp"
 #include "clientCustomActionsFromNet.hpp"
+#include "clientCustomActionsForChat.hpp"
 
 #ifdef _WIN32
     #include <winsock2.h>
@@ -45,13 +46,21 @@ class Client {
         void recvPlayer( unsigned int bufLength );
 
         /*
+         * Recv's an avalon::network::ChatMessage protobuf, creates an Action, and adds it to the queue
+         *
+         * @param bufLength The size of the protobuf that needs to be received
+         * @return None
+         */
+        void recvMessage( unsigned int bufLength );
+
+        /*
          * Recv's an avalon::network::Vote protobuf for a team vote, creates an Action, and adds it to the queue
          *
          * @param bufLength The size of the protobuf that needs to be received
          * @return None
          */
         void recvTeamVote( unsigned int bufLength );
-        
+
         /*
          * Recv's an avalon::network::Vote protobuf for a quet vote, creates an Action, and adds it to the queue
          *

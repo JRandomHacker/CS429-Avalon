@@ -1,4 +1,4 @@
-OBJS=action.o actionHandler.o controllerState.o data_block.o globals.o model.o model_data.o player.o subscriber.o
+OBJS=action.o actionHandler.o chat_message.o controllerState.o data_block.o globals.o model.o model_data.o player.o subscriber.o
 
 PROTOS_DIR=../protos
 
@@ -12,7 +12,7 @@ endif
 
 all : $(OBJS)
 
-clean : 
+clean :
 	rm -f $(OBJS)
 
 %.o : %.cpp %.hpp

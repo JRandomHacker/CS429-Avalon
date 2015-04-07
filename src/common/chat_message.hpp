@@ -17,10 +17,18 @@ class ChatMessage {
         /**
          * Public constructor
          *
-         * @param player_num The id of the player who sent the message
+         * @param player_id The id of the player who sent the message
          * @param mess_text The message's text
+         * @param time The message's timestamp
          */
         ChatMessage( unsigned int player_id, std::string mess_text, unsigned int time );
+
+        /**
+         * Public constructor
+         *
+         * @param proto_buf ChatMessage protobuf
+         */
+        ChatMessage( avalon::network::ChatMessage proto_buf );
 
         /**
          * Destructor
