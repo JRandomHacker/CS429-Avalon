@@ -18,11 +18,8 @@
 #include <QList>
 #include <vector>
 
-#ifdef _WIN32
-	GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model, HANDLE serverHandle ) :
-#else     
-	GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model, int serverHandle ) :
-#endif
+
+GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model, handle_t serverHandle ) :
     QWidget( parent ),
     ui( new Ui::GameWindow ) {
     this->control = controller;

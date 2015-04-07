@@ -11,6 +11,12 @@
 #include <windows.h>
 #endif
 
+#ifdef _WIN32
+    typedef HANDLE handle_t;
+#else
+    typedef int handle_t;
+#endif
+
 namespace Ui {
 class GameWindow;
 }
@@ -23,17 +29,11 @@ class GameWindow : public QWidget {
     Q_OBJECT
 
 public:
-    #ifdef _WIN32
     /**
      *  Creates a game window, starts the controller thread.
      */
-    explicit GameWindow( QWidget *parent = 0, ClientController* controller = NULL, Model * model = NULL, HANDLE serverHandle = 0 );
-    #else
-    /**
-     *  Creates a game window, starts the controller thread.
-     */
-    explicit GameWindow( QWidget *parent = 0, ClientController* controller = NULL, Model * model = NULL, int serverHandle = 0 );
-    #endif
+    explicit GameWindow( QWidget *parent = 0, ClientController* controller = NULL, Model * model = NULL, handle_t serverHandle = 0 );
+
     
     /**
      *  Destroys the game window.
@@ -294,18 +294,7 @@ private:
      */
     std::vector<Subscriber*> player_subscribers;
     
-
-    #ifdef _WIN32
-        /**
-         *  Process handle of server, if hosting
-         */
-        HANDLE serverH;
-    #else
-        /**
-         *  pid of the server, if hosting
-         */
-        int serverH;
-    #endif
+    handle_t serverH;
 
     /**
      *  Create a subscriber that checks if the model has game settings, 
