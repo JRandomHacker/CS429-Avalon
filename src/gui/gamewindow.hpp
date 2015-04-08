@@ -291,6 +291,11 @@ private:
     Subscriber* questTrackLength_subscriber;
 
     /**
+     *  Subscriber for players per quest
+     */
+    Subscriber* playersPerQuest_subscriber;
+
+    /**
      *  Subscriber for team vote state flag
      */
     Subscriber* teamVoteState_subscriber;

@@ -137,11 +137,13 @@ void GameWindow::createPlayerSubscribers( ) {
             },
             NULL );
     currentQuestTrack_subscriber = currentVoteTrack_subscriber;
+    playersPerQuest_subscriber = new ClosureSubscriber( NULL, NULL );
     questTrackLength_subscriber = new ClosureSubscriber( NULL, NULL );
     model->subscribe( "voteTrackLength", voteTrackLength_subscriber );
     model->subscribe( "currentVoteTrack", currentVoteTrack_subscriber );
     model->subscribe( "questTrackLength", questTrackLength_subscriber );
     model->subscribe( "currentQuestTrack", currentQuestTrack_subscriber );
+    model->subscribe( "playersPerQuest", playersPerQuest_subscriber );
     QStandardItemModel* trackModel = new QStandardItemModel( 2, 1 );
     ui->voteTrackList->setModel( trackModel );
     updateTrack( );
@@ -250,6 +252,7 @@ void GameWindow::updateLeader( ) {
 
         ui->leaderLabel->setText( QString( "You are the leader!" ) );
         ui->proposeTeamButton->show( );
+        ui->proposeTeamButton->setEnabled( false );
     } else if( lid != UINT_MAX ) {
 
         Player* leader = player_subscribers[lid]->getData<Player>( );
@@ -285,6 +288,11 @@ void GameWindow::updateQuestingTeam( ) {
 
     }
     ui->proposeTeamList->setModel( qModel );
+
+    std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
+    unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
+    unsigned int playersCurrQuest = playersPerQuest[currQuest];
+    ui->proposeTeamButton->setEnabled( playersCurrQuest == team.size( ) );
 }
 
 void GameWindow::updateGameInfoSlot( ) {
@@ -324,8 +332,11 @@ void GameWindow::updateTrack( ) {
     unsigned int vLength = *voteTrackLength_subscriber->getData<unsigned int>( );
     unsigned int currVote = *currentVoteTrack_subscriber->getData<unsigned int>( );
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
+    std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
+    unsigned int playersCurrQuest = playersPerQuest[currQuest];
 
-    std::string questStr = "Quest " + std::to_string( currQuest + 1 ) + "/" + std::to_string( qLength );
+    std::string questStr = "Quest " + std::to_string( currQuest + 1 ) + "/" + std::to_string( qLength )
+            + " (" + std::to_string( playersCurrQuest ) + " player(s) required)";
     std::string voteStr = "Vote " + std::to_string( currVote + 1 ) + "/" + std::to_string( vLength );
 
     QStandardItemModel* trackModel = ( QStandardItemModel* ) ui->voteTrackList->model( );
@@ -471,6 +482,8 @@ void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
     unsigned int row = (unsigned int) index.row( );
 
     std::vector<unsigned int> qTeam = *questingTeam_subscriber->getData<std::vector<unsigned int>>( );
+
+    // Remove this player and return if they are already on the team
     for( unsigned int i = 0; i < qTeam.size( ); i++ ) {
         if( qTeam[i] == row ) {
             SelectQuestGoerAction* act = new SelectQuestGoerAction( false, row );
@@ -479,8 +492,14 @@ void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
         }
     }
 
-    SelectQuestGoerAction* act = new SelectQuestGoerAction( true, row );
-    control->addActionToQueue( act );
+    // Add the player if possible
+    std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
+    unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
+    unsigned int playersCurrQuest = playersPerQuest[currQuest];
+    if( playersCurrQuest > qTeam.size( ) ) {
+        SelectQuestGoerAction* act = new SelectQuestGoerAction( true, row );
+        control->addActionToQueue( act );
+    }
 }
 
 void GameWindow::on_buttonVotePass_clicked( ) {

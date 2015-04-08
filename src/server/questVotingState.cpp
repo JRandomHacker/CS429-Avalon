@@ -20,7 +20,9 @@ namespace avalon {
 namespace server {
     QuestVotingState::QuestVotingState( ServInfo* mod ) : ServerControllerState( "QuestVoting", mod ) { }
 
-    QuestVotingState::~QuestVotingState( ) { }
+    QuestVotingState::~QuestVotingState( ) {
+        model->team.clear( );
+    }
 
     ServerControllerState* QuestVotingState::handleAction( Action* action_to_be_handled ) {
 
