@@ -422,10 +422,8 @@ void GameWindow::updateCurrentVotesSlot( ) {
 
 void GameWindow::updateCurrentVotes( ) {
 
-    std::cerr<< "hi" <<std::endl;
     std::vector<avalon::player_vote_t> votes = *currentVotes_subscriber->getData<std::vector<avalon::player_vote_t>>( );
     if( *teamVoteState_subscriber->getData<bool>( ) ) {
-        std::cerr<< "hi" <<std::endl;
         for( unsigned int i = 0; i < votes.size( ); i++ ) {
             if( votes[i] != avalon::NO_VOTE ) {
                 QStandardItemModel* listModel = ( QStandardItemModel* ) ui->playerList->model( );
@@ -433,20 +431,16 @@ void GameWindow::updateCurrentVotes( ) {
             }
         }
     } else {
-        std::cerr<< "hi" <<std::endl;
         std::vector<unsigned int> team = *questingTeam_subscriber->getData<std::vector<unsigned int>>( );
 
         for( unsigned int i = 0; i < votes.size( ); i++ ) {
-            std::cerr<< "hi" <<std::endl;
             if( votes[i] != avalon::NO_VOTE ) {
-                std::cerr<< "hi" <<std::endl;
                 unsigned int listPos = 0;
                 for( ; listPos < team.size( ); listPos++ ) {
                     if( team[listPos] == i ) {
                         break;
                     }
                 }
-                std::cerr<< "hi" <<listPos <<std::endl;
                 QStandardItemModel* listModel = ( QStandardItemModel* ) ui->proposeTeamList->model( );
                 listModel->item( listPos, 1 )->setText( QString( "Yes" ) );
             }
