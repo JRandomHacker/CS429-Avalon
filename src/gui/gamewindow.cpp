@@ -39,6 +39,7 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
     connect( this, SIGNAL( questingTeamUpdated( ) ), this, SLOT( updateQuestingTeamSlot( ) ) );
     connect( this, SIGNAL( trackUpdated( ) ), this, SLOT( updateTrackSlot( ) ) );
     connect( this, SIGNAL( teamVoteStateUpdated( ) ), this, SLOT( updateTeamVoteStateSlot( ) ) );
+    connect( this, SIGNAL( questVoteStateUpdated( ) ), this, SLOT( updateQuestVoteStateSlot( ) ) );
     connect( this, SIGNAL( voteHistoryUpdated( ) ), this, SLOT( updateVoteHistorySlot( ) ) );
     connect( this, SIGNAL( currentVotesUpdated( ) ), this, SLOT( updateCurrentVotesSlot( ) ) );
 
@@ -86,6 +87,7 @@ void GameWindow::createPlayerSubscribersSlot( ) {
 void GameWindow::createPlayerSubscribers( ) {
 
     ui->votingSection->hide( );
+    ui->stateLabel->setText( QString( "Team Select" ) );
 
     // Add subscriber for number of players
     num_players_subscriber = new ClosureSubscriber( NULL, NULL );
@@ -276,6 +278,11 @@ void GameWindow::updateQuestingTeam( ) {
         unsigned int player_num = team[ i ];
         Player* p = player_subscribers[ player_num ]->getData< Player >( );
         qModel->appendRow( new QStandardItem( QString( p->getName( ).c_str( ) ) ) );
+
+        QStringList qHeaders;
+        qHeaders.append( QString( "Name" ) );
+        qModel->setHorizontalHeaderLabels( qHeaders );
+
     }
     ui->proposeTeamList->setModel( qModel );
 }
@@ -340,6 +347,8 @@ void GameWindow::updateTeamVoteState( ) {
     QStandardItemModel* listModel = (QStandardItemModel*) ui->playerList->model( );
     if( inVoteState ) {
 
+        ui->stateLabel->setText( QString( "Team Vote" ) );
+
         // Hide the propose team button
         ui->proposeTeamButton->hide( );
 
@@ -371,6 +380,39 @@ void GameWindow::updateQuestVoteStateSlot( ) {
 
 void GameWindow::updateQuestVoteState( ) {
     // update UI for quest vote
+    bool inQuestVote = *questVoteState_subscriber->getData<bool>( );
+    QStandardItemModel* listModel = (QStandardItemModel*) ui->proposeTeamList->model( );
+    if( inQuestVote ) {
+        ui->stateLabel->setText( QString( "Quest Vote" ) );
+
+        // Create the "Has Voted" column
+        for( int i = 0; i < listModel->rowCount( ); i++ ) {
+            listModel->setItem( i, 1, new QStandardItem( "No" ) );
+        }
+        listModel->setHorizontalHeaderItem( 1, new QStandardItem( QString( "Has Voted" ) ) );
+
+        // Display vote buttons if on team
+        std::vector<unsigned int> team = *questingTeam_subscriber->getData<std::vector<unsigned int>>( );
+        unsigned int myID = *myID_subscriber->getData<unsigned int>( );
+        bool onTeam = false;
+        for( unsigned int i = 0; i < team.size( ); i++ ) {
+            if( team[i] == myID ) {
+                onTeam = true;
+                break;
+            }
+        }
+
+        if( onTeam ) {
+            ui->votingSection->show( );
+        } else {
+            ui->votingSection->hide( );
+        }
+    } else {
+        listModel->removeColumn( 1 );
+        ui->stateLabel->setText( QString( "Team Selection" ) );
+        ui->votingSection->hide( );
+    }
+
 }
 
 void GameWindow::updateCurrentVotesSlot( ) {
@@ -380,11 +422,34 @@ void GameWindow::updateCurrentVotesSlot( ) {
 
 void GameWindow::updateCurrentVotes( ) {
 
+    std::cerr<< "hi" <<std::endl;
     std::vector<avalon::player_vote_t> votes = *currentVotes_subscriber->getData<std::vector<avalon::player_vote_t>>( );
-    for( unsigned int i = 0; i < votes.size( ); i++ ) {
-        if( votes[i] != avalon::NO_VOTE ) {
-            QStandardItemModel* listModel = ( QStandardItemModel* ) ui->playerList->model( );
-            listModel->item( i, 3 )->setText( QString( "Yes" ) );
+    if( *teamVoteState_subscriber->getData<bool>( ) ) {
+        std::cerr<< "hi" <<std::endl;
+        for( unsigned int i = 0; i < votes.size( ); i++ ) {
+            if( votes[i] != avalon::NO_VOTE ) {
+                QStandardItemModel* listModel = ( QStandardItemModel* ) ui->playerList->model( );
+                listModel->item( i, 3 )->setText( QString( "Yes" ) );
+            }
+        }
+    } else {
+        std::cerr<< "hi" <<std::endl;
+        std::vector<unsigned int> team = *questingTeam_subscriber->getData<std::vector<unsigned int>>( );
+
+        for( unsigned int i = 0; i < votes.size( ); i++ ) {
+            std::cerr<< "hi" <<std::endl;
+            if( votes[i] != avalon::NO_VOTE ) {
+                std::cerr<< "hi" <<std::endl;
+                unsigned int listPos = 0;
+                for( ; listPos < team.size( ); listPos++ ) {
+                    if( team[listPos] == i ) {
+                        break;
+                    }
+                }
+                std::cerr<< "hi" <<listPos <<std::endl;
+                QStandardItemModel* listModel = ( QStandardItemModel* ) ui->proposeTeamList->model( );
+                listModel->item( listPos, 1 )->setText( QString( "Yes" ) );
+            }
         }
     }
 }
@@ -425,13 +490,23 @@ void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
 }
 
 void GameWindow::on_buttonVotePass_clicked( ) {
-    TeamVoteAction* vote = new TeamVoteAction( avalon::YES );
-    control->addActionToQueue( vote );
+    if( *teamVoteState_subscriber->getData<bool>( ) ) {
+        TeamVoteAction* vote = new TeamVoteAction( avalon::YES );
+        control->addActionToQueue( vote );
+    } else {
+        QuestVoteAction* vote = new QuestVoteAction( avalon::YES );
+        control->addActionToQueue( vote );
+    }
 }
 
 void GameWindow::on_buttonVoteFail_clicked( ) {
-    TeamVoteAction* vote = new TeamVoteAction( avalon::NO );
-    control->addActionToQueue( vote );
+    if( *teamVoteState_subscriber->getData<bool>( ) ) {
+        TeamVoteAction* vote = new TeamVoteAction( avalon::NO );
+        control->addActionToQueue( vote );
+    } else {
+        QuestVoteAction* vote = new QuestVoteAction( avalon::NO );
+        control->addActionToQueue( vote );
+    }
 }
 
 void GameWindow::on_proposeTeamButton_clicked( ) {

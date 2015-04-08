@@ -86,27 +86,41 @@
         <string>Questing Team</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="3" column="0">
-         <widget class="QPushButton" name="proposeTeamButton">
-          <property name="text">
-           <string>Propose Team</string>
-          </property>
-         </widget>
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="leaderLabel">
+            <property name="text">
+             <string>Current Leader is ...</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="stateLabel">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item row="1" column="0">
-         <widget class="QListView" name="proposeTeamList">
+         <widget class="QTableView" name="proposeTeamList">
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="leaderLabel">
+        <item row="2" column="0">
+         <widget class="QPushButton" name="proposeTeamButton">
           <property name="text">
-           <string>Current Leader is ...</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <string>Propose Team</string>
           </property>
          </widget>
         </item>
