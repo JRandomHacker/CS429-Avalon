@@ -289,6 +289,7 @@ void GameWindow::updateQuestingTeam( ) {
     }
     ui->proposeTeamList->setModel( qModel );
 
+    // Enable or disable the propose button depending on how many questers are selected
     std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
     unsigned int playersCurrQuest = playersPerQuest[currQuest];
@@ -418,6 +419,15 @@ void GameWindow::updateQuestVoteState( ) {
         } else {
             ui->votingSection->hide( );
         }
+
+        // Subscribe to the data
+        currentVotes_subscriber = new ClosureSubscriber(
+                    [&]( Subscriber* ) {
+                        emit currentVotesUpdated( );
+                        sem_wait( sync_sem );
+                    },
+                    NULL);
+        model->subscribe( "currentVotes", currentVotes_subscriber );
     } else {
         listModel->removeColumn( 1 );
         ui->stateLabel->setText( QString( "Team Selection" ) );
