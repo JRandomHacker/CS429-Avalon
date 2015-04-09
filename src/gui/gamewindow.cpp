@@ -439,6 +439,13 @@ void GameWindow::updateQuestVoteState( ) {
 
         if( onTeam ) {
             ui->votingSection->show( );
+
+            unsigned int myID = *myID_subscriber->getData<unsigned int>( );
+            Player me = *player_subscribers[myID]->getData<Player>( );
+            if( me.getAlignment( ) == avalon::GOOD ) {
+                ui->buttonVoteFail->setText( "PASS!!!" );
+            }
+
         } else {
             ui->votingSection->hide( );
         }
@@ -455,6 +462,7 @@ void GameWindow::updateQuestVoteState( ) {
         listModel->removeColumn( 1 );
         ui->stateLabel->setText( QString( "Team Selection" ) );
         ui->votingSection->hide( );
+        ui->buttonVoteFail->setText( "FAIL!!!" );
     }
 
 }
@@ -589,8 +597,15 @@ void GameWindow::on_buttonVoteFail_clicked( ) {
         TeamVoteAction* vote = new TeamVoteAction( avalon::NO );
         control->addActionToQueue( vote );
     } else {
-        QuestVoteAction* vote = new QuestVoteAction( avalon::NO );
-        control->addActionToQueue( vote );
+        unsigned int myID = *myID_subscriber->getData<unsigned int>( );
+        Player me = *player_subscribers[myID]->getData<Player>( );
+        if( me.getAlignment( ) == avalon::GOOD ) {
+            QuestVoteAction* vote = new QuestVoteAction( avalon::YES );
+            control->addActionToQueue( vote );
+        } else {
+            QuestVoteAction* vote = new QuestVoteAction( avalon::NO );
+            control->addActionToQueue( vote );
+        }
     }
 }
 
