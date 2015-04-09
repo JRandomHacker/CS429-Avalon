@@ -24,7 +24,7 @@ namespace server {
         model->team.clear( );
     }
 
-    ServerControllerState* QuestVotingState::handleAction( Action* action_to_be_handled ) {
+    ControllerState* QuestVotingState::handleAction( Action* action_to_be_handled ) {
 
         std::string action_type = action_to_be_handled->getMessage();
 

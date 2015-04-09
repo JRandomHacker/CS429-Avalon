@@ -39,24 +39,22 @@ namespace client {
         std::string action_type = action_to_be_handled->getMessage( );
 
         if ( action_type == "ChatMessageSent" ) {
-            // Handle a chat message sent to this client
+            // Handle a chat message sent from this client
 
-            /*auto action = dynamic_cast< ChatMessageSentAction* >( action_to_be_handled );
+            auto action = dynamic_cast< ChatMessageSentAction* >( action_to_be_handled );
             auto buf = action->getMessage( ).toProtoBuf( );
             data->client->sendProtobuf( avalon::network::CHAT_MSG_BUF, buf.SerializeAsString( ) );
-            */
 
         } else if( action_type == "ChatMessageRecv" ) {
 
             auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
-            unsigned int sender = action->getMessage( ).getSenderId( );
-            std::string message_text = action->getMessage( ).getMessageText( );
-            unsigned int time = action->getMessage( ).getTimestamp( );
+            //unsigned int sender = action->getMessage( ).getSenderId( );
+            //std::string message_text = action->getMessage( ).getMessageText( );
+            //unsigned int timestamp = action->getMessage( ).getTimestamp( );
 
-            avalon::network::ChatMessage buf;
-            buf.set_sender_id( sender );
-            buf.set_message_text( message_text );
-            buf.set_timestamp( time );
+            auto chat_message = action->getMessage( );
+
+            // GUI HANDLE CHAT MESSAGE
         } else if ( action_type == "EnterQuestVoteState" ) {
             return ControllerState::handleAction( action_to_be_handled );
         }

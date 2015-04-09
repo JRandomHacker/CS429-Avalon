@@ -22,7 +22,7 @@ namespace server {
 
     TeamSelectionState::~TeamSelectionState( ) { }
 
-    ServerControllerState* TeamSelectionState::handleAction( Action* action_to_be_handled ) {
+    ControllerState* TeamSelectionState::handleAction( Action* action_to_be_handled ) {
 
         std::string action_type = action_to_be_handled->getMessage();
 

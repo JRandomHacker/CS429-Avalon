@@ -20,7 +20,7 @@ WaitingForClientsState::WaitingForClientsState( ServInfo* mod ) : ServerControll
 
 WaitingForClientsState::~WaitingForClientsState( ) { }
 
-ServerControllerState* WaitingForClientsState::handleAction( Action* action_to_be_handled ) {
+ControllerState* WaitingForClientsState::handleAction( Action* action_to_be_handled ) {
 
     std::string action_type = action_to_be_handled->getMessage();
 

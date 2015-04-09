@@ -199,7 +199,7 @@ void Client::recvMessage( unsigned int bufLength ) {
     buf.ParseFromArray( chatBuf, bufLength );
 
     // Add an action to the queue
-    Action* action = new ChatMessageRecvAction( buf.message_text( ), buf.sender_id( ) );
+    Action* action = new ChatMessageRecvAction( avalon::common::ChatMessage( buf.sender_id( ), buf.message_text( ), 0 ) );
     queue->addAction( action );
 
     delete[] chatBuf;

@@ -101,7 +101,7 @@
 
 	ChatMessageRecvAction::~ChatMessageRecvAction( ) { }
 
-	ChatMessage ChatMessageRecvAction::getMessage( ) {
+	avalon::common::ChatMessage ChatMessageRecvAction::getMessage( ) {
             return message;
 	}
 // }

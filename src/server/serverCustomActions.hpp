@@ -260,11 +260,11 @@ class ChatMessageRecvAction : public Action {
          *
          * @return ChatMessage What the message is
          */
-        ChatMessage getMessage( );
+        avalon::common::ChatMessage getMessage( );
 
     private:
         //! The message received
-        ChatMessage message;
+        avalon::common::ChatMessage message;
 };
 
 #endif // SERVERCUSTOMACTIONS_HPP

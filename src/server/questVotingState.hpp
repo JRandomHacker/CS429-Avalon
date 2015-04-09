@@ -41,7 +41,7 @@ class QuestVotingState : public ServerControllerState {
          *
          * @param action_to_be_handled The action that this controllerState should parse
          */
-        ServerControllerState* handleAction( Action* action_to_be_handled );
+        ControllerState* handleAction( Action* action_to_be_handled );
 
     private:
 

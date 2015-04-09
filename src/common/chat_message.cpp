@@ -1,5 +1,8 @@
 #include "chat_message.hpp"
 
+namespace avalon {
+namespace common {
+
 ChatMessage::ChatMessage( unsigned int player_id, std::string mess_text, unsigned int time )
 	: sender_id( player_id ), message_text( mess_text ), timestamp( time ) {
 
@@ -35,3 +38,6 @@ avalon::network::ChatMessage ChatMessage::toProtoBuf( ) {
 	buf.set_timestamp( timestamp );
 	return buf;
 }
+
+} // namespace common
+} // namespace avalon
