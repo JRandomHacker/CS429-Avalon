@@ -537,6 +537,8 @@ void GameWindow::updateChatMessages( ) {
     std::string senderName = p.getName( );
 
     std::string messageStr = senderName + ": " + message.getMessageText( );
+    messageStr.erase(std::find_if(messageStr.rbegin(), messageStr.rend(),
+                                  std::not1(std::ptr_fun<int, int>(std::isspace))).base(), messageStr.end());
 
     QStandardItemModel* listModel = (QStandardItemModel*) ui->chatList->model( );
     QStandardItem* messageItem = new QStandardItem( QString( messageStr.c_str( ) ) );
