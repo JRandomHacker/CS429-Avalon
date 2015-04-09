@@ -121,6 +121,13 @@ signals:
     void voteHistoryUpdated( );
 
     /**
+     * Signal emitted when quest history is updated
+     *
+     * @return None
+     */
+    void questHistoryUpdated( );
+
+    /**
      * Signal emitted when current votes is updated
      *
      * @return None
@@ -188,6 +195,11 @@ private slots:
      * Pops up vote result
      */
     void updateVoteHistorySlot( );
+
+    /**
+     * Pops up quest result
+     */
+    void updateQuestHistorySlot( );
 
     /**
      * Updates who has voted
@@ -311,6 +323,11 @@ private:
     Subscriber* voteHistory_subscriber;
 
     /**
+     *  Subscriber for quest history
+     */
+    Subscriber* questHistory_subscriber;
+
+    /**
      * Subscriber for current votes
      */
     Subscriber* currentVotes_subscriber;
@@ -399,6 +416,11 @@ private:
      * Pops up vote result
      */
     void updateVoteHistory( );
+
+    /**
+     * Pops up quest result
+     */
+    void updateQuestHistory( );
 
     /**
      * Updates who has voted

@@ -2,6 +2,7 @@
 #define RESULTSDIALOG_H
 
 #include "voteHistory.hpp"
+#include "questVoteHistory.hpp"
 #include "player.hpp"
 #include "subscriber.hpp"
 
@@ -16,9 +17,13 @@ class ResultsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ResultsDialog(QWidget *parent, const VoteHistory& vote_results,
+    explicit ResultsDialog(QWidget *parent, VoteHistory* vote_results, QuestVoteHistory* quest_results,
     	const std::vector<Subscriber*>& player_subscribers );
     ~ResultsDialog();
+
+    std::string getVoteString( VoteHistory vote_results, const std::vector<Subscriber*>& player_subscribers );
+
+    std::string getQuestString( QuestVoteHistory vote_results, const std::vector<Subscriber*>& player_subscribers );
 
 
 private:

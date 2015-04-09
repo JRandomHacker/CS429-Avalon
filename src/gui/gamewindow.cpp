@@ -6,6 +6,7 @@
 #include "guihelpers.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "voteHistory.hpp"
+#include "questVoteHistory.hpp"
 #include "resultsdialog.hpp"
 #include <climits>
 #include <signal.h>
@@ -41,6 +42,7 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
     connect( this, SIGNAL( teamVoteStateUpdated( ) ), this, SLOT( updateTeamVoteStateSlot( ) ) );
     connect( this, SIGNAL( questVoteStateUpdated( ) ), this, SLOT( updateQuestVoteStateSlot( ) ) );
     connect( this, SIGNAL( voteHistoryUpdated( ) ), this, SLOT( updateVoteHistorySlot( ) ) );
+    connect( this, SIGNAL( questHistoryUpdated( ) ), this, SLOT( updateQuestHistorySlot( ) ) );
     connect( this, SIGNAL( currentVotesUpdated( ) ), this, SLOT( updateCurrentVotesSlot( ) ) );
 
     // Start up thread for controller
@@ -205,6 +207,14 @@ void GameWindow::createPlayerSubscribers( ) {
                 },
                 NULL );
     model->subscribe( "voteHistory", voteHistory_subscriber );
+
+    questHistory_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit questHistoryUpdated( );
+                    sem_wait( sync_sem );
+                },
+                NULL );
+    model->subscribe( "questHistory", questHistory_subscriber );
 }
 
 void GameWindow::updatePlayerSlot( unsigned int id ) {
@@ -480,7 +490,22 @@ void GameWindow::updateVoteHistory( ) {
     VoteHistory thisVote = hist.back( );
 
     // Show pop-up with results
-    ResultsDialog results( NULL, thisVote, player_subscribers );
+    ResultsDialog results( NULL, &thisVote, NULL, player_subscribers );
+    results.exec( );
+}
+
+void GameWindow::updateQuestHistorySlot( ) {
+    updateQuestHistory( );
+    sem_post( sync_sem );
+}
+
+void GameWindow::updateQuestHistory( ) {
+    std::vector<QuestVoteHistory> hist = *questHistory_subscriber->getData<std::vector<QuestVoteHistory>>( );
+
+    QuestVoteHistory thisQuest = hist.back( );
+
+    // Show pop-up with results
+    ResultsDialog results( NULL, NULL, &thisQuest, player_subscribers );
     results.exec( );
 }
 
