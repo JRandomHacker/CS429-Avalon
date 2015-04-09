@@ -246,9 +246,9 @@ class ChatMessageRecvAction : public Action {
         /**
          * Public constructor
          *
-         * @param message_text The text of the message recieved
+         * @param recMessage The ChatMessage received from the client
          */
-        ChatMessageRecvAction( std::string message_text, unsigned int other_player_num );
+        ChatMessageRecvAction( ChatMessage recMessage );
 
         /**
          * Destructor

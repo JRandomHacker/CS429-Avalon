@@ -19,7 +19,7 @@
 
 namespace avalon {
 namespace server {
-    
+
 class TeamSelectionState : public ServerControllerState {
 
     public:
@@ -41,7 +41,7 @@ class TeamSelectionState : public ServerControllerState {
          *
          * @param action_to_be_handled The action that this controllerState should parse
          */
-        ServerControllerState* handleAction( Action* action_to_be_handled );
+        ControllerState* handleAction( Action* action_to_be_handled );
 
     private:
         /*
