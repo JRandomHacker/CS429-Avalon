@@ -32,8 +32,14 @@ ControllerState* WaitingForClientsState::handleAction( Action* action_to_be_hand
 
         // See if they requested a custom name
         std::string requestedName = action->getPlayerName( );
-        if( !requestedName.empty( ) ) {
-            model->players[ playerID ]->setName( requestedName );
+        if( !requestedName.empty( ) && requestedName.size( ) < 256 ) {
+
+            // Make sure the name isn't taken
+            for( unsigned int i = 0; i < model->players.size( ); i++ ) {
+                if( model->players[ i ]->getName( ).compare( requestedName ) != 0 ) {
+                    model->players[ playerID ]->setName( requestedName );
+                }
+            }
         }
 
         sendStartingInfo( playerID );
