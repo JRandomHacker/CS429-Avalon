@@ -287,9 +287,9 @@ void Client::recvTeamVoteResults( unsigned int bufLength ) {
     bool votePassed = buf.passed( );
     unsigned int voteTrack = buf.vote_track( );
 
-    std::vector< avalon::player_vote_t >* votes = new std::vector< avalon::player_vote_t >( );
+    std::vector< avalon::player_vote_t > votes;
     for( auto it = buf.votes( ).begin( ); it != buf.votes( ).end( ); it++ ) {
-        votes->push_back( ( avalon::player_vote_t )( *it ) );
+        votes.push_back( ( avalon::player_vote_t )( *it ) );
     }
 
     // Add an action to the queue
@@ -309,16 +309,16 @@ void Client::recvQuestVoteResults( unsigned int bufLength ) {
     // Create a local copy of the GameSettings protobuf
     avalon::network::QuestVoteResults buf;
     buf.ParseFromArray( voteBuf, bufLength );
-    bool votePassed = buf.passed( );
-    unsigned int voteTrack = buf.quest_track( );
+    bool questVotePassed = buf.passed( );
+    unsigned int questVoteTrack = buf.quest_track( );
 
-    std::vector< avalon::player_vote_t >* votes = new std::vector< avalon::player_vote_t >( );
+    std::vector< avalon::player_vote_t > votes;
     for( auto it = buf.votes( ).begin( ); it != buf.votes( ).end( ); it++ ) {
-        votes->push_back( ( avalon::player_vote_t )( *it ) );
+        votes.push_back( ( avalon::player_vote_t )( *it ) );
     }
 
     // Add an action to the queue
-    Action* action = new QuestVoteResultsAction( votePassed, voteTrack, votes );
+    Action* action = new QuestVoteResultsAction( questVotePassed, questVoteTrack, votes );
     queue->addAction( action );
 
     delete[] voteBuf;

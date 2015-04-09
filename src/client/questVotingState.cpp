@@ -36,7 +36,7 @@ namespace client {
 
             auto action = dynamic_cast< QuestVoteResultsAction* >( action_to_be_handled );
 
-            QuestVoteHistory record( action->getVoteResult(), *action->getVotes(), FROMMODEL( unsigned int, "questTrackLength" ) );
+            QuestVoteHistory record( action->getVoteResult(), action->getVotes(), FROMMODEL( unsigned int, "currentQuestTrack" ) );
 
             // Pull the vote history vector from the model, append our new
             // history, and flag it as updated

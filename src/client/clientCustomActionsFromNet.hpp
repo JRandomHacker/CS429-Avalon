@@ -285,7 +285,7 @@ class TeamVoteResultsAction : public Action {
          * @param vote_track The new position of the vote track (0-indexed)
          * @param votes A pointer containing the votes of all players
          */
-        TeamVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes );
+        TeamVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t > votes );
 
         /**
          * Destructor
@@ -311,12 +311,12 @@ class TeamVoteResultsAction : public Action {
          *
          * @return votes A pointer containing the votes of all players
          */
-        std::vector< avalon::player_vote_t >* getVotes( );
+        std::vector< avalon::player_vote_t > getVotes( );
 
     private:
         bool vote_result;
         unsigned int vote_track;
-        std::vector< avalon::player_vote_t >* votes;
+        std::vector< avalon::player_vote_t > votes;
 };
 
 /**
@@ -336,7 +336,7 @@ class QuestVoteResultsAction : public Action {
          * @param QuestVote_track The new position of the QuestVote track (0-indexed)
          * @param QuestVotes A pointer containing the QuestVotes of all players
          */
-        QuestVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes );
+        QuestVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t > votes );
 
         /**
          * Destructor
@@ -362,12 +362,12 @@ class QuestVoteResultsAction : public Action {
          *
          * @return QuestVotes A pointer containing the votes of all players
          */
-        std::vector< avalon::player_vote_t >* getVotes( );
+        std::vector< avalon::player_vote_t > getVotes( );
 
     private:
         bool vote_result;
         unsigned int vote_track;
-        std::vector< avalon::player_vote_t >* votes;
+        std::vector< avalon::player_vote_t > votes;
 };
 
 #endif // CLIENTCUSTOMACTIONSFROMNET_HPP

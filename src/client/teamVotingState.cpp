@@ -37,7 +37,7 @@ namespace client {
             auto action = dynamic_cast< TeamVoteResultsAction* >( action_to_be_handled );
 
             // Construct a new VoteHistory from the current data
-            VoteHistory record( action->getVoteResult(), *action->getVotes(),
+            VoteHistory record( action->getVoteResult(), action->getVotes(),
                 FROMMODEL( std::vector< unsigned int >, "questingTeam" ),
                 FROMMODEL( unsigned int, "voteTrackLength" ),
                 FROMMODEL( unsigned int, "questTrackLength" ) );
