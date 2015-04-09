@@ -54,7 +54,7 @@ namespace server {
                 }
             }
         } else {
-            reportUnhandledAction( action_type );
+            return ServerControllerState::handleAction( action_to_be_handled );
         }
 
         return NULL;
