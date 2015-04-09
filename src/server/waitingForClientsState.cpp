@@ -20,7 +20,7 @@ WaitingForClientsState::WaitingForClientsState( ServInfo* mod ) : ServerControll
 
 WaitingForClientsState::~WaitingForClientsState( ) { }
 
-ServerControllerState* WaitingForClientsState::handleAction( Action* action_to_be_handled ) {
+ControllerState* WaitingForClientsState::handleAction( Action* action_to_be_handled ) {
 
     std::string action_type = action_to_be_handled->getMessage();
 
@@ -45,7 +45,7 @@ ServerControllerState* WaitingForClientsState::handleAction( Action* action_to_b
 
         return new TeamSelectionState( model );
     } else {
-        reportUnhandledAction( action_type );
+        return ServerControllerState::handleAction( action_to_be_handled );
     }
 
     // We haven't changed states

@@ -22,7 +22,7 @@ namespace server {
 
     TeamVotingState::~TeamVotingState( ) { }
 
-    ServerControllerState* TeamVotingState::handleAction( Action* action_to_be_handled ) {
+    ControllerState* TeamVotingState::handleAction( Action* action_to_be_handled ) {
 
         std::string action_type = action_to_be_handled->getMessage();
 
@@ -54,7 +54,7 @@ namespace server {
                 }
             }
         } else {
-            reportUnhandledAction( action_type );
+            return ServerControllerState::handleAction( action_to_be_handled );
         }
 
         return NULL;

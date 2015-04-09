@@ -94,8 +94,8 @@
 
 // ChatMessageRecvAction {
 
-    ChatMessageRecvAction::ChatMessageRecvAction( std::string message_text, unsigned int other_player_num ) :
-	Action( "ChatMessageRecv" ), message( other_player_num, message_text, 1 ) {
+    ChatMessageRecvAction::ChatMessageRecvAction( ChatMessage recMessage ) :
+	Action( "ChatMessageRecv" ), message( recMessage.getSenderId( ), recMessage.getMessageText( ), recMessage.getTimestamp( ) ) {
 
 	}
 

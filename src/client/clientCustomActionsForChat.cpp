@@ -11,23 +11,23 @@
 #include <string>
 #include <time.h>
 
-ChatMessageSentAction::ChatMessageSentAction( std::string message_text ) : Action( "ChatMessageSent" ), message( 1, message_text, 1 ) {
+ChatMessageSentAction::ChatMessageSentAction( avalon::common::ChatMessage mess ) : Action( "ChatMessageSent" ), message( mess ) {
 
 }
 
 ChatMessageSentAction::~ChatMessageSentAction( ) { }
 
-ChatMessage ChatMessageSentAction::getMessage( ) {
+avalon::common::ChatMessage ChatMessageSentAction::getMessage( ) {
 	return message;
 }
 
-ChatMessageRecvAction::ChatMessageRecvAction( std::string message_text, unsigned int other_player_num ) :
-	Action( "ChatMessageRecv" ), message( other_player_num, message_text, 1 ) {
+ChatMessageRecvAction::ChatMessageRecvAction( avalon::common::ChatMessage mess ) :
+	Action( "ChatMessageRecv" ), message( mess ) {
 
 }
 
 ChatMessageRecvAction::~ChatMessageRecvAction( ) { }
 
-ChatMessage ChatMessageRecvAction::getMessage( ) {
+avalon::common::ChatMessage ChatMessageRecvAction::getMessage( ) {
 	return message;
 }

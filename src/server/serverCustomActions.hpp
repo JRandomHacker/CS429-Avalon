@@ -246,9 +246,9 @@ class ChatMessageRecvAction : public Action {
         /**
          * Public constructor
          *
-         * @param message_text The text of the message recieved
+         * @param recMessage The ChatMessage received from the client
          */
-        ChatMessageRecvAction( std::string message_text, unsigned int other_player_num );
+        ChatMessageRecvAction( ChatMessage recMessage );
 
         /**
          * Destructor
@@ -260,11 +260,11 @@ class ChatMessageRecvAction : public Action {
          *
          * @return ChatMessage What the message is
          */
-        ChatMessage getMessage( );
+        avalon::common::ChatMessage getMessage( );
 
     private:
         //! The message received
-        ChatMessage message;
+        avalon::common::ChatMessage message;
 };
 
 #endif // SERVERCUSTOMACTIONS_HPP
