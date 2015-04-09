@@ -8,6 +8,8 @@
 #include "voteHistory.hpp"
 #include "questVoteHistory.hpp"
 #include "resultsdialog.hpp"
+#include "chat_message.hpp"
+#include "clientCustomActionsForChat.hpp"
 #include <climits>
 #include <signal.h>
 #include <QStandardItem>
@@ -44,6 +46,7 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
     connect( this, SIGNAL( voteHistoryUpdated( ) ), this, SLOT( updateVoteHistorySlot( ) ) );
     connect( this, SIGNAL( questHistoryUpdated( ) ), this, SLOT( updateQuestHistorySlot( ) ) );
     connect( this, SIGNAL( currentVotesUpdated( ) ), this, SLOT( updateCurrentVotesSlot( ) ) );
+    connect( this, SIGNAL( chatMessagesUpdated( ) ), this, SLOT( updateChatMessagesSlot( ) ) );
 
     // Start up thread for controller
     pthread_t controlThread;
@@ -215,6 +218,14 @@ void GameWindow::createPlayerSubscribers( ) {
                 },
                 NULL );
     model->subscribe( "questHistory", questHistory_subscriber );
+
+    chatMessages_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit chatMessagesUpdated( );
+                    sem_wait( sync_sem );
+                },
+                NULL );
+    model->subscribe( "chatMessages", chatMessages_subscriber );
 }
 
 void GameWindow::updatePlayerSlot( unsigned int id ) {
@@ -509,6 +520,27 @@ void GameWindow::updateQuestHistory( ) {
     results.exec( );
 }
 
+void GameWindow::updateChatMessagesSlot( ) {
+    updateChatMessages( );
+    sem_post( sync_sem );
+}
+
+void GameWindow::updateChatMessages( ) {
+    std::vector<avalon::common::ChatMessage> messages =
+            *chatMessages_subscriber->getData<std::vector<avalon::common::ChatMessage>>( );
+    avalon::common::ChatMessage message = messages.back( );
+
+    unsigned int senderID = message.getSenderId( );
+    Player p = *player_subscribers[senderID]->getData<Player>( );
+    std::string senderName = p.getName( );
+
+    std::string messageStr = senderName + ": " + message.getMessageText( );
+
+    QStandardItemModel* listModel = (QStandardItemModel*) ui->chatList->model( );
+    QStandardItem* messageItem = new QStandardItem( QString( messageStr.c_str( ) ) );
+    listModel->setItem( listModel->rowCount( ), messageItem );
+}
+
 
 void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
     if(leaderID_subscriber == NULL || myID_subscriber == NULL )
@@ -560,6 +592,18 @@ void GameWindow::on_buttonVoteFail_clicked( ) {
 void GameWindow::on_proposeTeamButton_clicked( ) {
     FinalizeTeamAction* act = new FinalizeTeamAction( );
     control->addActionToQueue( act );
+}
+
+void GameWindow::on_sendMsgButton_clicked( ) {
+    std::string message = ui->chatEdit->toPlainText( ).toStdString( );
+
+    unsigned int myID = *myID_subscriber->getData<unsigned int>( );
+    avalon::common::ChatMessage* chatMess = new avalon::common::ChatMessage( myID, message, 0 );
+    ChatMessageSentAction* act = new ChatMessageSentAction( *chatMess );
+
+    control->addActionToQueue( act );
+
+    ui->chatEdit->clear( );
 }
 
 void GameWindow::closeEvent( QCloseEvent* e ) {

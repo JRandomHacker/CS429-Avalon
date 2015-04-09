@@ -134,6 +134,11 @@ signals:
      */
     void currentVotesUpdated( );
 
+    /**
+     * Signal emitted when chatmessages are updated
+     */
+    void chatMessagesUpdated( );
+
 private slots:
     /**
      *  Makes subscriber to get num of players.
@@ -205,6 +210,11 @@ private slots:
      * Updates who has voted
      */
     void updateCurrentVotesSlot( );
+
+    /**
+     * Callback for chats
+     */
+    void updateChatMessagesSlot( );
     
     /**
      * When the leader clicks a player, they are toggled on/off the team
@@ -233,6 +243,11 @@ private slots:
      * @return None
      */
     void on_proposeTeamButton_clicked( );
+
+    /**
+     * Callback to send chat messages
+     */
+    void on_sendMsgButton_clicked( );
 
 private:
     /**
@@ -332,6 +347,11 @@ private:
      */
     Subscriber* currentVotes_subscriber;
 
+    /**
+     * Subscriber for chat
+     */
+    Subscriber* chatMessages_subscriber;
+
 
     /**
      *  Subscriber vector that watches player objects.
@@ -426,6 +446,11 @@ private:
      * Updates who has voted
      */
     void updateCurrentVotes( );
+
+    /**
+     * Updates chat log
+     */
+    void updateChatMessages( );
 };
 
 #endif // GAMEWINDOW_H
