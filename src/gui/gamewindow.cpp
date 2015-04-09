@@ -226,6 +226,8 @@ void GameWindow::createPlayerSubscribers( ) {
                 },
                 NULL );
     model->subscribe( "chatMessages", chatMessages_subscriber );
+    QStandardItemModel* chatModel = new QStandardItemModel( );
+    ui->chatList->setModel( chatModel );
 }
 
 void GameWindow::updatePlayerSlot( unsigned int id ) {
@@ -539,6 +541,7 @@ void GameWindow::updateChatMessages( ) {
     QStandardItemModel* listModel = (QStandardItemModel*) ui->chatList->model( );
     QStandardItem* messageItem = new QStandardItem( QString( messageStr.c_str( ) ) );
     listModel->setItem( listModel->rowCount( ), messageItem );
+    ui->chatList->scrollToBottom( );
 }
 
 

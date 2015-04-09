@@ -45,6 +45,7 @@ namespace client {
             data->model->addData( "voteHistory", std::vector< VoteHistory >( ) );
             data->model->addData( "teamVoteState", false );
             data->model->addData( "questVoteState", false );
+            data->model->addData( "chatMessages", std::vector< avalon::common::ChatMessage >( ) );
             
             std::vector< unsigned int > players_per_quest;
             for( auto it = sBuf->players_per_quest( ).begin( ); it != sBuf->players_per_quest( ).end( ); it++ ) {
