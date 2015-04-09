@@ -13,6 +13,7 @@
 
 #include "actionHandler.hpp"
 #include "globals.hpp"
+#include "chat_message.hpp"
 
 #ifdef _WIN32
     #include <winsock2.h>
