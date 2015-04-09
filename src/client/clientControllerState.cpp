@@ -48,13 +48,12 @@ namespace client {
         } else if( action_type == "ChatMessageRecv" ) {
 
             auto action = dynamic_cast< ChatMessageRecvAction* >( action_to_be_handled );
-            //unsigned int sender = action->getMessage( ).getSenderId( );
-            //std::string message_text = action->getMessage( ).getMessageText( );
-            //unsigned int timestamp = action->getMessage( ).getTimestamp( );
-
             auto chat_message = action->getMessage( );
 
             // GUI HANDLE CHAT MESSAGE
+            auto chatMessages = data->model->getDataForUpdate< std::vector< avalon::common::ChatMessage > >( "chatMessages" );
+            chatMessages->push_back( chat_message );
+            data->model->flagDataForUpdate( "chatMessages" );
         } else if ( action_type == "EnterQuestVoteState" ) {
             return ControllerState::handleAction( action_to_be_handled );
         }
