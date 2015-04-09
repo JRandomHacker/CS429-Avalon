@@ -5,6 +5,9 @@
 
 #include "chatmessage.pb.h"
 
+namespace avalon {
+namespace common {
+
 /**
  * A class representing a chat message, either to be sent or having been received
  *
@@ -68,5 +71,8 @@ class ChatMessage {
         std::string message_text;
         unsigned int timestamp;
 };
+
+} // namespace common
+} // namespace avalon
 
 #endif // CHAT_MESSAGE_HPP

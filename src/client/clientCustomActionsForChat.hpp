@@ -24,7 +24,7 @@ class ChatMessageSentAction : public Action {
          *
          * @param message_text The text of the message to send
          */
-        ChatMessageSentAction( std::string message_text );
+        ChatMessageSentAction( avalon::common::ChatMessage mess );
 
         /**
          * Destructor
@@ -36,11 +36,11 @@ class ChatMessageSentAction : public Action {
          *
          * @return ChatMessage What the message text is
          */
-        ChatMessage getMessage( );
+        avalon::common::ChatMessage getMessage( );
 
     private:
         //! The message being sent
-        ChatMessage message;
+        avalon::common::ChatMessage message;
 };
 
 /**
@@ -58,7 +58,7 @@ class ChatMessageRecvAction : public Action {
          *
          * @param message_text The text of the message recieved
          */
-        ChatMessageRecvAction( std::string message_text, unsigned int other_player_num );
+        ChatMessageRecvAction( avalon::common::ChatMessage mess );
 
         /**
          * Destructor
@@ -70,11 +70,11 @@ class ChatMessageRecvAction : public Action {
          *
          * @return ChatMessage What the message is
          */
-        ChatMessage getMessage( );
+        avalon::common::ChatMessage getMessage( );
 
     private:
         //! The message received
-        ChatMessage message;
+        avalon::common::ChatMessage message;
 };
 
 #endif // CLIENTCUSTOMACTIONSFORCHAT_HPP
