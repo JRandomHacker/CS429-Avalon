@@ -104,7 +104,7 @@
 // }
 
 // VoteResultsAction {
-    TeamVoteResultsAction::TeamVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes ) : Action( "TeamVoteResults" ) {
+    TeamVoteResultsAction::TeamVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t > votes ) : Action( "TeamVoteResults" ) {
         this->vote_result = vote_result;
         this->vote_track = vote_track;
         this->votes = votes;
@@ -120,13 +120,13 @@
         return vote_track;
     }
 
-    std::vector< avalon::player_vote_t >* TeamVoteResultsAction::getVotes( ) {
+    std::vector< avalon::player_vote_t > TeamVoteResultsAction::getVotes( ) {
         return votes;
     }
 // }
 
 // QuestVoteResultsAction {
-    QuestVoteResultsAction::QuestVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t >* votes ) : Action( "QuestVoteResults" ) {
+    QuestVoteResultsAction::QuestVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t > votes ) : Action( "QuestVoteResults" ) {
         this->vote_result = vote_result;
         this->vote_track = vote_track;
         this->votes = votes;
@@ -142,7 +142,7 @@
         return vote_track;
     }
 
-    std::vector< avalon::player_vote_t >* QuestVoteResultsAction::getVotes( ) {
+    std::vector< avalon::player_vote_t > QuestVoteResultsAction::getVotes( ) {
         return votes;
     }
 // }

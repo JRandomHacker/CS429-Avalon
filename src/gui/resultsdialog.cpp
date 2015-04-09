@@ -64,7 +64,7 @@ std::string ResultsDialog::getQuestString( QuestVoteHistory quest_results,
 
     int nPass = 0;
     int nFail = 0;
-    for( int i = 0; i < votes.size( ); i++ ) {
+    for( unsigned int i = 0; i < votes.size( ); i++ ) {
         if( votes[i] == avalon::YES )
             nPass++;
         else if( votes[i] == avalon::NO )

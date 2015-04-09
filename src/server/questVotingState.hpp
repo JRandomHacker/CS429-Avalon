@@ -74,7 +74,7 @@ class QuestVotingState : public ServerControllerState {
          * @return None
          */
         bool figureOutResultsOfVote( );
-        
+
         avalon::player_vote_t getVote( unsigned int player_id );
 };
 

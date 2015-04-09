@@ -170,7 +170,7 @@ namespace server {
             }
         }
 
-        return no >= model->fails_per_quest[ model->quest_track ];
+        return no < model->fails_per_quest[ model->quest_track ];
     }
 
     avalon::player_vote_t QuestVotingState::getVote( unsigned int player_id ) {

@@ -19,7 +19,7 @@
 
 namespace avalon {
 namespace server {
-    
+
 class TeamSelectionState : public ServerControllerState {
 
     public:
