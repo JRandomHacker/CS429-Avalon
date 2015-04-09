@@ -94,14 +94,14 @@
 
 // ChatMessageRecvAction {
 
-    ChatMessageRecvAction::ChatMessageRecvAction( ChatMessage recMessage ) :
+    ChatMessageRecvAction::ChatMessageRecvAction( avalon::common::ChatMessage recMessage ) :
 	Action( "ChatMessageRecv" ), message( recMessage.getSenderId( ), recMessage.getMessageText( ), recMessage.getTimestamp( ) ) {
 
 	}
 
 	ChatMessageRecvAction::~ChatMessageRecvAction( ) { }
 
-	ChatMessage ChatMessageRecvAction::getMessage( ) {
+	avalon::common::ChatMessage ChatMessageRecvAction::getMessage( ) {
             return message;
 	}
 // }

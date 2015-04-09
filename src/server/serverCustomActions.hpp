@@ -248,7 +248,7 @@ class ChatMessageRecvAction : public Action {
          *
          * @param recMessage The ChatMessage received from the client
          */
-        ChatMessageRecvAction( ChatMessage recMessage );
+        ChatMessageRecvAction( avalon::common::ChatMessage recMessage );
 
         /**
          * Destructor

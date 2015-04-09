@@ -9,7 +9,6 @@
 #include "globals.hpp"
 
 #include <string>
-#include <time.h>
 
 ChatMessageSentAction::ChatMessageSentAction( avalon::common::ChatMessage mess ) : Action( "ChatMessageSent" ), message( mess ) {
 

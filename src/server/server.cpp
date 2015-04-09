@@ -208,7 +208,9 @@ void Server::recvMessage( SOCKET recvSock, int bufLength ) {
     buf.ParseFromArray( buffer, bufLength );
     delete[] buffer;
 
-    Action* action = new ChatMessageRecvAction( buf.message_text( ), buf.sender_id( ) );
+    avalon::common::ChatMessage recMessage( buf.sender_id( ), buf.message_text( ), buf.timestamp( ) );
+
+    Action* action = new ChatMessageRecvAction( recMessage );
     queue->addAction( action );
 }
 
