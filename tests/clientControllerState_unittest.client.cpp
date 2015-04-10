@@ -7,18 +7,24 @@
  */
 
 #include "clientControllerState.hpp"
+#include "lobbyState.hpp"
+#include "../src/client/questVotingState.hpp"
+#include "../src/client/teamSelectionState.hpp"
+#include "../src/client/teamVotingState.hpp"
 #include "model.hpp"
 #include "voteHistory.hpp"
 #include "mockClient.hpp"
 #include "clientInfo.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
+#include "clientCustomActionsForChat.hpp"
 #include "vote.pb.h"
 #include "teamselection.pb.h"
 #include "settings.pb.h"
 #include "player.pb.h"
 #include "subscriber.hpp"
 #include "player.hpp"
+#include "chat_message.hpp"
 
 #include "gtest/gtest.h"
 
@@ -69,14 +75,14 @@ class ClientControllerStateTestFixture: public ::testing::Test {
         }
 };
 
-TEST_F( ClientControllerStateTestFixture, TestVotingStateVoteAction ) {
-    avalon::client::VotingState testState( testInfo );
+TEST_F( ClientControllerStateTestFixture, TestTeamVotingStateVoteAction ) {
+    avalon::client::TeamVotingState testState( testInfo );
 
     testAction = new TeamVoteAction( avalon::YES );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( NULL, resultState );
-    ASSERT_EQ( avalon::network::VOTE_BUF, testClient->getLastBufType( ) );
+    ASSERT_EQ( avalon::network::TEAM_VOTE_BUF, testClient->getLastBufType( ) );
 
     std::string sentBuf = testClient->getLastProtobuf( );
     avalon::network::Vote sentVote;
@@ -86,19 +92,19 @@ TEST_F( ClientControllerStateTestFixture, TestVotingStateVoteAction ) {
     ASSERT_EQ( 3, sentVote.id( ) );
 }
 
-TEST_F( ClientControllerStateTestFixture, TestVotingStateResultsAction ) {
-    avalon::client::VotingState testState( testInfo );
+TEST_F( ClientControllerStateTestFixture, TestTeamVotingStateResultsAction ) {
+    avalon::client::TeamVotingState testState( testInfo );
 
     testModel->addData< unsigned int >( "currentVoteTrack" , 0);
     testModel->addData< unsigned int >( "voteTrackLength", 5 );
     testModel->addData< unsigned int >( "questTrackLength", 5 );
     testModel->addData( "questingTeam", std::vector< unsigned int >( ) );
     testModel->addData( "voteHistory", std::vector< VoteHistory >( ) );
-    std::vector< avalon::player_vote_t >* testVotes = new std::vector< avalon::player_vote_t >( );
-    testVotes->push_back( avalon::YES );
-    testVotes->push_back( avalon::NO );
-    testVotes->push_back( avalon::YES );
-    testAction = new VoteResultsAction( true, 2, testVotes );
+    std::vector< avalon::player_vote_t > testVotes;
+    testVotes.push_back( avalon::YES );
+    testVotes.push_back( avalon::NO );
+    testVotes.push_back( avalon::YES );
+    testAction = new TeamVoteResultsAction( true, 2, testVotes );
     ControllerState* resultState = testState.handleAction( testAction );
 
     ASSERT_EQ( NULL, resultState );
@@ -111,8 +117,8 @@ TEST_F( ClientControllerStateTestFixture, TestVotingStateResultsAction ) {
     delete sub;
 }
 
-TEST_F( ClientControllerStateTestFixture, TestVotingStateTeamStateAction ) {
-    avalon::client::VotingState testState( testInfo );
+TEST_F( ClientControllerStateTestFixture, TestTeamVotingStateTeamStateAction ) {
+    avalon::client::TeamVotingState testState( testInfo );
 
     std::vector< unsigned int > testTeam { 2, 3, 5 };
     testInfo->model->addData( "questingTeam", testTeam );
@@ -279,4 +285,22 @@ TEST_F( ClientControllerStateTestFixture, TestLobbyStateTeamStateAction ) {
     unsigned int leader = *testInfo->model->referenceData< unsigned int >( "leaderID" );
     ASSERT_EQ( 0, size );
     ASSERT_EQ( 1, leader );
+}
+
+TEST_F( ClientControllerStateTestFixture, TestChatMessageSent ) {
+    avalon::client::LobbyState testState( testInfo );
+
+    avalon::common::ChatMessage msg( 3, "Test Message Text", 5 );
+    testAction = new ChatMessageSentAction( msg );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    ASSERT_EQ( NULL, resultState );
+
+    std::string sentBuf = testClient->getLastProtobuf( );
+    avalon::network::ChatMessage sentMsgBuf;
+    sentMsgBuf.ParseFromString( sentBuf );
+
+    ASSERT_EQ( "Test Message Text", sentMsgBuf.message_text( ) );
+    ASSERT_EQ( 3, sentMsgBuf.sender_id( ) );
+    ASSERT_EQ( 5, sentMsgBuf.timestamp( ) );
 }
