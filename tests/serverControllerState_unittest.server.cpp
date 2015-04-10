@@ -7,6 +7,10 @@
  */
 
 #include "serverControllerState.hpp"
+#include "../src/server/questVotingState.hpp"
+#include "../src/server/teamSelectionState.hpp"
+#include "../src/server/teamVotingState.hpp"
+#include "../src/server/waitingForClientsState.hpp"
 #include "model.hpp"
 #include "mockServer.hpp"
 #include "serverInfo.hpp"
@@ -17,7 +21,7 @@
 #include "settings.pb.h"
 #include "teamselection.pb.h"
 #include "vote.pb.h"
-#include "voteresults.pb.h"
+#include "teamvoteresults.pb.h"
 
 #include "gtest/gtest.h"
 
@@ -41,6 +45,8 @@ class ServerControllerStateTestFixture: public ::testing::Test {
             testInfo->server = testServer;
             testInfo->leader = 2;
             testInfo->vote_track_length = 5;
+            testInfo->players_per_quest = {{ 2, 2, 3, 4, 4 }};
+            testInfo->quest_track = 0;
 
             std::vector< Player* > testPlayers;
             testPlayers.push_back( new Player( "player1", avalon::NONE, avalon::GOOD ) );
@@ -61,6 +67,13 @@ class ServerControllerStateTestFixture: public ::testing::Test {
             testSettings.set_assassin( false );
             testSettings.set_oberon( false );
             testInfo->settingsBuf = testSettings;
+        }
+
+        void create_team( int team_size ) {
+            testInfo->team.clear();
+            for ( int i = 0; i < team_size; i++ ) {
+                testInfo->team.push_back(i);
+            }
         }
 
         // Run after every test
@@ -157,6 +170,8 @@ TEST_F( ServerControllerStateTestFixture, TestTeamStateToggleActionDeselect ) {
 TEST_F( ServerControllerStateTestFixture, TestTeamStateConfirmActionNotLeader ) {
     avalon::server::TeamSelectionState testState( testInfo );
 
+    create_team(2);
+
     testAction = new ConfirmTeamSelectionAction( 3 );
     ControllerState* resultState = testState.handleAction( testAction );
 
@@ -167,6 +182,8 @@ TEST_F( ServerControllerStateTestFixture, TestTeamStateConfirmActionNotLeader ) 
 TEST_F( ServerControllerStateTestFixture, TestTeamStateConfirmActionLeader ) {
     avalon::server::TeamSelectionState testState( testInfo );
 
+    create_team(2);
+
     testAction = new ConfirmTeamSelectionAction( 2 );
     ControllerState* resultState = testState.handleAction( testAction );
 
@@ -175,7 +192,7 @@ TEST_F( ServerControllerStateTestFixture, TestTeamStateConfirmActionLeader ) {
 }
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionNew ) {
-    avalon::server::VotingState testState( testInfo );
+    avalon::server::TeamVotingState testState( testInfo );
 
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testInfo->votes = testVotes;
@@ -194,7 +211,7 @@ TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionNew ) {
 }
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionRepeat ) {
-    avalon::server::VotingState testState( testInfo );
+    avalon::server::TeamVotingState testState( testInfo );
 
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 2, avalon::YES ) );
@@ -208,7 +225,7 @@ TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionRepeat ) {
 }
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionChange ) {
-    avalon::server::VotingState testState( testInfo );
+    avalon::server::TeamVotingState testState( testInfo );
 
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 2, avalon::NO ) );
@@ -228,7 +245,7 @@ TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionChange ) {
 }
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionSuccess ) {
-    avalon::server::VotingState testState( testInfo );
+    avalon::server::TeamVotingState testState( testInfo );
 
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 1, avalon::YES ) );
@@ -238,7 +255,7 @@ TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionSuccess ) {
     testAction = new TeamVoteAction( 2, avalon::YES );
     ControllerState* resultState = testState.handleAction( testAction );
 
-    EXPECT_EQ( "QuestVote", resultState->getType( ) );
+    EXPECT_EQ( "QuestVoting", resultState->getType( ) );
 
     std::string sentBuf = testServer->getLastProtobuf( );
     avalon::network::VoteResults sentResults;
@@ -249,7 +266,7 @@ TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionSuccess ) {
 }
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionFailure ) {
-    avalon::server::VotingState testState( testInfo );
+    avalon::server::TeamVotingState testState( testInfo );
 
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 1, avalon::YES ) );
@@ -271,7 +288,7 @@ TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionFailure ) {
 }
 
 TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionLoss ) {
-    avalon::server::VotingState testState( testInfo );
+    avalon::server::TeamVotingState testState( testInfo );
 
     std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
     testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 1, avalon::YES ) );
