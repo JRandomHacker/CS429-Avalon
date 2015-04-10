@@ -294,7 +294,7 @@ TEST_F( ClientControllerStateTestFixture, TestChatMessageSent ) {
     testAction = new ChatMessageSentAction( msg );
     ControllerState* resultState = testState.handleAction( testAction );
 
-    ASSERT_EQ( NULL, resultState );
+    EXPECT_EQ( NULL, resultState );
 
     std::string sentBuf = testClient->getLastProtobuf( );
     avalon::network::ChatMessage sentMsgBuf;
@@ -303,4 +303,56 @@ TEST_F( ClientControllerStateTestFixture, TestChatMessageSent ) {
     ASSERT_EQ( "Test Message Text", sentMsgBuf.message_text( ) );
     ASSERT_EQ( 3, sentMsgBuf.sender_id( ) );
     ASSERT_EQ( 5, sentMsgBuf.timestamp( ) );
+}
+
+TEST_F( ClientControllerStateTestFixture, TestChatMessageReceived ) {
+    avalon::client::LobbyState testState( testInfo );
+    testInfo->model->addData( "chatMessages", std::vector< avalon::common::ChatMessage >( ) );
+
+    avalon::common::ChatMessage msg( 3, "Test Message Text", 5 );
+    testAction = new ChatMessageRecvAction( msg );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+
+    auto result_msg = (*testInfo->model->referenceData< std::vector< avalon::common::ChatMessage > >( "chatMessages" ))[0];
+
+    ASSERT_EQ( "Test Message Text", result_msg.getMessageText( ) );
+    ASSERT_EQ( 3, result_msg.getSenderId( ) );
+    ASSERT_EQ( 5, result_msg.getTimestamp( ) );
+}
+
+TEST_F( ClientControllerStateTestFixture, TestChatMessagesReceivedInOrder ) {
+    avalon::client::LobbyState testState( testInfo );
+    testInfo->model->addData( "chatMessages", std::vector< avalon::common::ChatMessage >( ) );
+
+    avalon::common::ChatMessage msg1( 1, "Test Message Text1", 3 );
+    avalon::common::ChatMessage msg2( 2, "Test Message Text2", 4 );
+    avalon::common::ChatMessage msg3( 3, "Test Message Text3", 5 );
+    Action* testAction1 = new ChatMessageRecvAction( msg1 );
+    Action* testAction2 = new ChatMessageRecvAction( msg2 );
+    Action* testAction3 = new ChatMessageRecvAction( msg3 );
+    ControllerState* resultState;
+    resultState = testState.handleAction( testAction1 );
+    EXPECT_EQ( NULL, resultState );
+    resultState = testState.handleAction( testAction2 );
+    EXPECT_EQ( NULL, resultState );
+    resultState = testState.handleAction( testAction3 );
+    EXPECT_EQ( NULL, resultState );
+    
+    auto result_msgs = *testInfo->model->referenceData< std::vector< avalon::common::ChatMessage > >( "chatMessages" );
+
+    ASSERT_EQ( 3, result_msgs.size( ) );
+
+    ASSERT_EQ( "Test Message Text1", result_msgs[0].getMessageText( ) );
+    ASSERT_EQ( 1, result_msgs[0].getSenderId( ) );
+    ASSERT_EQ( 3, result_msgs[0].getTimestamp( ) );
+
+    ASSERT_EQ( "Test Message Text2", result_msgs[1].getMessageText( ) );
+    ASSERT_EQ( 2, result_msgs[1].getSenderId( ) );
+    ASSERT_EQ( 4, result_msgs[1].getTimestamp( ) );
+
+    ASSERT_EQ( "Test Message Text3", result_msgs[2].getMessageText( ) );
+    ASSERT_EQ( 3, result_msgs[2].getSenderId( ) );
+    ASSERT_EQ( 5, result_msgs[2].getTimestamp( ) );
 }
