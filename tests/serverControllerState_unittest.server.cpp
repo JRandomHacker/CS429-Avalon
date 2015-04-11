@@ -11,6 +11,7 @@
 #include "../src/server/teamSelectionState.hpp"
 #include "../src/server/teamVotingState.hpp"
 #include "../src/server/waitingForClientsState.hpp"
+#include "../src/server/questVotingState.hpp"
 #include "model.hpp"
 #include "mockServer.hpp"
 #include "serverInfo.hpp"
@@ -27,6 +28,7 @@
 
 #include <string>
 #include <vector>
+#include <random>
 
 class ServerControllerStateTestFixture: public ::testing::Test {
 
@@ -307,4 +309,109 @@ TEST_F( ServerControllerStateTestFixture, TestVotingStateVoteActionLoss ) {
 
     ASSERT_EQ( false, sentResults.passed( ) );
     ASSERT_EQ( avalon::network::ENTER_END_GAME_BUF, testServer->getLastState( ) );
+}
+
+TEST_F( ServerControllerStateTestFixture, TestQuestStateVoteActionNew ) {
+    avalon::server::QuestVotingState testState( testInfo );
+
+    testInfo->team = { 2, 3, 4 };
+    std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
+    testInfo->votes = testVotes;
+
+    testAction = new QuestVoteAction( 2, avalon::YES );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+
+    std::string sentBuf = testServer->getLastProtobuf( );
+    avalon::network::Vote sentVote;
+    sentVote.ParseFromString( sentBuf );
+
+    EXPECT_EQ( 2, sentVote.id( ) );
+    EXPECT_EQ( avalon::HIDDEN, sentVote.vote( ) );
+}
+
+TEST_F( ServerControllerStateTestFixture, TestQuestStateVoteActionRepeat ) {
+    avalon::server::QuestVotingState testState( testInfo );
+
+    testInfo->team = { 2, 3, 4 };
+    std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
+    testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 2, avalon::YES ) );
+    testInfo->votes = testVotes;
+
+    testAction = new QuestVoteAction( 2, avalon::YES );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+    EXPECT_EQ( "" , testServer->getLastProtobuf( ) );
+}
+
+TEST_F( ServerControllerStateTestFixture, TestQuestStateVoteActionReject ) {
+    avalon::server::QuestVotingState testState( testInfo );
+
+    testInfo->team = { 2, 3, 4 };
+    std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
+    testInfo->votes = testVotes;
+
+    testAction = new QuestVoteAction( 1, avalon::YES );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+    EXPECT_EQ( "" , testServer->getLastProtobuf( ) );
+}
+
+TEST_F( ServerControllerStateTestFixture, TestQuestStateVoteActionSuccess ) {
+    avalon::server::QuestVotingState testState( testInfo );
+
+    testInfo->team = { 2, 3, 4 };
+    testInfo->quest_track = 0;
+    testInfo->fails_per_quest = { 1, 1, 1, 1, 1 };
+    testInfo->quests_failed = 0;
+    testInfo->quest_track_length = 5;
+    std::random_device rd; // Seed
+    testInfo->rng = new std::mt19937( rd( ) );
+    std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
+    testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 2, avalon::YES ) );
+    testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 3, avalon::YES ) );
+    testInfo->votes = testVotes;
+
+    testAction = new QuestVoteAction( 4, avalon::YES );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( "TeamSelection", resultState->getType( ) );
+
+    std::string sentBuf = testServer->getLastProtobuf( );
+    avalon::network::VoteResults sentResults;
+    sentResults.ParseFromString( sentBuf );
+
+    ASSERT_EQ( true, sentResults.passed( ) );
+    EXPECT_EQ( avalon::network::ENTER_TEAM_SELECTION_BUF, testServer->getLastState( ) );
+}
+
+TEST_F( ServerControllerStateTestFixture, TestQuestStateVoteActionFailure ) {
+    avalon::server::QuestVotingState testState( testInfo );
+
+    testInfo->team = { 2, 3, 4 };
+    testInfo->quest_track = 0;
+    testInfo->fails_per_quest = { 1, 1, 1, 1, 1 };
+    testInfo->quests_failed = 0;
+    testInfo->quest_track_length = 5;
+    std::random_device rd; // Seed
+    testInfo->rng = new std::mt19937( rd( ) );
+    std::vector< std::pair< unsigned int, avalon::player_vote_t > > testVotes;
+    testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 2, avalon::YES ) );
+    testVotes.push_back( std::pair< unsigned int, avalon::player_vote_t >( 3, avalon::NO ) );
+    testInfo->votes = testVotes;
+
+    testAction = new QuestVoteAction( 4, avalon::YES );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( "TeamSelection", resultState->getType( ) );
+
+    std::string sentBuf = testServer->getLastProtobuf( );
+    avalon::network::VoteResults sentResults;
+    sentResults.ParseFromString( sentBuf );
+
+    ASSERT_EQ( false, sentResults.passed( ) );
+    EXPECT_EQ( avalon::network::ENTER_TEAM_SELECTION_BUF, testServer->getLastState( ) );
 }

@@ -11,8 +11,10 @@
 #include "../src/client/questVotingState.hpp"
 #include "../src/client/teamSelectionState.hpp"
 #include "../src/client/teamVotingState.hpp"
+#include "../src/client/questVotingState.hpp"
 #include "model.hpp"
 #include "voteHistory.hpp"
+#include "questVoteHistory.hpp"
 #include "mockClient.hpp"
 #include "clientInfo.hpp"
 #include "clientCustomActionsFromGUI.hpp"
@@ -355,4 +357,66 @@ TEST_F( ClientControllerStateTestFixture, TestChatMessagesReceivedInOrder ) {
     ASSERT_EQ( "Test Message Text3", result_msgs[2].getMessageText( ) );
     ASSERT_EQ( 3, result_msgs[2].getSenderId( ) );
     ASSERT_EQ( 5, result_msgs[2].getTimestamp( ) );
+}
+
+TEST_F( ClientControllerStateTestFixture, TestQuestVotingStateYesVote ) {
+    avalon::client::QuestVotingState testState( testInfo );
+    
+    testAction = new QuestVoteAction( avalon::YES );
+    ControllerState* resultState = testState.handleAction( testAction );
+    
+    EXPECT_EQ( NULL, resultState );
+    EXPECT_EQ( avalon::network::QUEST_VOTE_BUF, testClient->getLastBufType( ) );
+    
+    std::string sentBuf = testClient->getLastProtobuf( );
+    avalon::network::Vote voteBuf;
+    voteBuf.ParseFromString( sentBuf );
+    
+    EXPECT_EQ( 3, voteBuf.id( ) );
+    EXPECT_EQ( avalon::YES, voteBuf.vote( ) );
+}
+
+TEST_F( ClientControllerStateTestFixture, TestQuestVotingStateResultsAction ) {
+    avalon::client::QuestVotingState testState( testInfo );
+    testInfo->model->addData< unsigned int >( "currentQuestTrack", 0 );
+    testInfo->model->addData( "questHistory", std::vector< QuestVoteHistory >( ) );
+    
+    std::vector< avalon::player_vote_t > votes { avalon::YES, avalon::YES, avalon::NO };
+    testAction = new QuestVoteResultsAction( true, 2, votes );
+    ControllerState* resultState = testState.handleAction( testAction );
+    
+    EXPECT_EQ( NULL, resultState );
+    
+    auto history = *testInfo->model->referenceData< std::vector< QuestVoteHistory > >( "questHistory" );
+    
+    EXPECT_EQ( 1, history.size( ) );
+    EXPECT_TRUE( history[ 1 ].getVotePassed( ) );
+    EXPECT_EQ( 2, *testInfo->model->referenceData< unsigned int >( "currentQuestTrack" ) );
+}
+
+TEST_F( ClientControllerStateTestFixture, TestQuestVotingStateNetworkVote ) {
+    avalon::client::QuestVotingState testState( testInfo );
+    testInfo->model->addData< unsigned int >( "numberOfPlayers", 3 );
+    testState.setupState( );
+    
+    testAction = new ReceiveQuestVoteAction( 1 );
+    ControllerState* resultState = testState.handleAction( testAction );
+    
+    EXPECT_EQ( NULL, resultState );
+    
+    auto votes = *testInfo->model->referenceData< std::vector< avalon::player_vote_t > >( "currentVotes" );
+    EXPECT_EQ( avalon::HIDDEN, votes[ 1 ] );
+}
+
+TEST_F( ClientControllerStateTestFixture, TestQuestVotingStateNewTeamAction ) {
+    avalon::client::QuestVotingState testState( testInfo );
+    std::vector< unsigned int > testTeam { 2, 3, 5 };
+    testInfo->model->addData( "questingTeam", testTeam );
+
+    testAction = new EnterTeamSelectionAction( 4 );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( "TeamSelection", resultState->getType( ) );
+    EXPECT_EQ( 4, *testInfo->model->referenceData< unsigned int >( "leaderID" ) );
+    EXPECT_EQ( 0, testInfo->model->referenceData< std::vector< unsigned int > >( "questingTeam" )->size( ) );
 }
