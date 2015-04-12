@@ -26,10 +26,9 @@ std::string avalon::gui::roleToString( avalon::special_roles_t role ) {
     return "Role not recognized";
 }
 
-
 std::string avalon::gui::roleToImage( avalon::special_roles_t role ) {
 
-    std::string desire = ":/images/images/";
+    std::string desire = ":/images/";
 
     switch( role ){
         case avalon::MERLIN:
