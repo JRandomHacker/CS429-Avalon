@@ -16,8 +16,15 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0" rowspan="4">
     <layout class="QVBoxLayout" name="rolesLayout" stretch="0,0,0,0">
-     <item>
-      <widget class="QGraphicsView" name="playerAvatar"/>
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="playerLabelTest">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="images.qrc">:/images/images/GENERIC.jpg</pixmap>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QGroupBox" name="playersListSection">
@@ -203,6 +210,8 @@
   <zorder>line_2</zorder>
   <zorder></zorder>
  </widget>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>

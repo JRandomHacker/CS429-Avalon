@@ -268,6 +268,11 @@ private:
     sem_t * sync_sem;
 
     /**
+      * Pixmap object storing the user's avatar
+      */
+    QPixmap* myID_avatar;
+
+    /**
      *  Subscriber that gets num of players from the model.
      */
     Subscriber* num_players_subscriber;
@@ -276,7 +281,7 @@ private:
      *  Subscriber that gets current player ID from the model.
      */
     Subscriber* myID_subscriber;
-    
+
     /**
      *  Subscriber that gets the number of evil players from the model.
      */

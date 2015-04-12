@@ -55,3 +55,6 @@ unix {
     PKGCONFIG += protobuf
     QT_CONFIG -= no-pkg-config
 }
+
+RESOURCES += \
+    images.qrc
