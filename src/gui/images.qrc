@@ -8,4 +8,7 @@
         <file>images/OBERON.jpg</file>
         <file>images/PERCIVAL.jpg</file>
     </qresource>
+    <qresource prefix="/">
+        <file>images/MENU.jpg</file>
+    </qresource>
 </RCC>

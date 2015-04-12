@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>177</width>
-    <height>202</height>
+    <width>340</width>
+    <height>527</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,6 +21,16 @@
     <property name="rightMargin">
      <number>20</number>
     </property>
+    <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="images.qrc">:/images/MENU.jpg</pixmap>
+      </property>
+     </widget>
+    </item>
     <item>
      <widget class="QPushButton" name="buttonJoinMenu">
       <property name="sizePolicy">
@@ -82,6 +92,8 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>
