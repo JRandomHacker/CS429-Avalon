@@ -288,7 +288,7 @@ TEST_F( ClientControllerStateTestFixture, TestLobbyStateTeamStateAction ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestChatMessageSent ) {
-    avalon::client::LobbyState testState( testInfo );
+    avalon::client::ClientControllerState testState( "testState", testInfo );
 
     avalon::common::ChatMessage msg( 3, "Test Message Text", 5 );
     testAction = new ChatMessageSentAction( msg );
@@ -306,6 +306,41 @@ TEST_F( ClientControllerStateTestFixture, TestChatMessageSent ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestChatMessageReceived ) {
+    avalon::client::ClientControllerState testState( "testState", testInfo );
+    testInfo->model->addData( "chatMessages", std::vector< avalon::common::ChatMessage >( ) );
+
+    avalon::common::ChatMessage msg( 3, "Test Message Text", 5 );
+    testAction = new ChatMessageRecvAction( msg );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+
+    auto result_msg = (*testInfo->model->referenceData< std::vector< avalon::common::ChatMessage > >( "chatMessages" ))[0];
+
+    ASSERT_EQ( "Test Message Text", result_msg.getMessageText( ) );
+    ASSERT_EQ( 3, result_msg.getSenderId( ) );
+    ASSERT_EQ( 5, result_msg.getTimestamp( ) );
+}
+
+TEST_F( ClientControllerStateTestFixture, TestChatMessageSentChildState ) {
+    avalon::client::LobbyState testState( testInfo );
+
+    avalon::common::ChatMessage msg( 3, "Test Message Text", 5 );
+    testAction = new ChatMessageSentAction( msg );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+
+    std::string sentBuf = testClient->getLastProtobuf( );
+    avalon::network::ChatMessage sentMsgBuf;
+    sentMsgBuf.ParseFromString( sentBuf );
+
+    ASSERT_EQ( "Test Message Text", sentMsgBuf.message_text( ) );
+    ASSERT_EQ( 3, sentMsgBuf.sender_id( ) );
+    ASSERT_EQ( 5, sentMsgBuf.timestamp( ) );
+}
+
+TEST_F( ClientControllerStateTestFixture, TestChatMessageReceivedChildState ) {
     avalon::client::LobbyState testState( testInfo );
     testInfo->model->addData( "chatMessages", std::vector< avalon::common::ChatMessage >( ) );
 
@@ -323,7 +358,7 @@ TEST_F( ClientControllerStateTestFixture, TestChatMessageReceived ) {
 }
 
 TEST_F( ClientControllerStateTestFixture, TestChatMessagesReceivedInOrder ) {
-    avalon::client::LobbyState testState( testInfo );
+    avalon::client::ClientControllerState testState( "testState", testInfo );
     testInfo->model->addData( "chatMessages", std::vector< avalon::common::ChatMessage >( ) );
 
     avalon::common::ChatMessage msg1( 1, "Test Message Text1", 3 );
