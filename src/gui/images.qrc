@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>images/ASSASSIN.jpg</file>
+        <file>images/GENERIC.jpg</file>
+        <file>images/MERLIN.jpg</file>
+        <file>images/MORDRED.jpg</file>
+        <file>images/MORGANA.jpg</file>
+        <file>images/OBERON.jpg</file>
+        <file>images/PERCIVAL.jpg</file>
+    </qresource>
+</RCC>

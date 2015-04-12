@@ -254,8 +254,14 @@ void GameWindow::updatePlayer( unsigned int id ) {
     std::string newString = "<waiting for player>";
     if( p != NULL ) {
         newString = p->getName( );
-        if( id == *myID_subscriber->getData<unsigned int>( ) )
+        if( id == *myID_subscriber->getData<unsigned int>( ) ) {
             newString += " (me)";
+
+            //Load Player Avatar
+            ui->playerLabelTest->setVisible(false);
+            ui->playerLabelTest->setPixmap( QPixmap( avalon::gui::roleToImage( p->getRole() ).c_str( ) ) );
+            ui->playerLabelTest->setVisible(true);
+        }
 
         if( id == 0 )
             newString += " (host)";

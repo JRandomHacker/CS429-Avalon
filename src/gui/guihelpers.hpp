@@ -10,7 +10,7 @@ namespace avalon
     {
         std::string roleToString(avalon::special_roles_t role);
 
-        //std::string roleToImage(avalon::special_roles_t role);
+        std::string roleToImage(avalon::special_roles_t role);
 
         std::string alignmentToString(avalon::alignment_t align);
     }
