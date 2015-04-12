@@ -26,6 +26,13 @@ std::string avalon::gui::roleToString( avalon::special_roles_t role ) {
     return "Role not recognized";
 }
 
+/*
+std::string avalon::gui:roleToImage( avalon::special_roles_t role ) {
+
+    return "images/GENERIC.png";
+
+}*/
+
 std::string avalon::gui::alignmentToString( avalon::alignment_t align ) {
     switch( align ) {
 

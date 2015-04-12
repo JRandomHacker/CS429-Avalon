@@ -15,7 +15,14 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0" rowspan="4">
-    <layout class="QVBoxLayout" name="rolesLayout" stretch="0,0,0,0">
+    <layout class="QVBoxLayout" name="rolesLayout" stretch="0,0,0,0,0">
+     <item>
+      <widget class="QLabel" name="playerLabelTest">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QGraphicsView" name="playerAvatar"/>
      </item>

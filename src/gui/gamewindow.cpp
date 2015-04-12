@@ -25,6 +25,7 @@
 GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * model, handle_t serverHandle ) :
     QWidget( parent ),
     ui( new Ui::GameWindow ) {
+
     this->control = controller;
     this->model = model;
     ui->setupUi( this );
@@ -54,6 +55,7 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
         std::cerr << "Unable to start controller thread" << std::endl;
         exit( EXIT_THREAD_ERROR );
     }
+
 }
 
 GameWindow::~GameWindow( ) {
@@ -161,6 +163,13 @@ void GameWindow::createPlayerSubscribers( ) {
     headers.append( QString( "Name" ) );
     headers.append( QString( "Alignment" ) );
     headers.append( QString( "Role" ) );
+
+    //Enable columns in player list to change with size
+    for (int i = 0; i < ui->playerList->horizontalHeader()->count(); ++i)
+    {
+        ui->playerList->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);
+    }
+
     listModel->setHorizontalHeaderLabels( headers );
 
     for ( unsigned int i = 0; i < num_players; i++ ) {
@@ -307,8 +316,6 @@ void GameWindow::updateQuestingTeam( ) {
 
         QStringList qHeaders;
         qHeaders.append( QString( "Name" ) );
-        qModel->setHorizontalHeaderLabels( qHeaders );
-
     }
     ui->proposeTeamList->setModel( qModel );
 
