@@ -335,6 +335,7 @@ void GameWindow::updateQuestingTeam( ) {
 
         QStringList qHeaders;
         qHeaders.append( QString( "Name" ) );
+        qModel->setHorizontalHeaderLabels( qHeaders );
     }
 
     ui->proposeTeamList->setModel( qModel );
