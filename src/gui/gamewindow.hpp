@@ -7,6 +7,7 @@
 #include "model.hpp"
 #include "subscriber.hpp"
 #include <semaphore.h>
+#include <QLabel>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -296,6 +297,11 @@ private:
      *  Subscriber that gets current questing team from the model.
      */
     Subscriber* questingTeam_subscriber;
+
+    /**
+      * Array of icons for the vote track
+      */
+    QLabel** voteTrackLabels;
 
     /**
      *  Subscriber for vote track length

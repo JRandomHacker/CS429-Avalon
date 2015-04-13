@@ -157,12 +157,15 @@ void GameWindow::createPlayerSubscribers( ) {
 
     unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
 
+    voteTrackLabels = new QLabel*[qLength]();
+
     //Instantiate quest tracker GUI
     for(unsigned int i = 0; i < qLength; i++) {
-        QLabel* temp = new QLabel("");
-        temp->setPixmap( QPixmap( ":/images/QUEST_UNKNOWN.png" ) );
+        voteTrackLabels[i] = new QLabel("");
 
-        ui->votingTrackLayout->addWidget(temp);
+        voteTrackLabels[i]->setPixmap( QPixmap( ":/images/QUEST_UNKNOWN.png" ) );
+
+        ui->votingTrackLayout->addWidget(voteTrackLabels[i]);
     }
 
     updateTrack( );
@@ -401,17 +404,16 @@ void GameWindow::updateTrack( ) {
     std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
     unsigned int playersCurrQuest = playersPerQuest[currQuest];
 
-    /*
-    std::string questStr = "Quest Number " + std::to_string( currQuest + 1 ) + "/" + std::to_string( qLength )
-            + " (" + std::to_string( playersCurrQuest ) + " player(s) required)";
-    std::string voteStr = "Vote " + std::to_string( currVote + 1 ) + "/" + std::to_string( vLength );
+    if(currQuest > 0) {
+        std::vector<QuestVoteHistory> hist = *questHistory_subscriber->getData<std::vector<QuestVoteHistory>>( );
 
-    QStandardItemModel* trackModel = ( QStandardItemModel* ) ui->voteTrackList->model( );
-    QStandardItem* questItem = new QStandardItem( QString( questStr.c_str( ) ) );
-    QStandardItem* voteItem = new QStandardItem( QString( voteStr.c_str( ) ) );
-    trackModel->setItem( 0, questItem );
-    trackModel->setItem( 1, voteItem );
-    */
+        QuestVoteHistory temp = hist[currQuest-1];
+
+        if( temp.getVotePassed() )
+            voteTrackLabels[currQuest-1]->setPixmap( QPixmap( ":/images/QUEST_PASS.png" ) );
+        else
+            voteTrackLabels[currQuest-1]->setPixmap( QPixmap( ":/images/QUEST_FAIL.png" ) );
+    }
 
     ui->voteTrackList->hide();
 
