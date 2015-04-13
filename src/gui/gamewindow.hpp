@@ -268,11 +268,6 @@ private:
     sem_t * sync_sem;
 
     /**
-      * Pixmap object storing the user's avatar
-      */
-    QPixmap* myID_avatar;
-
-    /**
      *  Subscriber that gets num of players from the model.
      */
     Subscriber* num_players_subscriber;
@@ -418,6 +413,14 @@ private:
      * @return None
      */
     void updateQuestingTeam( );
+
+    /**
+      *
+      * Builds the array of quest icons.
+      *
+      * @return None
+      */
+    void buildQuestIcons( );
 
     /**
      * Displays info about vote/quest tracks

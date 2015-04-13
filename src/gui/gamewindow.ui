@@ -16,8 +16,11 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0" rowspan="4">
     <layout class="QVBoxLayout" name="rolesLayout" stretch="0,0,0,0">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetFixedSize</enum>
+     </property>
      <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="playerLabelTest">
+      <widget class="QLabel" name="playerAvatarLabel">
        <property name="text">
         <string/>
        </property>
@@ -34,6 +37,12 @@
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
          <widget class="QTableView" name="playerList">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>

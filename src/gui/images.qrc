@@ -8,5 +8,8 @@
         <file>images/MORGANA.jpg</file>
         <file>images/OBERON.jpg</file>
         <file>images/PERCIVAL.jpg</file>
+        <file>images/QUEST_FAIL.png</file>
+        <file>images/QUEST_PASS.png</file>
+        <file>images/QUEST_UNKNOWN.png</file>
     </qresource>
 </RCC>

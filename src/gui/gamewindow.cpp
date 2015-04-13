@@ -151,8 +151,20 @@ void GameWindow::createPlayerSubscribers( ) {
     model->subscribe( "questTrackLength", questTrackLength_subscriber );
     model->subscribe( "currentQuestTrack", currentQuestTrack_subscriber );
     model->subscribe( "playersPerQuest", playersPerQuest_subscriber );
-    QStandardItemModel* trackModel = new QStandardItemModel( 2, 1 );
-    ui->voteTrackList->setModel( trackModel );
+
+    //QStandardItemModel* trackModel = new QStandardItemModel( 2, 1 );
+    //ui->voteTrackList->setModel( trackModel );
+
+    unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
+
+    //Instantiate quest tracker GUI
+    for(unsigned int i = 0; i < qLength; i++) {
+        QLabel* temp = new QLabel("");
+        temp->setPixmap( QPixmap( ":/images/QUEST_UNKNOWN.png" ) );
+
+        ui->votingTrackLayout->addWidget(temp);
+    }
+
     updateTrack( );
 
     // Add list items and subscribers for each player
@@ -163,12 +175,6 @@ void GameWindow::createPlayerSubscribers( ) {
     headers.append( QString( "Name" ) );
     headers.append( QString( "Alignment" ) );
     headers.append( QString( "Role" ) );
-
-    //Enable columns in player list to change with size
-    for (int i = 0; i < ui->playerList->horizontalHeader()->count(); ++i)
-    {
-        ui->playerList->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);
-    }
 
     listModel->setHorizontalHeaderLabels( headers );
 
@@ -184,6 +190,10 @@ void GameWindow::createPlayerSubscribers( ) {
 
         updatePlayer( i );
     }
+
+    ui->playerList->hide();
+    ui->playerList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->playerList->show();
 
     // Subscribe to leaderID
     leaderID_subscriber = new ClosureSubscriber(
@@ -257,10 +267,10 @@ void GameWindow::updatePlayer( unsigned int id ) {
         if( id == *myID_subscriber->getData<unsigned int>( ) ) {
             newString += " (me)";
 
-            //Load Player Avatar
-            ui->playerLabelTest->setVisible(false);
-            ui->playerLabelTest->setPixmap( QPixmap( avalon::gui::roleToImage( p->getRole() ).c_str( ) ) );
-            ui->playerLabelTest->setVisible(true);
+            //Load client player's role avatar
+            ui->playerAvatarLabel->setVisible(false);
+            ui->playerAvatarLabel->setPixmap( QPixmap( avalon::gui::roleToImage( p->getRole() ).c_str( ) ) );
+            ui->playerAvatarLabel->setVisible(true);
         }
 
         if( id == 0 )
@@ -323,7 +333,12 @@ void GameWindow::updateQuestingTeam( ) {
         QStringList qHeaders;
         qHeaders.append( QString( "Name" ) );
     }
+
     ui->proposeTeamList->setModel( qModel );
+
+    ui->proposeTeamList->hide();
+    ui->proposeTeamList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->proposeTeamList->show();
 
     // Enable or disable the propose button depending on how many questers are selected
     std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
@@ -363,7 +378,21 @@ void GameWindow::updateTrackSlot( ) {
     sem_post( sync_sem );
 }
 
+void GameWindow::buildQuestIcons( ) {
+    /*
+    unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
+    this->questIcons = new QLabel*[qLength]();
+
+    for(unsigned int i = 0; i < qLength; i++) {
+        questIcons[i] = new QLabel();
+        questIcons[i]->setPixmap( QPixmap(":/images/QUEST_UNKNOWN.png") );
+    }
+    */
+}
+
 void GameWindow::updateTrack( ) {
+
+    //clearLayout( ui->votingTrackLayout );
 
     unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
     unsigned int vLength = *voteTrackLength_subscriber->getData<unsigned int>( );
@@ -372,7 +401,8 @@ void GameWindow::updateTrack( ) {
     std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
     unsigned int playersCurrQuest = playersPerQuest[currQuest];
 
-    std::string questStr = "Quest " + std::to_string( currQuest + 1 ) + "/" + std::to_string( qLength )
+    /*
+    std::string questStr = "Quest Number " + std::to_string( currQuest + 1 ) + "/" + std::to_string( qLength )
             + " (" + std::to_string( playersCurrQuest ) + " player(s) required)";
     std::string voteStr = "Vote " + std::to_string( currVote + 1 ) + "/" + std::to_string( vLength );
 
@@ -381,8 +411,11 @@ void GameWindow::updateTrack( ) {
     QStandardItem* voteItem = new QStandardItem( QString( voteStr.c_str( ) ) );
     trackModel->setItem( 0, questItem );
     trackModel->setItem( 1, voteItem );
-}
+    */
 
+    ui->voteTrackList->hide();
+
+}
 
 void GameWindow::updateTeamVoteStateSlot( ) {
     updateTeamVoteState( );
