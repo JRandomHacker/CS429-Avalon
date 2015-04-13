@@ -415,3 +415,83 @@ TEST_F( ServerControllerStateTestFixture, TestQuestStateVoteActionFailure ) {
     ASSERT_EQ( false, sentResults.passed( ) );
     EXPECT_EQ( avalon::network::ENTER_TEAM_SELECTION_BUF, testServer->getLastState( ) );
 }
+
+TEST_F( ServerControllerStateTestFixture, TestChatMessageReceived ) {
+    avalon::server::ServerControllerState testState( "testState", testInfo );
+
+    avalon::common::ChatMessage msg( 3, "Test Message Text", 5 );
+    testAction = new ChatMessageRecvAction( msg );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+
+    std::string sentBuf = testServer->getLastProtobuf( );
+    avalon::network::ChatMessage sentMessage;
+    sentMessage.ParseFromString( sentBuf );
+
+    ASSERT_EQ( 3, sentMessage.sender_id( ) );
+    ASSERT_EQ( "Test Message Text", sentMessage.message_text( ) );
+    ASSERT_EQ( 5, sentMessage.timestamp( ) );
+}
+
+TEST_F( ServerControllerStateTestFixture, TestChatMessageReceivedChildState ) {
+    avalon::server::TeamSelectionState testState( testInfo );
+
+    avalon::common::ChatMessage msg( 4, "Test Message Text", 6 );
+    testAction = new ChatMessageRecvAction( msg );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+
+    std::string sentBuf = testServer->getLastProtobuf( );
+    avalon::network::ChatMessage sentMessage;
+    sentMessage.ParseFromString( sentBuf );
+
+    ASSERT_EQ( 4, sentMessage.sender_id( ) );
+    ASSERT_EQ( "Test Message Text", sentMessage.message_text( ) );
+    ASSERT_EQ( 6, sentMessage.timestamp( ) );
+}
+
+TEST_F( ServerControllerStateTestFixture, TestChatMessagesReceivedInOrder ) {
+    avalon::server::ServerControllerState testState( "testState", testInfo );
+
+    avalon::common::ChatMessage msg1( 3, "Test Message Text1", 5 );
+    avalon::common::ChatMessage msg2( 4, "Test Message Text2", 6 );
+    avalon::common::ChatMessage msg3( 5, "Test Message Text3", 7 );
+    testAction = new ChatMessageRecvAction( msg1 );
+    ControllerState* resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+
+    std::string sentBuf = testServer->getLastProtobuf( );
+    avalon::network::ChatMessage sentMessage;
+    sentMessage.ParseFromString( sentBuf );
+
+    ASSERT_EQ( 3, sentMessage.sender_id( ) );
+    ASSERT_EQ( "Test Message Text1", sentMessage.message_text( ) );
+    ASSERT_EQ( 5, sentMessage.timestamp( ) );
+
+    testAction = new ChatMessageRecvAction( msg2 );
+    resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+
+    sentBuf = testServer->getLastProtobuf( );
+    sentMessage.ParseFromString( sentBuf );
+
+    ASSERT_EQ( 4, sentMessage.sender_id( ) );
+    ASSERT_EQ( "Test Message Text2", sentMessage.message_text( ) );
+    ASSERT_EQ( 6, sentMessage.timestamp( ) );
+
+    testAction = new ChatMessageRecvAction( msg3 );
+    resultState = testState.handleAction( testAction );
+
+    EXPECT_EQ( NULL, resultState );
+
+    sentBuf = testServer->getLastProtobuf( );
+    sentMessage.ParseFromString( sentBuf );
+
+    ASSERT_EQ( 5, sentMessage.sender_id( ) );
+    ASSERT_EQ( "Test Message Text3", sentMessage.message_text( ) );
+    ASSERT_EQ( 7, sentMessage.timestamp( ) );
+}
