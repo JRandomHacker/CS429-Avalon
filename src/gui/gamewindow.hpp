@@ -421,14 +421,6 @@ private:
     void updateQuestingTeam( );
 
     /**
-      *
-      * Builds the array of quest icons.
-      *
-      * @return None
-      */
-    void buildQuestIcons( );
-
-    /**
      * Displays info about vote/quest tracks
      *
      * @return None

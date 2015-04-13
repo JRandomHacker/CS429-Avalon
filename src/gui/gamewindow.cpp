@@ -152,9 +152,6 @@ void GameWindow::createPlayerSubscribers( ) {
     model->subscribe( "currentQuestTrack", currentQuestTrack_subscriber );
     model->subscribe( "playersPerQuest", playersPerQuest_subscriber );
 
-    //QStandardItemModel* trackModel = new QStandardItemModel( 2, 1 );
-    //ui->voteTrackList->setModel( trackModel );
-
     unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
 
     voteTrackLabels = new QLabel*[qLength]();
@@ -382,28 +379,9 @@ void GameWindow::updateTrackSlot( ) {
     sem_post( sync_sem );
 }
 
-void GameWindow::buildQuestIcons( ) {
-    /*
-    unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
-    this->questIcons = new QLabel*[qLength]();
-
-    for(unsigned int i = 0; i < qLength; i++) {
-        questIcons[i] = new QLabel();
-        questIcons[i]->setPixmap( QPixmap(":/images/QUEST_UNKNOWN.png") );
-    }
-    */
-}
-
 void GameWindow::updateTrack( ) {
-
-    //clearLayout( ui->votingTrackLayout );
-
-    unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
-    unsigned int vLength = *voteTrackLength_subscriber->getData<unsigned int>( );
-    unsigned int currVote = *currentVoteTrack_subscriber->getData<unsigned int>( );
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
     std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
-    unsigned int playersCurrQuest = playersPerQuest[currQuest];
 
     if(currQuest > 0) {
         std::vector<QuestVoteHistory> hist = *questHistory_subscriber->getData<std::vector<QuestVoteHistory>>( );
@@ -415,9 +393,6 @@ void GameWindow::updateTrack( ) {
         else
             voteTrackLabels[currQuest-1]->setPixmap( QPixmap( ":/images/QUEST_FAIL.png" ) );
     }
-
-    ui->voteTrackList->hide();
-
 }
 
 void GameWindow::updateTeamVoteStateSlot( ) {
