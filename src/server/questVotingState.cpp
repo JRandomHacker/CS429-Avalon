@@ -10,12 +10,6 @@
 #include "vote.pb.h"
 #include "questvoteresults.pb.h"
 
-#ifdef _WIN32
-    #include <winsock2.h>
-#else
-    #include <netdb.h>
-#endif
-
 namespace avalon {
 namespace server {
     QuestVotingState::QuestVotingState( ServInfo* mod ) : ServerControllerState( "QuestVoting", mod ) { }
@@ -139,9 +133,9 @@ namespace server {
     // If it passed, go to quest vote
     // If it failed, and there is more space on vote track, go to team selection
     // If it failed, and there isn't more space on the vote track, go to end game
-    ServerControllerState* QuestVotingState::decideNewState( ) {
+    ControllerState* QuestVotingState::decideNewState( ) {
 
-        if( model->quests_failed > ( model->quest_track_length / 2 + 1 ) ) {
+        if( badGuysWon( ) ) {
             // TODO change our state to endgame
             model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
             return NULL;

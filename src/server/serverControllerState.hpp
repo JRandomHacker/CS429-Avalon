@@ -76,6 +76,13 @@ class ServerControllerState : public ControllerState {
          */
         void sendProtobufToAll( avalon::network::buffers_t bufType, std::string message );
 
+        /**
+         * Helper function to see if the evil players have currently won
+         *
+         * @return Whether the evil players have won
+         */
+        bool badGuysWon( );
+
 };
 
 } // server

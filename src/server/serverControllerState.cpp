@@ -9,12 +9,6 @@
 #include "teamselection.pb.h"
 #include "vote.pb.h"
 
-#ifdef _WIN32
-    #include <winsock2.h>
-#else
-    #include <netdb.h>
-#endif
-
 namespace avalon {
 namespace server {
 
@@ -85,6 +79,12 @@ namespace server {
         for( unsigned int i = 0; i < model->num_clients; i++ ) {
             model->server->sendProtobuf( bufType, i, message );
         }
+    }
+
+    // Checks the game state to decide if the evil players have currently won
+    bool ServerControllerState::badGuysWon( ) {
+
+        return model->quests_failed > ( ( model->quest_track_length / 2 ) + 1 );
     }
 // }
 

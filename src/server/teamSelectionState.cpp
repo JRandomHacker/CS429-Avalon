@@ -9,12 +9,6 @@
 #include "teamselection.pb.h"
 #include "vote.pb.h"
 
-#ifdef _WIN32
-    #include <winsock2.h>
-#else
-    #include <netdb.h>
-#endif
-
 namespace avalon {
 namespace server {
 

@@ -2,7 +2,7 @@
  * Fourth state
  * Waits for everyone to send a quest vote
  *
- * @class QuestQuestVotingState
+ * @class QuestVotingState
  * @author Ryan Kerr && Justin Koehler
  * @date 2015-04-06
  */
@@ -66,7 +66,7 @@ class QuestVotingState : public ServerControllerState {
          *
          * @return The state we should enter
          */
-        ServerControllerState* decideNewState( );
+        ControllerState* decideNewState( );
 
         /*
          * A helper to figure out the vote results
@@ -81,5 +81,5 @@ class QuestVotingState : public ServerControllerState {
 } // server
 } // avalon
 
-#endif // VOTING_STATE_HPP
+#endif // _QUEST_VOTING_STATE_HPP
 

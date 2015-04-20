@@ -10,12 +10,6 @@
 #include "teamvoteresults.pb.h"
 #include <string>
 
-#ifdef _WIN32
-    #include <winsock2.h>
-#else
-    #include <netdb.h>
-#endif
-
 namespace avalon {
 namespace server {
     TeamVotingState::TeamVotingState( ServInfo* mod ) : ServerControllerState( "Voting", mod ) { }
