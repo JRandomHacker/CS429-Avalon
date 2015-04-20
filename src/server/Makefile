@@ -7,7 +7,10 @@ OBJS=server.o \
 	teamSelectionState.o \
 	teamVotingState.o \
 	serverInfo.o \
-	questVotingState.o
+	questVotingState.o \
+	endGameState.o \
+	finalGameState.o \
+	decideEndState.o
 
 COMMON_DIR=../common
 PROTOS_DIR=../protos

@@ -119,6 +119,52 @@ class EnterTeamSelectionAction : public Action {
 };
 
 /**
+ * An action corresponding to entering the team selection state
+ *
+ * @class EnterEndGameStateAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-20
+ */
+class EnterEndGameStateAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param leader The current team leader
+         */
+        EnterEndGameStateAction( );
+
+        /**
+         * Destructor
+         */
+        virtual ~EnterEndGameStateAction( );
+};
+
+/**
+ * An action corresponding to entering the team selection state
+ *
+ * @class EnterFinalGameStateAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-20
+ */
+class EnterFinalGameStateAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param leader The current team leader
+         */
+        EnterFinalGameStateAction( );
+
+        /**
+         * Destructor
+         */
+        virtual ~EnterFinalGameStateAction( );
+};
+
+/**
  * An action corresponding to receiving a team selection
  *
  * @class ModifyTeamSelectionAction

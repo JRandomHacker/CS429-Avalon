@@ -10,7 +10,9 @@ OBJS=client.o \
 	 teamSelectionState.o \
 	 teamVotingState.o \
 	 questVotingState.o \
-	 questVoteHistory.o
+	 questVoteHistory.o \
+	 endGameState.o \
+	 finalGameState.o
 
 COMMON_DIR=../common
 PROTOS_DIR=../protos

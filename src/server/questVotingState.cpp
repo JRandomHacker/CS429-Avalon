@@ -5,6 +5,7 @@
 #include "questVotingState.hpp"
 #include "serverInfo.hpp"
 #include "serverCustomActions.hpp"
+#include "decideEndState.hpp"
 
 #include "teamselection.pb.h"
 #include "vote.pb.h"
@@ -135,16 +136,8 @@ namespace server {
     // If it failed, and there isn't more space on the vote track, go to end game
     ControllerState* QuestVotingState::decideNewState( ) {
 
-        if( badGuysWon( ) ) {
-            // TODO change our state to endgame
-            model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
-            return NULL;
-
-        // If these fuckers can't make up their mind, they lose.
-        } else if( model->quest_track >= model->quest_track_length ) {
-            // TODO change our state to end game
-            model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
-            return NULL;
+        if( badGuysWon( ) || goodGuysWon( ) ) {
+            return decideEndState( model );
 
         // Go back to the selection state, moving one step closer to annihilation
         } else {

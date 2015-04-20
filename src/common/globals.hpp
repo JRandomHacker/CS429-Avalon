@@ -120,7 +120,9 @@ namespace avalon {
             /*! A message corresponding to a state change to QuestVotingState */
             ENTER_QUEST_VOTE_BUF,
             /*! A message corresponding to a state change to EndGameState */
-            ENTER_END_GAME_BUF
+            ENTER_END_GAME_BUF,
+            /*! A message corresponding to a state change to FinalGameState */
+            ENTER_FINAL_GAME_BUF
         };
     }
 }

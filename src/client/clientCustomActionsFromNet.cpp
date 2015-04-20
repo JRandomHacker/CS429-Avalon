@@ -50,6 +50,18 @@
     }
 // }
 
+// EnterEndGameStateAction {
+    EnterEndGameStateAction::EnterEndGameStateAction( ) : Action( "EnterEndGameState" ) { }
+
+    EnterEndGameStateAction::~EnterEndGameStateAction( ) { }
+// }
+
+// EnterFinalGameStateAction {
+    EnterFinalGameStateAction::EnterFinalGameStateAction( ) : Action( "EnterFinalGameState" ) { }
+
+    EnterFinalGameStateAction::~EnterFinalGameStateAction( ) { }
+// }
+
 // ModifyTeamSelectionAction {
     ModifyTeamSelectionAction::ModifyTeamSelectionAction( unsigned int selection, bool selected ) : Action( "ModifyTeamSelection" ) {
         this->selection = selection;

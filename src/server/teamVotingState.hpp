@@ -67,7 +67,7 @@ class TeamVotingState : public ServerControllerState {
          *
          * @return The state we should enter
          */
-        ServerControllerState* decideNewState( bool vote_passed );
+        ControllerState* decideNewState( bool vote_passed );
 
         /*
          * A helper to figure out the vote results

@@ -40,6 +40,19 @@ class ServerControllerState : public ControllerState {
          */
         ControllerState* handleAction( Action* action_to_be_handled );
 
+        /**
+         * Helper function to see if the evil players have currently won
+         *
+         * @return Whether the evil players have won
+         */
+        static bool badGuysWon( ServInfo* model );
+
+        /**
+         * Helper function to see if the good players have currently won
+         *
+         * @return Whether the good players have won (sans assassin)
+         */
+        static bool goodGuysWon( ServInfo* model );
 
     protected:
         //! A pointer to the model containing the game state
@@ -82,6 +95,13 @@ class ServerControllerState : public ControllerState {
          * @return Whether the evil players have won
          */
         bool badGuysWon( );
+
+        /**
+         * Helper function to see if the good players have currently won
+         *
+         * @return Whether the good players have won (sans assassin)
+         */
+        bool goodGuysWon( );
 
 };
 

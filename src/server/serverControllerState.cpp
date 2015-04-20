@@ -84,7 +84,43 @@ namespace server {
     // Checks the game state to decide if the evil players have currently won
     bool ServerControllerState::badGuysWon( ) {
 
-        return model->quests_failed > ( ( model->quest_track_length / 2 ) + 1 );
+        return ServerControllerState::badGuysWon( model );
+    }
+
+    // Checks the game state to decide if the evil players have currently won
+    bool ServerControllerState::goodGuysWon( ) {
+
+        return ServerControllerState::goodGuysWon( model );
+    }
+
+    // Checks the game state to decide if the evil players have currently won
+    bool ServerControllerState::badGuysWon( ServInfo* model ) {
+
+        bool badWins = false;
+
+        if( model->quests_failed >= ( ( model->quest_track_length / 2 ) + 1 ) ) {
+            badWins = true;
+        } else if ( model->vote_track >= model->vote_track_length ) {
+            badWins = true;
+        }
+
+        return badWins;
+    }
+
+    // Checks the game state to decide if the good players have currently won (sans assassin)
+    bool ServerControllerState::goodGuysWon( ServInfo* model ) {
+
+        bool goodWins = false;
+
+        unsigned int quests_passed = model->quest_track - model->quests_failed;
+
+        if( quests_passed >= ( ( model->quest_track_length / 2 ) + 1 ) ) {
+            goodWins = true;
+        } else if ( model->quest_track >= model->quest_track_length ) {
+            goodWins = true;
+        }
+
+        return goodWins;
     }
 // }
 
