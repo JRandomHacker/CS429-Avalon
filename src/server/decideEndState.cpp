@@ -14,10 +14,14 @@ namespace server {
 
 ControllerState* decideEndState( ServInfo* model ) {
 
-    if( ServerControllerState::badGuysWon( model ) || !model->settingsBuf.assassin( ) ) {
+    if( ServerControllerState::badGuysWon( model ) ) {
 
         model->server->broadcastStateChange( avalon::network::ENTER_FINAL_GAME_BUF, 0 );
-        return new FinalGameState( model );
+        return new FinalGameState( model, avalon::EVIL );
+    } else if( !model->settingsBuf.assassin( ) ) {
+
+        model->server->broadcastStateChange( avalon::network::ENTER_FINAL_GAME_BUF, 0 );
+        return new FinalGameState( model, avalon::GOOD );
     } else {
 
         model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );

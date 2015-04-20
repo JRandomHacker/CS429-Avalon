@@ -70,6 +70,14 @@ class Client {
         void recvQuestVote( unsigned int bufLength );
 
         /*
+         * Recv's an avalon::network::EndGame protobuf and deals with it
+         *
+         * @param bufLength The size of the protobuf that needs to be received
+         * @return None
+         */
+        void recvEndGameInfo( unsigned int bufLength );
+
+        /*
          * Recv's an avalon::network::VoteResults protobuf, creates an Action, and adds it to the queue
          *
          * @param bufLength The size of the protobuf that needs to be received

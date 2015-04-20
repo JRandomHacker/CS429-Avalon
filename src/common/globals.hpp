@@ -122,7 +122,9 @@ namespace avalon {
             /*! A message corresponding to a state change to EndGameState */
             ENTER_END_GAME_BUF,
             /*! A message corresponding to a state change to FinalGameState */
-            ENTER_FINAL_GAME_BUF
+            ENTER_FINAL_GAME_BUF,
+            /*! A message containing the winner and everyone's roles */
+            END_GAME_INFO_BUF
         };
     }
 }

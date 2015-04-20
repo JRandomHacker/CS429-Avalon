@@ -105,3 +105,16 @@
             return message;
 	}
 // }
+
+// ConfirmEndGameAction {
+
+    ConfirmEndGameAction::ConfirmEndGameAction( unsigned int player_id ) : Action( "ConfirmEndGame" ) {
+        this->player_id = player_id;
+    }
+
+    ConfirmEndGameAction::~ConfirmEndGameAction( ) { }
+
+    unsigned int ConfirmEndGameAction::getPlayerID( ) {
+            return player_id;
+    }
+// }

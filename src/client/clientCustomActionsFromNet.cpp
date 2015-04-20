@@ -158,3 +158,20 @@
         return votes;
     }
 // }
+
+// EndGameInfoAction {
+    EndGameInfoAction::EndGameInfoAction( avalon::alignment_t winner, std::vector< Player > players ) : Action( "EndGameInfo" ) {
+        this->winner = winner;
+        this->players = players;
+    }
+
+    EndGameInfoAction::~EndGameInfoAction( ) { }
+
+    avalon::alignment_t EndGameInfoAction::getWinner( ) {
+        return winner;
+    }
+
+    std::vector< Player > EndGameInfoAction::getPlayers( ) {
+        return players;
+    }
+// }

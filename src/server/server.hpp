@@ -53,6 +53,15 @@ class Server {
         void recvTeamSelection( SOCKET recvSock, int bufLength );
 
         /*
+         * Helper function to deal with an end game buffer
+         *
+         * @param recvSock The socket to recv from
+         * @param bufLength The length of the protobuf
+         * @return None
+         */
+        void recvConfirmEnd( SOCKET recvSock, int bufLength );
+
+        /*
          * Helper function to get the ChatMessage protobuf and create an action
          *
          * @param recvSock The socket to recv from

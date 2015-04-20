@@ -378,9 +378,9 @@ class QuestVoteResultsAction : public Action {
         /**
          * Public constructor
          *
-         * @param QuestVote_result The result of the QuestVote.
-         * @param QuestVote_track The new position of the QuestVote track (0-indexed)
-         * @param QuestVotes A pointer containing the QuestVotes of all players
+         * @param vote_result The result of the QuestVote.
+         * @param vote_track The new position of the QuestVote track (0-indexed)
+         * @param votes A pointer containing the QuestVotes of all players
          */
         QuestVoteResultsAction( bool vote_result, unsigned int vote_track, std::vector< avalon::player_vote_t > votes );
 
@@ -414,6 +414,48 @@ class QuestVoteResultsAction : public Action {
         bool vote_result;
         unsigned int vote_track;
         std::vector< avalon::player_vote_t > votes;
+};
+
+/**
+ * An action to deal with the relevant information to end a game
+ *
+ * @class EndGameInfoAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-06
+ */
+class EndGameInfoAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param winner What team won
+         * @param players All the players who were in the game with their real player info
+         */
+        EndGameInfoAction( avalon::alignment_t winner, std::vector< Player > players );
+
+        /**
+         * Destructor
+         */
+        virtual ~EndGameInfoAction( );
+
+        /**
+         * Getter
+         *
+         * @return The result of the vote.
+         */
+        avalon::alignment_t getWinner( );
+
+        /**
+         * Getter
+         *
+         * @return QuestVotes A pointer containing the votes of all players
+         */
+        std::vector< Player > getPlayers( );
+
+    private:
+        avalon::alignment_t winner;
+        std::vector< Player > players;
 };
 
 #endif // CLIENTCUSTOMACTIONSFROMNET_HPP

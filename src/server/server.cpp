@@ -164,6 +164,10 @@ void Server::recvData( SOCKET recvSock ) {
             recvQuestVote( recvSock, bufLength );
             break;
 
+        case avalon::network::ENTER_FINAL_GAME_BUF:
+            recvConfirmEnd( recvSock, bufLength );
+            break;
+
         default:
             std::cerr << "[ SERVER ] Received an unknown type of protobuf" << std::endl;
             break;
@@ -211,6 +215,14 @@ void Server::recvMessage( SOCKET recvSock, int bufLength ) {
     avalon::common::ChatMessage recMessage( buf.sender_id( ), buf.message_text( ), buf.timestamp( ) );
 
     Action* action = new ChatMessageRecvAction( recMessage );
+    queue->addAction( action );
+}
+
+void Server::recvConfirmEnd( SOCKET recvSock, int bufLength ) {
+
+    unsigned int sender = getIdFromSocket( recvSock );
+    Action* action = new ConfirmEndGameAction( sender );
+
     queue->addAction( action );
 }
 

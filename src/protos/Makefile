@@ -4,7 +4,8 @@ OBJS=settings.pb.o \
 	vote.pb.o \
 	teamvoteresults.pb.o \
 	chatmessage.pb.o \
-	questvoteresults.pb.o
+	questvoteresults.pb.o \
+	endgame.pb.o
 
 PROTOS_DIR=.
 

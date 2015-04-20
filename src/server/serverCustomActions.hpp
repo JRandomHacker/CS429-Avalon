@@ -267,4 +267,37 @@ class ChatMessageRecvAction : public Action {
         avalon::common::ChatMessage message;
 };
 
+/**
+ * An action for confirming the team selection and moving to the voting state
+ *
+ * @class ConfirmEndGameAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-20
+ */
+class ConfirmEndGameAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param selector_id The ID of the player attempting to confirm
+         */
+        ConfirmEndGameAction( unsigned int player_id );
+
+        /**
+         * Public destructor
+         */
+        virtual ~ConfirmEndGameAction( );
+
+        /**
+         * Getter
+         *
+         * @return The ID of the player attempting to modify team selection
+         */
+        unsigned int getPlayerID( );
+
+    private:
+        unsigned int player_id;
+};
+
 #endif // SERVERCUSTOMACTIONS_HPP

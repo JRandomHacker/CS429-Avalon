@@ -18,6 +18,7 @@
 #include "vote.pb.h"
 #include "teamvoteresults.pb.h"
 #include "questvoteresults.pb.h"
+#include "endgame.pb.h"
 
 #ifdef _WIN32
     #include <ws2tcpip.h>
@@ -156,6 +157,10 @@ void Client::waitForData( ) {
             recvTeamSelection( bufLength );
             break;
 
+        case avalon::network::END_GAME_INFO_BUF:
+            recvEndGameInfo( bufLength );
+            break;
+
         case avalon::network::ENTER_TEAM_SELECTION_BUF:
         case avalon::network::ENTER_TEAM_VOTE_BUF:
         case avalon::network::ENTER_QUEST_VOTE_BUF:
@@ -204,6 +209,29 @@ void Client::recvMessage( unsigned int bufLength ) {
     queue->addAction( action );
 
     delete[] chatBuf;
+}
+
+// Helper function to receive a EndGameInfo protobuf
+void Client::recvEndGameInfo( unsigned int bufLength ) {
+
+    // Receive the protobuf
+    char* endgameBuf = new char[ bufLength ];
+    recv( sock, endgameBuf, bufLength * sizeof( char ), 0);
+
+    avalon::network::EndGame buf;
+    buf.ParseFromArray( endgameBuf, bufLength );
+
+    std::vector< Player > players;
+    for( auto it = buf.players( ).begin( ); it != buf.players( ).end( ); it++ ) {
+        Player tmp( *it );
+        players.push_back( ( Player )( tmp ) );
+    }
+
+    // Add an action to the queue
+    Action* action = new EndGameInfoAction( ( avalon::alignment_t )buf.winner( ), players );
+    queue->addAction( action );
+
+    delete[] endgameBuf;
 }
 
 // Helper function to receive a TeamSelection protobuf
