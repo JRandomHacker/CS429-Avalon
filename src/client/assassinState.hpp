@@ -35,6 +35,11 @@ class AssassinState : public ClientControllerState {
          * @param action_to_be_handled The action that we need to deal with in our current state
          */
         ControllerState* handleAction( Action* action_to_be_handled );
+
+        /**
+         * Method called during setup to set the new state in the model
+         */
+        virtual void setupState( );
 };
 
 } // client

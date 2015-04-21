@@ -86,6 +86,48 @@ class AddPlayerAction : public Action {
 };
 
 /**
+ * An action to add or modify a player
+ *
+ * @class AssassinSelectedAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-20
+ */
+class AssassinSelectedAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param player_number The ID of the player to add
+         * @param player The player object that is being added
+         */
+        AssassinSelectedAction( unsigned int player_number, Player* player );
+
+        /**
+         * Destructor
+         */
+        virtual ~AssassinSelectedAction( );
+
+        /**
+         * Getter
+         *
+         * @return The playerID of the player the assassin killed
+         */
+        unsigned int getAssassinationTarget( );
+
+        /**
+         * Getter
+         *
+         * @return A pointer to a Player object containing the information we know about the dead player
+         */
+        Player* getDeadMansInfo( );
+
+    private:
+        unsigned int player_number;
+        Player* player_info;
+};
+
+/**
  * An action corresponding to entering the team selection state
  *
  * @class EnterTeamSelectionAction

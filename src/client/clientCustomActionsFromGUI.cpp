@@ -56,3 +56,13 @@ unsigned int SelectQuestGoerAction::getSelectedPlayer( ) {
 FinalizeTeamAction::FinalizeTeamAction( ) : Action( "FinalizeTeam" ) { }
 
 FinalizeTeamAction::~FinalizeTeamAction( ) { }
+
+AssassinTargetSelectionAction::AssassinTargetSelectionAction( unsigned int selection_id ) : Action( "AssassinTargetSelection" ) {
+    this->selection_id = selection_id;
+}
+
+AssassinTargetSelectionAction::~AssassinTargetSelectionAction( ) { }
+
+unsigned int AssassinTargetSelectionAction::getSelectionId( ) {
+	return selection_id;
+}

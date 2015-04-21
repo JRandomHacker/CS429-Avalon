@@ -38,6 +38,23 @@
     }
 // }
 
+// AssassinSelectedAction {
+    AssassinSelectedAction::AssassinSelectedAction( unsigned int player_num, Player* player ) : Action( "AssassinSelected" ) {
+        player_number = player_num;
+        player_info = player;
+    }
+
+    AssassinSelectedAction::~AssassinSelectedAction( ) { }
+
+    unsigned int AssassinSelectedAction::getAssassinationTarget( ) {
+        return player_number;
+    }
+
+    Player* AssassinSelectedAction::getDeadMansInfo( ) {
+        return player_info;
+    }
+// }
+
 // EnterTeamSelectionAction {
     EnterTeamSelectionAction::EnterTeamSelectionAction( unsigned int leader ) : Action( "EnterTeamSelection" ) {
         this->leader = leader;

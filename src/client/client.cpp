@@ -161,6 +161,10 @@ void Client::waitForData( ) {
             recvEndGameInfo( bufLength );
             break;
 
+        case avalon::network::ASSASSIN_TARGET_BUF:
+            recvAssassinSelection( bufLength );
+            break;
+
         case avalon::network::ENTER_TEAM_SELECTION_BUF:
         case avalon::network::ENTER_TEAM_VOTE_BUF:
         case avalon::network::ENTER_QUEST_VOTE_BUF:
@@ -189,6 +193,25 @@ void Client::recvPlayer( unsigned int bufLength ) {
 
     // Add an action to the queue
     Action* action = new AddPlayerAction( pBuf.id(), p );
+    queue->addAction( action );
+
+    delete[] playerBuf;
+}
+
+// Helper function to receive a player protobuf
+void Client::recvAssassinSelection( unsigned int bufLength ) {
+
+    // Receive the protobuf
+    char* playerBuf = new char[ bufLength ];
+    recv( sock, playerBuf, bufLength * sizeof( char ), 0);
+
+    // Create a new player object
+    avalon::network::Player pBuf;
+    pBuf.ParseFromArray( playerBuf, bufLength );
+    Player* p = new Player( pBuf );
+
+    // Add an action to the queue
+    Action* action = new AssassinSelectedAction( pBuf.id(), p );
     queue->addAction( action );
 
     delete[] playerBuf;

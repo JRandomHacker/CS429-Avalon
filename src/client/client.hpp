@@ -46,6 +46,14 @@ class Client {
         void recvPlayer( unsigned int bufLength );
 
         /*
+         * Recv's an avalon::network::Player protobuf corresponding to the player the assassin killed
+         *
+         * @param bufLength The size of the protobuf that needs to be received
+         * @return None
+         */
+        void recvAssassinSelection( unsigned int bufLength );
+
+        /*
          * Recv's an avalon::network::ChatMessage protobuf, creates an Action, and adds it to the queue
          *
          * @param bufLength The size of the protobuf that needs to be received

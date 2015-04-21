@@ -25,7 +25,15 @@ namespace client {
 
         std::string action_type = action_to_be_handled->getMessage( );
 
-        if( action_type == "" ) {
+        if( action_type == "EndGameInfo" ) {
+
+            auto action = dynamic_cast< EndGameInfoAction* >( action_to_be_handled );
+
+            data->model->updateData( "winningTeam", action->getWinner( ) );
+            data->model->updateData( "endGamePlayers", action->getPlayers( ) );
+            data->model->updateData( "endGameState", true );
+
+            data->client->sendProtobuf( avalon::network::ENTER_END_GAME_BUF, "" );
 
         } else {
             return ClientControllerState::handleAction( action_to_be_handled );

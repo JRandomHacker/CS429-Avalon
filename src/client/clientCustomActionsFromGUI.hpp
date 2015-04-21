@@ -176,4 +176,38 @@ class FinalizeTeamAction : public Action {
         virtual ~FinalizeTeamAction( );
 };
 
+/**
+ * An action to select a player to go on a quest
+ *
+ * @class AssassinTargetSelectionAction
+ * @author Matt Hoffman
+ * @date 2015-03-14
+ */
+class AssassinTargetSelectionAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param selection_id Which player is being selected to die
+         */
+        AssassinTargetSelectionAction( unsigned int selection_id );
+
+        /**
+         * Destructor
+         */
+        virtual ~AssassinTargetSelectionAction( );
+
+        /**
+         * Gets the selected target to be murdered in cold blood
+         *
+         * @return the ID of the player who will be murdered
+         */
+        unsigned int getSelectionId( );
+
+    private:
+        //! The id of the selected player
+        unsigned int selection_id;
+};
+
 #endif // CLIENTCUSTOMACTIONSFROMGUI_HPP
