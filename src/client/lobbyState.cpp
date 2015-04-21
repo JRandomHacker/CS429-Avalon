@@ -50,7 +50,7 @@ namespace client {
             data->model->addData< unsigned int >( "assassinTargeted", 0 );
             data->model->addData( "endGameState", false );
             data->model->addData< avalon::alignment_t >( "winningTeam", avalon::UNKNOWN_ALIGN ); 
-            data->model->addData( "endGamePlayers", std::vector< Player* >( ) );
+            data->model->addData( "endGamePlayers", std::vector< Player >( ) );
             data->model->addData( "chatMessages", std::vector< avalon::common::ChatMessage >( ) );
             
             std::vector< unsigned int > players_per_quest;
