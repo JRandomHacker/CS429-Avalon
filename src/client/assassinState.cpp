@@ -1,14 +1,14 @@
 /**
- * Implementation of the FinalGameState class
+ * Implementation of the AssassinState class
  *
- * @file endGameState.cpp
+ * @file assassinState.cpp
  * @author Ryan Kerr && Justin Koehler
  * @date 2015-04-20
  */
 
 #include <string>
 
-#include "finalGameState.hpp"
+#include "assassinState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
 
@@ -17,11 +17,11 @@
 namespace avalon {
 namespace client {
 
-    // Constructor for the FinalGameState, simply sets the correct state name
-    FinalGameState::FinalGameState( ClientInfo* dat ) : ClientControllerState( "FinalGame", dat ) { }
+    // Constructor for the AssassinState, simply sets the correct state name
+    AssassinState::AssassinState( ClientInfo* dat ) : ClientControllerState( "Assassin", dat ) { }
 
     // Figures out what needs to be done with any given action, when we're in the voting state
-    ControllerState* FinalGameState::handleAction( Action* action_to_be_handled ) {
+    ControllerState* AssassinState::handleAction( Action* action_to_be_handled ) {
 
         std::string action_type = action_to_be_handled->getMessage( );
 

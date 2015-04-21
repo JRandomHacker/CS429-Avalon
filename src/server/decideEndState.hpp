@@ -12,8 +12,8 @@
 #include "serverControllerState.hpp"
 #include "serverInfo.hpp"
 #include "globals.hpp"
+#include "assassinState.hpp"
 #include "endGameState.hpp"
-#include "finalGameState.hpp"
 
 namespace avalon {
 namespace server {

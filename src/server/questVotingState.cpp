@@ -75,6 +75,11 @@ namespace server {
 
         bool exists = false;
 
+        // Make sure good guys can only pass missions
+        if( model->players[ voter ]->getAlignment( ) == avalon::GOOD ) {
+            vote = avalon::YES;
+        }
+
         // Look through the votes vector to see if the player voted previously
         for( unsigned int i = 0; i < model->votes.size( ); i++ ) {
 

@@ -164,8 +164,12 @@ void Server::recvData( SOCKET recvSock ) {
             recvQuestVote( recvSock, bufLength );
             break;
 
-        case avalon::network::ENTER_FINAL_GAME_BUF:
+        case avalon::network::ENTER_END_GAME_BUF:
             recvConfirmEnd( recvSock, bufLength );
+            break;
+
+        case avalon::network::ASSASSIN_TARGET_BUF:
+            recvAssassinTarget( recvSock, bufLength );
             break;
 
         default:
@@ -222,6 +226,22 @@ void Server::recvConfirmEnd( SOCKET recvSock, int bufLength ) {
 
     unsigned int sender = getIdFromSocket( recvSock );
     Action* action = new ConfirmEndGameAction( sender );
+
+    queue->addAction( action );
+}
+
+void Server::recvAssassinTarget( SOCKET recvSock, int bufLength ) {
+
+    // Receive the buffer
+    char* buffer = new char[ bufLength ];
+    recv( recvSock, ( char* )buffer, bufLength * sizeof( char ), 0 );
+
+    avalon::network::Player buf;
+    buf.ParseFromArray( buffer, bufLength );
+    delete[] buffer;
+
+    unsigned int selector = getIdFromSocket( recvSock );
+    Action* action = new AssassinTargetSelectionAction( selector, buf.id( ) );
 
     queue->addAction( action );
 }

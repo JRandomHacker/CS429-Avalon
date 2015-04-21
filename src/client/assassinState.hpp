@@ -1,13 +1,13 @@
 /**
-// * ClientControllerState for the end of the game
+ * ClientControllerState for when the assassin needs to do things
  *
- * @class FinalGameState
+ * @class AssassinState
  * @author Ryan Kerr && Justin Koehler
  * @date 2015-04-20
  */
 
-#ifndef _FINAL_GAME_STATE_HPP
-#define _FINAL_GAME_STATE_HPP
+#ifndef _ASSASSIN_STATE_HPP
+#define _ASSASSIN_STATE_HPP
 
 #include <string>
 #include <iostream>
@@ -19,7 +19,7 @@
 namespace avalon {
 namespace client {
 
-class FinalGameState : public ClientControllerState {
+class AssassinState : public ClientControllerState {
     public:
 
         /**
@@ -27,7 +27,7 @@ class FinalGameState : public ClientControllerState {
          *
          * @param mod A pointer to a ClientInfo struct with the clients data
          */
-        FinalGameState( ClientInfo* mod );
+        AssassinState( ClientInfo* mod );
 
         /**
          * Method to actually deal with the action we've received
@@ -40,5 +40,5 @@ class FinalGameState : public ClientControllerState {
 } // client
 } // avalon
 
-#endif // _FINAL_GAME_STATE_HPP_
+#endif // _ASSASSIN_STATE_HPP_
 

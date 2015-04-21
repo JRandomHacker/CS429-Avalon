@@ -44,6 +44,15 @@ class Server {
         void recvData( SOCKET recvSock );
 
         /*
+         * Helper function to get the assassin's selection for merlin
+         *
+         * @param recvSock The socket to recv from
+         * @param bufLength The length of the protobuf
+         * @return None
+         */
+        void recvAssassinTarget( SOCKET recvSock, int bufLength );
+
+        /*
          * Helper function to get the TeamSelection protobuf and create an action
          *
          * @param recvSock The socket to recv from

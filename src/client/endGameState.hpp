@@ -1,5 +1,5 @@
 /**
- * ClientControllerState for when the assassin needs to do things
+ * ClientControllerState for the end of the game
  *
  * @class EndGameState
  * @author Ryan Kerr && Justin Koehler

@@ -8,8 +8,8 @@ OBJS=server.o \
 	teamVotingState.o \
 	serverInfo.o \
 	questVotingState.o \
+	assassinState.o \
 	endGameState.o \
-	finalGameState.o \
 	decideEndState.o
 
 COMMON_DIR=../common

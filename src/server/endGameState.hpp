@@ -14,6 +14,7 @@
 #include <iostream>
 
 #include "action.hpp"
+#include "globals.hpp"
 #include "serverInfo.hpp"
 #include "serverControllerState.hpp"
 
@@ -29,7 +30,7 @@ class EndGameState : public ServerControllerState {
          *
          * @param mod A pointer to the ServInfo struct that the clientController is using
          */
-        EndGameState( ServInfo* mod );
+        EndGameState( ServInfo* mod, avalon::alignment_t winner );
 
         /**
          * Destructor

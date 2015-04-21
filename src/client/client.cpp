@@ -164,8 +164,8 @@ void Client::waitForData( ) {
         case avalon::network::ENTER_TEAM_SELECTION_BUF:
         case avalon::network::ENTER_TEAM_VOTE_BUF:
         case avalon::network::ENTER_QUEST_VOTE_BUF:
+        case avalon::network::ENTER_ASSASSIN_BUF:
         case avalon::network::ENTER_END_GAME_BUF:
-        case avalon::network::ENTER_FINAL_GAME_BUF:
             recvStateChange( bufType, bufLength );
             break;
 
@@ -371,12 +371,12 @@ void Client::recvStateChange( int bufType, unsigned int randomness ) {
             action = new EnterQuestVoteStateAction( );
             break;
 
-        case avalon::network::ENTER_END_GAME_BUF:
-            action = new EnterEndGameStateAction( );
+        case avalon::network::ENTER_ASSASSIN_BUF:
+            action = new EnterAssassinStateAction( );
             break;
 
-        case avalon::network::ENTER_FINAL_GAME_BUF:
-            action = new EnterFinalGameStateAction( );
+        case avalon::network::ENTER_END_GAME_BUF:
+            action = new EnterEndGameStateAction( );
             break;
 
         default:

@@ -50,16 +50,16 @@
     }
 // }
 
+// EnterAssassinStateAction {
+    EnterAssassinStateAction::EnterAssassinStateAction( ) : Action( "EnterAssassinState" ) { }
+
+    EnterAssassinStateAction::~EnterAssassinStateAction( ) { }
+// }
+
 // EnterEndGameStateAction {
     EnterEndGameStateAction::EnterEndGameStateAction( ) : Action( "EnterEndGameState" ) { }
 
     EnterEndGameStateAction::~EnterEndGameStateAction( ) { }
-// }
-
-// EnterFinalGameStateAction {
-    EnterFinalGameStateAction::EnterFinalGameStateAction( ) : Action( "EnterFinalGameState" ) { }
-
-    EnterFinalGameStateAction::~EnterFinalGameStateAction( ) { }
 // }
 
 // ModifyTeamSelectionAction {

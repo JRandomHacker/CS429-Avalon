@@ -119,10 +119,12 @@ namespace avalon {
             QUEST_VOTE_RESULTS_BUF,
             /*! A message corresponding to a state change to QuestVotingState */
             ENTER_QUEST_VOTE_BUF,
+            /*! An avalon::network::Player protobuf containing the id of the target the assassin wants to assassinate*/
+            ASSASSIN_TARGET_BUF,
+            /*! A message corresponding to a state change to AssassinState */
+            ENTER_ASSASSIN_BUF,
             /*! A message corresponding to a state change to EndGameState */
             ENTER_END_GAME_BUF,
-            /*! A message corresponding to a state change to FinalGameState */
-            ENTER_FINAL_GAME_BUF,
             /*! A message containing the winner and everyone's roles */
             END_GAME_INFO_BUF
         };

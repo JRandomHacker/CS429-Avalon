@@ -12,7 +12,7 @@ OBJS=client.o \
 	 questVotingState.o \
 	 questVoteHistory.o \
 	 endGameState.o \
-	 finalGameState.o
+	 assassinState.o
 
 COMMON_DIR=../common
 PROTOS_DIR=../protos

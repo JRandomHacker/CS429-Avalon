@@ -280,7 +280,7 @@ class ConfirmEndGameAction : public Action {
         /**
          * Public constructor
          *
-         * @param selector_id The ID of the player attempting to confirm
+         * @param player_id The ID of the player attempting to confirm
          */
         ConfirmEndGameAction( unsigned int player_id );
 
@@ -297,6 +297,48 @@ class ConfirmEndGameAction : public Action {
         unsigned int getPlayerID( );
 
     private:
+        unsigned int player_id;
+};
+
+/**
+ * An action for selecting the target the assassin thinks is merlin
+ *
+ * @class AssassinTargetSelectionAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-20
+ */
+class AssassinTargetSelectionAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param selector_id The ID of the player who sent the target
+         * @param player_id The ID of the player attempting to confirm
+         */
+        AssassinTargetSelectionAction( unsigned int selector_id, unsigned int player_id );
+
+        /**
+         * Public destructor
+         */
+        virtual ~AssassinTargetSelectionAction( );
+
+        /**
+         * Getter
+         *
+         * @return The ID of the player attempting to modify team selection
+         */
+        unsigned int getSelectorID( );
+
+        /**
+         * Getter
+         *
+         * @return The ID of the player to be assassinated
+         */
+        unsigned int getPlayerID( );
+
+    private:
+        unsigned int selector_id;
         unsigned int player_id;
 };
 

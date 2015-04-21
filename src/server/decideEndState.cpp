@@ -16,16 +16,16 @@ ControllerState* decideEndState( ServInfo* model ) {
 
     if( ServerControllerState::badGuysWon( model ) ) {
 
-        model->server->broadcastStateChange( avalon::network::ENTER_FINAL_GAME_BUF, 0 );
-        return new FinalGameState( model, avalon::EVIL );
+        model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
+        return new EndGameState( model, avalon::EVIL );
     } else if( !model->settingsBuf.assassin( ) ) {
 
-        model->server->broadcastStateChange( avalon::network::ENTER_FINAL_GAME_BUF, 0 );
-        return new FinalGameState( model, avalon::GOOD );
+        model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
+        return new EndGameState( model, avalon::GOOD );
     } else {
 
-        model->server->broadcastStateChange( avalon::network::ENTER_END_GAME_BUF, 0 );
-        return new EndGameState( model );
+        model->server->broadcastStateChange( avalon::network::ENTER_ASSASSIN_BUF, 0 );
+        return new AssassinState( model );
     }
 }
 

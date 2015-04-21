@@ -2,7 +2,7 @@
 #include "questVotingState.hpp"
 #include "teamSelectionState.hpp"
 #include "endGameState.hpp"
-#include "finalGameState.hpp"
+#include "assassinState.hpp"
 #include "clientCustomActionsFromGUI.hpp"
 #include "clientCustomActionsFromNet.hpp"
 #include "clientInfo.hpp"
@@ -70,10 +70,10 @@ namespace client {
             return new TeamSelectionState( data );
         } else if( action_type == "EnterQuestVoteState" ) {
             return new QuestVotingState( data );
+        } else if( action_type == "EnterAssassinState" ) {
+            return new AssassinState( data );
         } else if( action_type == "EnterEndGameState" ) {
             return new EndGameState( data );
-        } else if( action_type == "EnterFinalGameState" ) {
-            return new FinalGameState( data );
         } else {
             return ClientControllerState::handleAction( action_to_be_handled );
         }

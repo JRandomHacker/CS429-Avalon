@@ -118,3 +118,22 @@
             return player_id;
     }
 // }
+
+// AssassinTargetSelectionAction {
+
+    AssassinTargetSelectionAction::AssassinTargetSelectionAction( unsigned int selector_id, unsigned int player_id ) : Action( "AssassinTargetSelection" ) {
+
+        this->player_id = player_id;
+        this->selector_id = selector_id;
+	}
+
+	AssassinTargetSelectionAction::~AssassinTargetSelectionAction( ) { }
+
+	unsigned int AssassinTargetSelectionAction::getPlayerID( ) {
+            return player_id;
+	}
+
+	unsigned int AssassinTargetSelectionAction::getSelectorID( ) {
+            return selector_id;
+	}
+// }
