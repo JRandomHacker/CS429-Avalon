@@ -128,6 +128,27 @@ class AssassinSelectedAction : public Action {
 };
 
 /**
+ * An action ending the clientcontroller
+ *
+ * @class ShutdownClientAction
+ * @author Ryan Kerr && Justin Koehler
+ * @date 2015-04-20
+ */
+class ShutdownClientAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         */
+        ShutdownClientAction( );
+
+        /**
+         * Destructor
+         */
+        virtual ~ShutdownClientAction( );
+};
+
+/**
  * An action corresponding to entering the team selection state
  *
  * @class EnterTeamSelectionAction

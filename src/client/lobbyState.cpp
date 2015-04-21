@@ -32,6 +32,7 @@ namespace client {
             auto action = dynamic_cast< GameSettingsAction* >( action_to_be_handled );
             avalon::network::GameSettings* sBuf = action->getSettings( );
             
+            data->model->addData( "resetGame", false );
             data->model->addData< unsigned int >( "numberOfPlayers", sBuf->players( ) );
             data->model->addData< unsigned int >( "myID", sBuf->client( ) );
             data->model->addData< unsigned int >( "numEvilChars", sBuf->evil_count( ) );

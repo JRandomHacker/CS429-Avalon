@@ -35,6 +35,8 @@ namespace server {
         if( action_type == "ConfirmEndGame" ) {
 
             std::cout << "Cool" << std::endl;
+            model->server->broadcastStateChange( avalon::network::SHUTDOWN_BUF, 0 );
+            exit( EXIT_SUCCESS );
         }
         return NULL;
     }

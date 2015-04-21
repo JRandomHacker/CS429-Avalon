@@ -55,6 +55,12 @@
     }
 // }
 
+// ShutdownClientAction {
+    ShutdownClientAction::ShutdownClientAction( ) : Action( "ShutdownClient" ) { }
+
+    ShutdownClientAction::~ShutdownClientAction( ) { }
+// }
+
 // EnterTeamSelectionAction {
     EnterTeamSelectionAction::EnterTeamSelectionAction( unsigned int leader ) : Action( "EnterTeamSelection" ) {
         this->leader = leader;

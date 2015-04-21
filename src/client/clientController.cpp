@@ -78,9 +78,9 @@ void* ClientController::networkThreadHelper( void* obj ) {
 
 // Actual network thread function
 void ClientController::networkThreadFunc( ) {
-    while( true ) {
-        client->waitForData( );
-    }
+
+    while( client->waitForData( ) );
+    pthread_exit( NULL );
 }
 
 // Helper function to change the controller's state

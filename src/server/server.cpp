@@ -139,6 +139,7 @@ void Server::recvData( SOCKET recvSock ) {
     // Make sure there wasn't a receive error
     if( size <= 0 ) {
         std::cerr << "[ SERVER ] Network recv error" << std::endl;
+        broadcastStateChange( avalon::network::SHUTDOWN_BUF, EXIT_NETWORK_ERROR );
         exit( EXIT_NETWORK_ERROR );
     }
 

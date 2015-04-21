@@ -126,6 +126,13 @@ class Client {
          */
         void recvSettings( unsigned int bufLength );
 
+        /*
+         * Adds an action to the queue telling the controller to throw up its hands
+         *
+         * @return None
+         */
+        void addShutdownAction( );
+
     public:
 
         /**
@@ -163,9 +170,9 @@ class Client {
          * Data processing function
          * Recv's arbitrary buffers from the server and handles them
          *
-         * @return None
+         * @return True if successfully received data, false otherwise
          */
-        void waitForData( );
+        bool waitForData( );
 
         /**
          * Function to send a protobuf to the server the client is connected to

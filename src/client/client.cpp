@@ -101,11 +101,11 @@ int Client::initClient( std::string host, int port ) {
 // Function to wait for another packet from the server
 // Receives the information about the next message,
 // then delegates to helper functions
-void Client::waitForData( ) {
+bool Client::waitForData( ) {
 
     if( !network_initialized ) {
         std::cerr << "[ CLIENT ] Attempting to wait for data without connecting to a server" << std::endl;
-        return;
+        return false;
     }
 
     // Receive the type of protobuf we're going to be working with
@@ -115,7 +115,7 @@ void Client::waitForData( ) {
     // Less than equal, since on Linux an error will return 0, and on Windows an error will return -1
     if(size <= 0) {
         std::cerr << "[ CLIENT ] Network recv error" << std::endl;
-        exit( EXIT_NETWORK_ERROR );
+        return false;
     }
 
     // Receive the length of the protobuf we're looking for
@@ -173,10 +173,17 @@ void Client::waitForData( ) {
             recvStateChange( bufType, bufLength );
             break;
 
+        case avalon::network::SHUTDOWN_BUF:
+            addShutdownAction( );
+            return false;
+            break;
+
         default:
             std::cerr << "[ CLIENT ] Received an unknown type of protobuf" << std::endl;
             break;
     }
+
+    return true;
 }
 
 // Helper function to receive a player protobuf
@@ -410,6 +417,12 @@ void Client::recvStateChange( int bufType, unsigned int randomness ) {
     if( action ) {
         queue->addAction( action );
     }
+}
+
+void Client::addShutdownAction( ) {
+
+    Action* action = new ShutdownClientAction( );
+    queue->addAction( action );
 }
 
 void Client::sendProtobuf( avalon::network::buffers_t bufType, std::string message ) {

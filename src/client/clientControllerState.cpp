@@ -54,7 +54,10 @@ namespace client {
             auto chatMessages = data->model->getDataForUpdate< std::vector< avalon::common::ChatMessage > >( "chatMessages" );
             chatMessages->push_back( chat_message );
             data->model->flagDataForUpdate( "chatMessages" );
-        } else if ( action_type == "EnterQuestVoteState" ) {
+        } else if( action_type == "ShutdownClient" ) {
+            data->model->updateData( "resetGame", true );
+            pthread_exit( NULL );
+        }else {
             return ControllerState::handleAction( action_to_be_handled );
         }
 
