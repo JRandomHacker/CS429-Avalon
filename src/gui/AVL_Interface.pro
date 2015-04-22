@@ -32,7 +32,7 @@ HEADERS  += optionswindow.hpp \
     guihelpers.hpp \
     votedialog.hpp \
     resultsdialog.hpp \
-    endgamewindow.h
+    endgamewindow.hpp
 
 FORMS    += optionswindow.ui \
     gamewindow.ui \
