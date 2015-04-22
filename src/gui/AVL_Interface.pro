@@ -44,8 +44,7 @@ FORMS    += optionswindow.ui \
     joinserverwindow.ui \
     votedialog.ui \
     resultsdialog.ui \
-    endgamewindow.ui \
-    questhistorywindow.ui
+    endgamewindow.ui
 
 INCLUDEPATH  += ../protos/
 INCLUDEPATH  += ../common/
