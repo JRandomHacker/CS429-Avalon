@@ -371,9 +371,9 @@ void GameWindow::updateQuestingTeam( ) {
 
     ui->proposeTeamList->setModel( qModel );
 
-    ui->proposeTeamList->hide();
-    ui->proposeTeamList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->proposeTeamList->show();
+    ui->proposeTeamList->hide( );
+    ui->proposeTeamList->horizontalHeader( )->setSectionResizeMode( QHeaderView::Stretch );
+    ui->proposeTeamList->show( );
 
     // Enable or disable the propose button depending on how many questers are selected
     std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
@@ -709,7 +709,11 @@ void GameWindow::on_proposeTeamButton_clicked( ) {
 
 void GameWindow::on_sendMsgButton_clicked( ) {
     std::string message = ui->chatEdit->toPlainText( ).toStdString( );
-
+    message = avalon::gui::trimString( message );
+    if( message.empty( ) ) {
+        ui->chatEdit->clear( );
+        return;
+    }
     unsigned int myID = *myID_subscriber->getData<unsigned int>( );
     avalon::common::ChatMessage* chatMess = new avalon::common::ChatMessage( myID, message, 0 );
     ChatMessageSentAction* act = new ChatMessageSentAction( *chatMess );
