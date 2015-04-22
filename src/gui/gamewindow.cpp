@@ -48,6 +48,8 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
     connect( this, SIGNAL( questHistoryUpdated( ) ), this, SLOT( updateQuestHistorySlot( ) ) );
     connect( this, SIGNAL( currentVotesUpdated( ) ), this, SLOT( updateCurrentVotesSlot( ) ) );
     connect( this, SIGNAL( chatMessagesUpdated( ) ), this, SLOT( updateChatMessagesSlot( ) ) );
+    connect( this, SIGNAL( assassinStateUpdated( ) ), this, SLOT( updateAssassinStateSlot( ) ) );
+    connect( this, SIGNAL( endGameStateUpdated( ) ), this, SLOT( updateEndGameStateSlot( ) ) );
 
     // Start up thread for controller
     pthread_t controlThread;
@@ -205,7 +207,7 @@ void GameWindow::createPlayerSubscribers( ) {
     model->subscribe( "leaderID", leaderID_subscriber );
     updateLeader( );
 
-    // Subscribe to voteState
+    // Subscribe to state flags
     teamVoteState_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                     emit teamVoteStateUpdated( );
@@ -222,6 +224,23 @@ void GameWindow::createPlayerSubscribers( ) {
             NULL );
     model->subscribe( "questVoteState", questVoteState_subscriber );
 
+    assassinState_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit assassinStateUpdated( );
+                    sem_wait( sync_sem );
+                },
+                NULL );
+    model->subscribe( "assassinState", assassinState_subscriber );
+
+    endGameState_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit endGameStateUpdated( );
+                    sem_wait( sync_sem );
+                },
+                NULL );
+    model->subscribe( "endGameState", endGameState_subscriber );
+
+    // Subscribe to histories
     voteHistory_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                     emit voteHistoryUpdated( );
@@ -491,6 +510,24 @@ void GameWindow::updateQuestVoteState( ) {
 
 }
 
+void GameWindow::updateAssassinStateSlot( ) {
+    updateAssassinState( );
+    sem_post( sync_sem );
+}
+
+void GameWindow::updateAssassinState( ) {
+    // Do stuff for assassin
+}
+
+void GameWindow::updateEndGameStateSlot( ) {
+    updateEndGameState( );
+    sem_post( sync_sem );
+}
+
+void GameWindow::updateEndGameState( ) {
+    // End game
+}
+
 void GameWindow::updateCurrentVotesSlot( ) {
     updateCurrentVotes( );
     sem_post( sync_sem );
@@ -580,7 +617,7 @@ void GameWindow::updateChatMessages( ) {
 
 
 void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
-    if(leaderID_subscriber == NULL || myID_subscriber == NULL )
+    if( leaderID_subscriber == NULL || myID_subscriber == NULL )
         return;
 
     unsigned int row = (unsigned int) index.row( );
@@ -602,6 +639,20 @@ void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
     unsigned int playersCurrQuest = playersPerQuest[currQuest];
     if( playersCurrQuest > qTeam.size( ) ) {
         SelectQuestGoerAction* act = new SelectQuestGoerAction( true, row );
+        control->addActionToQueue( act );
+    }
+}
+
+void GameWindow::on_proposeTeamList_clicked( const QModelIndex& index ) {
+    if( leaderID_subscriber == NULL || myID_subscriber == NULL )
+        return;
+
+    unsigned int row = ( unsigned int ) index.row( );
+
+    // Remove the player in that row from the questing team
+    std::vector<unsigned int> qTeam = *questingTeam_subscriber->getData<std::vector<unsigned int>>( );
+    if( row < qTeam.size( ) ) {
+        SelectQuestGoerAction* act = new SelectQuestGoerAction( false, qTeam[row] );
         control->addActionToQueue( act );
     }
 }
