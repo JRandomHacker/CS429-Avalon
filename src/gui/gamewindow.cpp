@@ -73,6 +73,18 @@ GameWindow::~GameWindow( ) {
     delete leaderID_subscriber;
     delete questingTeam_subscriber;
     delete teamVoteState_subscriber;
+    delete voteTrackLength_subscriber;
+    delete currentVoteTrack_subscriber;
+    delete questTrackLength_subscriber;
+    delete currentQuestTrack_subscriber;
+    delete playersPerQuest_subscriber;
+    delete questVoteState_subscriber;
+    delete assassinState_subscriber;
+    delete endGameState_subscriber;
+    delete voteHistory_subscriber;
+    delete questHistory_subscriber;
+    delete currentVotes_subscriber;
+    delete chatMessages_subscriber;
     for( std::vector<Subscriber*>::iterator i = player_subscribers.begin( ); i != player_subscribers.end( ); i++ )
         delete *i;
 
@@ -367,6 +379,9 @@ void GameWindow::updateQuestingTeam( ) {
     std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
     unsigned int playersCurrQuest = playersPerQuest[currQuest];
+    ui->teamSizeLabel->setText( QString( (std::to_string( team.size( ) ) + "/" + std::to_string( playersCurrQuest )
+                                         + " players selected").c_str( ) ) );
+
     ui->proposeTeamButton->setEnabled( playersCurrQuest == team.size( ) );
 }
 
