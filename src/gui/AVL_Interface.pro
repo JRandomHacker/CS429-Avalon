@@ -22,7 +22,8 @@ SOURCES  += main.cpp\
     guihelpers.cpp \
     votedialog.cpp \
     resultsdialog.cpp \
-    endgamewindow.cpp
+    endgamewindow.cpp \
+    enterdetector.cpp
 
 HEADERS  += optionswindow.hpp \
     gamewindow.hpp \
@@ -32,7 +33,8 @@ HEADERS  += optionswindow.hpp \
     guihelpers.hpp \
     votedialog.hpp \
     resultsdialog.hpp \
-    endgamewindow.hpp
+    endgamewindow.hpp \
+    enterdetector.hpp
 
 FORMS    += optionswindow.ui \
     gamewindow.ui \

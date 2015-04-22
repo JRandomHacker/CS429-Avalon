@@ -9,6 +9,7 @@
 #include "questVoteHistory.hpp"
 #include "resultsdialog.hpp"
 #include "chat_message.hpp"
+#include "enterdetector.hpp"
 #include "clientCustomActionsForChat.hpp"
 #include <climits>
 #include <signal.h>
@@ -50,6 +51,8 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
     connect( this, SIGNAL( chatMessagesUpdated( ) ), this, SLOT( updateChatMessagesSlot( ) ) );
     connect( this, SIGNAL( assassinStateUpdated( ) ), this, SLOT( updateAssassinStateSlot( ) ) );
     connect( this, SIGNAL( endGameStateUpdated( ) ), this, SLOT( updateEndGameStateSlot( ) ) );
+
+    ui->chatEdit->installEventFilter( new EnterDetector( this, ui->sendMsgButton ) );
 
     // Start up thread for controller
     pthread_t controlThread;
