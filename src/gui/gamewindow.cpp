@@ -535,6 +535,12 @@ void GameWindow::updateAssassinStateSlot( ) {
 
 void GameWindow::updateAssassinState( ) {
     // Do stuff for assassin
+
+    bool inAssassinState = *assassinState_subscriber->getData<bool>( );
+    if( inAssassinState ) {
+        ui->stateLabel->setText( QString( "Assassin Round" ) );
+
+    }
 }
 
 void GameWindow::updateEndGameStateSlot( ) {
