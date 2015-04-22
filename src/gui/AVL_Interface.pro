@@ -22,7 +22,8 @@ SOURCES  += main.cpp\
     guihelpers.cpp \
     votedialog.cpp \
     resultsdialog.cpp \
-    endgamewindow.cpp
+    endgamewindow.cpp \
+    questhistorywindow.cpp
 
 HEADERS  += optionswindow.hpp \
     gamewindow.hpp \
@@ -32,7 +33,8 @@ HEADERS  += optionswindow.hpp \
     guihelpers.hpp \
     votedialog.hpp \
     resultsdialog.hpp \
-    endgamewindow.hpp
+    endgamewindow.hpp \
+    questhistorywindow.hpp
 
 FORMS    += optionswindow.ui \
     gamewindow.ui \
@@ -40,7 +42,8 @@ FORMS    += optionswindow.ui \
     joinserverwindow.ui \
     votedialog.ui \
     resultsdialog.ui \
-    endgamewindow.ui
+    endgamewindow.ui \
+    questhistorywindow.ui
 
 INCLUDEPATH  += ../protos/
 INCLUDEPATH  += ../common/

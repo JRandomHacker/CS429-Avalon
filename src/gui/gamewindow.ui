@@ -14,6 +14,126 @@
    <string>Avalon Online</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <item row="4" column="2" colspan="2">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <layout class="QVBoxLayout" name="proposedTeamLayout">
+     <item>
+      <widget class="QGroupBox" name="proposedTeamSection">
+       <property name="title">
+        <string>Questing Team</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="leaderLabel">
+            <property name="text">
+             <string>Current Leader is ...</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="stateLabel">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QTableView" name="proposeTeamList">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="proposeTeamButton">
+          <property name="text">
+           <string>Propose Team</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="3">
+    <layout class="QVBoxLayout" name="votingLayout">
+     <item>
+      <widget class="QGroupBox" name="votingSection">
+       <property name="title">
+        <string>Voting</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QPushButton" name="buttonVotePass">
+          <property name="text">
+           <string>PASS!!!</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonVoteFail">
+          <property name="text">
+           <string>FAIL!!!</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="5" column="2" colspan="2">
+    <layout class="QVBoxLayout" name="chatLayout">
+     <item>
+      <widget class="QGroupBox" name="chatSection">
+       <property name="title">
+        <string>Chat</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QListView" name="chatList"/>
+        </item>
+        <item>
+         <widget class="QTextEdit" name="chatEdit"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="sendMsgButton">
+          <property name="text">
+           <string>Send Message</string>
+          </property>
+          <property name="autoDefault">
+           <bool>true</bool>
+          </property>
+          <property name="default">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="0" column="0" rowspan="6">
     <layout class="QVBoxLayout" name="rolesLayout" stretch="0,0,0,0">
      <property name="sizeConstraint">
@@ -86,122 +206,13 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
-    <layout class="QVBoxLayout" name="proposedTeamLayout">
+   <item row="2" column="2" colspan="2">
+    <layout class="QVBoxLayout" name="questHistDetailsLayout">
      <item>
-      <widget class="QGroupBox" name="proposedTeamSection">
-       <property name="title">
-        <string>Questing Team</string>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>View Quest History Details</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QLabel" name="leaderLabel">
-            <property name="text">
-             <string>Current Leader is ...</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="stateLabel">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="0">
-         <widget class="QTableView" name="proposeTeamList">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-          <attribute name="verticalHeaderVisible">
-           <bool>false</bool>
-          </attribute>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QPushButton" name="proposeTeamButton">
-          <property name="text">
-           <string>Propose Team</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="4" column="2" colspan="2">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <layout class="QVBoxLayout" name="votingLayout">
-     <item>
-      <widget class="QGroupBox" name="votingSection">
-       <property name="title">
-        <string>Voting</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QPushButton" name="buttonVotePass">
-          <property name="text">
-           <string>PASS!!!</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonVoteFail">
-          <property name="text">
-           <string>FAIL!!!</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="5" column="2" colspan="2">
-    <layout class="QVBoxLayout" name="chatLayout">
-     <item>
-      <widget class="QGroupBox" name="chatSection">
-       <property name="title">
-        <string>Chat</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
-        <item>
-         <widget class="QListView" name="chatList"/>
-        </item>
-        <item>
-         <widget class="QTextEdit" name="chatEdit"/>
-        </item>
-        <item>
-         <widget class="QPushButton" name="sendMsgButton">
-          <property name="text">
-           <string>Send Message</string>
-          </property>
-          <property name="autoDefault">
-           <bool>true</bool>
-          </property>
-          <property name="default">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </widget>
      </item>
     </layout>
@@ -210,6 +221,7 @@
   <zorder>line</zorder>
   <zorder>line_2</zorder>
   <zorder></zorder>
+  <zorder>verticalLayoutWidget</zorder>
  </widget>
  <resources>
   <include location="images.qrc"/>
