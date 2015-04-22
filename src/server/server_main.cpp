@@ -16,12 +16,6 @@
 #include "globals.hpp"
 
 
-//! The port number we're listening on
-int port = 0;
-//! The number of players this game will support
-int num_players = 0;
-
-
 /**
  * Helper function to parse the options passed into the program
  *
@@ -29,7 +23,7 @@ int num_players = 0;
  * @param argv An array of the arguments passed in
  * @return A vector containing all the chosen special roles
  */
-std::vector< avalon::special_roles_t > parse_options( int argc, char** argv );
+ServerSettings parse_options( int argc, char** argv );
 
 /**
  * Main function for the server executable
@@ -41,22 +35,25 @@ std::vector< avalon::special_roles_t > parse_options( int argc, char** argv );
 int main( int argc, char** argv ) {
 
     int retval;
-    std::vector< avalon::special_roles_t > selected_roles = parse_options( argc, argv );
+
+    ServerSettings server_settings = parse_options( argc, argv );
 
     // Make sure we weren't given a super silly number for players
-    if( num_players <= 0 ) {
+    if( server_settings.num_players <= 0 ) {
         std::cerr << "--players is required, and must have a positive integer" << std::endl;
         exit( EXIT_INVALID_PLAYERS_ERROR );
     }
 
     // Set the default port if we weren't provided one
-    if( port == 0 ) {
-        port = DEFAULT_PORT;
+    if( server_settings.port == 0 ) {
+        server_settings.port = DEFAULT_PORT;
     }
 
+    server_settings.game_settings.loadFromFile( "config/settings.lua", server_settings.num_players );
+
     ServInfo* model = new ServInfo;
-    ServerController* controller = new ServerController( model, port );
-    if( ( retval = controller->initModel( num_players, selected_roles ) ) != EXIT_SUCCESS ) {
+    ServerController* controller = new ServerController( model, server_settings );
+    if( ( retval = controller->initModel( server_settings ) ) != EXIT_SUCCESS ) {
         exit( retval );
     }
     if( ( retval = controller->spawnNetwork( ) ) != EXIT_SUCCESS ) {
@@ -73,14 +70,15 @@ int main( int argc, char** argv ) {
 
 /*
  * Helper function to parse options passed into argv
- * Sets the global variables in this file accordingly
+ * returns a server settings object with the appropriate stuff
  *
  * @param argc The same argc as main
  * @param argv The same argv as main
+ * @param avalon_settings The avalon settings loaded in from the ini file
  */
-std::vector< avalon::special_roles_t > parse_options( int argc, char** argv ) {
+ServerSettings parse_options( int argc, char** argv ) {
+    ServerSettings settings;
 
-    std::vector< avalon::special_roles_t > selected;
     struct option options[] = {
         { "players",  required_argument, NULL, 'p' },
         { "port",     required_argument, NULL, 'o' },
@@ -96,33 +94,33 @@ std::vector< avalon::special_roles_t > parse_options( int argc, char** argv ) {
     while( ( opt = getopt_long_only( argc, argv, "", options, NULL ) ) != -1 ) {
         switch( opt ) {
             case 'p':
-                num_players = atoi( optarg );
+                settings.num_players = atoi( optarg );
                 break;
             case 'o':
-                port = atoi( optarg );
+                settings.port = atoi( optarg );
                 break;
             case 'm':
-                selected.push_back( avalon::MERLIN );
+                settings.selected_roles.push_back( avalon::MERLIN );
                 break;
             case 'e':
-                selected.push_back( avalon::PERCIVAL );
+                settings.selected_roles.push_back( avalon::PERCIVAL );
                 break;
             case 'r':
-                selected.push_back( avalon::MORDRED );
+                settings.selected_roles.push_back( avalon::MORDRED );
                 break;
             case 'g':
-                selected.push_back( avalon::MORGANA );
+                settings.selected_roles.push_back( avalon::MORGANA );
                 break;
             case 'a':
-                selected.push_back( avalon::ASSASSIN );
+                settings.selected_roles.push_back( avalon::ASSASSIN );
                 break;
             case 'b':
-                selected.push_back( avalon::OBERON );
+                settings.selected_roles.push_back( avalon::OBERON );
                 break;
             default:
                 break;
         }
     }
 
-    return selected;
+    return settings;
 }

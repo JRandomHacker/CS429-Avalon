@@ -20,10 +20,10 @@
 #include <string>
 
 // Constructor
-ServerController::ServerController( ServInfo* model, int port ) {
+ServerController::ServerController( ServInfo* model, ServerSettings settings ) {
 
     this->model = model;
-    this->model->server = new Server( port );
+    this->model->server = new Server( settings.port );
 
     this->qSem = new sem_t;
     sem_init( qSem, 0, 0 ); // Initialize semaphore to 0 so wait immediately blocks
@@ -70,18 +70,18 @@ int ServerController::spawnNetwork( ) {
 }
 
 // Initializes the model
-int ServerController::initModel( unsigned int num_clients, std::vector< avalon::special_roles_t > special_roles ) {
-    model->num_clients = num_clients;
+int ServerController::initModel( ServerSettings settings ) {
+    model->num_clients = settings.num_players;
     model->vote_track = 0;
     model->quest_track = 0;
     model->hidden_voting = false;
-    model->vote_track_length = 5; // TODO get value from ini
-    model->quest_track_length = 5; // TODO get value from ini
-    model->players_per_quest.insert( model->players_per_quest.end( ), &all_players_per_quest[ model->num_clients - 1 ][ 0 ], &all_players_per_quest[ model->num_clients - 1 ][ 5 ] ); // TODO get value from ini
-    model->fails_per_quest.insert( model->fails_per_quest.end( ), &all_fails_per_quest[ model->num_clients - 1 ][ 0 ], &all_fails_per_quest[ model->num_clients - 1 ][ 5 ] ); // TODO get value from ini
+    model->vote_track_length = settings.game_settings.vote_track_length;
+    model->quest_track_length = settings.game_settings.quest_track_length;
+    model->players_per_quest = settings.game_settings.players_per_quest;
+    model->fails_per_quest = settings.game_settings.fails_per_quest;
 
-    initModelCharacters( special_roles );
-    return initModelPlayer( special_roles );
+    initModelCharacters( settings.selected_roles );
+    return initModelPlayer( settings.selected_roles );
 }
 
 

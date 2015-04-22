@@ -7,6 +7,7 @@ OBJS=server.o \
 	teamSelectionState.o \
 	teamVotingState.o \
 	serverInfo.o \
+	serverSettings.o \
 	questVotingState.o \
 	assassinState.o \
 	endGameState.o \
@@ -14,8 +15,9 @@ OBJS=server.o \
 
 COMMON_DIR=../common
 PROTOS_DIR=../protos
+LUA_DIR=../lua/src
 
-INCLUDES=-I$(PROTOS_DIR) -I$(COMMON_DIR)
+INCLUDES=-I$(PROTOS_DIR) -I$(COMMON_DIR) -I$(LUA_DIR)
 CXXOPTS=-Wall -Wextra -std=c++11 -ggdb
 CXX=g++
 

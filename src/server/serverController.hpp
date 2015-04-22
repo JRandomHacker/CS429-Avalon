@@ -13,6 +13,7 @@
 #include "globals.hpp"
 #include "server.hpp"
 #include "serverControllerState.hpp"
+#include "serverSettings.hpp"
 #include "actionHandler.hpp"
 #include "action.hpp"
 #include <semaphore.h>
@@ -119,10 +120,10 @@ class ServerController {
          * Contructor
          *
          * @param model A pointer to the model of the server's state
-         * @param port The port number to listen on
+         * @param settings The server settings
          *
          */
-        ServerController( ServInfo* model, int port );
+        ServerController( ServInfo* model, ServerSettings settings );
 
         /**
          * Destructor
@@ -142,11 +143,9 @@ class ServerController {
          * Initializes the model with the information about the number of players to connect
          * and the special roles we want in the game
          *
-         * @param num_clients The number of players
-         * @param special_roles A vector of the special characters to use
          * @return None
          */
-        int initModel( unsigned int num_clients, std::vector< avalon::special_roles_t > special_roles );
+        int initModel( ServerSettings settings );
 
         /**
          * This method should be called on its own thread, once the controller has been set up

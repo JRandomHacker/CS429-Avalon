@@ -7,21 +7,25 @@ SERVER_DIR=./server
 PROTOS_DIR=./protos
 GUI_DIR=./gui
 TESTS_DIR=../tests
+LUA_DIR=./lua
 
 SERVER_OBJS=$(COMMON_DIR)/*.o $(SERVER_DIR)/*.o $(PROTOS_DIR)/*.o
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
 
 LIBS=-pthread $(PROTOS_LIB)
-INCLUDES=-I$(PROTOS_DIR) -I$(COMMON_DIR) -I$(CLIENT_DIR) -I$(SERVER_DIR)
+INCLUDES=-I$(PROTOS_DIR) -I$(COMMON_DIR) -I$(CLIENT_DIR) -I$(SERVER_DIR) -I$(LUA_DIR)/src
 CXXOPTS=-Wall -Wextra -std=c++11 -ggdb
 CXX=g++
+
+LUA_PLAT=posix
 
 ifeq ($(OS),Windows_NT)
 	LIBS+=-lws2_32
 	CXXOPTS += -static-libgcc -static-libstdc++
+	LUA_PLAT=mingw
 endif
 
-.PHONY : protos common client server tests clean
+.PHONY : protos common client server tests lua clean
 
 all : $(PROGS)
 
@@ -35,6 +39,7 @@ clean :
 	cd $(CLIENT_DIR) && $(MAKE) clean
 	cd $(SERVER_DIR) && $(MAKE) clean
 	cd $(COMMON_DIR) && $(MAKE) clean
+	cd $(LUA_DIR) && $(MAKE) clean
 	rm -f *.exe
 	rm -f $(GUI_DIR)/moc_* $(GUI_DIR)/ui_* $(GUI_DIR)/object_*
 	rm -f $(GUI_DIR)/Makefile* $(GUI_DIR)/*.o
@@ -44,17 +49,21 @@ clean :
 protos :
 	$(MAKE) -C $(PROTOS_DIR)
 
+lua :
+	$(MAKE) -C $(LUA_DIR) mingw
+
 client : common
 	$(MAKE) -C $(CLIENT_DIR)
 
-server : common
+server : common lua
 	$(MAKE) -C $(SERVER_DIR)
 
 common : protos
 	$(MAKE) -C $(COMMON_DIR)
 
-server.exe : $(SERVER_DIR)/server_main.cpp server
-	$(CXX) $(CXXOPTS) $(INCLUDES) $< $(SERVER_OBJS) -o $(BIN_DIR)/$@ $(LIBS)
+server.exe : $(SERVER_DIR)/server_main.cpp server lua
+	$(CXX) $(CXXOPTS) $(INCLUDES) $< $(SERVER_OBJS) -o $(BIN_DIR)/$@ $(LIBS) \
+	-L./lua/src -llua
 	
 # Depend on server, client and common, since apparently shell globbing
 # doesn't work properly in Windows qmake if the files don't exist yet
