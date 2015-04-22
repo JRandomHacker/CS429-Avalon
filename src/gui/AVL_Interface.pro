@@ -21,7 +21,8 @@ SOURCES  += main.cpp\
     displayerrors.cpp \
     guihelpers.cpp \
     votedialog.cpp \
-    resultsdialog.cpp
+    resultsdialog.cpp \
+    endgamewindow.cpp
 
 HEADERS  += optionswindow.hpp \
     gamewindow.hpp \
@@ -30,14 +31,16 @@ HEADERS  += optionswindow.hpp \
     displayerrors.hpp \
     guihelpers.hpp \
     votedialog.hpp \
-    resultsdialog.hpp
+    resultsdialog.hpp \
+    endgamewindow.h
 
 FORMS    += optionswindow.ui \
     gamewindow.ui \
     createserverwindow.ui \
     joinserverwindow.ui \
     votedialog.ui \
-    resultsdialog.ui
+    resultsdialog.ui \
+    endgamewindow.ui
 
 INCLUDEPATH  += ../protos/
 INCLUDEPATH  += ../common/
