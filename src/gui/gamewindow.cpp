@@ -175,9 +175,10 @@ void GameWindow::createPlayerSubscribers( ) {
 
     //Instantiate quest tracker GUI
     for(unsigned int i = 0; i < qLength; i++) {
-        voteTrackLabels[i] = new QLabel("");
 
+        voteTrackLabels[i] = new QLabel("");
         voteTrackLabels[i]->setPixmap( QPixmap( ":/images/QUEST_UNKNOWN.png" ) );
+        voteTrackLabels[i]->setToolTip( QString("No quest history to display.") );
 
         ui->votingTrackLayout->addWidget(voteTrackLabels[i]);
     }
@@ -416,6 +417,32 @@ void GameWindow::updateTrackSlot( ) {
     sem_post( sync_sem );
 }
 
+std::string GameWindow::buildQuestHistoryString(VoteHistory vote_results) {
+
+    std::string header1 = "---Questing Team---\n";
+    std::string header2 = "---Player Votes---\n";
+
+    for ( unsigned int i = 0; i < vote_results.getPlayerVotes( ).size( ); i++ ) {
+        if ( vote_results.getPlayerVotes( )[i] == avalon::YES) {
+
+            header2 += " voted to accept the team\n";
+
+        } else if ( vote_results.getPlayerVotes( )[i] == avalon::NO) {
+
+            header2 += " voted to reject the team\n";
+
+        } else if ( vote_results.getPlayerVotes( )[i] == avalon::HIDDEN) {
+
+            // Handle hidden votes here if need be
+
+        } else {
+
+        }
+    }
+
+    return header1 + header2;
+}
+
 void GameWindow::updateTrack( ) {
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
     std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
@@ -429,6 +456,13 @@ void GameWindow::updateTrack( ) {
             voteTrackLabels[currQuest-1]->setPixmap( QPixmap( ":/images/QUEST_PASS.png" ) );
         else
             voteTrackLabels[currQuest-1]->setPixmap( QPixmap( ":/images/QUEST_FAIL.png" ) );
+
+        std::vector<VoteHistory> hist2 = *voteHistory_subscriber->getData<std::vector<VoteHistory>>( );
+
+        VoteHistory prevVote = hist2.back( );
+
+        voteTrackLabels[currQuest-1]->setToolTip( QString(buildQuestHistoryString(prevVote).c_str()) );
+
     }
 }
 
