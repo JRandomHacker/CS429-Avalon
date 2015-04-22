@@ -66,3 +66,13 @@ std::string avalon::gui::alignmentToString( avalon::alignment_t align ) {
 
     return "Alignment not recognized";
 }
+
+std::string avalon::gui::trimString( std::string in ) {
+    int i = in.length( ) - 1;
+    for( ; i >= 0; i-- ) {
+        if( in[i] != ' ' && in[i] != '\n' && in[i] != '\t' )
+            break;
+    }
+    std::string out = in.substr( 0, i + 1);
+    return out;
+}
