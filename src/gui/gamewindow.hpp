@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QKeyEvent>
+#include "voteHistory.hpp"
 #include "clientController.hpp"
 #include "model.hpp"
 #include "subscriber.hpp"
@@ -457,6 +458,13 @@ private:
      * @return None
      */
     void updateQuestingTeam( );
+
+    /**
+     * Build a string containing quest history
+     *
+     * @return A string containing quest history
+     */
+    std::string buildQuestHistoryString( VoteHistory vote_results );
 
     /**
      * Displays info about vote/quest tracks
