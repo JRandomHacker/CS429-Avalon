@@ -66,3 +66,8 @@ AssassinTargetSelectionAction::~AssassinTargetSelectionAction( ) { }
 unsigned int AssassinTargetSelectionAction::getSelectionId( ) {
 	return selection_id;
 }
+
+GameEndAction::GameEndAction( ) : Action( "GameEnd" ) {
+}
+
+GameEndAction::~GameEndAction( ) { }
