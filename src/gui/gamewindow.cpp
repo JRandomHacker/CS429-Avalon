@@ -315,6 +315,7 @@ void GameWindow::updatePlayer( unsigned int id ) {
 
         listModel->setItem( id, 1, new QStandardItem(
                                 QString( avalon::gui::alignmentToString( p->getAlignment( ) ).c_str( ) ) ) );
+
         listModel->setItem( id, 2, new QStandardItem(
                                 QString( avalon::gui::roleToString( p->getRole( ) ).c_str( ) ) ) );
     }
