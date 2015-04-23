@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>images/MENU.jpg</file>
         <file>images/ASSASSIN.jpg</file>
-        <file>images/GENERIC.jpg</file>
         <file>images/MERLIN.jpg</file>
         <file>images/MORDRED.jpg</file>
         <file>images/MORGANA.jpg</file>
@@ -11,5 +10,8 @@
         <file>images/QUEST_FAIL.png</file>
         <file>images/QUEST_PASS.png</file>
         <file>images/QUEST_UNKNOWN.png</file>
+        <file>images/GENERIC_EVIL.jpg</file>
+        <file>images/GENERIC_GOOD.jpg</file>
+        <file>images/NONE.jpg</file>
     </qresource>
 </RCC>

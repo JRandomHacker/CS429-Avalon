@@ -306,7 +306,7 @@ void GameWindow::updatePlayer( unsigned int id ) {
 
             //Load client player's role avatar
             ui->playerAvatarLabel->setVisible(false);
-            ui->playerAvatarLabel->setPixmap( QPixmap( avalon::gui::roleToImage( p->getRole() ).c_str( ) ) );
+            ui->playerAvatarLabel->setPixmap( QPixmap( avalon::gui::roleToImage( p->getRole(), p->getAlignment() ).c_str( ) ) );
             ui->playerAvatarLabel->setVisible(true);
         }
 
@@ -459,9 +459,9 @@ void GameWindow::updateTrack( ) {
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
 
     if(currQuest > 0) {
-        std::vector<QuestVoteHistory> hist = *questHistory_subscriber->getData<std::vector<QuestVoteHistory>>( );
 
-        QuestVoteHistory temp = hist[currQuest-1];
+        std::vector<QuestVoteHistory> hist = *questHistory_subscriber->getData<std::vector<QuestVoteHistory>>( );
+        QuestVoteHistory temp = hist.back();
 
         //Determine what icon to use
         if( temp.getVotePassed( ) )
