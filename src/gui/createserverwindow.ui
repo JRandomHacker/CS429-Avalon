@@ -60,7 +60,7 @@
        <item>
         <widget class="QCheckBox" name="cbOpenVoting">
          <property name="text">
-          <string>Open Voting</string>
+          <string>Closed Voting</string>
          </property>
         </widget>
        </item>
