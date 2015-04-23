@@ -109,8 +109,9 @@ int CreateServerWindow::createServer( ) {
             portStr += ui->editPortNum->text( ).toStdString( );
 
             std::string hiddenStr = "";
-            if( ui->cbOpenVoting->isChecked( ) )
-                hiddenStr = " --hidden";
+            if( ui->cbOpenVoting->isChecked( ) ) {
+                hiddenStr = "--hidden";
+            }
 
             QList< QListWidgetItem* > roles = ui->listWidget->selectedItems( );
 
