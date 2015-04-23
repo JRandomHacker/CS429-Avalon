@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QKeyEvent>
+#include "voteHistory.hpp"
 #include "clientController.hpp"
 #include "model.hpp"
 #include "subscriber.hpp"
@@ -115,6 +116,18 @@ signals:
     void questVoteStateUpdated( );
 
     /**
+     * Signal emitted when assassin state is entered
+     *
+     * @return None
+     */
+    void assassinStateUpdated( );
+
+    /**
+     * Signal emitted when game ends
+     */
+    void endGameStateUpdated( );
+
+    /**
      * Signal emitted when vote history is updated
      *
      * @return  None
@@ -198,6 +211,16 @@ private slots:
     void updateQuestVoteStateSlot( );
 
     /**
+     * Changes gui for assassin state
+     */
+    void updateAssassinStateSlot( );
+
+    /**
+     * Changes gui for end game state
+     */
+    void updateEndGameStateSlot( );
+
+    /**
      * Pops up vote result
      */
     void updateVoteHistorySlot( );
@@ -223,6 +246,12 @@ private slots:
      * @return None
      */
     void on_playerList_clicked( const QModelIndex &index );
+
+    /**
+     * When the leader clicks on a player in the team list, they are removed from the team
+     */
+    void on_proposeTeamList_clicked( const QModelIndex& index );
+
 
     /**
      *  Callback for positive vote button
@@ -339,6 +368,16 @@ private:
     Subscriber* questVoteState_subscriber;
 
     /**
+     *  Subscriber for assassin state flag
+     */
+    Subscriber* assassinState_subscriber;
+
+    /**
+     *  Subscriber for end game flag
+     */
+    Subscriber* endGameState_subscriber;
+
+    /**
      * Subscriber for vote history
      */
     Subscriber* voteHistory_subscriber;
@@ -421,6 +460,13 @@ private:
     void updateQuestingTeam( );
 
     /**
+     * Build a string containing quest history
+     *
+     * @return A string containing quest history
+     */
+    std::string buildQuestHistoryString( VoteHistory vote_results );
+
+    /**
      * Displays info about vote/quest tracks
      *
      * @return None
@@ -437,6 +483,16 @@ private:
      * Changes gui to enable/disable quest voting
      */
     void updateQuestVoteState( );
+
+    /**
+     * Changes gui to enable assassin state
+     */
+    void updateAssassinState( );
+
+    /**
+     * Changes gui to display results of game
+     */
+    void updateEndGameState( );
 
     /**
      * Pops up vote result

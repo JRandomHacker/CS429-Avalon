@@ -14,7 +14,7 @@
    <string>Avalon Online</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0" rowspan="6">
+   <item row="0" column="0" rowspan="5">
     <layout class="QVBoxLayout" name="rolesLayout" stretch="0,0,0,0">
      <property name="sizeConstraint">
       <enum>QLayout::SetFixedSize</enum>
@@ -79,14 +79,48 @@
    <item row="0" column="2" colspan="2">
     <layout class="QHBoxLayout" name="votingTrackLayout"/>
    </item>
-   <item row="0" column="1" rowspan="6">
+   <item row="0" column="1" rowspan="5">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
+   <item row="3" column="2" colspan="2">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <layout class="QVBoxLayout" name="votingLayout">
+     <item>
+      <widget class="QGroupBox" name="votingSection">
+       <property name="title">
+        <string>Voting</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QPushButton" name="buttonVotePass">
+          <property name="text">
+           <string>PASS!!!</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonVoteFail">
+          <property name="text">
+           <string>FAIL!!!</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="2">
     <layout class="QVBoxLayout" name="proposedTeamLayout">
      <item>
       <widget class="QGroupBox" name="proposedTeamSection">
@@ -118,7 +152,14 @@
           </item>
          </layout>
         </item>
-        <item row="1" column="0">
+        <item row="3" column="0">
+         <widget class="QPushButton" name="proposeTeamButton">
+          <property name="text">
+           <string>Propose Team</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
          <widget class="QTableView" name="proposeTeamList">
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
@@ -128,10 +169,10 @@
           </attribute>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QPushButton" name="proposeTeamButton">
+        <item row="1" column="0">
+         <widget class="QLabel" name="teamSizeLabel">
           <property name="text">
-           <string>Propose Team</string>
+           <string>?/? players selected</string>
           </property>
          </widget>
         </item>
@@ -141,40 +182,6 @@
     </layout>
    </item>
    <item row="4" column="2" colspan="2">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <layout class="QVBoxLayout" name="votingLayout">
-     <item>
-      <widget class="QGroupBox" name="votingSection">
-       <property name="title">
-        <string>Voting</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QPushButton" name="buttonVotePass">
-          <property name="text">
-           <string>PASS!!!</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonVoteFail">
-          <property name="text">
-           <string>FAIL!!!</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="5" column="2" colspan="2">
     <layout class="QVBoxLayout" name="chatLayout">
      <item>
       <widget class="QGroupBox" name="chatSection">

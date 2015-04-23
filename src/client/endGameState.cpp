@@ -33,8 +33,8 @@ namespace client {
             data->model->updateData( "endGamePlayers", action->getPlayers( ) );
             data->model->updateData( "endGameState", true );
 
+        } else if ( action_type == "GameEnd" ) {
             data->client->sendProtobuf( avalon::network::ENTER_END_GAME_BUF, "" );
-
         } else {
             return ClientControllerState::handleAction( action_to_be_handled );
         }

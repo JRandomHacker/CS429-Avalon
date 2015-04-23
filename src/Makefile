@@ -50,7 +50,7 @@ protos :
 	$(MAKE) -C $(PROTOS_DIR)
 
 lua :
-	$(MAKE) -C $(LUA_DIR) mingw
+	$(MAKE) -C $(LUA_DIR) $(LUA_PLAT) 
 
 client : common
 	$(MAKE) -C $(CLIENT_DIR)

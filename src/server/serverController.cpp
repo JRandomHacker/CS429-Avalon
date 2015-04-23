@@ -74,7 +74,7 @@ int ServerController::initModel( ServerSettings settings ) {
     model->num_clients = settings.num_players;
     model->vote_track = 0;
     model->quest_track = 0;
-    model->hidden_voting = false;
+    model->hidden_voting = settings.hidden_votes;
     model->vote_track_length = settings.game_settings.vote_track_length;
     model->quest_track_length = settings.game_settings.quest_track_length;
     model->players_per_quest = settings.game_settings.players_per_quest;

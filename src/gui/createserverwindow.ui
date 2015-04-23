@@ -60,14 +60,7 @@
        <item>
         <widget class="QCheckBox" name="cbOpenVoting">
          <property name="text">
-          <string>Open Voting</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cbLady">
-         <property name="text">
-          <string>Lady of the Lake</string>
+          <string>Closed Voting</string>
          </property>
         </widget>
        </item>

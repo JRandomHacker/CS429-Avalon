@@ -9,6 +9,7 @@
 #include "questVoteHistory.hpp"
 #include "resultsdialog.hpp"
 #include "chat_message.hpp"
+#include "enterdetector.hpp"
 #include "clientCustomActionsForChat.hpp"
 #include <climits>
 #include <signal.h>
@@ -48,6 +49,10 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
     connect( this, SIGNAL( questHistoryUpdated( ) ), this, SLOT( updateQuestHistorySlot( ) ) );
     connect( this, SIGNAL( currentVotesUpdated( ) ), this, SLOT( updateCurrentVotesSlot( ) ) );
     connect( this, SIGNAL( chatMessagesUpdated( ) ), this, SLOT( updateChatMessagesSlot( ) ) );
+    connect( this, SIGNAL( assassinStateUpdated( ) ), this, SLOT( updateAssassinStateSlot( ) ) );
+    connect( this, SIGNAL( endGameStateUpdated( ) ), this, SLOT( updateEndGameStateSlot( ) ) );
+
+    ui->chatEdit->installEventFilter( new EnterDetector( this, ui->sendMsgButton ) );
 
     // Start up thread for controller
     pthread_t controlThread;
@@ -68,6 +73,18 @@ GameWindow::~GameWindow( ) {
     delete leaderID_subscriber;
     delete questingTeam_subscriber;
     delete teamVoteState_subscriber;
+    delete voteTrackLength_subscriber;
+    delete currentVoteTrack_subscriber;
+    delete questTrackLength_subscriber;
+    delete currentQuestTrack_subscriber;
+    delete playersPerQuest_subscriber;
+    delete questVoteState_subscriber;
+    delete assassinState_subscriber;
+    delete endGameState_subscriber;
+    delete voteHistory_subscriber;
+    delete questHistory_subscriber;
+    delete currentVotes_subscriber;
+    delete chatMessages_subscriber;
     for( std::vector<Subscriber*>::iterator i = player_subscribers.begin( ); i != player_subscribers.end( ); i++ )
         delete *i;
 
@@ -158,9 +175,10 @@ void GameWindow::createPlayerSubscribers( ) {
 
     //Instantiate quest tracker GUI
     for(unsigned int i = 0; i < qLength; i++) {
-        voteTrackLabels[i] = new QLabel("");
 
+        voteTrackLabels[i] = new QLabel("");
         voteTrackLabels[i]->setPixmap( QPixmap( ":/images/QUEST_UNKNOWN.png" ) );
+        voteTrackLabels[i]->setToolTip( QString("No quest history to display.") );
 
         ui->votingTrackLayout->addWidget(voteTrackLabels[i]);
     }
@@ -205,7 +223,7 @@ void GameWindow::createPlayerSubscribers( ) {
     model->subscribe( "leaderID", leaderID_subscriber );
     updateLeader( );
 
-    // Subscribe to voteState
+    // Subscribe to state flags
     teamVoteState_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                     emit teamVoteStateUpdated( );
@@ -222,6 +240,23 @@ void GameWindow::createPlayerSubscribers( ) {
             NULL );
     model->subscribe( "questVoteState", questVoteState_subscriber );
 
+    assassinState_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit assassinStateUpdated( );
+                    sem_wait( sync_sem );
+                },
+                NULL );
+    model->subscribe( "assassinState", assassinState_subscriber );
+
+    endGameState_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit endGameStateUpdated( );
+                    sem_wait( sync_sem );
+                },
+                NULL );
+    model->subscribe( "endGameState", endGameState_subscriber );
+
+    // Subscribe to histories
     voteHistory_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
                     emit voteHistoryUpdated( );
@@ -337,14 +372,17 @@ void GameWindow::updateQuestingTeam( ) {
 
     ui->proposeTeamList->setModel( qModel );
 
-    ui->proposeTeamList->hide();
-    ui->proposeTeamList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->proposeTeamList->show();
+    ui->proposeTeamList->hide( );
+    ui->proposeTeamList->horizontalHeader( )->setSectionResizeMode( QHeaderView::Stretch );
+    ui->proposeTeamList->show( );
 
     // Enable or disable the propose button depending on how many questers are selected
     std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
     unsigned int playersCurrQuest = playersPerQuest[currQuest];
+    ui->teamSizeLabel->setText( QString( (std::to_string( team.size( ) ) + "/" + std::to_string( playersCurrQuest )
+                                         + " players selected").c_str( ) ) );
+
     ui->proposeTeamButton->setEnabled( playersCurrQuest == team.size( ) );
 }
 
@@ -379,6 +417,32 @@ void GameWindow::updateTrackSlot( ) {
     sem_post( sync_sem );
 }
 
+std::string GameWindow::buildQuestHistoryString(VoteHistory vote_results) {
+
+    std::string header1 = "---Questing Team---\n";
+    std::string header2 = "---Player Votes---\n";
+
+    for ( unsigned int i = 0; i < vote_results.getPlayerVotes( ).size( ); i++ ) {
+        if ( vote_results.getPlayerVotes( )[i] == avalon::YES) {
+
+            header2 += " voted to accept the team\n";
+
+        } else if ( vote_results.getPlayerVotes( )[i] == avalon::NO) {
+
+            header2 += " voted to reject the team\n";
+
+        } else if ( vote_results.getPlayerVotes( )[i] == avalon::HIDDEN) {
+
+            // Handle hidden votes here if need be
+
+        } else {
+
+        }
+    }
+
+    return header1 + header2;
+}
+
 void GameWindow::updateTrack( ) {
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
     std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
@@ -392,6 +456,13 @@ void GameWindow::updateTrack( ) {
             voteTrackLabels[currQuest-1]->setPixmap( QPixmap( ":/images/QUEST_PASS.png" ) );
         else
             voteTrackLabels[currQuest-1]->setPixmap( QPixmap( ":/images/QUEST_FAIL.png" ) );
+
+        std::vector<VoteHistory> hist2 = *voteHistory_subscriber->getData<std::vector<VoteHistory>>( );
+
+        VoteHistory prevVote = hist2.back( );
+
+        voteTrackLabels[currQuest-1]->setToolTip( QString(buildQuestHistoryString(prevVote).c_str()) );
+
     }
 }
 
@@ -491,6 +562,41 @@ void GameWindow::updateQuestVoteState( ) {
 
 }
 
+void GameWindow::updateAssassinStateSlot( ) {
+    updateAssassinState( );
+    sem_post( sync_sem );
+}
+
+void GameWindow::updateAssassinState( ) {
+    // Do stuff for assassin
+
+    bool inAssassinState = *assassinState_subscriber->getData<bool>( );
+    if( inAssassinState ) {
+        ui->stateLabel->setText( QString( "Assassin Round" ) );
+
+    }
+}
+
+void GameWindow::updateEndGameStateSlot( ) {
+    updateEndGameState( );
+    sem_post( sync_sem );
+}
+
+void GameWindow::updateEndGameState( ) {
+    // End game
+    bool inEndGameState = *endGameState_subscriber->getData<bool>( );
+    if( inEndGameState ) {
+        Subscriber* winningTeam_subscriber = new ClosureSubscriber( NULL, NULL );
+        model->subscribe( "winningTeam", winningTeam_subscriber );
+        avalon::alignment_t winner = *winningTeam_subscriber->getData<avalon::alignment_t>( );
+        unsigned int myID = *myID_subscriber->getData<unsigned int>( );
+        Player myPlayer = *player_subscribers[myID]->getData<Player>( );
+
+        std::string gameResultString = avalon::gui::getGameResultString( myPlayer.getAlignment( ), winner );
+
+    }
+}
+
 void GameWindow::updateCurrentVotesSlot( ) {
     updateCurrentVotes( );
     sem_post( sync_sem );
@@ -580,7 +686,7 @@ void GameWindow::updateChatMessages( ) {
 
 
 void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
-    if(leaderID_subscriber == NULL || myID_subscriber == NULL )
+    if( leaderID_subscriber == NULL || myID_subscriber == NULL )
         return;
 
     unsigned int row = (unsigned int) index.row( );
@@ -602,6 +708,20 @@ void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
     unsigned int playersCurrQuest = playersPerQuest[currQuest];
     if( playersCurrQuest > qTeam.size( ) ) {
         SelectQuestGoerAction* act = new SelectQuestGoerAction( true, row );
+        control->addActionToQueue( act );
+    }
+}
+
+void GameWindow::on_proposeTeamList_clicked( const QModelIndex& index ) {
+    if( leaderID_subscriber == NULL || myID_subscriber == NULL )
+        return;
+
+    unsigned int row = ( unsigned int ) index.row( );
+
+    // Remove the player in that row from the questing team
+    std::vector<unsigned int> qTeam = *questingTeam_subscriber->getData<std::vector<unsigned int>>( );
+    if( row < qTeam.size( ) ) {
+        SelectQuestGoerAction* act = new SelectQuestGoerAction( false, qTeam[row] );
         control->addActionToQueue( act );
     }
 }
@@ -640,7 +760,11 @@ void GameWindow::on_proposeTeamButton_clicked( ) {
 
 void GameWindow::on_sendMsgButton_clicked( ) {
     std::string message = ui->chatEdit->toPlainText( ).toStdString( );
-
+    message = avalon::gui::trimString( message );
+    if( message.empty( ) ) {
+        ui->chatEdit->clear( );
+        return;
+    }
     unsigned int myID = *myID_subscriber->getData<unsigned int>( );
     avalon::common::ChatMessage* chatMess = new avalon::common::ChatMessage( myID, message, 0 );
     ChatMessageSentAction* act = new ChatMessageSentAction( *chatMess );
