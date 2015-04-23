@@ -210,4 +210,27 @@ class AssassinTargetSelectionAction : public Action {
         unsigned int selection_id;
 };
 
+/**
+ * An action to end the game
+ *
+ * @class GameEndAction
+ * @author Justin Koehler
+ * @date 2015-04-22
+ */
+class GameEndAction : public Action {
+    public:
+
+        /**
+         * Public constructor
+         *
+         * @param new_name This new name I want
+         */
+        GameEndAction( );
+
+        /**
+         * Destructor
+         */
+        virtual ~GameEndAction( );
+};
+
 #endif // CLIENTCUSTOMACTIONSFROMGUI_HPP
