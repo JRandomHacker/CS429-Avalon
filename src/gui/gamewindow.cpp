@@ -423,20 +423,19 @@ std::string GameWindow::buildQuestHistoryString(VoteHistory vote_results) {
     std::string header2 = "---Player Votes---\n";
 
     for ( unsigned int i = 0; i < vote_results.getPlayerVotes( ).size( ); i++ ) {
+
         if ( vote_results.getPlayerVotes( )[i] == avalon::YES) {
 
-            header2 += " voted to accept the team\n";
+            header2 += player_subscribers[i]->getData<Player>( )->getName( ) + " approved the team.\n";
 
         } else if ( vote_results.getPlayerVotes( )[i] == avalon::NO) {
 
-            header2 += " voted to reject the team\n";
+            header2 += player_subscribers[i]->getData<Player>( )->getName( ) + " rejected the team.\n";
 
         } else if ( vote_results.getPlayerVotes( )[i] == avalon::HIDDEN) {
-
-            // Handle hidden votes here if need be
-
+            //Hidden voting
         } else {
-
+            //Imposible situation
         }
     }
 
