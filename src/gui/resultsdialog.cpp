@@ -2,7 +2,7 @@
 #include "ui_resultsdialog.h"
 
 ResultsDialog::ResultsDialog(QWidget *parent, VoteHistory* vote_results, QuestVoteHistory* quest_results,
-                             const std::vector<Subscriber*>& player_subscribers ) :
+                             Subscriber* player_subscribers ) :
     QDialog(parent),
     ui(new Ui::ResultsDialog),
     player_subscribers_ref(player_subscribers)
@@ -24,7 +24,7 @@ ResultsDialog::ResultsDialog(QWidget *parent, VoteHistory* vote_results, QuestVo
 }
 
 std::string ResultsDialog::getVoteString( VoteHistory vote_results,
-                                          const::std::vector<Subscriber*>& player_subscribers ) {
+                                          Subscriber* player_subscribers ) {
 
     std::string result_text = "";
     result_text += "The vote has ";
@@ -50,8 +50,7 @@ std::string ResultsDialog::getVoteString( VoteHistory vote_results,
     return result_text;
 }
 
-std::string ResultsDialog::getQuestString( QuestVoteHistory quest_results,
-                                           const::std::vector<Subscriber*>& player_subscribers ) {
+std::string ResultsDialog::getQuestString( QuestVoteHistory quest_results, Subscriber* player_subscribers ) {
     std::string result_text = "Quest ";
 
     if( quest_results.getVotePassed( ) ) {
@@ -81,5 +80,5 @@ ResultsDialog::~ResultsDialog()
 }
 
 std::string ResultsDialog::getPlayerName( unsigned int player_id ) {
-    return (player_subscribers_ref[ player_id ])->getData< Player >()->getName();
+    return (*player_subscribers_ref->getData< std::vector <Player> >( ))[player_id].getName( );
 }

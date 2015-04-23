@@ -38,7 +38,7 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
 
     // Connect slots and signals for updating UI elements
     connect( this, SIGNAL( gameSettingsReceived( ) ), this, SLOT( createPlayerSubscribersSlot( ) ) );
-    connect( this, SIGNAL( playerInfoUpdated( unsigned int ) ), this, SLOT( updatePlayerSlot( unsigned int ) ) );
+    connect( this, SIGNAL( playerInfoUpdated( ) ), this, SLOT( updatePlayerSlot( ) ) );
     connect( this, SIGNAL( gameInfoUpdated( ) ), this, SLOT( updateGameInfoSlot( ) ) );
     connect( this, SIGNAL( leaderIDUpdated( ) ), this, SLOT( updateLeaderSlot( ) ) );
     connect( this, SIGNAL( questingTeamUpdated( ) ), this, SLOT( updateQuestingTeamSlot( ) ) );
@@ -85,9 +85,7 @@ GameWindow::~GameWindow( ) {
     delete questHistory_subscriber;
     delete currentVotes_subscriber;
     delete chatMessages_subscriber;
-    for( std::vector<Subscriber*>::iterator i = player_subscribers.begin( ); i != player_subscribers.end( ); i++ )
-        delete *i;
-
+    delete player_subscriber;
     delete ui;
 }
 
@@ -196,19 +194,15 @@ void GameWindow::createPlayerSubscribers( ) {
 
     listModel->setHorizontalHeaderLabels( headers );
 
-    for ( unsigned int i = 0; i < num_players; i++ ) {
-        // Add subscriber for this player
-        player_subscribers.push_back( new ClosureSubscriber(
-            [&,i]( Subscriber* ){
-                emit playerInfoUpdated( i );
+    player_subscriber = new ClosureSubscriber(
+            [&]( Subscriber* ){
+                emit playerInfoUpdated( );
                 sem_wait( sync_sem );
             },
-            NULL ) );
-        model->subscribe( std::string( "player" ) + std::to_string( i ), player_subscribers[i] );
-
-        updatePlayer( i );
-    }
-
+            NULL );
+    model->subscribe( "players", player_subscriber );
+    updatePlayer( );
+    
     ui->playerList->hide();
     ui->playerList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->playerList->show();
@@ -284,39 +278,43 @@ void GameWindow::createPlayerSubscribers( ) {
     ui->chatList->setModel( chatModel );
 }
 
-void GameWindow::updatePlayerSlot( unsigned int id ) {
-    updatePlayer( id );
+void GameWindow::updatePlayerSlot( ) {
+    updatePlayer( );
     sem_post( sync_sem );
 }
 
-void GameWindow::updatePlayer( unsigned int id ) {
+void GameWindow::updatePlayer( ) {
 
     QStandardItemModel* listModel = ( QStandardItemModel* ) ui->playerList->model( );
 
-    Player* p = player_subscribers[id]->getData<Player>( );
+    
+    std::vector <Player> player_vector = (*player_subscriber->getData<std::vector<Player> >( ) );
 
-    // Update the player's info in GUI
-    std::string newString = "<waiting for player>";
-    if( p != NULL ) {
-        newString = p->getName( );
-        if( id == *myID_subscriber->getData<unsigned int>( ) ) {
+    for (unsigned int i = 0; i < player_vector.size(); i++ ) {
+        // Update the player's info in GUI
+        std::string newString = "<waiting for player>";
+        Player p = player_vector[i];
+        newString = p.getName( );
+        if( i == *myID_subscriber->getData<unsigned int>( ) ) {
             newString += " (me)";
 
             //Load client player's role avatar
             ui->playerAvatarLabel->setVisible(false);
-            ui->playerAvatarLabel->setPixmap( QPixmap( avalon::gui::roleToImage( p->getRole() ).c_str( ) ) );
+            ui->playerAvatarLabel->setPixmap( QPixmap( avalon::gui::roleToImage( p.getRole() ).c_str( ) ) );
             ui->playerAvatarLabel->setVisible(true);
         }
 
-        if( id == 0 )
+        if( i == 0 )
             newString += " (host)";
 
-        listModel->setItem( id, 1, new QStandardItem(
-                                QString( avalon::gui::alignmentToString( p->getAlignment( ) ).c_str( ) ) ) );
-        listModel->setItem( id, 2, new QStandardItem(
-                                QString( avalon::gui::roleToString( p->getRole( ) ).c_str( ) ) ) );
+        listModel->setItem( i, 1, new QStandardItem(
+                                QString( avalon::gui::alignmentToString( p.getAlignment( ) ).c_str( ) ) ) );
+        listModel->setItem( i, 2, new QStandardItem(
+                                QString( avalon::gui::roleToString( p.getRole( ) ).c_str( ) ) ) );   
+    
+        listModel->setItem( i, 0, new QStandardItem( QString( newString.c_str( ) ) ) );
     }
-    listModel->setItem( id, 0, new QStandardItem( QString( newString.c_str( ) ) ) );
+    
     
     ui->playerList->resizeColumnsToContents( );
 }
@@ -338,10 +336,10 @@ void GameWindow::updateLeader( ) {
         ui->proposeTeamButton->setEnabled( false );
     } else if( lid != UINT_MAX ) {
 
-        Player* leader = player_subscribers[lid]->getData<Player>( );
-        if( leader != NULL ) {
-            ui->leaderLabel->setText( QString( ( "Current Leader: "+leader->getName( ) ).c_str( ) ) );
-        }
+        Player leader = (*player_subscriber->getData<std::vector<Player> >( ) )[lid];
+        //if( leader != NULL ) {
+            ui->leaderLabel->setText( QString( ( "Current Leader: "+leader.getName( ) ).c_str( ) ) );
+        //}
         ui->proposeTeamButton->hide( );
     } else {
 
@@ -362,8 +360,8 @@ void GameWindow::updateQuestingTeam( ) {
     for( unsigned int i = 0; i < team.size( ); i++ ) {
 
         unsigned int player_num = team[ i ];
-        Player* p = player_subscribers[ player_num ]->getData< Player >( );
-        qModel->appendRow( new QStandardItem( QString( p->getName( ).c_str( ) ) ) );
+        Player p = (*player_subscriber->getData<std::vector<Player> >( ))[player_num];
+        qModel->appendRow( new QStandardItem( QString( p.getName( ).c_str( ) ) ) );
 
         QStringList qHeaders;
         qHeaders.append( QString( "Name" ) );
@@ -536,7 +534,7 @@ void GameWindow::updateQuestVoteState( ) {
             ui->votingSection->show( );
 
             unsigned int myID = *myID_subscriber->getData<unsigned int>( );
-            Player me = *player_subscribers[myID]->getData<Player>( );
+            Player me = (*player_subscriber->getData<std::vector<Player> >( ))[myID];
             if( me.getAlignment( ) == avalon::GOOD ) {
                 ui->buttonVoteFail->setText( "PASS!!!" );
             }
@@ -590,7 +588,7 @@ void GameWindow::updateEndGameState( ) {
         model->subscribe( "winningTeam", winningTeam_subscriber );
         avalon::alignment_t winner = *winningTeam_subscriber->getData<avalon::alignment_t>( );
         unsigned int myID = *myID_subscriber->getData<unsigned int>( );
-        Player myPlayer = *player_subscribers[myID]->getData<Player>( );
+        Player myPlayer = (*player_subscriber->getData<std::vector<Player> >( ))[myID];
 
         std::string gameResultString = avalon::gui::getGameResultString( myPlayer.getAlignment( ), winner );
 
@@ -641,7 +639,7 @@ void GameWindow::updateVoteHistory( ) {
     VoteHistory thisVote = hist.back( );
 
     // Show pop-up with results
-    ResultsDialog results( NULL, &thisVote, NULL, player_subscribers );
+    ResultsDialog results( NULL, &thisVote, NULL, player_subscriber );
     results.exec( );
 }
 
@@ -656,7 +654,7 @@ void GameWindow::updateQuestHistory( ) {
     QuestVoteHistory thisQuest = hist.back( );
 
     // Show pop-up with results
-    ResultsDialog results( NULL, NULL, &thisQuest, player_subscribers );
+    ResultsDialog results( NULL, NULL, &thisQuest, player_subscriber );
     results.exec( );
 }
 
@@ -671,7 +669,7 @@ void GameWindow::updateChatMessages( ) {
     avalon::common::ChatMessage message = messages.back( );
 
     unsigned int senderID = message.getSenderId( );
-    Player p = *player_subscribers[senderID]->getData<Player>( );
+    Player p = (*player_subscriber->getData<std::vector<Player> >( ) )[senderID];
     std::string senderName = p.getName( );
 
     std::string messageStr = senderName + ": " + message.getMessageText( );
@@ -742,7 +740,7 @@ void GameWindow::on_buttonVoteFail_clicked( ) {
         control->addActionToQueue( vote );
     } else {
         unsigned int myID = *myID_subscriber->getData<unsigned int>( );
-        Player me = *player_subscribers[myID]->getData<Player>( );
+        Player me = (*player_subscriber->getData<std::vector<Player> >( ))[myID];
         if( me.getAlignment( ) == avalon::GOOD ) {
             QuestVoteAction* vote = new QuestVoteAction( avalon::YES );
             control->addActionToQueue( vote );

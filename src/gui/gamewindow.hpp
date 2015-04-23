@@ -72,7 +72,7 @@ signals:
      * @param playerNum The ID of the player that is being updated
      * @return None
      */
-    void playerInfoUpdated( unsigned int playerNum );
+    void playerInfoUpdated();
 
     /**
      * A signal that is emitted when the GameSettings have finished setting things up
@@ -169,7 +169,7 @@ private slots:
      * @param id The playerNum of the updated player
      * @return None
      */
-    void updatePlayerSlot( unsigned int id );
+    void updatePlayerSlot( );
 
     /**
      *  Updates the numEvil and roleList UI elements
@@ -399,9 +399,9 @@ private:
 
 
     /**
-     *  Subscriber vector that watches player objects.
+     *  Subscriber vector that watches player subscriber.
      */
-    std::vector<Subscriber*> player_subscribers;
+    Subscriber* player_subscriber;
     
     handle_t serverH;
 
@@ -436,7 +436,7 @@ private:
      * @param id The playerNum of the updated player
      * @return None
      */
-    void updatePlayer( unsigned int id );
+    void updatePlayer( );
 
     /**
      *  Updates the numEvil and roleList UI elements

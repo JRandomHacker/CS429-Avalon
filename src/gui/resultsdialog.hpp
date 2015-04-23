@@ -18,16 +18,16 @@ class ResultsDialog : public QDialog
 
 public:
     explicit ResultsDialog(QWidget *parent, VoteHistory* vote_results, QuestVoteHistory* quest_results,
-    	const std::vector<Subscriber*>& player_subscribers );
+    	Subscriber* player_subscribers );
     ~ResultsDialog();
 
-    std::string getVoteString( VoteHistory vote_results, const std::vector<Subscriber*>& player_subscribers );
+    std::string getVoteString( VoteHistory vote_results, Subscriber* player_subscribers );
 
-    std::string getQuestString( QuestVoteHistory vote_results, const std::vector<Subscriber*>& player_subscribers );
+    std::string getQuestString( QuestVoteHistory vote_results, Subscriber* player_subscribers );
 
 
 private:
-	const std::vector<Subscriber*>& player_subscribers_ref;
+	Subscriber* player_subscribers_ref;
     Ui::ResultsDialog *ui;
     
     /**
