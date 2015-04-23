@@ -591,9 +591,9 @@ void GameWindow::updateEndGameState( ) {
         model->subscribe( "winningTeam", winningTeam_subscriber );
         avalon::alignment_t winner = *winningTeam_subscriber->getData<avalon::alignment_t>( );
         unsigned int myID = *myID_subscriber->getData<unsigned int>( );
-        Player* myPlayer = *player_subscribers[myID]->getData<Player*>( );
+        Player myPlayer = *player_subscribers[myID]->getData<Player>( );
 
-        std::string gameResultString = avalon::gui::getGameResultString( myPlayer->getAlignment( ), winner );
+        std::string gameResultString = avalon::gui::getGameResultString( myPlayer.getAlignment( ), winner );
 
         EndGameWindow* endWindow = new EndGameWindow( this, std::vector<Player*>(), gameResultString );
         endWindow->exec( );
