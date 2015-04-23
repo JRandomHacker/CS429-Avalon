@@ -2,21 +2,22 @@
 #define ENDGAMEWINDOW_H
 
 #include <QDialog>
+#include "player.hpp"
 
 namespace Ui {
-class endGameWindow;
+class EndGameWindow;
 }
 
-class endGameWindow : public QDialog
+class EndGameWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit endGameWindow(QWidget *parent = 0);
-    ~endGameWindow();
+    EndGameWindow(QWidget *parent, std::vector<Player*> allPlayers, std::string resultString);
+    ~EndGameWindow();
 
 private:
-    Ui::endGameWindow *ui;
+    Ui::EndGameWindow *ui;
 };
 
 #endif // ENDGAMEWINDOW_H

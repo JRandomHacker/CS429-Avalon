@@ -15,6 +15,8 @@ namespace avalon
         std::string alignmentToString(avalon::alignment_t align);
 
         std::string trimString( std::string in );
+
+        std::string getGameResultString( avalon::alignment_t player, avalon::alignment_t winner );
     }
 }
 

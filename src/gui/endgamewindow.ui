@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>endGameWindow</class>
- <widget class="QDialog" name="endGameWindow">
+ <class>EndGameWindow</class>
+ <widget class="QDialog" name="EndGameWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -36,15 +36,12 @@
          <widget class="QTableView" name="playerList"/>
         </item>
        </layout>
-       <zorder>playerList</zorder>
-       <zorder>playerList</zorder>
-       <zorder>resultsText</zorder>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="acceptButton">
        <property name="text">
-        <string>PushButton</string>
+        <string>Quit Game</string>
        </property>
       </widget>
      </item>

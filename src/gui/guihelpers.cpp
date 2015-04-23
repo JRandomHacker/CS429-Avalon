@@ -76,3 +76,10 @@ std::string avalon::gui::trimString( std::string in ) {
     std::string out = in.substr( 0, i + 1);
     return out;
 }
+
+std::string avalon::gui::getGameResultString( avalon::alignment_t player, avalon::alignment_t winner ) {
+    if( winner == avalon::GOOD )
+        return "Good guys won!";
+    else
+        return "Bad guys won!";
+}

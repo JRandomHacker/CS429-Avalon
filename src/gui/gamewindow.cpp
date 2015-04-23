@@ -10,6 +10,7 @@
 #include "resultsdialog.hpp"
 #include "chat_message.hpp"
 #include "enterdetector.hpp"
+#include "endgamewindow.hpp"
 #include "clientCustomActionsForChat.hpp"
 #include <climits>
 #include <signal.h>
@@ -584,6 +585,19 @@ void GameWindow::updateEndGameStateSlot( ) {
 
 void GameWindow::updateEndGameState( ) {
     // End game
+    bool inEndGameState = *endGameState_subscriber->getData<bool>( );
+    if( inEndGameState ) {
+        Subscriber* winningTeam_subscriber = new ClosureSubscriber( NULL, NULL );
+        model->subscribe( "winningTeam", winningTeam_subscriber );
+        avalon::alignment_t winner = *winningTeam_subscriber->getData<avalon::alignment_t>( );
+        unsigned int myID = *myID_subscriber->getData<unsigned int>( );
+        Player* myPlayer = *player_subscribers[myID]->getData<Player*>( );
+
+        std::string gameResultString = avalon::gui::getGameResultString( myPlayer->getAlignment( ), winner );
+
+        EndGameWindow* endWindow = new EndGameWindow( this, std::vector<Player*>(), gameResultString );
+        endWindow->exec( );
+    }
 }
 
 void GameWindow::updateCurrentVotesSlot( ) {
