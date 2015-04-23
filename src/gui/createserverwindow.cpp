@@ -108,8 +108,9 @@ int CreateServerWindow::createServer( ) {
             std::string portStr = "--port=";
             portStr += ui->editPortNum->text( ).toStdString( );
 
+            std::string hiddenStr = "";
             if( ui->cbOpenVoting->isChecked( ) )
-                playerStr += " --hidden";
+                hiddenStr = " --hidden";
 
             QList< QListWidgetItem* > roles = ui->listWidget->selectedItems( );
 
@@ -117,6 +118,7 @@ int CreateServerWindow::createServer( ) {
             args[ i++ ] = ( char* )"./server.exe";
             args[ i++ ] = ( char* )playerStr.c_str( );
             args[ i++ ] = ( char* )portStr.c_str( );
+            args[ i++ ] = ( char* )hiddenStr.c_str( );
 
             for ( int j = 0; j < roles.length( ); j++ ) {
                 std::string flagStr = "--";
