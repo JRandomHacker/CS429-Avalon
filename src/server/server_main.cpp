@@ -82,6 +82,7 @@ ServerSettings parse_options( int argc, char** argv ) {
     struct option options[] = {
         { "players",  required_argument, NULL, 'p' },
         { "port",     required_argument, NULL, 'o' },
+        { "hidden",   no_argument,       NULL, 'h' },
         { "merlin",   no_argument,       NULL, 'm' },
         { "percival", no_argument,       NULL, 'e' },
         { "mordred",  no_argument,       NULL, 'r' },
@@ -98,6 +99,9 @@ ServerSettings parse_options( int argc, char** argv ) {
                 break;
             case 'o':
                 settings.port = atoi( optarg );
+                break;
+            case 'h':
+                settings.hidden_votes = true;
                 break;
             case 'm':
                 settings.selected_roles.push_back( avalon::MERLIN );
