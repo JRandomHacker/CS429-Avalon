@@ -116,7 +116,12 @@ namespace server {
         buf.set_passed( passed );
         buf.set_vote_track( model->vote_track );
         for( unsigned int i = 0; i < model->num_clients; i++ ) {
-            buf.add_votes( sorted_votes[ i ] );
+
+            if( model->hidden_voting ) {
+                buf.add_votes( avalon::HIDDEN );
+            } else {
+                buf.add_votes( sorted_votes[ i ] );
+            }
         }
 
         // Send the protobuf to all the players
