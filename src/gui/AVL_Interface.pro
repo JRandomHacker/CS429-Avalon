@@ -22,9 +22,7 @@ SOURCES  += main.cpp\
     guihelpers.cpp \
     votedialog.cpp \
     resultsdialog.cpp \
-    endgamewindow.cpp \
     enterdetector.cpp
-    questhistorywindow.cpp
 
 HEADERS  += optionswindow.hpp \
     gamewindow.hpp \
@@ -34,17 +32,14 @@ HEADERS  += optionswindow.hpp \
     guihelpers.hpp \
     votedialog.hpp \
     resultsdialog.hpp \
-    endgamewindow.hpp \
     enterdetector.hpp
-    questhistorywindow.hpp
 
 FORMS    += optionswindow.ui \
     gamewindow.ui \
     createserverwindow.ui \
     joinserverwindow.ui \
     votedialog.ui \
-    resultsdialog.ui \
-    endgamewindow.ui
+    resultsdialog.ui
 
 INCLUDEPATH  += ../protos/
 INCLUDEPATH  += ../common/

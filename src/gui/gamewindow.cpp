@@ -10,7 +10,6 @@
 #include "resultsdialog.hpp"
 #include "chat_message.hpp"
 #include "enterdetector.hpp"
-#include "endgamewindow.hpp"
 #include "clientCustomActionsForChat.hpp"
 #include <climits>
 #include <signal.h>
@@ -595,8 +594,6 @@ void GameWindow::updateEndGameState( ) {
 
         std::string gameResultString = avalon::gui::getGameResultString( myPlayer.getAlignment( ), winner );
 
-        EndGameWindow* endWindow = new EndGameWindow( this, std::vector<Player*>(), gameResultString );
-        endWindow->exec( );
     }
 }
 
