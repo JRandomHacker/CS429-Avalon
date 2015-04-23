@@ -37,7 +37,7 @@ int main( int argc, char** argv ) {
     int retval;
 
     std::fstream file;
-    file.open("out");
+    file.open("out", std::ios::out);
 
     ServerSettings server_settings = parse_options( argc, argv );
 
@@ -52,11 +52,11 @@ int main( int argc, char** argv ) {
         server_settings.port = DEFAULT_PORT;
     }
 
-    // if( ( retval = server_settings.game_settings.loadFromFile( "config/settings.lua", server_settings.num_players ) ) != EXIT_SUCCESS ) {
-    //     file << "Exiting after lua: " << retval << std::endl;
-    //     file.close();
-    //     exit( retval );
-    // }
+    if( ( retval = server_settings.game_settings.loadFromFile( "config/settings.lua", server_settings.num_players ) ) != EXIT_SUCCESS ) {
+        file << "Exiting after lua: " << retval << std::endl;
+        file.close();
+        exit( retval );
+    }
 
     ServInfo* model = new ServInfo;
     ServerController* controller = new ServerController( model, server_settings );

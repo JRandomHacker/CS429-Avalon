@@ -80,8 +80,8 @@ int ServerController::initModel( ServerSettings settings ) {
     model->players_per_quest = settings.game_settings.players_per_quest;
     model->fails_per_quest = settings.game_settings.fails_per_quest;
 
-    initModelCharacters( settings.selected_roles );
-    return initModelPlayer( settings.selected_roles );
+    initModelCharacters( settings );
+    return initModelPlayer( settings );
 }
 
 
@@ -151,14 +151,14 @@ void ServerController::processActions( ) {
 }
 
 // Initializes the settingsBuf in the model
-void ServerController::initModelCharacters( std::vector< avalon::special_roles_t > special_roles ) {
+void ServerController::initModelCharacters( ServerSettings settings ) {
 
     // For some reason, the default of false in the protobuf file isn't working
     // So set them all to false ourselves
     model->settingsBuf.set_players( model->num_clients );
     model->settingsBuf.set_vote_track_len( model->vote_track_length );
     model->settingsBuf.set_quest_track_len( model->quest_track_length );
-    model->settingsBuf.set_evil_count( avalon::getEvilCount( model->num_clients ) );
+    model->settingsBuf.set_evil_count( settings.game_settings.num_evil_players );
     for( unsigned int i = 0; i < model->players_per_quest.size( ); i++ ) {
         model->settingsBuf.add_players_per_quest( model->players_per_quest[ i ] );
     }
@@ -173,7 +173,7 @@ void ServerController::initModelCharacters( std::vector< avalon::special_roles_t
     model->settingsBuf.set_oberon( false );
 
     // Figure out which roles we have in the game
-    for( std::vector< avalon::special_roles_t >::iterator it = special_roles.begin(); it != special_roles.end(); it++ ) {
+    for( std::vector< avalon::special_roles_t >::iterator it = settings.selected_roles.begin(); it != settings.selected_roles.end(); it++ ) {
         switch( *it ) {
             case avalon::MERLIN:
                 model->settingsBuf.set_merlin( true );
@@ -201,9 +201,9 @@ void ServerController::initModelCharacters( std::vector< avalon::special_roles_t
 
 }
 // Creates Players, and randomizes them around the Players vector
-int ServerController::initModelPlayer( std::vector< avalon::special_roles_t > special_roles ) {
+int ServerController::initModelPlayer( ServerSettings settings ) {
 
-    if( special_roles.size( ) > model->num_clients ) {
+    if( settings.selected_roles.size( ) > model->num_clients ) {
         std::cerr << "More special roles than players. Exiting." << std::endl;
         return EXIT_SPECIAL_ERROR;
     }
@@ -213,7 +213,7 @@ int ServerController::initModelPlayer( std::vector< avalon::special_roles_t > sp
     std::vector< avalon::alignment_t > possibleChars;
 
     // Add the characters from the special_roles array to the good or evil array
-    for( std::vector< avalon::special_roles_t >::iterator it = special_roles.begin(); it != special_roles.end(); it++ ) {
+    for( std::vector< avalon::special_roles_t >::iterator it = settings.selected_roles.begin(); it != settings.selected_roles.end(); it++ ) {
         if( avalon::getRoleAlignment( *it ) == avalon::EVIL ) {
             evilChars.push_back( *it );
         } else {
@@ -222,7 +222,7 @@ int ServerController::initModelPlayer( std::vector< avalon::special_roles_t > sp
     }
 
     // Add the possible characters to the vectors
-    unsigned int numEvil = avalon::getEvilCount( model->num_clients );
+    unsigned int numEvil = settings.game_settings.num_evil_players;
 
     if( evilChars.size( ) > numEvil ) {
         std::cerr << "More evil roles than evil players. Exiting." << std::endl;

@@ -24,6 +24,13 @@ int GameSettings::loadFromFile( std::string file_name, unsigned int num_players 
 	} else {
 		file << "ABLE TO CALL LUA FN" << std::endl;
 	}
+
+	lua_getglobal( L, "invalid_num_players" );
+	if ( !lua_isnil( L, -1 ) ) {
+		return EXIT_BAD_NUM_PLAYERS;
+	}
+	lua_remove( L, -1 );
+
 	bool correct_out = true;
 	correct_out = correct_out && luaLoadUnsignedInteger( L, &num_evil_players, "num_evil_players" );
 	correct_out = correct_out && luaLoadUnsignedInteger( L, &vote_track_length, "vote_track_length" );

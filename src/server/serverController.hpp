@@ -79,18 +79,18 @@ class ServerController {
         /*
          * Helper function for the contructor to actually initialize the players array
          *
-         * @param special_roles A vector of the special characters we want to use
+         * @param settings The settings for the server
          * @return None
          */
-        void initModelCharacters( std::vector< avalon::special_roles_t > special_roles );
+        void initModelCharacters( ServerSettings settings );
 
         /*
          * Helper function for the contructor to actually initialize the players array
          *
-         * @param special_roles A vector of the special characters we want to use
+         * @param settings The settings for the server
          * @return EXIT_SUCCESS on success, an error code otherwise
          */
-        int initModelPlayer( std::vector< avalon::special_roles_t > special_roles );
+        int initModelPlayer( ServerSettings settings );
         
         unsigned int all_players_per_quest[ 10 ][ 5 ] = { { 1, 1, 1, 1, 1 },
                                                     { 1, 2, 1, 2, 2 },

@@ -28,6 +28,12 @@
 #define EXIT_SERVER_NOT_FOUND 16
 //! Exit status if we lose a connection
 #define EXIT_NETWORK_ERROR 17
+//! Exit status if lua doesn't return correct values
+#define EXIT_LUA_NO_VALUES 18
+//! Exit status if lua doesn't accept the number of players
+#define EXIT_BAD_NUM_PLAYERS 19
+//! Exit status if the lua config script doesn't load corrctly
+#define EXIT_LUA_LOAD_ERROR 20
 //! Exit status in Windows if the exit code of the server is larger than an integer
 #define UNKNOWN_ERROR 42
 
@@ -85,14 +91,6 @@ namespace avalon {
      * @return The alignment of the role
      */
     alignment_t getRoleAlignment( special_roles_t role );
-
-    /**
-     * A function to get the number of evil characters based on the number of players
-     *
-     * @param num_players The number of players in the game
-     * @return The number of players who should be evil
-     */
-    unsigned int getEvilCount( int num_players );
 
     namespace network {
         /*! An enumerator for different protobuf types */
