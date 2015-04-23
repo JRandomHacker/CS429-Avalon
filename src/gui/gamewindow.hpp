@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QKeyEvent>
-#include "voteHistory.hpp"
 #include "clientController.hpp"
 #include "model.hpp"
 #include "subscriber.hpp"
@@ -464,7 +463,7 @@ private:
      *
      * @return A string containing quest history
      */
-    std::string buildQuestHistoryString( VoteHistory vote_results );
+    std::string buildQuestHistoryString( );
 
     /**
      * Displays info about vote/quest tracks

@@ -189,6 +189,8 @@ void GameWindow::createPlayerSubscribers( ) {
     QStandardItemModel* listModel = new QStandardItemModel( num_players, 3 );
     ui->playerList->setModel( listModel );
 
+    ui->playerList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
     QStringList headers;
     headers.append( QString( "Name" ) );
     headers.append( QString( "Alignment" ) );
@@ -417,10 +419,21 @@ void GameWindow::updateTrackSlot( ) {
     sem_post( sync_sem );
 }
 
-std::string GameWindow::buildQuestHistoryString(VoteHistory vote_results) {
+std::string GameWindow::buildQuestHistoryString( ) {
+
+    std::vector<VoteHistory> prevTeamHist = *voteHistory_subscriber->getData<std::vector<VoteHistory>>( );
+    VoteHistory vote_results = prevTeamHist.back();
 
     std::string header1 = "---Questing Team---\n";
     std::string header2 = "---Player Votes---\n";
+
+    std::vector<unsigned int> questingTeam = vote_results.getProposedTeam( );
+
+    for ( unsigned int i = 0; i < questingTeam.size( ); i++ ) {
+
+        header1 += player_subscribers[ questingTeam[i] ]->getData<Player>( )->getName( ) + "\n";
+
+    }
 
     for ( unsigned int i = 0; i < vote_results.getPlayerVotes( ).size( ); i++ ) {
 
@@ -444,23 +457,19 @@ std::string GameWindow::buildQuestHistoryString(VoteHistory vote_results) {
 
 void GameWindow::updateTrack( ) {
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
-    std::vector<unsigned int> playersPerQuest = *playersPerQuest_subscriber->getData<std::vector<unsigned int>>( );
 
     if(currQuest > 0) {
         std::vector<QuestVoteHistory> hist = *questHistory_subscriber->getData<std::vector<QuestVoteHistory>>( );
 
         QuestVoteHistory temp = hist[currQuest-1];
 
-        if( temp.getVotePassed() )
+        //Determine what icon to use
+        if( temp.getVotePassed( ) )
             voteTrackLabels[currQuest-1]->setPixmap( QPixmap( ":/images/QUEST_PASS.png" ) );
         else
             voteTrackLabels[currQuest-1]->setPixmap( QPixmap( ":/images/QUEST_FAIL.png" ) );
 
-        std::vector<VoteHistory> hist2 = *voteHistory_subscriber->getData<std::vector<VoteHistory>>( );
-
-        VoteHistory prevVote = hist2.back( );
-
-        voteTrackLabels[currQuest-1]->setToolTip( QString(buildQuestHistoryString(prevVote).c_str()) );
+        voteTrackLabels[currQuest-1]->setToolTip( QString(buildQuestHistoryString( ).c_str( )) );
 
     }
 }
