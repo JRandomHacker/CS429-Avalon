@@ -26,7 +26,7 @@ std::string avalon::gui::roleToString( avalon::special_roles_t role ) {
     return "Role not recognized";
 }
 
-std::string avalon::gui::roleToImage( avalon::special_roles_t role ) {
+std::string avalon::gui::roleToImage( avalon::special_roles_t role, avalon::alignment_t align ) {
 
     std::string desire = ":/images/";
 
@@ -44,12 +44,12 @@ std::string avalon::gui::roleToImage( avalon::special_roles_t role ) {
         case avalon::PERCIVAL:
             return desire += "PERCIVAL.jpg";
         case avalon::NONE:
-            return desire += "GENERIC.jpg";
+            return desire += "NONE.jpg";
         case avalon::UNKNOWN_ROLE:
-            return desire += "GENERIC.jpg";
+            return desire += "NONE.jpg";
     }
 
-    return desire += "GENERIC.jpg";
+    return desire += "NONE.jpg";
 
 }
 
