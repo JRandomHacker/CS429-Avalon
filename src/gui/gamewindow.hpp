@@ -296,6 +296,10 @@ private:
 
     sem_t * sync_sem;
 
+    Player* assassinChoice = NULL;
+
+    bool amAssassin = false;
+
     /**
      *  Subscriber that gets num of players from the model.
      */

@@ -582,6 +582,9 @@ void GameWindow::updateAssassinState( ) {
     if( inAssassinState ) {
         ui->stateLabel->setText( QString( "Assassin Round" ) );
 
+        assassinChoice = NULL;
+
+
     }
 }
 
