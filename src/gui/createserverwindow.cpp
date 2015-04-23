@@ -47,6 +47,9 @@ int CreateServerWindow::createServer( ) {
         execStr += " --port=";
         execStr += ui->editPortNum->text( ).toStdString( );
 
+        if( ui->cbOpenVoting->isChecked( ) )
+            execStr += " --hidden";
+
         QList<QListWidgetItem* > roles = ui->listWidget->selectedItems( );
 
         for ( int j = 0; j < roles.length( ); j++ ) {
@@ -104,6 +107,9 @@ int CreateServerWindow::createServer( ) {
             // Get the port
             std::string portStr = "--port=";
             portStr += ui->editPortNum->text( ).toStdString( );
+
+            if( ui->cbOpenVoting->isChecked( ) )
+                execStr += " --hidden";
 
             QList< QListWidgetItem* > roles = ui->listWidget->selectedItems( );
 
