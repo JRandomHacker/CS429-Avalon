@@ -78,6 +78,8 @@ typedef struct ServerSettings {
 	std::vector< avalon::special_roles_t > selected_roles;
 	//! How many players this game will support
 	int num_players = 0;
+    //! Whether hidden voting is enabled
+    bool hidden_votes = false;
 
 	GameSettings game_settings;
 } ServerSettings;
