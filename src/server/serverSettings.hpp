@@ -20,10 +20,11 @@ typedef struct GameSettings {
 	    quest_track_length( qtl ), vote_track_length( vtl ),
 	    players_per_quest( ppq ), fails_per_quest( fpq ) {};
 
-	void loadFromFile( std::string file_name, unsigned int num_players );
-	void luaLoadUnsignedInteger( lua_State* L, unsigned int* result, const char * global_name );
-	void luaLoadUnsignedIntegerArray( lua_State* L, std::vector< unsigned int >* result, const char * global_name );
+	int loadFromFile( std::string file_name, unsigned int num_players );
+	bool luaLoadUnsignedInteger( lua_State* L, unsigned int* result, const char * global_name );
+	bool luaLoadUnsignedIntegerArray( lua_State* L, std::vector< unsigned int >* result, const char * global_name );
 
+	unsigned int num_evil_players = 1;
 	unsigned int quest_track_length = 5;
 	unsigned int vote_track_length = 5;
 	std::vector< unsigned int > players_per_quest = {{1, 1, 1, 1, 1}};

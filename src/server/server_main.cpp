@@ -36,6 +36,9 @@ int main( int argc, char** argv ) {
 
     int retval;
 
+    std::fstream file;
+    file.open("out");
+
     ServerSettings server_settings = parse_options( argc, argv );
 
     // Make sure we weren't given a super silly number for players
@@ -49,14 +52,24 @@ int main( int argc, char** argv ) {
         server_settings.port = DEFAULT_PORT;
     }
 
-    server_settings.game_settings.loadFromFile( "config/settings.lua", server_settings.num_players );
+    // if( ( retval = server_settings.game_settings.loadFromFile( "config/settings.lua", server_settings.num_players ) ) != EXIT_SUCCESS ) {
+    //     file << "Exiting after lua: " << retval << std::endl;
+    //     file.close();
+    //     exit( retval );
+    // }
 
     ServInfo* model = new ServInfo;
     ServerController* controller = new ServerController( model, server_settings );
     if( ( retval = controller->initModel( server_settings ) ) != EXIT_SUCCESS ) {
+        file << "Exiting after model init: " << retval << std::endl;
+        file.close();
+        
         exit( retval );
     }
     if( ( retval = controller->spawnNetwork( ) ) != EXIT_SUCCESS ) {
+        file << "Exiting after spawn network: " << retval << std::endl;
+        file.close();
+        
         exit( retval );
     }
 
