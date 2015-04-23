@@ -67,9 +67,7 @@ namespace client {
             
             populateSpecialRoles( sBuf );
 
-            for ( unsigned int i = 0; i < ( unsigned int )sBuf->players( ); i++ ) {
-                data->model->addData( std::string( "player" ) + std::to_string( i ), NULL );
-            }
+            data->model->addData( "players", std::vector< Player >( ) );
 
             delete sBuf;
             data->model->updateData("hasGameSettings", true);
@@ -81,7 +79,10 @@ namespace client {
             unsigned int player_number = action->getPlayerNumber( );
             Player* p = action->getPlayerInfo( );
             
-            data->model->updateData( std::string( "player" ) + std::to_string( player_number ), *p );
+            auto players = data->model->getDataForUpdate< std::vector< Player > >( "players" );
+            players->push_back( *p );
+            data->model->flagDataForUpdate( "players" );
+
             delete p;
 
         // We need to send the Server our preferred name
