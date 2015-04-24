@@ -386,6 +386,11 @@ private:
     Subscriber* endGameState_subscriber;
 
     /**
+     *  Subscriber for the assassin's target
+     */
+    Subscriber* assassinTargeted_subscriber;
+
+    /**
      * Subscriber for vote history
      */
     Subscriber* voteHistory_subscriber;

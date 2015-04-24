@@ -259,6 +259,9 @@ void GameWindow::createPlayerSubscribers( ) {
                 NULL );
     model->subscribe( "endGameState", endGameState_subscriber );
 
+    assassinTargeted_subscriber = new ClosureSubscriber( NULL, NULL );
+    model->subscribe( "assassinTargeted", assassinTargeted_subscriber );
+
     // Subscribe to histories
     voteHistory_subscriber = new ClosureSubscriber(
                 [&]( Subscriber* ) {
@@ -617,18 +620,42 @@ void GameWindow::updateEndGameStateSlot( ) {
 }
 
 void GameWindow::updateEndGameState( ) {
-    // End game
+
     bool inEndGameState = *endGameState_subscriber->getData<bool>( );
     if( inEndGameState ) {
+
         ui->stateLabel->setText( QString( "Game Over" ) );
 
+        // Get pertinent info: winning team, my player obj, my pID, assassin stuff
         Subscriber* winningTeam_subscriber = new ClosureSubscriber( NULL, NULL );
         model->subscribe( "winningTeam", winningTeam_subscriber );
         avalon::alignment_t winner = *winningTeam_subscriber->getData<avalon::alignment_t>( );
         unsigned int myID = *myID_subscriber->getData<unsigned int>( );
         Player myPlayer = *player_subscribers[myID]->getData<Player>( );
+        bool assassinPresent = *assassinState_subscriber->getData<bool>( );
+        if( assassinPresent ) {
+            assassinChoice = *assassinTargeted_subscriber->getData<unsigned int>( );
+        }
 
+        // Display the result of the game
         std::string gameResultString = avalon::gui::getGameResultString( myPlayer.getAlignment( ), winner );
+
+
+/*
+        // Update the player list to show all players' info
+        Subscriber* endGamePlayers_subscriber = new ClosureSubscriber( NULL, NULL );
+        std::vector<Player> allPlayers = *endGamePlayers_subscriber->getData<std::vector<Player>>( );
+        QStandardItemModel* playerModel = ( QStandardItemModel* ) ui->playerList->model( );
+        for( unsigned int i = 0; i < allPlayers.size( ); i++ ) {
+            Player p = allPlayers[i];
+            std::string pName = p.getName( );
+            std::string pAlignment = avalon::gui::alignmentToString( p.getAlignment( ) );
+            std::string pRole = avalon::gui::roleToString( p.getRole( ) );
+            playerModel->setItem( i, 0, new QStandardItem( pName.c_str( ) ) );
+            playerModel->setItem( i, 1, new QStandardItem( pAlignment.c_str( ) ) );
+            playerModel->setItem( i, 2, new QStandardItem( pRole.c_str( ) ) );
+        }*/
+
 
     }
 }
