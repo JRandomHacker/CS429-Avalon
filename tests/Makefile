@@ -4,7 +4,8 @@ TESTS=player_unittest.common.exe \
 	  model_unittest.common.exe \
 	  action_unittest.common.exe \
 	  clientControllerState_unittest.client.exe \
-	  serverControllerState_unittest.server.exe
+	  serverControllerState_unittest.server.exe \
+	  lua_unittest.server.exe
 
 TESTS_DIR=.
 SRC_DIR=../src
@@ -12,15 +13,16 @@ COMMON_DIR=$(SRC_DIR)/common
 CLIENT_DIR=$(SRC_DIR)/client
 SERVER_DIR=$(SRC_DIR)/server
 PROTOS_DIR=$(SRC_DIR)/protos
+LUA_DIR=$(SRC_DIR)/lua/src
 
 PROTOS_LIB=`pkg-config --cflags protobuf --libs protobuf`
 
-LIBS=-pthread $(PROTOS_LIB)
+LIBS=-pthread $(PROTOS_LIB) -L../src/lua/src -llua
 COMMON_OBJS=$(COMMON_DIR)/*.o
 SERVER_OBJS=$(SERVER_DIR)/*.o
 CLIENT_OBJS=$(CLIENT_DIR)/*.o
 PROTOS_OBJS=$(PROTOS_DIR)/*.o
-CUSTOM_CPPFLAGS= -I$(COMMON_DIR) -I$(CLIENT_DIR) -I$(SERVER_DIR) -I$(PROTOS_DIR)
+CUSTOM_CPPFLAGS= -I$(COMMON_DIR) -I$(CLIENT_DIR) -I$(SERVER_DIR) -I$(PROTOS_DIR) -I$(LUA_DIR)
 CUSTOM_CXXFLAGS= -Wall -Wextra -std=c++11 -ggdb
 CXX=g++
 
