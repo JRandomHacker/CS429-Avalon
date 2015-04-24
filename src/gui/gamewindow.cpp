@@ -168,7 +168,12 @@ void GameWindow::createPlayerSubscribers( ) {
                     sem_wait( sync_sem );
             },
             NULL );
-    currentQuestTrack_subscriber = currentVoteTrack_subscriber;
+    currentQuestTrack_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit trackUpdated( );
+                    sem_wait( sync_sem );
+            },
+            NULL );
     playersPerQuest_subscriber = new ClosureSubscriber( NULL, NULL );
     questTrackLength_subscriber = new ClosureSubscriber( NULL, NULL );
     model->subscribe( "voteTrackLength", voteTrackLength_subscriber );
@@ -843,7 +848,7 @@ void GameWindow::updateResetGameSlot( ) {
 }
 
 void GameWindow::updateResetGame( ) {
-    if( *resetGame_subscriber->getData<bool>( ) ) {
+    if( *resetGame_subscriber->getData<bool>( ) && !isExited ) {
         QErrorMessage error( this );
         error.showMessage( "Oh no!  For some reason, the game is over." );
         error.exec( );
@@ -975,6 +980,7 @@ void GameWindow::exitToMainMenu( ) {
     OptionsWindow* opts = new OptionsWindow( NULL );
     opts->show( );
 
+    isExited = true;
     this->close( );
 }
 

@@ -320,6 +320,8 @@ private:
 
     bool amAssassin = false;
 
+    bool isExited = false;
+
     /**
      *  Subscriber that gets num of players from the model.
      */
