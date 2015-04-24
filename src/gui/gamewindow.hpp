@@ -296,7 +296,7 @@ private:
 
     sem_t * sync_sem;
 
-    Player* assassinChoice = NULL;
+    unsigned int assassinChoice = UINT_MAX;
 
     bool amAssassin = false;
 

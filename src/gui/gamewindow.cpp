@@ -308,6 +308,10 @@ void GameWindow::updatePlayer( unsigned int id ) {
             ui->playerAvatarLabel->setVisible(false);
             ui->playerAvatarLabel->setPixmap( QPixmap( avalon::gui::roleToImage( p->getRole(), p->getAlignment() ).c_str( ) ) );
             ui->playerAvatarLabel->setVisible(true);
+
+            if( p->getRole( ) == avalon::ASSASSIN ) {
+                amAssassin = true;
+            }
         }
 
         if( id == 0 )
@@ -581,10 +585,23 @@ void GameWindow::updateAssassinState( ) {
     bool inAssassinState = *assassinState_subscriber->getData<bool>( );
     if( inAssassinState ) {
         ui->stateLabel->setText( QString( "Assassin Round" ) );
+        ui->teamSizeLabel->hide( );
+        ui->votingSection->hide( );
 
-        assassinChoice = NULL;
+        assassinChoice = -1;
 
+        if( amAssassin ) {
+            ui->leaderLabel->setText( QString( "You are the assassin!  Choose a player to kill." ) );
+            ui->proposeTeamButton->setText( QString( "Assassinate" ) );
+            ui->proposeTeamButton->show( );
+            ui->proposeTeamButton->setEnabled( false );
 
+            ui->proposeTeamList->setModel( new QStandardItemModel( 0 ) );
+
+        } else {
+            ui->proposeTeamList->hide( );
+            ui->proposeTeamButton->hide( );
+        }
     }
 }
 
@@ -597,6 +614,8 @@ void GameWindow::updateEndGameState( ) {
     // End game
     bool inEndGameState = *endGameState_subscriber->getData<bool>( );
     if( inEndGameState ) {
+        ui->stateLabel->setText( QString( "Game Over" ) );
+
         Subscriber* winningTeam_subscriber = new ClosureSubscriber( NULL, NULL );
         model->subscribe( "winningTeam", winningTeam_subscriber );
         avalon::alignment_t winner = *winningTeam_subscriber->getData<avalon::alignment_t>( );
@@ -702,6 +721,20 @@ void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
 
     unsigned int row = (unsigned int) index.row( );
 
+    // If it is the assassin state, let the assassin choose a player
+    if( *assassinState_subscriber->getData<bool>( ) && amAssassin ) {
+        assassinChoice = row;
+        std::string chosenName = player_subscribers[row]->getData<Player>( )->getName( );
+        QStandardItem* choiceItem = new QStandardItem( QString( chosenName.c_str( ) ) );
+        QStandardItemModel* newModel = new QStandardItemModel( );
+        newModel->setItem( 0, choiceItem );
+        ui->proposeTeamList->setModel( newModel );
+        ui->proposeTeamButton->setEnabled( true );
+
+        return;
+    }
+
+    // Otherwise, let the leader add/remove players
     std::vector<unsigned int> qTeam = *questingTeam_subscriber->getData<std::vector<unsigned int>>( );
 
     // Remove this player and return if they are already on the team
@@ -765,8 +798,15 @@ void GameWindow::on_buttonVoteFail_clicked( ) {
 }
 
 void GameWindow::on_proposeTeamButton_clicked( ) {
-    FinalizeTeamAction* act = new FinalizeTeamAction( );
-    control->addActionToQueue( act );
+    // If it is not the assassin state, submit the team; in the assassin state, submit the assassin's choice
+    if( !*assassinState_subscriber->getData<bool>( ) ) {
+        FinalizeTeamAction* act = new FinalizeTeamAction( );
+        control->addActionToQueue( act );
+
+    } else if ( assassinChoice < *num_players_subscriber->getData<unsigned int>( ) ) {
+        AssassinTargetSelectionAction* act = new AssassinTargetSelectionAction( assassinChoice );
+        control->addActionToQueue( act );
+    }
 }
 
 void GameWindow::on_sendMsgButton_clicked( ) {
