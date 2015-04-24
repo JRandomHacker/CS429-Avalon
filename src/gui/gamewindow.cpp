@@ -467,6 +467,11 @@ std::string GameWindow::buildQuestHistoryString( ) {
     //There's some shitty programming going on here. Will refractor this later.
     for ( unsigned int i = prevTeamHist.size() - 2; i > 0; i--) {
 
+        if( i > prevTeamHist.size( ) ) { // In case of underflow
+            header3 += "None";
+            break;
+        }
+
         vote_results = prevTeamHist[i];
 
         if( vote_results.getVotePassed( ) )
@@ -681,7 +686,7 @@ void GameWindow::updateEndGameState( ) {
         std::string gameResultString = avalon::gui::getGameResultString( myPlayer.getAlignment( ), winner );
 
 
-/*
+
         // Update the player list to show all players' info
         Subscriber* endGamePlayers_subscriber = new ClosureSubscriber( NULL, NULL );
         std::vector<Player> allPlayers = *endGamePlayers_subscriber->getData<std::vector<Player>>( );
@@ -694,7 +699,7 @@ void GameWindow::updateEndGameState( ) {
             playerModel->setItem( i, 0, new QStandardItem( pName.c_str( ) ) );
             playerModel->setItem( i, 1, new QStandardItem( pAlignment.c_str( ) ) );
             playerModel->setItem( i, 2, new QStandardItem( pRole.c_str( ) ) );
-        }*/
+        }
 
 
     }
