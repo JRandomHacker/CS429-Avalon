@@ -44,13 +44,17 @@ std::string avalon::gui::roleToImage( avalon::special_roles_t role, avalon::alig
         case avalon::PERCIVAL:
             return desire += "PERCIVAL.jpg";
         case avalon::NONE:
-            return desire += "NONE.jpg";
+            break;
         case avalon::UNKNOWN_ROLE:
-            return desire += "NONE.jpg";
+            break;
     }
 
-    return desire += "NONE.jpg";
-
+    if(role == avalon::NONE && align == avalon::GOOD)
+            return desire += "GENERIC_GOOD.jpg";
+    else if(role == avalon::NONE && align == avalon::EVIL)
+            return desire += "GENERIC_EVIL.jpg";
+    else
+            return desire += "NONE.jpg";
 }
 
 std::string avalon::gui::alignmentToString( avalon::alignment_t align ) {

@@ -331,6 +331,11 @@ private:
     Subscriber* questingTeam_subscriber;
 
     /**
+      * Last updated label
+      */
+    unsigned int lastUpdatedQuest;
+
+    /**
       * Array of icons for the vote track
       */
     QLabel** voteTrackLabels;

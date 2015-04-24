@@ -171,6 +171,7 @@ void GameWindow::createPlayerSubscribers( ) {
 
     unsigned int qLength = *questTrackLength_subscriber->getData<unsigned int>( );
 
+    lastUpdatedQuest = 0;
     voteTrackLabels = new QLabel*[qLength]();
 
     //Instantiate quest tracker GUI
@@ -319,6 +320,7 @@ void GameWindow::updatePlayer( unsigned int id ) {
 
         listModel->setItem( id, 1, new QStandardItem(
                                 QString( avalon::gui::alignmentToString( p->getAlignment( ) ).c_str( ) ) ) );
+
         listModel->setItem( id, 2, new QStandardItem(
                                 QString( avalon::gui::roleToString( p->getRole( ) ).c_str( ) ) ) );
     }
@@ -462,7 +464,7 @@ std::string GameWindow::buildQuestHistoryString( ) {
 void GameWindow::updateTrack( ) {
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
 
-    if(currQuest > 0) {
+    if(currQuest > lastUpdatedQuest) {
 
         std::vector<QuestVoteHistory> hist = *questHistory_subscriber->getData<std::vector<QuestVoteHistory>>( );
         QuestVoteHistory temp = hist.back();
@@ -476,6 +478,8 @@ void GameWindow::updateTrack( ) {
         voteTrackLabels[currQuest-1]->setToolTip( QString(buildQuestHistoryString( ).c_str( )) );
 
     }
+
+    lastUpdatedQuest = currQuest;
 }
 
 void GameWindow::updateTeamVoteStateSlot( ) {
