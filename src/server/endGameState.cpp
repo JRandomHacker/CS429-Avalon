@@ -10,6 +10,7 @@ namespace server {
 
     EndGameState::EndGameState( ServInfo* mod, avalon::alignment_t winner ) : ServerControllerState( "EndGame", mod ) { 
 
+        model->confirmed_quit_clients = 0;
         avalon::network::EndGame buf;
         buf.set_winner( winner );
 
@@ -34,9 +35,13 @@ namespace server {
 
         if( action_type == "ConfirmEndGame" ) {
 
-            std::cout << "Cool" << std::endl;
-            model->server->broadcastStateChange( avalon::network::SHUTDOWN_BUF, 0 );
-            exit( EXIT_SUCCESS );
+            model->confirmed_quit_clients++;
+            std::cerr << "Client successfully quit" << std::endl;
+            
+            if ( model->confirmed_quit_clients == model->num_clients ) {
+                model->server->broadcastStateChange( avalon::network::SHUTDOWN_BUF, 0 );
+                exit( EXIT_SUCCESS );
+            }
         } else {
             return ServerControllerState::handleAction( action_to_be_handled );
         }

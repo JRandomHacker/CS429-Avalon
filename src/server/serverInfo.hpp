@@ -20,6 +20,8 @@ typedef struct {
     Server* server;
     //! The number of clients who can connect
     unsigned int num_clients;
+    //! The number of clients who have reported the game as finished
+    unsigned int confirmed_quit_clients;
     //! The number of times a team vote can be failed before losing
     unsigned int vote_track_length;
     //! The number of quests in the game
