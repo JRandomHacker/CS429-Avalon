@@ -308,6 +308,7 @@ void GameWindow::updatePlayer( unsigned int id ) {
             //Load client player's role avatar
             ui->playerAvatarLabel->setVisible(false);
             ui->playerAvatarLabel->setPixmap( QPixmap( avalon::gui::roleToImage( p->getRole(), p->getAlignment() ).c_str( ) ) );
+            ui->playerAvatarLabel->setToolTip( QString( avalon::gui::roleToFlavorText( p->getRole(), p->getAlignment() ).c_str( ) ) );
             ui->playerAvatarLabel->setVisible(true);
 
             if( p->getRole( ) == avalon::ASSASSIN ) {
