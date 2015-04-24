@@ -603,6 +603,7 @@ void GameWindow::updateAssassinState( ) {
             ui->proposeTeamList->setModel( new QStandardItemModel( 0 ) );
 
         } else {
+            ui->leaderLabel->setText( QString( "An assassin walks among you..." ) );
             ui->proposeTeamList->hide( );
             ui->proposeTeamButton->hide( );
         }

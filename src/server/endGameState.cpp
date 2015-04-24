@@ -37,6 +37,8 @@ namespace server {
             std::cout << "Cool" << std::endl;
             model->server->broadcastStateChange( avalon::network::SHUTDOWN_BUF, 0 );
             exit( EXIT_SUCCESS );
+        } else {
+            return ServerControllerState::handleAction( action_to_be_handled );
         }
         return NULL;
     }

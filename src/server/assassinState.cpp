@@ -27,7 +27,9 @@ namespace server {
                     correct = true;
                 }
 
-                sendProtobufToAll( avalon::network::ASSASSIN_TARGET_BUF, model->players[ selection ]->getBuf( ).SerializeAsString( ) );
+                avalon::network::Player playerBuf = model->players[ selection ]->getBuf( );
+                playerBuf.set_id( selection );
+                sendProtobufToAll( avalon::network::ASSASSIN_TARGET_BUF, playerBuf.SerializeAsString( ) );
 
                 avalon::alignment_t winner;
                 if( correct ) {
@@ -40,7 +42,7 @@ namespace server {
                 return new EndGameState( model, winner );
             }
         } else {
-            return ControllerState::handleAction( action_to_be_handled );
+            return ServerControllerState::handleAction( action_to_be_handled );
         }
         return NULL;
     }
