@@ -843,7 +843,7 @@ void GameWindow::updateResetGameSlot( ) {
 }
 
 void GameWindow::updateResetGame( ) {
-    if( *resetGame_subscriber->getData<bool>( ) ) {
+    if( *resetGame_subscriber->getData<bool>( ) && !isExited ) {
         QErrorMessage error( this );
         error.showMessage( "Oh no!  For some reason, the game is over." );
         error.exec( );
@@ -975,6 +975,7 @@ void GameWindow::exitToMainMenu( ) {
     OptionsWindow* opts = new OptionsWindow( NULL );
     opts->show( );
 
+    isExited = true;
     this->close( );
 }
 
