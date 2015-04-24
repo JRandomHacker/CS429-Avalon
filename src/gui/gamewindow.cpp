@@ -51,6 +51,7 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
     connect( this, SIGNAL( chatMessagesUpdated( ) ), this, SLOT( updateChatMessagesSlot( ) ) );
     connect( this, SIGNAL( assassinStateUpdated( ) ), this, SLOT( updateAssassinStateSlot( ) ) );
     connect( this, SIGNAL( endGameStateUpdated( ) ), this, SLOT( updateEndGameStateSlot( ) ) );
+    connect( this, SIGNAL( endGamePlayersUpdated( ) ), this, SLOT( updateEndGamePlayersSlot( ) ) );
 
     ui->chatEdit->installEventFilter( new EnterDetector( this, ui->sendMsgButton ) );
 
@@ -81,6 +82,8 @@ GameWindow::~GameWindow( ) {
     delete questVoteState_subscriber;
     delete assassinState_subscriber;
     delete endGameState_subscriber;
+    delete endGamePlayers_subscriber;
+    delete assassinTargeted_subscriber;
     delete voteHistory_subscriber;
     delete questHistory_subscriber;
     delete currentVotes_subscriber;
@@ -258,6 +261,14 @@ void GameWindow::createPlayerSubscribers( ) {
                 },
                 NULL );
     model->subscribe( "endGameState", endGameState_subscriber );
+
+    endGamePlayers_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit endGamePlayersUpdated( );
+                    sem_wait( sync_sem );
+                },
+                NULL );
+    model->subscribe( "endGamePlayers", endGamePlayers_subscriber );
 
     assassinTargeted_subscriber = new ClosureSubscriber( NULL, NULL );
     model->subscribe( "assassinTargeted", assassinTargeted_subscriber );
@@ -685,23 +696,27 @@ void GameWindow::updateEndGameState( ) {
         // Display the result of the game
         std::string gameResultString = avalon::gui::getGameResultString( myPlayer.getAlignment( ), winner );
 
+    }
+}
 
+void GameWindow::updateEndGamePlayersSlot( ) {
+    updateEndGamePlayers( );
+    sem_post( sync_sem );
+}
 
-        // Update the player list to show all players' info
-        Subscriber* endGamePlayers_subscriber = new ClosureSubscriber( NULL, NULL );
-        std::vector<Player> allPlayers = *endGamePlayers_subscriber->getData<std::vector<Player>>( );
-        QStandardItemModel* playerModel = ( QStandardItemModel* ) ui->playerList->model( );
-        for( unsigned int i = 0; i < allPlayers.size( ); i++ ) {
-            Player p = allPlayers[i];
-            std::string pName = p.getName( );
-            std::string pAlignment = avalon::gui::alignmentToString( p.getAlignment( ) );
-            std::string pRole = avalon::gui::roleToString( p.getRole( ) );
-            playerModel->setItem( i, 0, new QStandardItem( pName.c_str( ) ) );
-            playerModel->setItem( i, 1, new QStandardItem( pAlignment.c_str( ) ) );
-            playerModel->setItem( i, 2, new QStandardItem( pRole.c_str( ) ) );
-        }
+void GameWindow::updateEndGamePlayers( ) {
 
-
+    // Update the player list to show all players' info
+    std::vector<Player> allPlayers = *endGamePlayers_subscriber->getData<std::vector<Player>>( );
+    QStandardItemModel* playerModel = ( QStandardItemModel* ) ui->playerList->model( );
+    for( unsigned int i = 0; i < allPlayers.size( ); i++ ) {
+        Player p = allPlayers[i];
+        std::string pName = p.getName( );
+        std::string pAlignment = avalon::gui::alignmentToString( p.getAlignment( ) );
+        std::string pRole = avalon::gui::roleToString( p.getRole( ) );
+        playerModel->setItem( i, 0, new QStandardItem( pName.c_str( ) ) );
+        playerModel->setItem( i, 1, new QStandardItem( pAlignment.c_str( ) ) );
+        playerModel->setItem( i, 2, new QStandardItem( pRole.c_str( ) ) );
     }
 }
 

@@ -127,6 +127,11 @@ signals:
     void endGameStateUpdated( );
 
     /**
+     * Signal emitted when all player info is received
+     */
+    void endGamePlayersUpdated( );
+
+    /**
      * Signal emitted when vote history is updated
      *
      * @return  None
@@ -218,6 +223,11 @@ private slots:
      * Changes gui for end game state
      */
     void updateEndGameStateSlot( );
+
+    /**
+     * Slot to update all players
+     */
+    void updateEndGamePlayersSlot( );
 
     /**
      * Pops up vote result
@@ -386,6 +396,11 @@ private:
     Subscriber* endGameState_subscriber;
 
     /**
+     *  Subscriber for full list of players at end of game
+     */
+    Subscriber* endGamePlayers_subscriber;
+
+    /**
      *  Subscriber for the assassin's target
      */
     Subscriber* assassinTargeted_subscriber;
@@ -506,6 +521,11 @@ private:
      * Changes gui to display results of game
      */
     void updateEndGameState( );
+
+    /**
+     * Displays all player info
+     */
+    void updateEndGamePlayers( );
 
     /**
      * Pops up vote result
