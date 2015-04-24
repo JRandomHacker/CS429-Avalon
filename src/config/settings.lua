@@ -1,6 +1,6 @@
 -- num_players is set by the game
 
-all_num_evil_players = { 1, 1, 1, 1, 4, 2, 3, 3, 3, 4 }
+all_num_evil_players = { 1, 1, 1, 1, 2, 2, 3, 3, 3, 4 }
 
 all_players_per_quest = { { 1, 1, 1, 1, 1 },
                           { 1, 2, 1, 2, 2 },
