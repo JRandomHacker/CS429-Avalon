@@ -160,6 +160,7 @@ namespace server {
 
         // Go back to the selection state, moving one step closer to annihilation
         } else {
+            model->team.clear( );
             model->server->broadcastStateChange( avalon::network::ENTER_TEAM_SELECTION_BUF, model->leader );
             return new TeamSelectionState( model );
         }
