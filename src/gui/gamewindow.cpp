@@ -536,6 +536,11 @@ std::string GameWindow::buildQuestHistoryString( ) {
 
 void GameWindow::updateTrack( ) {
     unsigned int currQuest = *currentQuestTrack_subscriber->getData<unsigned int>( );
+    unsigned int vLength = *voteTrackLength_subscriber->getData<unsigned int>( );
+    unsigned int currVote = *currentVoteTrack_subscriber->getData<unsigned int>( );
+
+    std::string voteStr = "Vote " + std::to_string( currVote + 1 ) + "/" + std::to_string( vLength );
+    ui->failedVotesTrackLabel->setText( QString( voteStr.c_str() ) );
 
     if(currQuest > lastUpdatedQuest) {
 

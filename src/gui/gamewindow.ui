@@ -14,34 +14,7 @@
    <string>Avalon Online</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="3" column="4">
-    <layout class="QVBoxLayout" name="votingLayout">
-     <item>
-      <widget class="QGroupBox" name="votingSection">
-       <property name="title">
-        <string>Voting</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QPushButton" name="buttonVotePass">
-          <property name="text">
-           <string>PASS!!!</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonVoteFail">
-          <property name="text">
-           <string>FAIL!!!</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="3" column="3">
+   <item row="5" column="3">
     <layout class="QVBoxLayout" name="proposedTeamLayout">
      <item>
       <widget class="QGroupBox" name="proposedTeamSection">
@@ -117,39 +90,7 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="3" colspan="2">
-    <layout class="QVBoxLayout" name="chatLayout">
-     <item>
-      <widget class="QGroupBox" name="chatSection">
-       <property name="title">
-        <string>Chat</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
-        <item>
-         <widget class="QListView" name="chatList"/>
-        </item>
-        <item>
-         <widget class="QTextEdit" name="chatEdit"/>
-        </item>
-        <item>
-         <widget class="QPushButton" name="sendMsgButton">
-          <property name="text">
-           <string>Send Message</string>
-          </property>
-          <property name="autoDefault">
-           <bool>true</bool>
-          </property>
-          <property name="default">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="0" rowspan="6">
+   <item row="0" column="0" rowspan="8">
     <layout class="QVBoxLayout" name="rolesLayout" stretch="0,0,0,0">
      <property name="sizeConstraint">
       <enum>QLayout::SetFixedSize</enum>
@@ -160,7 +101,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>:/images/NONE.jpg</pixmap>
+        <pixmap resource="images.qrc">:/images/NONE.jpg</pixmap>
        </property>
       </widget>
      </item>
@@ -211,29 +152,102 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="1" rowspan="6">
+   <item row="0" column="1" rowspan="8">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
     </widget>
    </item>
-   <item row="0" column="3" colspan="2">
-    <layout class="QHBoxLayout" name="votingTrackLayout"/>
-   </item>
-   <item row="4" column="2" colspan="3">
+   <item row="6" column="2" colspan="3">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
+   <item row="0" column="3" colspan="2">
+    <layout class="QHBoxLayout" name="votingTrackLayout"/>
+   </item>
+   <item row="5" column="4">
+    <layout class="QVBoxLayout" name="votingLayout">
+     <item>
+      <widget class="QGroupBox" name="votingSection">
+       <property name="title">
+        <string>Voting</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QPushButton" name="buttonVotePass">
+          <property name="text">
+           <string>PASS!!!</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonVoteFail">
+          <property name="text">
+           <string>FAIL!!!</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="3">
+    <layout class="QVBoxLayout" name="failedVotesLayout">
+     <item>
+      <widget class="QLabel" name="failedVotesTrackLabel">
+       <property name="text">
+        <string>0/5 failed team votes</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="7" column="3" colspan="2">
+    <layout class="QVBoxLayout" name="chatLayout">
+     <item>
+      <widget class="QGroupBox" name="chatSection">
+       <property name="title">
+        <string>Chat</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QListView" name="chatList"/>
+        </item>
+        <item>
+         <widget class="QTextEdit" name="chatEdit"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="sendMsgButton">
+          <property name="text">
+           <string>Send Message</string>
+          </property>
+          <property name="autoDefault">
+           <bool>true</bool>
+          </property>
+          <property name="default">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
   </layout>
   <zorder>line</zorder>
   <zorder>line_2</zorder>
   <zorder></zorder>
   <zorder></zorder>
+  <zorder>verticalLayoutWidget</zorder>
  </widget>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>
