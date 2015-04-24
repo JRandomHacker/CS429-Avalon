@@ -2,6 +2,7 @@
 #define GUIHELPERS_HPP
 
 #include "globals.hpp"
+#include "player.hpp"
 #include <string>
 
 namespace avalon
@@ -18,7 +19,7 @@ namespace avalon
 
         std::string trimString( std::string in );
 
-        std::string getGameResultString( avalon::alignment_t player, avalon::alignment_t winner );
+        std::string getGameResultString(avalon::alignment_t player, bool assassin, Player *assassinTarget, avalon::alignment_t winner );
     }
 }
 

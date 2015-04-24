@@ -1,5 +1,6 @@
 
 #include "guihelpers.hpp"
+#include "player.hpp"
 #include <string>
 
 std::string avalon::gui::roleToString( avalon::special_roles_t role ) {
@@ -109,9 +110,36 @@ std::string avalon::gui::trimString( std::string in ) {
     return out;
 }
 
-std::string avalon::gui::getGameResultString( avalon::alignment_t player, avalon::alignment_t winner ) {
-    if( winner == avalon::GOOD )
-        return "Good guys won!";
+std::string avalon::gui::getGameResultString( avalon::alignment_t player, bool assassin, Player* assassinTarget,
+                                              avalon::alignment_t winner ) {
+    if( winner == avalon::GOOD && player == avalon::GOOD && !assassin )
+        return "Rejoice!  A new day has dawned, and good has triumphed over evil, as you always knew it would.  Are there those among "
+                "you who are agents of evil still?  Maybe.  I bet they feel pretty dumb right now.";
+    else if( winner == avalon::GOOD && player == avalon::EVIL && !assassin )
+        return "Good has triumphed over evil, and the kingdom rejoices!  You can't help but be swept away by the reveling.  It "
+                "literally cannot be helped.  After all, you were on their side all along, right?";
+    else if( winner == avalon::GOOD && player == avalon::GOOD && assassin )
+        return "The minions of Mordred are scattered, and the kingdom is safe.  Nothing can bring you down today, not even the "
+                "news of " + assassinTarget->getName( ) + "'s tragic and bloody death.  " + assassinTarget->getName( )
+                + " would definitely want you to keep partying.";
+    else if( winner == avalon::GOOD && player == avalon::EVIL && assassin )
+        return "Foiled again!  Why does evil never get its day?  Oh, well.  At least you and your friends brought "
+                + assassinTarget->getName( ) + " down with you.  The memory of " + assassinTarget->getName( ) + "'s death "
+                "brings a big smile to your face, and you fit right in with the revelers.";
+    else if( winner == avalon::EVIL && player == avalon::GOOD && !assassin )
+        return "Things look bleak.  You tremble as loud footsteps march past the entrance to the broom closet you have hidden "
+                "yourself in.  A loud scream announces the death of another of your allies.  Maybe you can escape the castle "
+                "if you go now...";
+    else if( winner == avalon::EVIL && player == avalon::EVIL && !assassin )
+        return "At last!  The kingdom is yours!  You wonder briefly why no one ever believed you when you said that evil would "
+                "always triumph.  Then you shrug, wipe the blood of your enemies off your hands, and join the feast.  It "
+                "tastes like victory.";
+    else if( winner == avalon::EVIL && player == avalon::GOOD && assassin )
+        return "How could a night of such triumph turn to terror?  You were celebrating; good had triumphed, as was just.  "
+                "But the next thing you knew, Merlin--he had been " + assassinTarget->getName( ) + " all along--lay dead on the "
+                "floor.  The blood--it's everywhere.  Is it yours?  You can't remember.";
     else
-        return "Bad guys won!";
+        return "Yes!  Your last hope, your last chance to plunge the kingdom into darkness, came through!  Merlin--who had been "
+                + assassinTarget->getName( ) + " all along--is dead at your feet, and the night of celebration has turned to "
+                "beautiful chaos.  Ah, victory is sweet.";
 }

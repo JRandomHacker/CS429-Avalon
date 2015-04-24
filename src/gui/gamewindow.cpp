@@ -690,12 +690,15 @@ void GameWindow::updateEndGameState( ) {
         unsigned int myID = *myID_subscriber->getData<unsigned int>( );
         Player myPlayer = *player_subscribers[myID]->getData<Player>( );
         bool assassinPresent = *assassinState_subscriber->getData<bool>( );
+        Player* assassinKilled = NULL;
         if( assassinPresent ) {
             assassinChoice = *assassinTargeted_subscriber->getData<unsigned int>( );
+            assassinKilled = player_subscribers[assassinChoice]->getData<Player>( );
         }
 
         // Display the result of the game
-        std::string gameResultString = avalon::gui::getGameResultString( myPlayer.getAlignment( ), winner );
+        std::string gameResultString = avalon::gui::getGameResultString( myPlayer.getAlignment( ), assassinPresent,
+                                                                         assassinKilled, winner );
 
         ui->proposeTeamButton->hide( );
         ui->proposeTeamList->hide( );
