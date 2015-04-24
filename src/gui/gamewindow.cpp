@@ -434,8 +434,9 @@ std::string GameWindow::buildQuestHistoryString( ) {
     std::vector<VoteHistory> prevTeamHist = *voteHistory_subscriber->getData<std::vector<VoteHistory>>( );
     VoteHistory vote_results = prevTeamHist.back();
 
-    std::string header1 = "---Questing Team---\n";
-    std::string header2 = "---Player Votes---\n";
+    std::string header1 = "********QUEST RESULTS********\n-----Questing Team-----\n";
+    std::string header2 = "-----Player Votes-----\n";
+    std::string header3 = "\n********REJECTED TEAMS********\n";
 
     std::vector<unsigned int> questingTeam = vote_results.getProposedTeam( );
 
@@ -462,7 +463,46 @@ std::string GameWindow::buildQuestHistoryString( ) {
         }
     }
 
-    return header1 + header2;
+
+    //There's some shitty programming going on here. Will refractor this later.
+    for ( unsigned int i = prevTeamHist.size() - 2; i > 0; i--) {
+
+        vote_results = prevTeamHist[i];
+
+        if( vote_results.getVotePassed( ) )
+            break;
+
+        header3 += "-----Questing Team-----\n";
+
+        questingTeam = vote_results.getProposedTeam( );
+
+        for ( unsigned int i = 0; i < questingTeam.size( ); i++ ) {
+
+            header3 += player_subscribers[ questingTeam[i] ]->getData<Player>( )->getName( ) + "\n";
+
+        }
+
+        header3 += "-----Player Votes-----\n";
+        for ( unsigned int i = 0; i < vote_results.getPlayerVotes( ).size( ); i++ ) {
+
+            if ( vote_results.getPlayerVotes( )[i] == avalon::YES) {
+
+                header3 += player_subscribers[i]->getData<Player>( )->getName( ) + " approved the team.\n";
+
+            } else if ( vote_results.getPlayerVotes( )[i] == avalon::NO) {
+
+                header3 += player_subscribers[i]->getData<Player>( )->getName( ) + " rejected the team.\n";
+
+            } else if ( vote_results.getPlayerVotes( )[i] == avalon::HIDDEN) {
+                //Hidden voting
+            } else {
+                //Imposible situation
+            }
+        }
+
+    }
+
+    return header1 + header2 + header3;
 }
 
 void GameWindow::updateTrack( ) {
