@@ -157,6 +157,11 @@ signals:
      */
     void chatMessagesUpdated( );
 
+    /**
+     * Signal emitted to reset the game
+     */
+    void resetGameUpdated( );
+
 private slots:
     /**
      *  Makes subscriber to get num of players.
@@ -248,6 +253,11 @@ private slots:
      * Callback for chats
      */
     void updateChatMessagesSlot( );
+
+    /**
+     * Slot for reset game signal
+     */
+    void updateResetGameSlot( );
     
     /**
      * When the leader clicks a player, they are toggled on/off the team
@@ -425,6 +435,11 @@ private:
      */
     Subscriber* chatMessages_subscriber;
 
+    /**
+     * Subscriber for a signal to end the game
+     */
+    Subscriber* resetGame_subscriber;
+
 
     /**
      *  Subscriber vector that watches player objects.
@@ -546,6 +561,16 @@ private:
      * Updates chat log
      */
     void updateChatMessages( );
+
+    /**
+     * Resets the game
+     */
+    void updateResetGame( );
+
+    /**
+     * Destroys the gamewindow and returns the the main menu.
+     */
+    void exitToMainMenu( );
 };
 
 #endif // GAMEWINDOW_H

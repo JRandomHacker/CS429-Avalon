@@ -11,6 +11,7 @@
 #include "chat_message.hpp"
 #include "enterdetector.hpp"
 #include "clientCustomActionsForChat.hpp"
+#include "optionswindow.hpp"
 #include <climits>
 #include <signal.h>
 #include <QStandardItem>
@@ -20,6 +21,8 @@
 #include <QHeaderView>
 #include <QModelIndex>
 #include <QList>
+#include <QMessageBox>
+#include <QErrorMessage>
 #include <vector>
 
 
@@ -52,6 +55,7 @@ GameWindow::GameWindow( QWidget *parent, ClientController* controller, Model * m
     connect( this, SIGNAL( assassinStateUpdated( ) ), this, SLOT( updateAssassinStateSlot( ) ) );
     connect( this, SIGNAL( endGameStateUpdated( ) ), this, SLOT( updateEndGameStateSlot( ) ) );
     connect( this, SIGNAL( endGamePlayersUpdated( ) ), this, SLOT( updateEndGamePlayersSlot( ) ) );
+    connect( this, SIGNAL( resetGameUpdated( ) ), this, SLOT(updateResetGameSlot( ) ) );
 
     ui->chatEdit->installEventFilter( new EnterDetector( this, ui->sendMsgButton ) );
 
@@ -88,6 +92,7 @@ GameWindow::~GameWindow( ) {
     delete questHistory_subscriber;
     delete currentVotes_subscriber;
     delete chatMessages_subscriber;
+    delete resetGame_subscriber;
     for( std::vector<Subscriber*>::iterator i = player_subscribers.begin( ); i != player_subscribers.end( ); i++ )
         delete *i;
 
@@ -299,6 +304,14 @@ void GameWindow::createPlayerSubscribers( ) {
     model->subscribe( "chatMessages", chatMessages_subscriber );
     QStandardItemModel* chatModel = new QStandardItemModel( );
     ui->chatList->setModel( chatModel );
+
+    resetGame_subscriber = new ClosureSubscriber(
+                [&]( Subscriber* ) {
+                    emit resetGameUpdated( );
+                    sem_wait( sync_sem );
+                },
+                NULL );
+    model->subscribe( "resetGame", resetGame_subscriber );
 }
 
 void GameWindow::updatePlayerSlot( unsigned int id ) {
@@ -706,6 +719,8 @@ void GameWindow::updateEndGameState( ) {
         ui->proposedTeamSection->setTitle( "Results" );
         ui->leaderLabel->setText( gameResultString.c_str( ) );
 
+        ui->proposeTeamButton->setText( "Quit Game" );
+        ui->proposeTeamButton->show( );
     }
 }
 
@@ -817,6 +832,21 @@ void GameWindow::updateChatMessages( ) {
     ui->chatList->scrollToBottom( );
 }
 
+void GameWindow::updateResetGameSlot( ) {
+    updateResetGame( );
+    sem_post( sync_sem );
+}
+
+void GameWindow::updateResetGame( ) {
+    if( *resetGame_subscriber->getData<bool>( ) ) {
+        QErrorMessage error( this );
+        error.showMessage( "Oh no!  For some reason, the game is over." );
+        error.exec( );
+
+        exitToMainMenu( );
+    }
+}
+
 
 void GameWindow::on_playerList_clicked( const QModelIndex& index ) {
     if( leaderID_subscriber == NULL || myID_subscriber == NULL )
@@ -901,13 +931,18 @@ void GameWindow::on_buttonVoteFail_clicked( ) {
 }
 
 void GameWindow::on_proposeTeamButton_clicked( ) {
-    // If it is not the assassin state, submit the team; in the assassin state, submit the assassin's choice
-    if( !*assassinState_subscriber->getData<bool>( ) ) {
-        FinalizeTeamAction* act = new FinalizeTeamAction( );
-        control->addActionToQueue( act );
+    // In the end game, quit; in the assassin state, submit the assassin's choice; else, submit the team
+    if( *endGameState_subscriber->getData<bool>( ) ) {
+        QMessageBox::StandardButton confirmation = QMessageBox::question( this, "Exit", "Are you sure you want to exit to"
+                                                            " the main menu?", QMessageBox::Yes|QMessageBox::No);
+        if( confirmation == QMessageBox::Yes )
+            exitToMainMenu( );
 
-    } else if ( assassinChoice < *num_players_subscriber->getData<unsigned int>( ) ) {
+    } else if ( *assassinState_subscriber->getData<bool>( ) && assassinChoice < *num_players_subscriber->getData<unsigned int>( ) ) {
         AssassinTargetSelectionAction* act = new AssassinTargetSelectionAction( assassinChoice );
+        control->addActionToQueue( act );
+    } else {
+        FinalizeTeamAction* act = new FinalizeTeamAction( );
         control->addActionToQueue( act );
     }
 }
@@ -926,6 +961,16 @@ void GameWindow::on_sendMsgButton_clicked( ) {
     control->addActionToQueue( act );
 
     ui->chatEdit->clear( );
+}
+
+void GameWindow::exitToMainMenu( ) {
+    GameEndAction* act = new GameEndAction( );
+    control->addActionToQueue( act );
+
+    OptionsWindow* opts = new OptionsWindow( NULL );
+    opts->show( );
+
+    this->close( );
 }
 
 void GameWindow::closeEvent( QCloseEvent* e ) {
