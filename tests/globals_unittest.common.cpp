@@ -31,11 +31,3 @@ TEST( GlobalTestSuite, areGoodRolesGood) {
     EXPECT_NE( avalon::GOOD, avalon::getRoleAlignment( avalon::ASSASSIN ) );
 }
 
-TEST( GlobalTestSuite, correctEvilCount ) {
-    EXPECT_EQ( 2, avalon::getEvilCount( 5 ) );
-    EXPECT_EQ( 2, avalon::getEvilCount( 6 ) );
-    EXPECT_EQ( 3, avalon::getEvilCount( 7 ) );
-    EXPECT_EQ( 3, avalon::getEvilCount( 8 ) );
-    EXPECT_EQ( 3, avalon::getEvilCount( 9 ) );
-    EXPECT_EQ( 4, avalon::getEvilCount( 10 ) );
-}
